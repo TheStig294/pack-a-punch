@@ -1,0 +1,33 @@
+"UnlitGeneric"
+{
+	"%tooltexture" "ttt_pack_a_punch/pap_camo"
+	"%compilewater" "1"
+	"%compileKeepLight" 1
+
+	"$basetexture"	"ttt_pack_a_punch/pap_camo"
+	"$surfaceprop" "water"
+
+	"$abovewater" "1"
+
+	"$fogenable" 1
+	"$fogcolor" "{219 63 0}"
+	"$fogstart" "-400"
+	"$fogend" "1000"
+	"$bottommaterial" "ttt_pack_a_punch/pap_camo"
+
+	"Proxies"
+{
+"AnimatedTexture"
+{
+"animatedTextureVar" "$basetexture"
+"animatedTextureFrameNumVar" "$frame"
+"animatedTextureFrameRate" "20.0"
+}
+"TextureScroll"
+		{
+			"texturescrollvar"	"$basetexturetransform"
+			"texturescrollrate"	"0.1"
+			"texturescrollangle"	"0"
+		}
+}
+}
