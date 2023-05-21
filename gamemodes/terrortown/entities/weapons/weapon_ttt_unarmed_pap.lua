@@ -2,7 +2,7 @@ AddCSLuaFile()
 SWEP.HoldType = "normal"
 
 if CLIENT then
-    SWEP.PrintName = "Self-PaP"
+    SWEP.PrintName = "Self-Pack-a-Punch"
     SWEP.Slot = 5
     SWEP.ViewModelFOV = 10
 end
@@ -23,44 +23,59 @@ SWEP.InLoadoutFor = nil
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.BuffScale = 1.3
+local buffScale = 1.2
 
 function SWEP:GetClass()
     return "weapon_ttt_unarmed_pap"
 end
 
 function SWEP:Initialize()
-    local owner = self:GetOwner()
+    self:SetHoldType(self.HoldType)
 
-    if IsValid(owner) and owner:IsPlayer() then
-        self.HolsterPAPOwner = owner
-        owner:ChatPrint("You pack-a-punched yourself!")
-        owner:SetMaterial(TTT_PAP_CAMO)
-        owner:SetFOV(0)
-        owner:SetFOV(owner:GetFOV() * self.BuffScale)
-        owner:SetJumpPower(owner:GetJumpPower() * self.BuffScale)
-        owner:SetHealth(owner:Health() * self.BuffScale)
+    timer.Simple(0.1, function()
+        local owner = self:GetOwner()
 
-        if SERVER then
-            owner:SetMaxHealth(owner:GetMaxHealth() * self.BuffScale)
-            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * self.BuffScale)
+        if IsValid(owner) and owner:IsPlayer() then
+            self.HolsterPAPOwner = owner
+            owner:SetMaterial(TTT_PAP_CAMO)
+            owner:SetFOV(0)
+            owner:SetFOV(owner:GetFOV() * buffScale)
+            owner:SetJumpPower(owner:GetJumpPower() * buffScale)
+            owner:SetHealth(owner:Health() * buffScale)
+
+            if SERVER then
+                owner:ChatPrint("You pack-a-punched yourself!")
+                owner:SetMaxHealth(owner:GetMaxHealth() * buffScale)
+                owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * buffScale)
+            end
         end
-    end
+    end)
+end
+
+if SERVER then
+    hook.Add("TTTEndRound", "TTTPAPHolsteredReset", function()
+        for _, ply in ipairs(player.GetAll()) do
+            if ply:HasWeapon("weapon_ttt_unarmed_pap") then
+                ply:StripWeapon("weapon_ttt_unarmed_pap")
+                ply:Give("weapon_ttt_unarmed")
+            end
+        end
+    end)
 end
 
 function SWEP:OnRemove()
     local owner = self.HolsterPAPOwner
 
     if IsValid(owner) and owner:IsPlayer() then
-        owner:ChatPrint("Your pack-a-punch buff has been removed")
         owner:SetMaterial("")
         owner:SetFOV(0)
-        owner:SetJumpPower(owner:GetJumpPower() / self.BuffScale)
-        owner:SetHealth(owner:Health() / self.BuffScale)
+        owner:SetJumpPower(owner:GetJumpPower() / buffScale)
+        owner:SetHealth(owner:Health() / buffScale)
 
         if SERVER then
-            owner:SetMaxHealth(owner:GetMaxHealth() / self.BuffScale)
-            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / self.BuffScale)
+            owner:ChatPrint("Your pack-a-punch buff has been removed")
+            owner:SetMaxHealth(owner:GetMaxHealth() / buffScale)
+            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / buffScale)
         end
     end
 end
@@ -100,4 +115,8 @@ function SWEP:DrawWorldModel()
 end
 
 function SWEP:DrawWorldModelTranslucent()
+end
+
+function SWEP:ShouldDrawViewModel()
+    return false
 end
