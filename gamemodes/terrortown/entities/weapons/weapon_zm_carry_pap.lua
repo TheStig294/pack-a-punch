@@ -25,9 +25,7 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 0.1
 SWEP.Kind = WEAPON_CARRY
-
-SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
-
+SWEP.InLoadoutFor = nil
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
