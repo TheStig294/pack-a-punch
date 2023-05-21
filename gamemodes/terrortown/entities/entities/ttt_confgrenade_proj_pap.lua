@@ -61,6 +61,7 @@ local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
 function ENT:Initialize()
     self:SetMaterial(TTT_PAP_CAMO)
+    self:SetModelScale(5, 0.0001)
 
     return self.BaseClass.Initialize(self)
 end
@@ -76,13 +77,13 @@ function ENT:Explode(tr)
         end
 
         local pos = self:GetPos()
-        -- -- Spawn some fire as well!
-        -- local fireNade = ents.Create("ttt_firegrenade_proj")
-        -- fireNade:SetPos(pos)
-        -- fireNade:Spawn()
-        -- fireNade:SetDmg(50)
-        -- fireNade:SetThrower(self:GetThrower())
-        -- fireNade:Explode(tr)
+        -- Spawn some fire as well!
+        local fireNade = ents.Create("ttt_firegrenade_proj")
+        fireNade:SetPos(pos)
+        fireNade:Spawn()
+        fireNade:SetDmg(20)
+        fireNade:SetThrower(self:GetThrower())
+        fireNade:Explode(tr)
         -- make sure we are removed, even if errors occur later
         self:Remove()
         PushPullRadius(pos, self:GetThrower())

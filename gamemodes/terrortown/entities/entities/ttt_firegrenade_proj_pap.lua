@@ -16,6 +16,7 @@ function ENT:Initialize()
     end
 
     self:SetMaterial(TTT_PAP_CAMO)
+    self:SetModelScale(5, 0.0001)
 
     return self.BaseClass.Initialize(self)
 end
@@ -51,7 +52,7 @@ function ENT:Explode(tr)
 
         util.Effect("Explosion", effect, true, true)
         util.BlastDamage(self, self:GetThrower(), pos, self:GetRadius(), self:GetDmg())
-        StartFires(pos, tr, 30, 90, false, self:GetThrower())
+        StartFires(pos, tr, 30, 1000, false, self:GetThrower())
         self:SetDetonateExact(0)
         self:Remove()
     else
