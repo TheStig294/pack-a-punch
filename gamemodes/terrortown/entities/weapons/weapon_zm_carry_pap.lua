@@ -277,15 +277,15 @@ function SWEP:AllowPickup(target)
     local phys = target:GetPhysicsObject()
     local ply = self:GetOwner()
 
-    return (IsValid(phys) and IsValid(ply) and (not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)) and phys:GetMass() < CARRY_WEIGHT_LIMIT and (not PlayerStandsOn(target)) and (target.CanPickup ~= false) and (target:GetClass() ~= "prop_ragdoll" or allow_rag:GetBool()) and ((not target:IsWeapon()) or allow_wep:GetBool()))
+    return IsValid(phys) and IsValid(ply) and (not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)) and phys:GetMass() < CARRY_WEIGHT_LIMIT and (not PlayerStandsOn(target)) and (target.CanPickup ~= false) and (target:GetClass() ~= "prop_ragdoll" or allow_rag:GetBool()) and ((not target:IsWeapon()) or allow_wep:GetBool())
 end
 
 function SWEP:DoAttack(pickup)
-    self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if IsValid(self.EntHolding) then
-        self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+        self:SendWeaponAnim(ACT_VM_MISSCENTER)
 
         if (not pickup) and self.EntHolding:GetClass() == "prop_ragdoll" then
             -- see if we can pin this ragdoll to a wall in front of us
@@ -297,7 +297,7 @@ function SWEP:DoAttack(pickup)
             self:Drop()
         end
 
-        self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
+        self:SetNextSecondaryFire(CurTime() + 0.3)
 
         return
     end
@@ -316,27 +316,27 @@ function SWEP:DoAttack(pickup)
             if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(ent) then
                 if self:AllowPickup(ent) then
                     self:Pickup()
-                    self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+                    self:SendWeaponAnim(ACT_VM_HITCENTER)
                     -- make the refire slower to avoid immediately dropping
                     local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or 0.5
-                    self.Weapon:SetNextSecondaryFire(CurTime() + delay)
+                    self:SetNextSecondaryFire(CurTime() + delay)
 
                     return
                 else
                     local is_ragdoll = trace.Entity:GetClass() == "prop_ragdoll"
                     -- pull heavy stuff
-                    local ent = trace.Entity
-                    local phys = ent:GetPhysicsObject()
+                    local e = trace.Entity
+                    local p = e:GetPhysicsObject()
                     local pdir = trace.Normal * -1
 
                     if is_ragdoll then
-                        phys = ent:GetPhysicsObjectNum(trace.PhysicsBone)
+                        p = e:GetPhysicsObjectNum(trace.PhysicsBone)
                         -- increase refire to make rags easier to drag
-                        --self.Weapon:SetNextSecondaryFire(CurTime() + 0.04)
+                        --self:SetNextSecondaryFire(CurTime() + 0.04)
                     end
 
-                    if IsValid(phys) then
-                        self:MoveObject(phys, pdir, 6000, is_ragdoll)
+                    if IsValid(p) then
+                        self:MoveObject(p, pdir, 6000, is_ragdoll)
 
                         return
                     end
@@ -344,14 +344,12 @@ function SWEP:DoAttack(pickup)
             end
         else
             if (ply:EyePos() - trace.HitPos):Length() < 100 then
-                local phys = trace.Entity:GetPhysicsObject()
+                local p = trace.Entity:GetPhysicsObject()
 
-                if IsValid(phys) then
-                    if IsValid(phys) then
-                        local pdir = trace.Normal
-                        self:MoveObject(phys, pdir, 6000, (trace.Entity:GetClass() == "prop_ragdoll"))
-                        self.Weapon:SetNextPrimaryFire(CurTime() + 0.03)
-                    end
+                if IsValid(p) then
+                    local pdir = trace.Normal
+                    self:MoveObject(p, pdir, 6000, trace.Entity:GetClass() == "prop_ragdoll")
+                    self:SetNextPrimaryFire(CurTime() + 0.03)
                 end
             end
         end
