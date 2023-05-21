@@ -33,11 +33,11 @@ SWEP.IronSightsAng = Vector(0, 0, 0)
 SWEP.PAPDesc = "Now a 4-shot grenade launcher!"
 
 function SWEP:Initialize()
-    local owner = self:GetOwner()
-
-    if IsValid(owner) then
-        owner:SetAmmo(0, self:GetPrimaryAmmoType())
-    end
+    timer.Simple(0.1, function()
+        if self:Clip1() > self.Primary.ClipMax then
+            self:SetClip1(self.Primary.ClipMax)
+        end
+    end)
 end
 
 -- Shooting functions largely copied from weapon_cs_base

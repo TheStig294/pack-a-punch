@@ -26,7 +26,7 @@ SWEP.Primary.Damage = 9
 SWEP.Primary.Delay = 0.1
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 45
-SWEP.Primary.ClipMax = 90
+SWEP.Primary.ClipMax = 45
 SWEP.Primary.DefaultClip = 45
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
@@ -39,6 +39,14 @@ SWEP.IronSightsPos = Vector(-8.735, -10, 4.039)
 SWEP.IronSightsAng = Vector(-1.201, -0.201, -2)
 SWEP.HeadshotMultiplier = 4.5 -- brain fizz
 SWEP.PAPDesc = "Increased stun power, 1.5x ammo"
+
+function SWEP:Initialize()
+    timer.Simple(0.1, function()
+        if self:Clip1() < self.Primary.ClipMax then
+            self:SetClip1(self.Primary.ClipMax)
+        end
+    end)
+end
 
 --SWEP.DeploySpeed = 3
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
