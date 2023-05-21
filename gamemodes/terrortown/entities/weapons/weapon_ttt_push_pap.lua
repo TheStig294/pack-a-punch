@@ -77,10 +77,10 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-    if self.IsCharging then return end
-    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
-    self.IsCharging = true
+    -- if self.IsCharging then return end
+    -- self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    -- self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+    -- self.IsCharging = true
 end
 
 function SWEP:FirePulse(force_fwd, force_up)
