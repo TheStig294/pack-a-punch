@@ -32,6 +32,7 @@ SWEP.Kind = WEAPON_EQUIP2
 -- only detectives can buy
 SWEP.CanBuy = nil
 SWEP.WeaponID = AMMO_DEFUSER
+SWEP.PAPDesc = "Disarms all C4s on the map!"
 --SWEP.AllowDrop = false
 local defuse = Sound("c4.disarmfinish")
 
@@ -76,7 +77,10 @@ function SWEP:PrimaryAttack()
         end
     end
 
-    self:GetOwner():ChatPrint("Defused " .. c4Count .. " active bombs on the map")
+    if SERVER then
+        self:GetOwner():ChatPrint("Defused " .. c4Count .. " active bomb(s) on the map")
+        self:Remove()
+    end
 end
 
 function SWEP:SecondaryAttack()

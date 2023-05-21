@@ -7,7 +7,7 @@ end
 
 if CLIENT then
     LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")
-    LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nWorks with both floor and buyable weapons")
+    LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nSome weapons gain a special upgrade!\n(Others get a 1.5x firerate increase)")
 end
 
 -- Registering the passive item
@@ -137,6 +137,19 @@ if CLIENT then
             -- If no defined name for a gun, shove "PAP" in front
         elseif wep.PrintName and not string.EndsWith(wep.ClassName, "_pap") then
             wep.PrintName = "PAP " .. LANG.TryTranslation(wep.PrintName)
+        end
+
+        -- Description
+        local description
+
+        if upgradeData and upgradeData.desc then
+            description = upgradeData.desc
+        elseif wep.PAPDesc then
+            description = wep.PAPDesc
+        end
+
+        if description then
+            chat.AddText("Special PaP Upgrade: " .. description)
         end
     end)
 

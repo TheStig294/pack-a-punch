@@ -40,6 +40,7 @@ SWEP.NoSights = true
 SWEP.Range = 175
 SWEP.ItemSamples = {}
 SWEP.NowRepeating = nil
+SWEP.PAPDesc = "One-time use traitor tester, get result after a delay"
 local MAX_ITEM = 30
 SWEP.MaxItemSamples = MAX_ITEM
 local CHARGE_DELAY = 0.1

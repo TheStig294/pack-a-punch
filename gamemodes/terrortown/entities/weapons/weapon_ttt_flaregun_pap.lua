@@ -2,7 +2,7 @@ AddCSLuaFile()
 SWEP.HoldType = "pistol"
 
 if CLIENT then
-    SWEP.PrintName = "Everlasting Flame"
+    SWEP.PrintName = "Perma-Fire Gun"
     SWEP.Slot = 6
     SWEP.ViewModelFOV = 54
     SWEP.ViewModelFlip = false
@@ -23,10 +23,10 @@ SWEP.Primary.Recoil = 4
 SWEP.Primary.Damage = 7
 SWEP.Primary.Delay = 0.75
 SWEP.Primary.Cone = 0.01
-SWEP.Primary.ClipSize = 3
+SWEP.Primary.ClipSize = 2
 SWEP.Primary.Automatic = false
-SWEP.Primary.DefaultClip = 3
-SWEP.Primary.ClipMax = 3
+SWEP.Primary.DefaultClip = 2
+SWEP.Primary.ClipMax = 2
 SWEP.Primary.Sound = Sound("Weapon_USP.SilencedShot")
 SWEP.Kind = WEAPON_EQUIP
 -- only traitors can buy
@@ -35,6 +35,7 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_FLARE
 SWEP.Tracer = "AR2Tracer"
 SWEP.UseHands = true
+SWEP.PAPDesc = "Sets someone on fire that doesn't go out, unless they go into water"
 SWEP.ViewModel = Model("models/weapons/c_357.mdl")
 SWEP.WorldModel = Model("models/weapons/w_357.mdl")
 
@@ -135,6 +136,8 @@ local function IgniteTarget(att, path, dmginfo)
         }
 
         if ent:IsPlayer() then
+            ent:ChatPrint("Hope there's some water, else you're not putting this fire out!")
+
             timer.Simple(dur + 0.1, function()
                 if IsValid(ent) then
                     ent.ignite_info = nil
@@ -152,6 +155,14 @@ local function IgniteTarget(att, path, dmginfo)
             end)
         end
     end
+end
+
+function SWEP:Initialize()
+    timer.Simple(0.1, function()
+        if self:Clip1() > self.Primary.ClipMax then
+            self:SetClip1(self.Primary.ClipMax)
+        end
+    end)
 end
 
 function SWEP:ShootFlare()

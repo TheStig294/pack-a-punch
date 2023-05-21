@@ -6,6 +6,7 @@ TTT_PAP_CAMO = "ttt_pack_a_punch/pap_camo"
 TTT_PAP_UPGRADES = {
     weapon_ttt_binoculars = {
         name = "Eagle's Eye",
+        desc = "Faster/zoomier zoom",
         func = function(SWEP)
             SWEP.ZoomLevels = {0, 15, 10, 5}
 
@@ -14,6 +15,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_ttt_confgrenade = {
         name = "The Bristol Pusher",
+        desc = "Massive push power, spawns fire!",
         func = function(SWEP)
             function SWEP:GetGrenadeName()
                 return "ttt_confgrenade_proj_pap"
@@ -22,7 +24,14 @@ TTT_PAP_UPGRADES = {
     },
     weapon_ttt_decoy = {
         name = "Does anyone use this?",
+        desc = "No upgrade... here's a credit back",
         func = function(SWEP)
+            local owner = SWEP:GetOwner()
+
+            if IsValid(owner) then
+                owner:AddCredits(1)
+            end
+
             function SWEP:PlacedDecoy(decoy)
                 decoy:SetMaterial(TTT_PAP_CAMO)
                 self:GetOwner().decoy = decoy
@@ -90,6 +99,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_rifle = {
         name = "Arrhythmic Dirge",
+        desc = "Zoomier zoom, fire rate increase!",
         automatic = false,
         firerateMult = 1.2,
         damageMult = 1.5,
@@ -107,6 +117,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_shotgun = {
         name = "Dagon's Glare",
+        desc = "1.5x ammo, fire rate increase, reload multiple bullets at once!",
         firerateMult = 1.1,
         ammoMult = 1.5,
         func = function(SWEP)
@@ -125,6 +136,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_sledge = {
         name = "H.U.G.E. 9001",
+        desc = "Minimal recoil!",
         firerateMult = 1.3,
         recoilMult = 0.1
     }

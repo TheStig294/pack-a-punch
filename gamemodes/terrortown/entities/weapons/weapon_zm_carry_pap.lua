@@ -33,6 +33,7 @@ SWEP.EntHolding = nil
 SWEP.CarryHack = nil
 SWEP.Constr = nil
 SWEP.PrevOwner = nil
+SWEP.PAPDesc = "Left/right-click to push/pull from afar!"
 local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1")
 local prop_force = CreateConVar("ttt_prop_carrying_force", "60000")
 local no_throw = CreateConVar("ttt_no_prop_throwing", "0")

@@ -37,6 +37,7 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_RADIO
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.PAPDesc = "Automatically plays distracting sounds every 30 seconds, can place 4 radios!"
 
 function SWEP:OnDrop()
     self:Remove()

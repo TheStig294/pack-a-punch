@@ -37,6 +37,23 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.NoSights = true
 SWEP.AllowDrop = false
 SWEP.DeathScanDelay = 15
+SWEP.PAPDesc = "No upgrade... here's a credit back"
+
+function SWEP:Initialize()
+    if CLIENT then
+        self:AddHUDHelp("vis_help_pri", nil, true)
+    end
+
+    if SERVER then
+        local owner = self:GetOwner()
+
+        if IsValid(owner) then
+            owner:AddCredits(1)
+        end
+    end
+
+    return self.BaseClass.Initialize(self)
+end
 
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -115,12 +132,4 @@ function SWEP:DropDevice()
     self:EmitSound(throwsound)
 
     return cse
-end
-
-if CLIENT then
-    function SWEP:Initialize()
-        self:AddHUDHelp("vis_help_pri", nil, true)
-
-        return self.BaseClass.Initialize(self)
-    end
 end

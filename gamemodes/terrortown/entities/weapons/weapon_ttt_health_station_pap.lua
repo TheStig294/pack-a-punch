@@ -36,6 +36,7 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_HEALTHSTATION
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.PAPDesc = "Heal much faster, x2 capacity"
 
 function SWEP:OnDrop()
     self:Remove()

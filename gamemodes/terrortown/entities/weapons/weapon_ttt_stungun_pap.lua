@@ -38,6 +38,7 @@ SWEP.WorldModel = "models/weapons/w_smg_ump45.mdl"
 SWEP.IronSightsPos = Vector(-8.735, -10, 4.039)
 SWEP.IronSightsAng = Vector(-1.201, -0.201, -2)
 SWEP.HeadshotMultiplier = 4.5 -- brain fizz
+SWEP.PAPDesc = "Increased stun power, 1.5x ammo"
 
 --SWEP.DeploySpeed = 3
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
