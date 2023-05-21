@@ -23,7 +23,9 @@ SWEP.InLoadoutFor = nil
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.PAPDesc = "You pack-a-punched yourself!\nSpeed, jump and health boost!"
 local buffScale = 1.2
+local buffScaleJump = 1.5
 
 function SWEP:GetClass()
     return "weapon_ttt_unarmed_pap"
@@ -40,11 +42,10 @@ function SWEP:Initialize()
             owner:SetMaterial(TTT_PAP_CAMO)
             owner:SetFOV(0)
             owner:SetFOV(owner:GetFOV() * buffScale)
-            owner:SetJumpPower(owner:GetJumpPower() * buffScale)
+            owner:SetJumpPower(owner:GetJumpPower() * buffScaleJump)
             owner:SetHealth(owner:Health() * buffScale)
 
             if SERVER then
-                owner:ChatPrint("You pack-a-punched yourself!")
                 owner:SetMaxHealth(owner:GetMaxHealth() * buffScale)
                 owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * buffScale)
             end
@@ -69,7 +70,7 @@ function SWEP:OnRemove()
     if IsValid(owner) and owner:IsPlayer() then
         owner:SetMaterial("")
         owner:SetFOV(0)
-        owner:SetJumpPower(owner:GetJumpPower() / buffScale)
+        owner:SetJumpPower(owner:GetJumpPower() / buffScaleJump)
         owner:SetHealth(owner:Health() / buffScale)
 
         if SERVER then
