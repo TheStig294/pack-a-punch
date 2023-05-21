@@ -93,7 +93,7 @@ function SWEP:PrimaryAttack()
     local tr = util.TraceLine({
         start = spos,
         endpos = sdest,
-        filter = self:GetOwner(),
+        filter = {self:GetOwner()},
         mask = MASK_SHOT
     })
 
@@ -116,10 +116,9 @@ function SWEP:PrimaryAttack()
     else
         if ent:IsPlayer() and ent:Alive() and not ent:IsSpec() then
             if self.DoneATraitorTest then
-                self:GetOwner():ChatPrint("You can only test 1 person")
+                self:GetOwner():PrintMessage(HUD_PRINTTALK, "You can only test 1 person")
             else
-                self:GetOwner():ChatPrint("You will get the test result in 60 seconds")
-                ent:PrintMessage(HUD_PRINTCENTER, "You'll be traitor tested in 60 secs!")
+                self:GetOwner():PrintMessage(HUD_PRINTTALK, "You will get the test result in 60 seconds")
                 ent:PrintMessage(HUD_PRINTTALK, "You'll be traitor tested in 60 secs!")
                 self.IsTraitorTest = ent:GetRole() == ROLE_TRAITOR or (ent.IsTraitorTeam and ent:IsTraitorTeam())
                 self.DoneATraitorTest = true
@@ -144,9 +143,17 @@ function SWEP:PrimaryAttack()
                     end
                 end)
             end
-
+        else
             if CLIENT then
                 self:GetOwner():EmitSound(beep_miss)
+            end
+
+            if SERVER then
+                if self.DoneATraitorTest then
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "You can only test 1 person")
+                else
+                    self:GetOwner():PrintMessage(HUD_PRINTTALK, "Player not close enough/not found")
+                end
             end
         end
 
@@ -278,9 +285,9 @@ function SWEP:RemoveItemSample(idx)
 end
 
 function SWEP:SecondaryAttack()
-    self:SetNextSecondaryFire(CurTime() + 0.05)
-    if CLIENT then return end
-    self:SendPrints(true)
+    -- self:SetNextSecondaryFire(CurTime() + 0.05)
+    -- if CLIENT then return end
+    -- self:SendPrints(true)
 end
 
 if SERVER then
