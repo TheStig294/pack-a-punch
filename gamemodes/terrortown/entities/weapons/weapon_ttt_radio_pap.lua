@@ -56,6 +56,8 @@ end
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 SWEP.RadioCount = 0
 
+local radioSounds = {"scream", "explosion", "footsteps", "burning", "beeps", "shotgun", "pistol", "mac10", "deagle", "m16", "rifle", "huge"}
+
 -- c4 plant but different
 function SWEP:RadioDrop()
     if SERVER then
