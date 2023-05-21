@@ -61,12 +61,15 @@ function SWEP:PrimaryAttack(worldsnd)
         pos = tr.Entity:GetPos()
     end
 
-    local fireNade = ents.Create("ttt_firegrenade_proj")
-    fireNade:SetPos(pos)
-    fireNade:Spawn()
-    fireNade:SetDmg(20)
-    fireNade:SetThrower(self:GetOwner())
-    fireNade:Explode(tr)
+    if SERVER then
+        local fireNade = ents.Create("ttt_firegrenade_proj")
+        fireNade:SetPos(pos)
+        fireNade:Spawn()
+        fireNade:SetDmg(20)
+        fireNade:SetThrower(self:GetOwner())
+        fireNade:Explode(tr)
+    end
+
     self:TakePrimaryAmmo(1)
     local owner = self:GetOwner()
     if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
