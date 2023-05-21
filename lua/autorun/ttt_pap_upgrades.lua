@@ -73,7 +73,7 @@ TTT_PAP_UPGRADES = {
         recoilMult = 2
     },
     weapon_zm_molotov = {
-        name = "Firewall",
+        name = "Forever Fire-Nade",
         func = function(SWEP)
             function SWEP:GetGrenadeName()
                 return "ttt_firegrenade_proj_pap"
