@@ -40,6 +40,7 @@ SWEP.WeaponID = AMMO_KNIFE
 SWEP.IsSilent = true
 -- Pull out faster than standard guns
 SWEP.DeploySpeed = 2
+SWEP.KnifeCount = 0
 
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -109,12 +110,16 @@ function SWEP:PrimaryAttack()
             dmg:SetDamageType(DMG_SLASH)
             hitEnt:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
         end
+
+        self.KnifeCount = self.KnifeCount + 1
+
+        if self.KnifeCount >= 2 then
+            self:Remove()
+        end
     end
 
     self:GetOwner():LagCompensation(false)
 end
-
-SWEP.KnifeCount = 0
 
 function SWEP:StabKill(tr, spos, sdest)
     local target = tr.Entity
@@ -200,11 +205,6 @@ function SWEP:StabKill(tr, spos, sdest)
     target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
     -- target appears to die right there, so we could theoretically get to
     -- the ragdoll in here...
-    self.KnifeCount = self.KnifeCount + 1
-
-    if self.KnifeCount >= 2 then
-        self:Remove()
-    end
 end
 
 function SWEP:SecondaryAttack()
