@@ -19,9 +19,7 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 SWEP.Kind = WEAPON_UNARMED
-
-SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
-
+SWEP.InLoadoutFor = nil
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
@@ -40,7 +38,11 @@ function SWEP:Initialize()
         owner:SetMaterial(TTT_PAP_CAMO)
         owner:SetFOV(0)
         owner:SetFOV(owner:GetFOV() * self.BuffScale)
-        owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * self.BuffScale)
+
+        if SERVER then
+            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * self.BuffScale)
+        end
+
         owner:SetJumpPower(owner:GetJumpPower() * self.BuffScale)
         owner:SetHealth(owner:Health() * self.BuffScale)
         owner:SetMaxHealth(owner:GetMaxHealth() * self.BuffScale)
@@ -54,7 +56,11 @@ function SWEP:OnRemove()
         owner:ChatPrint("Your pack-a-punch buff has been removed")
         owner:SetMaterial("")
         owner:SetFOV(0)
-        owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / self.BuffScale)
+
+        if SERVER then
+            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / self.BuffScale)
+        end
+
         owner:SetJumpPower(owner:GetJumpPower() / self.BuffScale)
         owner:SetHealth(owner:Health() / self.BuffScale)
         owner:SetMaxHealth(owner:GetMaxHealth() / self.BuffScale)
