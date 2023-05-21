@@ -29,10 +29,8 @@ SWEP.Primary.DefaultClip = 3
 SWEP.Primary.ClipMax = 3
 SWEP.Primary.Sound = Sound("Weapon_USP.SilencedShot")
 SWEP.Kind = WEAPON_EQUIP
-
 -- only traitors can buy
-SWEP.CanBuy = {ROLE_TRAITOR}
-
+SWEP.CanBuy = nil
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_FLARE
 SWEP.Tracer = "AR2Tracer"

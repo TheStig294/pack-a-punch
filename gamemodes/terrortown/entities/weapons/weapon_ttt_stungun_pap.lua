@@ -19,9 +19,7 @@ end
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_EQUIP
 SWEP.WeaponID = AMMO_STUN
-
-SWEP.CanBuy = {ROLE_DETECTIVE}
-
+SWEP.CanBuy = nil
 SWEP.LimitedStock = false
 SWEP.AmmoEnt = "item_ammo_smg1_ttt"
 SWEP.Primary.Damage = 9

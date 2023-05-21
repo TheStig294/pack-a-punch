@@ -29,10 +29,8 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 2
 SWEP.Kind = WEAPON_EQUIP2
-
 -- only detectives can buy
-SWEP.CanBuy = {ROLE_DETECTIVE}
-
+SWEP.CanBuy = nil
 SWEP.WeaponID = AMMO_DEFUSER
 --SWEP.AllowDrop = false
 local defuse = Sound("c4.disarmfinish")

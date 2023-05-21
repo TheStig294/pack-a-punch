@@ -21,10 +21,8 @@ end
 
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_EQUIP
-
 -- only traitors can buy
-SWEP.CanBuy = {ROLE_TRAITOR}
-
+SWEP.CanBuy = nil
 SWEP.WeaponID = AMMO_C4
 SWEP.UseHands = true
 SWEP.ViewModel = Model("models/weapons/cstrike/c_c4.mdl")
