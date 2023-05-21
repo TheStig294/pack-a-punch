@@ -38,14 +38,13 @@ function SWEP:Initialize()
         owner:SetMaterial(TTT_PAP_CAMO)
         owner:SetFOV(0)
         owner:SetFOV(owner:GetFOV() * self.BuffScale)
-
-        if SERVER then
-            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * self.BuffScale)
-        end
-
         owner:SetJumpPower(owner:GetJumpPower() * self.BuffScale)
         owner:SetHealth(owner:Health() * self.BuffScale)
-        owner:SetMaxHealth(owner:GetMaxHealth() * self.BuffScale)
+
+        if SERVER then
+            owner:SetMaxHealth(owner:GetMaxHealth() * self.BuffScale)
+            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() * self.BuffScale)
+        end
     end
 end
 
@@ -56,14 +55,13 @@ function SWEP:OnRemove()
         owner:ChatPrint("Your pack-a-punch buff has been removed")
         owner:SetMaterial("")
         owner:SetFOV(0)
-
-        if SERVER then
-            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / self.BuffScale)
-        end
-
         owner:SetJumpPower(owner:GetJumpPower() / self.BuffScale)
         owner:SetHealth(owner:Health() / self.BuffScale)
-        owner:SetMaxHealth(owner:GetMaxHealth() / self.BuffScale)
+
+        if SERVER then
+            owner:SetMaxHealth(owner:GetMaxHealth() / self.BuffScale)
+            owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / self.BuffScale)
+        end
     end
 end
 
