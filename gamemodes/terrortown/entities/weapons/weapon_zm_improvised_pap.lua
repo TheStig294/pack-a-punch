@@ -257,7 +257,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:GetClass()
-    return "weapon_zm_improvised"
+    return "weapon_zm_improvised_pap"
 end
 
 function SWEP:OnDrop()

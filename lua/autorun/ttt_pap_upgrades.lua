@@ -67,21 +67,6 @@ TTT_PAP_UPGRADES = {
         name = "Infini-porter",
         ammoMult = 40
     },
-    weapon_ttt_unarmed = {
-        name = "Perma-Holstered",
-        func = function(SWEP)
-            function SWEP:Think()
-                local owner = self:GetOwner()
-                if not IsValid(owner) then return end
-                owner:SelectWeapon(self.ClassName)
-                owner:SetActiveWeapon(self)
-            end
-
-            function SWEP:Holster()
-                return false
-            end
-        end
-    },
     weapon_zm_mac10 = {
         name = "MAC100",
         firerateMult = 2,
