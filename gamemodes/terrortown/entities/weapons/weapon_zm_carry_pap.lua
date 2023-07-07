@@ -10,6 +10,7 @@ if CLIENT then
     SWEP.ViewModelFlip = false
 end
 
+SWEP.PAPDesc = "Left/right-click to push/pull from afar!"
 SWEP.Base = "weapon_tttbase"
 SWEP.AutoSpawnable = false
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
@@ -33,24 +34,24 @@ SWEP.EntHolding = nil
 SWEP.CarryHack = nil
 SWEP.Constr = nil
 SWEP.PrevOwner = nil
-SWEP.PAPDesc = "Left/right-click to push/pull from afar!"
-local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1")
-local prop_force = CreateConVar("ttt_prop_carrying_force", "60000")
-local no_throw = CreateConVar("ttt_no_prop_throwing", "0")
-local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1")
-local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0")
+local allow_rag = true
+local prop_force = 60000
+local no_throw = false
+local pin_rag = true
+local pin_rag_inno = false
 -- Allowing weapon pickups can allow players to cause a crash in the physics
 -- system (ie. not fixable). Tuning the range seems to make this more
 -- difficult. Not sure why. It's that kind of crash.
-local allow_wep = CreateConVar("ttt_weapon_carrying", "0")
-local wep_range = CreateConVar("ttt_weapon_carrying_range", "50")
+local allow_wep = true
+local wep_range = 10000
 -- not customizable via convars as some objects rely on not being carryable for
 -- gameplay purposes
-CARRY_WEIGHT_LIMIT = 45
-local PIN_RAG_RANGE = 90
+CARRY_WEIGHT_LIMIT = 10000
+local PIN_RAG_RANGE = 10000
 local player = player
 local IsValid = IsValid
 local CurTime = CurTime
+local push_pull_cooldown_secs = 1
 
 local function SetSubPhysMotionEnabled(ent, enable)
     if not IsValid(ent) then return end
@@ -112,7 +113,7 @@ function SWEP:Reset(keep_velocity)
             phys:EnableMotion(true)
         end
 
-        if (not keep_velocity) and (no_throw:GetBool() or self.EntHolding:GetClass() == "prop_ragdoll") then
+        if (not keep_velocity) and (no_throw or self.EntHolding:GetClass() == "prop_ragdoll") then
             KillVelocity(self.EntHolding)
         end
     end
@@ -188,56 +189,14 @@ if SERVER then
 end
 
 function SWEP:PrimaryAttack()
-    local ply = self:GetOwner()
-    if not IsValid(ply) then return end
-    local trace = ply:GetEyeTrace(MASK_SHOT)
-    local ent = trace.Entity
-
-    if IsValid(ent) then
-        local phys = ent:GetPhysicsObject()
-        if not IsValid(phys) or not phys:IsMoveable() or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then return end
-        local is_ragdoll = ent:GetClass() == "prop_ragdoll"
-        local pdir = trace.Normal
-        local is_player
-
-        if ent:IsPlayer() then
-            is_player = ent
-        end
-
-        if is_ragdoll then
-            phys = ent:GetPhysicsObjectNum(trace.PhysicsBone)
-        end
-
-        self:MoveObject(phys, pdir, 20000, is_ragdoll, is_player)
-    end
+    self:DoAttack(false)
 end
 
 function SWEP:SecondaryAttack()
-    local ply = self:GetOwner()
-    if not IsValid(ply) then return end
-    local trace = ply:GetEyeTrace(MASK_SHOT)
-    local ent = trace.Entity
-
-    if IsValid(ent) then
-        local phys = ent:GetPhysicsObject()
-        if not IsValid(phys) or not phys:IsMoveable() or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then return end
-        local is_ragdoll = ent:GetClass() == "prop_ragdoll"
-        local pdir = trace.Normal * -1
-        local is_player
-
-        if ent:IsPlayer() then
-            is_player = ent
-        end
-
-        if is_ragdoll then
-            phys = ent:GetPhysicsObjectNum(trace.PhysicsBone)
-        end
-
-        self:MoveObject(phys, pdir, 20000, is_ragdoll, is_player)
-    end
+    self:DoAttack(true)
 end
 
-function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll, is_player)
+function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
     if not IsValid(phys) then return end
     local speed = phys:GetVelocity():Length()
     -- remap speed from 0 -> 125 to force 1 -> 4000
@@ -255,20 +214,16 @@ function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll, is_player)
         pdir = pdir * (mass + 0.5) * (1 / 50)
     end
 
-    if is_player then
-        is_player:SetVelocity(pdir / 200)
-    else
-        phys:ApplyForceCenter(pdir)
-    end
+    phys:ApplyForceCenter(pdir)
 end
 
 function SWEP:GetRange(target)
-    if IsValid(target) and target:IsWeapon() and allow_wep:GetBool() then
-        return wep_range:GetFloat()
+    if IsValid(target) and target:IsWeapon() and allow_wep then
+        return wep_range
     elseif IsValid(target) and target:GetClass() == "prop_ragdoll" then
-        return 75
+        return 10000
     else
-        return 100
+        return 10000
     end
 end
 
@@ -276,15 +231,15 @@ function SWEP:AllowPickup(target)
     local phys = target:GetPhysicsObject()
     local ply = self:GetOwner()
 
-    return IsValid(phys) and IsValid(ply) and (not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)) and phys:GetMass() < CARRY_WEIGHT_LIMIT and (not PlayerStandsOn(target)) and (target.CanPickup ~= false) and (target:GetClass() ~= "prop_ragdoll" or allow_rag:GetBool()) and ((not target:IsWeapon()) or allow_wep:GetBool())
+    return IsValid(phys) and IsValid(ply) and (not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)) and phys:GetMass() < CARRY_WEIGHT_LIMIT and (not PlayerStandsOn(target)) and (target.CanPickup ~= false) and (target:GetClass() ~= "prop_ragdoll" or allow_rag) and ((not target:IsWeapon()) or allow_wep)
 end
 
 function SWEP:DoAttack(pickup)
-    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+    self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if IsValid(self.EntHolding) then
-        self:SendWeaponAnim(ACT_VM_MISSCENTER)
+        self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
 
         if (not pickup) and self.EntHolding:GetClass() == "prop_ragdoll" then
             -- see if we can pin this ragdoll to a wall in front of us
@@ -296,7 +251,7 @@ function SWEP:DoAttack(pickup)
             self:Drop()
         end
 
-        self:SetNextSecondaryFire(CurTime() + 0.3)
+        self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
 
         return
     end
@@ -314,41 +269,58 @@ function SWEP:DoAttack(pickup)
         if pickup then
             if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(ent) then
                 if self:AllowPickup(ent) then
+                    print(ent)
+
+                    if ent:IsPlayer() then
+                        local viewVector = ply:GetAimVector() * 1000
+                        ent:SetVelocity(viewVector)
+                    end
+
                     self:Pickup()
-                    self:SendWeaponAnim(ACT_VM_HITCENTER)
+                    self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
                     -- make the refire slower to avoid immediately dropping
-                    local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or 0.5
-                    self:SetNextSecondaryFire(CurTime() + delay)
+                    local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or push_pull_cooldown_secs
+                    self.Weapon:SetNextSecondaryFire(CurTime() + delay)
 
                     return
                 else
                     local is_ragdoll = trace.Entity:GetClass() == "prop_ragdoll"
                     -- pull heavy stuff
-                    local e = trace.Entity
-                    local p = e:GetPhysicsObject()
+                    local ent = trace.Entity
+                    local phys = ent:GetPhysicsObject()
                     local pdir = trace.Normal * -1
 
                     if is_ragdoll then
-                        p = e:GetPhysicsObjectNum(trace.PhysicsBone)
+                        phys = ent:GetPhysicsObjectNum(trace.PhysicsBone)
                         -- increase refire to make rags easier to drag
-                        --self:SetNextSecondaryFire(CurTime() + 0.04)
+                        --self.Weapon:SetNextSecondaryFire(CurTime() + 0.04)
                     end
 
-                    if IsValid(p) then
-                        self:MoveObject(p, pdir, 6000, is_ragdoll)
+                    if IsValid(phys) and not ent:IsPlayer() then
+                        self:MoveObject(phys, pdir, 6000, is_ragdoll)
 
                         return
                     end
                 end
             end
         else
-            if (ply:EyePos() - trace.HitPos):Length() < 100 then
-                local p = trace.Entity:GetPhysicsObject()
+            print(ent)
 
-                if IsValid(p) then
+            if ent:IsPlayer() then
+                local viewVector = -ply:GetAimVector() * 1000
+                print(viewVector)
+                ent:SetVelocity(viewVector)
+                self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+                self.Weapon:SetNextPrimaryFire(CurTime() + push_pull_cooldown_secs)
+            end
+
+            if (ply:EyePos() - trace.HitPos):Length() < 10000 then
+                local phys = trace.Entity:GetPhysicsObject()
+
+                if IsValid(phys) and not ent:IsPlayer() then
                     local pdir = trace.Normal
-                    self:MoveObject(p, pdir, 6000, trace.Entity:GetClass() == "prop_ragdoll")
-                    self:SetNextPrimaryFire(CurTime() + 0.03)
+                    self:MoveObject(phys, pdir, 6000, (trace.Entity:GetClass() == "prop_ragdoll"))
+                    self.Weapon:SetNextPrimaryFire(CurTime() + 0.03)
                 end
             end
         end
@@ -402,7 +374,7 @@ function SWEP:Pickup()
 
             entphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
             local bone = math.Clamp(trace.PhysicsBone, 0, 1)
-            local max_force = prop_force:GetInt()
+            local max_force = prop_force
 
             if ent:GetClass() == "prop_ragdoll" then
                 self.dt.carried_rag = ent
@@ -452,7 +424,7 @@ function SWEP:Drop()
         end
 
         -- Try to limit ragdoll slinging
-        if no_throw:GetBool() or ent:GetClass() == "prop_ragdoll" then
+        if no_throw or ent:GetClass() == "prop_ragdoll" then
             KillVelocity(ent)
         end
 
@@ -475,8 +447,8 @@ local function RagdollPinnedTakeDamage(rag, dmginfo)
 end
 
 function SWEP:PinRagdoll()
-    if not pin_rag:GetBool() then return end
-    if (not self:GetOwner():IsTraitor()) and (not pin_rag_inno:GetBool()) then return end
+    if not pin_rag then return end
+    if (not self:GetOwner():IsTraitor()) and (not pin_rag_inno) then return end
     local rag = self.EntHolding
     local ply = self:GetOwner()
 
@@ -529,8 +501,8 @@ end
 
 if SERVER then
     function SWEP:Initialize()
-        self.dt.can_rag_pin = pin_rag:GetBool()
-        self.dt.can_rag_pin_inno = pin_rag_inno:GetBool()
+        self.dt.can_rag_pin = pin_rag
+        self.dt.can_rag_pin_inno = pin_rag_inno
         self.dt.carried_rag = nil
 
         return self.BaseClass.Initialize(self)
