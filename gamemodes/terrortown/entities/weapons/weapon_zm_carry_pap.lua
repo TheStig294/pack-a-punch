@@ -213,15 +213,14 @@ end
 
 function SWEP:SecondaryAttack()
     self:SendWeaponAnim(ACT_VM_MISSCENTER)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
     if IsValid(self.Victim) then
-        self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
         self:Reset()
 
         return
     end
 
-    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
 
