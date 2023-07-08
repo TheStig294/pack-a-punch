@@ -208,20 +208,12 @@ function SWEP:Pickup(ent)
     net.Send(self.Victim)
 end
 
-function SWEP:PlayPunchAnimation()
-    local owner = self:GetOwner()
-    local anim = "fists_right"
-    local vm = owner:GetViewModel()
-    vm:SendViewModelMatchingSequence(vm:LookupSequence(anim))
-    owner:SetAnimation(PLAYER_ATTACK1)
-end
-
 function SWEP:PrimaryAttack()
     if IsValid(self.Victim) then return end
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
-    self:PlayPunchAnimation()
+    self:SendWeaponAnim(ACT_VM_MISSCENTER)
 
     -- for some reason not always true
     if owner.LagCompensation then
