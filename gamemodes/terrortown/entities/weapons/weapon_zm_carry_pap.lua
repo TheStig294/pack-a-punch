@@ -269,8 +269,6 @@ function SWEP:DoAttack(pickup)
         if pickup then
             if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(ent) then
                 if self:AllowPickup(ent) then
-                    print(ent)
-
                     if ent:IsPlayer() then
                         local viewVector = ply:GetAimVector() * 1000
                         ent:SetVelocity(viewVector)
@@ -280,6 +278,7 @@ function SWEP:DoAttack(pickup)
                     self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
                     -- make the refire slower to avoid immediately dropping
                     local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or push_pull_cooldown_secs
+                    self.Weapon:SetNextPrimaryFire(CurTime() + delay)
                     self.Weapon:SetNextSecondaryFire(CurTime() + delay)
 
                     return
@@ -304,14 +303,12 @@ function SWEP:DoAttack(pickup)
                 end
             end
         else
-            print(ent)
-
             if ent:IsPlayer() then
                 local viewVector = -ply:GetAimVector() * 1000
-                print(viewVector)
                 ent:SetVelocity(viewVector)
                 self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
                 self.Weapon:SetNextPrimaryFire(CurTime() + push_pull_cooldown_secs)
+                self.Weapon:SetNextSecondaryFire(CurTime() + push_pull_cooldown_secs)
             end
 
             if (ply:EyePos() - trace.HitPos):Length() < 10000 then
