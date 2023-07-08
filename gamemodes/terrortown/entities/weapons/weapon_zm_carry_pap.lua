@@ -33,10 +33,10 @@ SWEP.HoldType = "pistol"
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")
 SWEP.HitDistance = 250
-SWEP.Primary.Damage = 0
-SWEP.Primary.Automatic = true
-SWEP.Primary.Ammo = "none"
-SWEP.Primary.Delay = 0.7
+SWEP.Secondary.Damage = 0
+SWEP.Secondary.Automatic = true
+SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.Delay = 0.7
 SWEP.Kind = WEAPON_CARRY
 SWEP.AllowDrop = false
 SWEP.IsSilent = false
@@ -209,11 +209,21 @@ function SWEP:Pickup(ent)
 end
 
 function SWEP:PrimaryAttack()
-    if IsValid(self.Victim) then return end
-    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+end
+
+function SWEP:SecondaryAttack()
+    self:SendWeaponAnim(ACT_VM_MISSCENTER)
+
+    if IsValid(self.Victim) then
+        self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+        self:Reset()
+
+        return
+    end
+
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
-    self:SendWeaponAnim(ACT_VM_MISSCENTER)
 
     -- for some reason not always true
     if owner.LagCompensation then
@@ -242,12 +252,6 @@ function SWEP:PrimaryAttack()
     if owner.LagCompensation then
         owner:LagCompensation(false)
     end
-end
-
-function SWEP:SecondaryAttack()
-    if not IsValid(self.Victim) then return end
-    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self:Reset()
 end
 
 function SWEP:OnDrop()
