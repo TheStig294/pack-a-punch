@@ -1,519 +1,277 @@
----- Carry weapon SWEP
+-- All credit for this code goes to Malivil and Noxx from the 2022 Jingle Jam roles pack: https://github.com/NoxxFlame/TTT-Jingle-Jam-Roles-2022
+-- (I just modified it to work like an upgraded magnito-stick)
 AddCSLuaFile()
-DEFINE_BASECLASS"weapon_tttbase"
-SWEP.HoldType = "pistol"
+local CurTime = CurTime
+local ents = ents
+local hook = hook
+local ipairs = ipairs
+local IsValid = IsValid
+local math = math
+local table = table
+local timer = timer
+local util = util
+local AddHook = hook.Add
+local EntsFindAlongRay = ents.FindAlongRay
+local MathClamp = math.Clamp
+local MathRandom = math.random
+local MathAbs = math.abs
+local TableInsert = table.insert
+local TraceLine = util.TraceLine
+local RemoveHook = hook.Remove
 
 if CLIENT then
-    SWEP.PrintName = "Telekinesis Stick"
-    SWEP.Slot = 4
+    SWEP.PrintName = "Player Magneto-tick"
+    SWEP.Slot = 4 -- add 1 to get the slot number key
     SWEP.DrawCrosshair = false
     SWEP.ViewModelFlip = false
 end
 
-SWEP.PAPDesc = "Left/right-click to push/pull from afar!"
+SWEP.PAPDesc = "A magneto-stick that can pick up players!"
+SWEP.InLoadoutFor = {}
 SWEP.Base = "weapon_tttbase"
-SWEP.AutoSpawnable = false
+SWEP.HoldType = "pistol"
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
+SWEP.HitDistance = 250
+SWEP.Primary.Damage = 0
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
-SWEP.Primary.Delay = 0.1
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Automatic = true
-SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 0.1
+SWEP.Primary.Delay = 0.7
 SWEP.Kind = WEAPON_CARRY
-SWEP.InLoadoutFor = nil
-SWEP.AllowDelete = false
 SWEP.AllowDrop = false
-SWEP.NoSights = true
-SWEP.EntHolding = nil
-SWEP.CarryHack = nil
-SWEP.Constr = nil
-SWEP.PrevOwner = nil
-local allow_rag = true
-local prop_force = 60000
-local no_throw = false
-local pin_rag = true
-local pin_rag_inno = false
--- Allowing weapon pickups can allow players to cause a crash in the physics
--- system (ie. not fixable). Tuning the range seems to make this more
--- difficult. Not sure why. It's that kind of crash.
-local allow_wep = true
-local wep_range = 10000
--- not customizable via convars as some objects rely on not being carryable for
--- gameplay purposes
-CARRY_WEIGHT_LIMIT = 10000
-local PIN_RAG_RANGE = 10000
-local player = player
-local IsValid = IsValid
-local CurTime = CurTime
-local push_pull_cooldown_secs = 1
+SWEP.IsSilent = false
+SWEP.Victim = nil
+SWEP.VictimProps = nil
+-- Pull out faster than standard guns
+SWEP.DeploySpeed = 2
+local sound_single = Sound("Weapon_Crowbar.Single")
 
-local function SetSubPhysMotionEnabled(ent, enable)
-    if not IsValid(ent) then return end
+function SWEP:Initialize()
+    if SERVER then
+        -- Don't let the held player pickup weapons
+        AddHook("PlayerCanPickupWeapon", "PAP_magneto_PlayerCanPickupWeapon_" .. self:EntIndex(), function(ply, wep)
+            if ply == self.Victim then return false end
+        end)
 
-    for i = 0, ent:GetPhysicsObjectCount() - 1 do
-        local subphys = ent:GetPhysicsObjectNum(i)
-
-        if IsValid(subphys) then
-            subphys:EnableMotion(enable)
-
-            if enable then
-                subphys:Wake()
-            end
-        end
-    end
-end
-
-local function KillVelocity(ent)
-    ent:SetVelocity(vector_origin)
-    -- The only truly effective way to prevent all kinds of velocity and
-    -- inertia is motion disabling the entire ragdoll for a tick
-    -- for non-ragdolls this will do the same for their single physobj
-    SetSubPhysMotionEnabled(ent, false)
-
-    timer.Simple(0, function()
-        SetSubPhysMotionEnabled(ent, true)
-    end)
-end
-
-function SWEP:Reset(keep_velocity)
-    if IsValid(self.CarryHack) then
-        self.CarryHack:Remove()
+        -- Prevent fall damage while being carried
+        AddHook("EntityTakeDamage", "PAP_magneto_EntityTakeDamage_" .. self:EntIndex(), function(ent, dmginfo)
+            if IsPlayer(ent) and ent == self.Victim and dmginfo:IsFallDamage() then return true end
+        end)
     end
 
-    if IsValid(self.Constr) then
-        self.Constr:Remove()
-    end
-
-    if IsValid(self.EntHolding) then
-        -- it is possible for weapons to be already equipped at this point
-        -- changing the owner in such a case would cause problems
-        if not self.EntHolding:IsWeapon() then
-            if not IsValid(self.PrevOwner) then
-                self.EntHolding:SetOwner(nil)
-            else
-                self.EntHolding:SetOwner(self.PrevOwner)
-            end
-        end
-
-        -- the below ought to be unified with self:Drop()
-        local phys = self.EntHolding:GetPhysicsObject()
-
-        if IsValid(phys) then
-            phys:ClearGameFlag(FVPHYSICS_PLAYER_HELD)
-            phys:AddGameFlag(FVPHYSICS_WAS_THROWN)
-            phys:EnableCollisions(true)
-            phys:EnableGravity(true)
-            phys:EnableDrag(true)
-            phys:EnableMotion(true)
-        end
-
-        if (not keep_velocity) and (no_throw or self.EntHolding:GetClass() == "prop_ragdoll") then
-            KillVelocity(self.EntHolding)
-        end
-    end
-
-    self.dt.carried_rag = nil
-    self.EntHolding = nil
-    self.CarryHack = nil
-    self.Constr = nil
-end
-
-SWEP.reset = SWEP.Reset
-
-function SWEP:CheckValidity()
-    if (not IsValid(self.EntHolding)) or (not IsValid(self.CarryHack)) or (not IsValid(self.Constr)) then
-        -- if one of them is not valid but another is non-nil...
-        if (self.EntHolding or self.CarryHack or self.Constr) then
-            self:Reset()
-        end
-
-        return false
-    else
-        return true
-    end
-end
-
-local function PlayerStandsOn(ent)
-    for _, ply in ipairs(player.GetAll()) do
-        if ply:GetGroundEntity() == ent and ply:IsTerror() then return true end
-    end
-
-    return false
+    return self.BaseClass.Initialize(self)
 end
 
 if SERVER then
-    local ent_diff = vector_origin
-    local ent_diff_time = CurTime()
-    local stand_time = 0
+    CreateConVar("ttt_pap_magneto_release_delay", "2", FCVAR_NONE, "The seconds a victim is stunned for when released", 0, 60)
+    CreateConVar("ttt_pap_magneto_carry_duration", "30", FCVAR_NONE, "The seconds a victim can be carried for", 0, 60)
+    CreateConVar("ttt_pap_magneto_struggle_interval", "0.25", FCVAR_NONE, "The seconds between victim struggles", 0.1, 1)
+    CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", FCVAR_NONE, "The seconds a struggle reduces carry duration by", 0.1, 1)
 
     function SWEP:Think()
-        BaseClass.Think(self)
-        if not self:CheckValidity() then return end
+        self.BaseClass.Think(self)
+        if self.Victim == nil then return end
 
-        -- If we are too far from our object, force a drop. To avoid doing this
-        -- vector math extremely often (esp. when everyone is carrying something)
-        -- even though the occurrence is very rare, limited to once per
-        -- second. This should be plenty to catch the rare glitcher.
-        if CurTime() > ent_diff_time then
-            ent_diff = self:GetPos() - self.EntHolding:GetPos()
+        -- If the player we're holding left or is dead then reset the weapon
+        if not IsValid(self.Victim) or not self.Victim:Alive() or self.Victim:IsSpec() then
+            self:Reset()
 
-            if ent_diff:Dot(ent_diff) > 40000 then
-                self:Reset()
-
-                return
-            end
-
-            ent_diff_time = CurTime() + 1
+            return
         end
 
-        if CurTime() > stand_time then
-            if PlayerStandsOn(self.EntHolding) then
-                self:Reset()
-
-                return
-            end
-
-            stand_time = CurTime() + 0.1
-        end
-
-        self.CarryHack:SetPos(self:GetOwner():EyePos() + self:GetOwner():GetAimVector() * 70)
-        self.CarryHack:SetAngles(self:GetOwner():GetAngles())
-        self.EntHolding:PhysWake()
+        self:UpdateVictimPosition()
     end
+end
+
+function SWEP:UpdateVictimPosition()
+    if CLIENT then return end
+    if not IsValid(self.Victim) then return end
+    local owner = self:GetOwner()
+    self.Victim:SetPos(owner:LocalToWorld(Vector(35, 0, 0)))
+    self.Victim:SetEyeAngles(owner:GetAngles())
+    self.Victim:SetMoveType(MOVETYPE_NOCLIP)
+end
+
+function SWEP:Reset()
+    local owner = self:GetOwner()
+    local ply = self.Victim
+    local plyProps = self.VictimProps
+    -- Reset the properties early so the "PlayerCanPickupWeapon" hook is disabled
+    self.Victim = nil
+    self.VictimProps = nil
+    if CLIENT or not IsValid(ply) then return end
+    ply:SetNWBool("PAP_magnetoCarryVictim", false)
+    ply:SetSolid(plyProps.Solid)
+    ply:SetMoveType(MOVETYPE_WALK)
+
+    -- If this Reset is becauses they died, just drop them
+    if ply:Alive() and not ply:IsSpec() then
+        -- Move the player up a little bit to make sure they don't get stuck in the ground
+        local newPos = owner:LocalToWorld(Vector(75, 0, 5))
+        -- Prevent player from getting stuck in the world
+        local found = false
+        local attempts = 0
+
+        while true and attempts < 10 do
+            attempts = attempts + 1
+
+            local tr = TraceLine({
+                start = newPos,
+                endpos = newPos
+            })
+
+            if tr.Hit then
+                newPos.z = newPos.z + 10
+            else
+                found = true
+                break
+            end
+        end
+
+        -- Prevent player from getting stuck in other players
+        attempts = 0
+
+        while true and attempts < 10 do
+            attempts = attempts + 1
+            local foundEnts = EntsFindAlongRay(newPos, newPos)
+
+            if #foundEnts > 1 then
+                newPos.z = newPos.z + 10
+            else
+                found = true
+                break
+            end
+        end
+
+        -- If we failed to find a suitable place, just put them literally in the owner
+        -- The players can figure out what to do from there
+        if not found then
+            newPos = owner:GetPos()
+        end
+
+        ply:SetPos(newPos)
+
+        -- Give the player's weapons back
+        for _, data in ipairs(plyProps.Weapons) do
+            local wep = ply:Give(data.class)
+            wep:SetClip1(data.clip1)
+            wep:SetClip2(data.clip2)
+        end
+    end
+
+    -- Unlock the owner's view as well
+    net.Start("PAP_magnetoCarryEnd")
+    net.WriteUInt(self:EntIndex(), 16)
+    net.Send(owner)
+    -- Unlock player movement and camera and hide struggle UI
+    net.Start("PAP_magnetoVictimCarryEnd")
+    net.WriteUInt(self:EntIndex(), 16)
+    net.WriteUInt(GetConVar("ttt_pap_magneto_release_delay"):GetInt(), 8)
+    net.Send(ply)
+end
+
+function SWEP:Pickup(ent)
+    if IsValid(self.Victim) then return end
+    if not IsValid(ent) then return end
+    self.Victim = ent
+    if CLIENT then return end
+    self.Victim:SetNWBool("PAP_magnetoCarryVictim", true)
+
+    self.VictimProps = {
+        Solid = self.Victim:GetSolid(),
+        Weapons = {}
+    }
+
+    self.Victim:SetSolid(SOLID_NONE)
+
+    for _, weap in ipairs(self.Victim:GetWeapons()) do
+        TableInsert(self.VictimProps.Weapons, {
+            class = weap:GetClass(),
+            clip1 = weap:Clip1(),
+            clip2 = weap:Clip2()
+        })
+    end
+
+    self.Victim:StripWeapons()
+    self:UpdateVictimPosition()
+    -- Lock the owner's camera a bit too so things are less janky
+    net.Start("PAP_magnetoCarryStart")
+    net.WriteUInt(self:EntIndex(), 16)
+    net.Send(self:GetOwner())
+    -- Lock player movement and camera on the client to reduce jerkiness
+    -- Also show UI for the held player to struggle
+    net.Start("PAP_magnetoVictimCarryStart")
+    net.WriteUInt(self:EntIndex(), 16)
+    net.WriteUInt(GetConVar("ttt_pap_magneto_carry_duration"):GetInt(), 8)
+    net.WriteFloat(GetConVar("ttt_pap_magneto_struggle_interval"):GetFloat())
+    net.WriteFloat(GetConVar("ttt_pap_magneto_struggle_reduction"):GetFloat())
+    net.Send(self.Victim)
+end
+
+function SWEP:PlayPunchAnimation()
+    local owner = self:GetOwner()
+    local anim = "fists_right"
+    local vm = owner:GetViewModel()
+    vm:SendViewModelMatchingSequence(vm:LookupSequence(anim))
+    owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:PrimaryAttack()
-    self:DoAttack(false)
+    if IsValid(self.Victim) then return end
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    local owner = self:GetOwner()
+    if not IsValid(owner) then return end
+    self:PlayPunchAnimation()
+
+    -- for some reason not always true
+    if owner.LagCompensation then
+        owner:LagCompensation(true)
+    end
+
+    local spos = owner:GetShootPos()
+    local sdest = spos + (owner:GetAimVector() * 70)
+    local kmins = Vector(1, 1, 1) * -10
+    local kmaxs = Vector(1, 1, 1) * 10
+
+    local tr_main = util.TraceHull({
+        start = spos,
+        endpos = sdest,
+        filter = owner,
+        mask = MASK_SHOT_HULL,
+        mins = kmins,
+        maxs = kmaxs
+    })
+
+    local hitEnt = tr_main.Entity
+    self:EmitSound(sound_single)
+    if not IsPlayer(hitEnt) or tr_main.HitWorld then return end
+    self:Pickup(hitEnt)
+
+    if owner.LagCompensation then
+        owner:LagCompensation(false)
+    end
 end
 
 function SWEP:SecondaryAttack()
-    self:DoAttack(true)
-end
-
-function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
-    if not IsValid(phys) then return end
-    local speed = phys:GetVelocity():Length()
-    -- remap speed from 0 -> 125 to force 1 -> 4000
-    local force = maxforce + (1 - maxforce) * (speed / 125)
-
-    if is_ragdoll then
-        force = force * 2
-    end
-
-    pdir = pdir * force
-    local mass = phys:GetMass()
-
-    -- scale more for light objects
-    if mass < 50 then
-        pdir = pdir * (mass + 0.5) * (1 / 50)
-    end
-
-    phys:ApplyForceCenter(pdir)
-end
-
-function SWEP:GetRange(target)
-    if IsValid(target) and target:IsWeapon() and allow_wep then
-        return wep_range
-    elseif IsValid(target) and target:GetClass() == "prop_ragdoll" then
-        return 10000
-    else
-        return 10000
-    end
-end
-
-function SWEP:AllowPickup(target)
-    local phys = target:GetPhysicsObject()
-    local ply = self:GetOwner()
-
-    return IsValid(phys) and IsValid(ply) and (not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)) and phys:GetMass() < CARRY_WEIGHT_LIMIT and (not PlayerStandsOn(target)) and (target.CanPickup ~= false) and (target:GetClass() ~= "prop_ragdoll" or allow_rag) and ((not target:IsWeapon()) or allow_wep)
-end
-
-function SWEP:DoAttack(pickup)
-    self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-
-    if IsValid(self.EntHolding) then
-        self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
-
-        if (not pickup) and self.EntHolding:GetClass() == "prop_ragdoll" then
-            -- see if we can pin this ragdoll to a wall in front of us
-            if not self:PinRagdoll() then
-                -- else just drop it as usual
-                self:Drop()
-            end
-        else
-            self:Drop()
-        end
-
-        self.Weapon:SetNextSecondaryFire(CurTime() + 0.3)
-
-        return
-    end
-
-    local ply = self:GetOwner()
-    local trace = ply:GetEyeTrace(MASK_SHOT)
-
-    if IsValid(trace.Entity) then
-        local ent = trace.Entity
-        local phys = trace.Entity:GetPhysicsObject()
-        if not IsValid(phys) or not phys:IsMoveable() or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then return end
-        -- if we let the client mess with physics, desync ensues
-        if CLIENT then return end
-
-        if pickup then
-            if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(ent) then
-                if self:AllowPickup(ent) then
-                    if ent:IsPlayer() then
-                        local viewVector = ply:GetAimVector() * 1000
-                        ent:SetVelocity(viewVector)
-                    end
-
-                    self:Pickup()
-                    self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-                    -- make the refire slower to avoid immediately dropping
-                    local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or push_pull_cooldown_secs
-                    self.Weapon:SetNextPrimaryFire(CurTime() + delay)
-                    self.Weapon:SetNextSecondaryFire(CurTime() + delay)
-
-                    return
-                else
-                    local is_ragdoll = trace.Entity:GetClass() == "prop_ragdoll"
-                    -- pull heavy stuff
-                    local ent = trace.Entity
-                    local phys = ent:GetPhysicsObject()
-                    local pdir = trace.Normal * -1
-
-                    if is_ragdoll then
-                        phys = ent:GetPhysicsObjectNum(trace.PhysicsBone)
-                        -- increase refire to make rags easier to drag
-                        --self.Weapon:SetNextSecondaryFire(CurTime() + 0.04)
-                    end
-
-                    if IsValid(phys) and not ent:IsPlayer() then
-                        self:MoveObject(phys, pdir, 6000, is_ragdoll)
-
-                        return
-                    end
-                end
-            end
-        else
-            if ent:IsPlayer() then
-                local viewVector = -ply:GetAimVector() * 1000
-                ent:SetVelocity(viewVector)
-                self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-                self.Weapon:SetNextPrimaryFire(CurTime() + push_pull_cooldown_secs)
-                self.Weapon:SetNextSecondaryFire(CurTime() + push_pull_cooldown_secs)
-            end
-
-            if (ply:EyePos() - trace.HitPos):Length() < 10000 then
-                local phys = trace.Entity:GetPhysicsObject()
-
-                if IsValid(phys) and not ent:IsPlayer() then
-                    local pdir = trace.Normal
-                    self:MoveObject(phys, pdir, 6000, (trace.Entity:GetClass() == "prop_ragdoll"))
-                    self.Weapon:SetNextPrimaryFire(CurTime() + 0.03)
-                end
-            end
-        end
-    end
-end
-
--- Perform a pickup
-function SWEP:Pickup()
-    if CLIENT or IsValid(self.EntHolding) then return end
-    local ply = self:GetOwner()
-    local trace = ply:GetEyeTrace(MASK_SHOT)
-    local ent = trace.Entity
-    self.EntHolding = ent
-    local entphys = ent:GetPhysicsObject()
-
-    if IsValid(ent) and IsValid(entphys) then
-        self.CarryHack = ents.Create("prop_physics")
-
-        if IsValid(self.CarryHack) then
-            self.CarryHack:SetPos(self.EntHolding:GetPos())
-            self.CarryHack:SetModel("models/weapons/w_bugbait.mdl")
-            self.CarryHack:SetColor(Color(50, 250, 50, 240))
-            self.CarryHack:SetNoDraw(true)
-            self.CarryHack:DrawShadow(false)
-            self.CarryHack:SetHealth(999)
-            self.CarryHack:SetOwner(ply)
-            self.CarryHack:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-            self.CarryHack:SetSolid(SOLID_NONE)
-            -- set the desired angles before adding the constraint
-            self.CarryHack:SetAngles(self:GetOwner():GetAngles())
-            self.CarryHack:Spawn()
-
-            -- if we already are owner before pickup, we will not want to disown
-            -- this entity when we drop it
-            -- weapons should not have their owner changed in this way
-            if not self.EntHolding:IsWeapon() then
-                self.PrevOwner = self.EntHolding:GetOwner()
-                self.EntHolding:SetOwner(ply)
-            end
-
-            local phys = self.CarryHack:GetPhysicsObject()
-
-            if IsValid(phys) then
-                phys:SetMass(200)
-                phys:SetDamping(0, 1000)
-                phys:EnableGravity(false)
-                phys:EnableCollisions(false)
-                phys:EnableMotion(false)
-                phys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
-            end
-
-            entphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
-            local bone = math.Clamp(trace.PhysicsBone, 0, 1)
-            local max_force = prop_force
-
-            if ent:GetClass() == "prop_ragdoll" then
-                self.dt.carried_rag = ent
-                bone = trace.PhysicsBone
-                max_force = 0
-            else
-                self.dt.carried_rag = nil
-            end
-
-            self.Constr = constraint.Weld(self.CarryHack, self.EntHolding, 0, bone, max_force, true)
-        end
-    end
-end
-
-local down = Vector(0, 0, -1)
-
-function SWEP:AllowEntityDrop()
-    local ply = self:GetOwner()
-    local ent = self.CarryHack
-    if (not IsValid(ply)) or (not IsValid(ent)) then return false end
-    local ground = ply:GetGroundEntity()
-    if ground and (ground:IsWorld() or IsValid(ground)) then return true end
-    local diff = (ent:GetPos() - ply:GetShootPos()):GetNormalized()
-
-    return down:Dot(diff) <= 0.75
-end
-
-function SWEP:Drop()
-    if not self:CheckValidity() then return end
-    if not self:AllowEntityDrop() then return end
-
-    if SERVER then
-        self.Constr:Remove()
-        self.CarryHack:Remove()
-        local ent = self.EntHolding
-        local phys = ent:GetPhysicsObject()
-
-        if IsValid(phys) then
-            phys:EnableCollisions(true)
-            phys:EnableGravity(true)
-            phys:EnableDrag(true)
-            phys:EnableMotion(true)
-            phys:Wake()
-            phys:ApplyForceCenter(self:GetOwner():GetAimVector() * 500)
-            phys:ClearGameFlag(FVPHYSICS_PLAYER_HELD)
-            phys:AddGameFlag(FVPHYSICS_WAS_THROWN)
-        end
-
-        -- Try to limit ragdoll slinging
-        if no_throw or ent:GetClass() == "prop_ragdoll" then
-            KillVelocity(ent)
-        end
-
-        ent:SetPhysicsAttacker(self:GetOwner())
-    end
-
+    if not IsValid(self.Victim) then return end
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:Reset()
 end
 
-local CONSTRAINT_TYPE = "Rope"
-
-local function RagdollPinnedTakeDamage(rag, dmginfo)
-    local att = dmginfo:GetAttacker()
-    if not IsValid(att) then return end
-    -- drop from pinned position upon dmg
-    constraint.RemoveConstraints(rag, CONSTRAINT_TYPE)
-    rag:PhysWake()
-    rag:SetHealth(0)
-    rag.is_pinned = false
-end
-
-function SWEP:PinRagdoll()
-    if not pin_rag then return end
-    if (not self:GetOwner():IsTraitor()) and (not pin_rag_inno) then return end
-    local rag = self.EntHolding
-    local ply = self:GetOwner()
-
-    local tr = util.TraceLine({
-        start = ply:EyePos(),
-        endpos = ply:EyePos() + (ply:GetAimVector() * PIN_RAG_RANGE),
-        filter = {ply, self, rag, self.CarryHack},
-        mask = MASK_SOLID
-    })
-
-    if tr.HitWorld and (not tr.HitSky) then
-        -- find bone we're holding the ragdoll by
-        local bone = self.Constr.Bone2
-
-        -- only allow one rope per bone
-        for _, c in pairs(constraint.FindConstraints(rag, CONSTRAINT_TYPE)) do
-            if c.Bone1 == bone then
-                c.Constraint:Remove()
-            end
-        end
-
-        local bonephys = rag:GetPhysicsObjectNum(bone)
-        if not IsValid(bonephys) then return end
-        local bonepos = bonephys:GetPos()
-        local attachpos = tr.HitPos
-        local length = (bonepos - attachpos):Length() * 0.9
-        -- we need to convert using this particular physobj to get the right
-        -- coordinates
-        bonepos = bonephys:WorldToLocal(bonepos)
-        constraint.Rope(rag, tr.Entity, bone, 0, bonepos, attachpos, length, length * 0.1, 6000, 1, "cable/rope", false)
-        rag.is_pinned = true
-        rag.OnPinnedDamage = RagdollPinnedTakeDamage
-        -- lets EntityTakeDamage run for the ragdoll
-        rag:SetHealth(999999)
-        self:Reset(true)
-    end
-end
-
-function SWEP:SetupDataTables()
-    -- we've got these dt slots anyway, might as well use them instead of a
-    -- globalvar, probably cheaper
-    self:DTVar("Bool", 0, "can_rag_pin")
-    self:DTVar("Bool", 0, "can_rag_pin_inno")
-    -- client actually has no idea what we're holding, and almost never needs to
-    -- know
-    self:DTVar("Entity", 0, "carried_rag")
-
-    return self.BaseClass.SetupDataTables(self)
-end
-
-if SERVER then
-    function SWEP:Initialize()
-        self.dt.can_rag_pin = pin_rag
-        self.dt.can_rag_pin_inno = pin_rag_inno
-        self.dt.carried_rag = nil
-
-        return self.BaseClass.Initialize(self)
-    end
-end
-
-function SWEP:OnRemove()
-    self:Reset()
+function SWEP:OnDrop()
+    self:Remove()
 end
 
 function SWEP:Deploy()
     self:Reset()
+    local vm = self:GetOwner():GetViewModel()
+    vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
 
     return true
+end
+
+function SWEP:OnRemove()
+    self:Reset()
 end
 
 function SWEP:Holster()
@@ -526,37 +284,213 @@ function SWEP:ShouldDropOnDie()
     return false
 end
 
-function SWEP:OnDrop()
-    self:Remove()
+if SERVER then
+    util.AddNetworkString("PAP_magnetoCarryStart")
+    util.AddNetworkString("PAP_magnetoCarryEnd")
+    util.AddNetworkString("PAP_magnetoVictimCarryStart")
+    util.AddNetworkString("PAP_magnetoVictimCarryEnd")
+    util.AddNetworkString("PAP_magnetoVictimStruggle")
+    resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle1.mp3")
+    resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle2.mp3")
+    resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle3.mp3")
+
+    local struggle_sounds = {Sound("ttt_pack_a_punch/magneto_stick/struggle1.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle2.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle3.mp3")}
+
+    net.Receive("PAP_magnetoVictimCarryEnd", function(len, ply)
+        local entIdx = net.ReadUInt(16)
+        local wep = Entity(entIdx)
+        if not IsValid(wep) or not wep:IsWeapon() then return end
+        if wep.Victim ~= ply then return end
+        wep:Reset()
+    end)
+
+    net.Receive("PAP_magnetoVictimStruggle", function(len, ply)
+        if not IsPlayer(ply) or not ply:Alive() or ply:IsSpec() then return end
+        local idx = MathRandom(1, #struggle_sounds)
+        local chosen_sound = struggle_sounds[idx]
+        sound.Play(chosen_sound, ply:GetPos())
+    end)
 end
 
 if CLIENT then
-    local draw = draw
-    local util = util
-    local PT = LANG.GetParamTranslation
+    -- Owner
+    net.Receive("PAP_magnetoCarryStart", function()
+        local client = LocalPlayer()
+        local entIdx = net.ReadUInt(16)
 
-    local key_params = {
-        primaryfire = Key("+attack", "LEFT MOUSE")
-    }
+        AddHook("InputMouseApply", "PAP_magneto_InputMouseApply_" .. entIdx, function(cmd, x, y, ang)
+            if not client:Alive() or client:IsSpec() then return end
+            -- Lock view from going too high up or down
+            ang.pitch = MathClamp(ang.pitch, -35, 35)
+            -- Apply the mouse movement to the values and then set the camera angles
+            ang.pitch = ang.pitch + (y / 50)
+            ang.yaw = ang.yaw - (x / 50)
+            cmd:SetViewAngles(ang)
 
-    function SWEP:DrawHUD()
-        self.BaseClass.DrawHUD(self)
+            return true
+        end)
+    end)
 
-        if self.dt.can_rag_pin and IsValid(self.dt.carried_rag) then
-            local client = LocalPlayer()
+    net.Receive("PAP_magnetoCarryEnd", function()
+        local entIdx = net.ReadUInt(16)
+        RemoveHook("InputMouseApply", "PAP_magneto_InputMouseApply_" .. entIdx)
+    end)
 
-            if not client:IsSpec() and (self.dt.can_rag_pin_inno or client:IsTraitor()) then
-                local tr = util.TraceLine({
-                    start = client:EyePos(),
-                    endpos = client:EyePos() + (client:GetAimVector() * PIN_RAG_RANGE),
-                    filter = {client, self, self.dt.carried_rag},
-                    mask = MASK_SOLID
-                })
+    -- Victim
+    surface.CreateFont("PAP_magnetoEscape", {
+        font = "Trebuchet24",
+        size = 18,
+        weight = 600
+    })
 
-                if tr.HitWorld and (not tr.HitSky) then
-                    draw.SimpleText(PT("magnet_help", key_params), "TabLarge", ScrW() / 2, ScrH() / 2 - 50, COLOR_RED, TEXT_ALIGN_CENTER)
+    net.Receive("PAP_magnetoVictimCarryStart", function()
+        local client = LocalPlayer()
+        local entIdx = net.ReadUInt(16)
+        local carryDuration = net.ReadUInt(8)
+        local struggleInterval = net.ReadFloat()
+        local struggleReduction = net.ReadFloat()
+        local pap_magnetoWeapon = Entity(entIdx)
+        local pap_magneto = pap_magnetoWeapon:GetOwner()
+
+        AddHook("StartCommand", "PAP_magneto_Victim_StartCommand_" .. entIdx, function(ply, cmd)
+            if ply ~= client then return end
+            if not client:Alive() or client:IsSpec() then return end
+            -- Stop them from moving and attacking
+            cmd:SetForwardMove(0)
+            cmd:SetSideMove(0)
+            cmd:RemoveKey(IN_JUMP)
+            cmd:RemoveKey(IN_DUCK)
+            cmd:RemoveKey(IN_ATTACK)
+            cmd:RemoveKey(IN_ATTACK2)
+        end)
+
+        AddHook("InputMouseApply", "PAP_magneto_Victim_InputMouseApply_" .. entIdx, function(cmd, x, y, ang)
+            if not client:Alive() or client:IsSpec() then return end
+
+            -- If we're being held by the owner, lock our view in the center but facing the same direction as owner
+            -- If they aren't being held then the mouse is basically just disabled, preventing them from moving their camera
+            -- This lock takes effect in the delay after the victim is dropped by the owner
+            if client:GetNWBool("PAP_magnetoCarryVictim", false) then
+                local currentYaw = client:EyeAngles().yaw
+                local targetYaw = pap_magneto:EyeAngles().yaw
+                local speedMult = 0.001
+                local minSpeed = 0.001
+                local dir = currentYaw < targetYaw and 1 or -1
+                local difference = MathAbs(currentYaw - targetYaw)
+
+                if difference > 180 then
+                    dir = dir * -1
+                    difference = 360 - difference
                 end
+
+                local change = difference * speedMult
+
+                if change < minSpeed then
+                    change = minSpeed
+                end
+
+                currentYaw = currentYaw + change * dir
+
+                -- Yaw ranges from -180 to 180
+                if currentYaw > 180 then
+                    currentYaw = currentYaw - 360
+                elseif currentYaw < -180 then
+                    currentYaw = currentYaw + 360
+                end
+
+                ang.pitch = 0
+                ang.yaw = currentYaw
+                cmd:SetViewAngles(ang)
             end
+
+            return true
+        end)
+
+        -- If duration is not set then this hold is indefinite
+        if carryDuration <= 0 then return end
+        -- Show the struggle UI
+        local startTime = CurTime()
+        local endTime = startTime + carryDuration
+        local margin = 10
+        local width, height = 200, 25
+        local x = ScrW() / 2 - width / 2
+        local y = margin / 2 + height
+
+        local colors = {
+            background = Color(30, 60, 100, 222),
+            fill = Color(75, 150, 255, 255)
+        }
+
+        AddHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx, function()
+            if not client:Alive() or client:IsSpec() then return end
+            -- Don't use carryDuration or the changes to the endTime for the struggle won't reflect accurately
+            local percentage = (CurTime() - startTime) / (endTime - startTime)
+
+            -- If the percentage has hit 100 then release the player
+            if percentage >= 1 then
+                net.Start("PAP_magnetoVictimCarryEnd")
+                net.WriteUInt(entIdx, 16)
+                net.SendToServer()
+                RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
+
+                return
+            end
+
+            CRHUD:PaintBar(8, x, y, width, height, colors, percentage)
+
+            draw.TextShadow({
+                text = "Someone has a hold of you!",
+                font = "PAP_magnetoEscape",
+                pos = {ScrW() / 2, y - height + 3},
+                color = COLOR_WHITE,
+                xalign = TEXT_ALIGN_CENTER
+            }, 1, 255)
+
+            draw.SimpleText("ESCAPE PROGRESS", "PAP_magnetoEscape", ScrW() / 2, y + 3, COLOR_WHITE, TEXT_ALIGN_CENTER)
+
+            draw.TextShadow({
+                text = "Press " .. Key("+forward", "W") .. " repeatedly to struggle",
+                font = "PAP_magnetoEscape",
+                pos = {ScrW() / 2, y + height + 3},
+                color = COLOR_WHITE,
+                xalign = TEXT_ALIGN_CENTER
+            }, 1, 255)
+        end)
+
+        -- Increase progress every time they press the struggle button
+        local nextStruggle = 0
+
+        AddHook("KeyPress", "PAP_magneto_Victim_KeyPress_" .. entIdx, function(ply, key)
+            if ply ~= client then return end
+            if not client:Alive() or client:IsSpec() then return end
+            if key ~= IN_FORWARD then return end
+
+            if CurTime() > nextStruggle then
+                nextStruggle = CurTime() + struggleInterval
+                endTime = endTime - struggleReduction
+                net.Start("PAP_magnetoVictimStruggle")
+                net.SendToServer()
+            end
+        end)
+    end)
+
+    net.Receive("PAP_magnetoVictimCarryEnd", function()
+        local entIdx = net.ReadUInt(16)
+        local delay = net.ReadUInt(8)
+
+        local function End()
+            RemoveHook("StartCommand", "PAP_magneto_Victim_StartCommand_" .. entIdx)
+            RemoveHook("InputMouseApply", "PAP_magneto_Victim_InputMouseApply_" .. entIdx)
         end
-    end
+
+        -- End the effect after the given delay, if there is one
+        if delay > 0 then
+            timer.Simple(delay, End)
+        else
+            End()
+        end
+
+        RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
+        RemoveHook("KeyPress", "PAP_magneto_Victim_KeyPress_" .. entIdx)
+    end)
 end
