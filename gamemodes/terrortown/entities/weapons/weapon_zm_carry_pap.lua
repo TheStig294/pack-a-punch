@@ -67,6 +67,7 @@ if SERVER then
     CreateConVar("ttt_pap_magneto_carry_duration", "30", FCVAR_NONE, "The seconds a victim can be carried for", 0, 60)
     CreateConVar("ttt_pap_magneto_struggle_interval", "0.25", FCVAR_NONE, "The seconds between victim struggles", 0.1, 1)
     CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", FCVAR_NONE, "The seconds a struggle reduces carry duration by", 0.1, 1)
+    CreateConVar("ttt_pap_magneto_cooldown", "10", FCVAR_NONE, "Seconds cooldown of picking up players again", 0, 180)
 
     function SWEP:Think()
         self.BaseClass.Think(self)
@@ -173,6 +174,21 @@ end
 function SWEP:Pickup(ent)
     if IsValid(self.Victim) then return end
     if not IsValid(ent) then return end
+
+    if ent.PaPMagnetostickCooldown then
+        self:GetOwner():PrintMessage(HUD_PRINTCENTER, "This player was picked up too recently!")
+
+        return
+    else
+        ent.PaPMagnetostickCooldown = true
+
+        timer.Simple(GetConVar("ttt_pap_magneto_cooldown"):GetInt(), function()
+            if IsValid(ent) then
+                ent.PaPMagnetostickCooldown = false
+            end
+        end)
+    end
+
     self.Victim = ent
     if CLIENT then return end
     self.Victim:SetNWBool("PAP_magnetoCarryVictim", true)
