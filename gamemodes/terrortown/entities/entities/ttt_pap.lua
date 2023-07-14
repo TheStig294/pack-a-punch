@@ -124,6 +124,7 @@ local function ApplyPAP(wep, upgradeData)
     net.WriteFloat(wep.Primary.ClipSize)
     net.WriteFloat(wep.Primary.Recoil)
     net.WriteBool(wep.Primary.Automatic)
+    net.WriteBool(upgradeData.defaultPaPUpgrade)
     net.Broadcast()
 end
 
@@ -141,6 +142,7 @@ if CLIENT then
         wep.Primary.DefaultClip = wep.Primary.ClipSize
         wep.Primary.Recoil = net.ReadFloat()
         wep.Primary.Automatic = net.ReadBool()
+        local defaultPaPUpgrade = net.ReadBool()
         -- Name
         local upgradeData = TTT_PAP_UPGRADES[wep.ClassName]
 
@@ -154,7 +156,9 @@ if CLIENT then
         -- Description
         local description
 
-        if upgradeData and upgradeData.desc then
+        if defaultPaPUpgrade then
+            description = "x1.5 fire rate increase!"
+        elseif upgradeData and upgradeData.desc then
             description = upgradeData.desc
         elseif wep.PAPDesc then
             description = wep.PAPDesc
@@ -218,6 +222,7 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
     local classname = wep:GetClass()
     local oldClip = wep:Clip1()
     ply:StripWeapon(classname)
+    local specialPaPUpgrade = false
 
     timer.Simple(3.4, function()
         for _, w in ipairs(ply:GetWeapons()) do
@@ -231,6 +236,7 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
 
         if papClass then
             classname = classname .. "_pap"
+            specialPaPUpgrade = true
         end
 
         wep = ply:Give(classname)
@@ -240,7 +246,17 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
     timer.Simple(3.5, function()
         if not IsValid(wep) then return end
         local upgradeData = TTT_PAP_UPGRADES[classname]
-        upgradeData = upgradeData or {}
+
+        if upgradeData then
+            upgradeData.defaultPaPUpgrade = false
+        else
+            upgradeData = {}
+
+            if not specialPaPUpgrade then
+                upgradeData.defaultPaPUpgrade = true
+            end
+        end
+
         -- Default gun stats for PAP
         -- By default, weapons get a 1.5 firerate upgrade
         -- Unless specified in the upgrades table
@@ -250,10 +266,12 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
         upgradeData.ammoMult = upgradeData.ammoMult or 1
         upgradeData.recoilMult = upgradeData.recoilMult or 1
 
+        -- By default, go by the gun's specified automatic/non-automatic fire
         if upgradeData.automatic == nil then
             upgradeData.automatic = wep.Primary.Automatic
         end
 
+        -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
         upgradeData.oldClip = oldClip
 
         if upgradeData then
