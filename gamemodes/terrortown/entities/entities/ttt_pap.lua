@@ -7,7 +7,7 @@ end
 
 if CLIENT then
     LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")
-    LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nSome weapons gain a special upgrade!\n(Others get a 1.5x firerate increase)")
+    LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
 end
 
 -- Registering the passive item
