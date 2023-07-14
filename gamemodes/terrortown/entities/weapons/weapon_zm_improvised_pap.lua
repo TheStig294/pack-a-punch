@@ -10,6 +10,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_cbar"
 end
 
+SWEP.PAPDesc = "Zero push cooldown, greatly increased damage!"
 SWEP.Base = "weapon_tttbase"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
