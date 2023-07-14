@@ -7,6 +7,7 @@ if CLIENT then
     SWEP.ViewModelFOV = 10
 end
 
+SWEP.PAPDesc = "You pack-a-punched yourself!\nSpeed, jump and health boost!"
 SWEP.Base = "weapon_tttbase"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
@@ -23,7 +24,6 @@ SWEP.InLoadoutFor = nil
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.PAPDesc = "You pack-a-punched yourself!\nSpeed, jump and health boost!"
 local buffScale = 1.2
 local buffScaleJump = 1.5
 

@@ -17,6 +17,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_wtester"
 end
 
+SWEP.PAPDesc = "Use on someone while standing next to them to test them!\nTests take longer with each use"
 SWEP.Base = "weapon_tttbase"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/props_lab/huladoll.mdl"
@@ -39,7 +40,6 @@ SWEP.NoSights = true
 SWEP.Range = 175
 SWEP.ItemSamples = {}
 SWEP.NowRepeating = nil
-SWEP.PAPDesc = "Use on someone to test them! Takes longer to test with each use"
 local MAX_ITEM = 30
 SWEP.MaxItemSamples = MAX_ITEM
 local MAX_CHARGE = 1250

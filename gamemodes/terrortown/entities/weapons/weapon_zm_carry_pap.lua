@@ -26,7 +26,7 @@ if CLIENT then
     SWEP.ViewModelFlip = false
 end
 
-SWEP.PAPDesc = "A magneto-stick that picks up players!"
+SWEP.PAPDesc = "A magneto-stick that exclusively picks up players!"
 SWEP.InLoadoutFor = {}
 SWEP.Base = "weapon_tttbase"
 SWEP.HoldType = "pistol"

@@ -14,6 +14,7 @@ if CLIENT then
     }
 end
 
+SWEP.PAPDesc = "Now a drivable toy car, that's able to damage players"
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_EQUIP2
 SWEP.Primary.Recoil = 1.5

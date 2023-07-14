@@ -15,6 +15,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_health"
 end
 
+SWEP.PAPDesc = "Heal much faster, x2 capacity"
 SWEP.Base = "weapon_tttbase"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/props/cs_office/microwave.mdl"
@@ -36,7 +37,6 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_HEALTHSTATION
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.PAPDesc = "Heal much faster, x2 capacity"
 
 function SWEP:OnDrop()
     self:Remove()

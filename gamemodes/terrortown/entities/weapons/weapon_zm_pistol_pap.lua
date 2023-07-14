@@ -10,6 +10,7 @@ if CLIENT then
     SWEP.IconLetter = "u"
 end
 
+SWEP.PAPDesc = "Now an incendiary grenade launcher! (With 4 ammo)"
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_PISTOL
@@ -30,7 +31,6 @@ SWEP.ViewModel = "models/weapons/cstrike/c_pist_fiveseven.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_fiveseven.mdl"
 SWEP.IronSightsPos = Vector(-5.95, -4, 2.799)
 SWEP.IronSightsAng = Vector(0, 0, 0)
-SWEP.PAPDesc = "Now a 4-shot grenade launcher!"
 
 function SWEP:Initialize()
     timer.Simple(0.1, function()

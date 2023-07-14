@@ -17,6 +17,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_radio"
 end
 
+SWEP.PAPDesc = "Auto-plays sounds, +3 extra radios!"
 SWEP.Base = "weapon_tttbase"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/props/cs_office/radio.mdl"
@@ -37,7 +38,6 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_RADIO
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.PAPDesc = "Automatically plays distracting sounds every 30 seconds, can place 4 radios!"
 
 function SWEP:OnDrop()
     self:Remove()

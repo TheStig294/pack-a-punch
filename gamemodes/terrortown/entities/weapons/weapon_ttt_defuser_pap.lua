@@ -15,6 +15,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_defuser"
 end
 
+SWEP.PAPDesc = "Single-use, disarms all C4s on the map!"
 SWEP.Base = "weapon_tttbase"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_defuser.mdl"
@@ -32,7 +33,6 @@ SWEP.Kind = WEAPON_EQUIP2
 -- only detectives can buy
 SWEP.CanBuy = nil
 SWEP.WeaponID = AMMO_DEFUSER
-SWEP.PAPDesc = "Disarms all C4s on the map!"
 --SWEP.AllowDrop = false
 local defuse = Sound("c4.disarmfinish")
 

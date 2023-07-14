@@ -16,6 +16,7 @@ if CLIENT then
     SWEP.IconLetter = "q"
 end
 
+SWEP.PAPDesc = "Increased stun power, 1.5x ammo"
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_EQUIP
 SWEP.WeaponID = AMMO_STUN
@@ -38,7 +39,6 @@ SWEP.WorldModel = "models/weapons/w_smg_ump45.mdl"
 SWEP.IronSightsPos = Vector(-8.735, -10, 4.039)
 SWEP.IronSightsAng = Vector(-1.201, -0.201, -2)
 SWEP.HeadshotMultiplier = 4.5 -- brain fizz
-SWEP.PAPDesc = "Increased stun power, 1.5x ammo"
 
 function SWEP:Initialize()
     timer.Simple(0.1, function()

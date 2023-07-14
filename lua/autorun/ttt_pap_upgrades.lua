@@ -6,7 +6,7 @@ TTT_PAP_CAMO = "ttt_pack_a_punch/pap_camo"
 TTT_PAP_UPGRADES = {
     weapon_ttt_binoculars = {
         name = "Eagle's Eye",
-        desc = "Faster/zoomier zoom",
+        desc = "Faster and further zoom",
         func = function(SWEP)
             SWEP.ZoomLevels = {0, 15, 10, 5}
 
@@ -24,22 +24,26 @@ TTT_PAP_UPGRADES = {
     },
     weapon_ttt_glock = {
         name = "Mini-Glock",
+        desc = "Big fire rate, ammo, and fire spread increase",
         firerateMult = 1.5,
         spreadMult = 10,
         ammoMult = 2
     },
     weapon_ttt_m16 = {
         name = "Skullcrusher",
+        desc = "Ammo + fire rate increase",
         ammoMult = 2,
         firerateMult = 1.2
     },
     weapon_ttt_phammer = {
         name = "The Ghost Ball",
+        desc = "x2 ammo + fire rate increase",
         firerateMult = 2,
         ammoMult = 2
     },
     weapon_ttt_sipistol = {
         name = "Unsilenced Pistol",
+        desc = "Higher DPS, unsilenced",
         damageMult = 1.5,
         firerateMult = 1.2
     },
@@ -53,10 +57,12 @@ TTT_PAP_UPGRADES = {
     },
     weapon_ttt_teleport = {
         name = "Infini-porter",
+        desc = "Effectively unlimited uses",
         ammoMult = 40
     },
     weapon_zm_mac10 = {
         name = "MAC100",
+        desc = "Super high fire rate and recoil",
         firerateMult = 2,
         recoilMult = 2
     },
@@ -70,6 +76,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_revolver = {
         name = "The Head Lifter",
+        desc = "High recoil, high damage!",
         automatic = false,
         firerateMult = 0.5,
         recoilMult = 2,

@@ -15,6 +15,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_flare"
 end
 
+SWEP.PAPDesc = "Sets someone on fire that doesn't go out, unless they go into water"
 SWEP.Base = "weapon_tttbase"
 -- if I run out of ammo types, this weapon is one I could move to a custom ammo
 -- handling strategy, because you never need to pick up ammo for it
@@ -35,7 +36,6 @@ SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_FLARE
 SWEP.Tracer = "AR2Tracer"
 SWEP.UseHands = true
-SWEP.PAPDesc = "Sets someone on fire that doesn't go out, unless they go into water"
 SWEP.ViewModel = Model("models/weapons/c_357.mdl")
 SWEP.WorldModel = Model("models/weapons/w_357.mdl")
 

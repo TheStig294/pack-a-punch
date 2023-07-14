@@ -16,6 +16,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_launch"
 end
 
+SWEP.PAPDesc = "Full-auto push gun! Now has ammo"
 SWEP.Base = "weapon_tttbase"
 SWEP.Primary.Ammo = "AirboatGun"
 SWEP.Primary.ClipSize = 50
@@ -40,7 +41,6 @@ SWEP.WorldModel = "models/weapons/w_physics.mdl"
 AccessorFuncDT(SWEP, "charge", "Charge")
 SWEP.IsCharging = false
 SWEP.NextCharge = 0
-SWEP.PAPDesc = "Full-auto push gun!"
 local CHARGE_AMOUNT = 0.02
 local CHARGE_DELAY = 0.025
 local math = math

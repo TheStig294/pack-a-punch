@@ -19,6 +19,7 @@ if CLIENT then
     SWEP.IconLetter = "I"
 end
 
+SWEP.PAPDesc = "x1.5 explosion damage and radius, triggers an extra separate explosion 20 seconds after being placed"
 SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_EQUIP
 -- only traitors can buy
