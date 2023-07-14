@@ -28,7 +28,7 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 end)
 
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
-    if equipment == EQUIP_PAP then
+    if is_item and math.floor(equipment) == EQUIP_PAP then
         local wep = ply:GetActiveWeapon()
 
         -- Preventing purchase if the currently held weapon is invalid
@@ -43,7 +43,7 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
 
             if not TTT_PAP_UPGRADES[class] and not weapons.Get(class .. "_pap") then
                 ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
-                ply:PrintMessage(HUD_PRINTTALK, "This weapon can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+                ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try holding a different one\nIf you spent a credit, it was refunded")
 
                 return false
             end
