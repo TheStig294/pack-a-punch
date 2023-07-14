@@ -72,8 +72,8 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out has had its upgrade disabled, try a different one\nIf you spent a credit, it was refunded")
 
             return false
-        elseif istable(wep.CanBuy) and not table.IsEmpty(wep.CanBuy) and wep.CanBuy ~= {} then
-            -- Preventing purchase if held weapon is a buyable weapon and it has no custom PaP upgrade
+        elseif not wep.AutoSpawnable then
+            -- Preventing purchase if held weapon is not a floor weapon and it has no custom PaP upgrade
             local class = wep:GetClass()
 
             if not TTT_PAP_UPGRADES[class] and not weapons.Get(class .. "_pap") then
