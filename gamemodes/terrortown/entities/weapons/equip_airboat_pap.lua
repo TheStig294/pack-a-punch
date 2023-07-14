@@ -59,18 +59,30 @@ function SWEP:PrimaryAttack()
     if CLIENT or not IsFirstTimePredicted() then return end
     local owner = self:GetOwner()
     if not IsValid(owner) or not owner:IsPlayer() then return end
-    owner:ChatPrint("Press 'H' to honk the horn!")
+    -- Don't place car if player is looking too far away
     local TraceResult = owner:GetEyeTrace()
-    local pos = TraceResult.HitPos
-    pos.z = pos.z + self.PlaceOffset
+    local startPos = TraceResult.StartPos
+    local endPos = TraceResult.HitPos
+    local dist = math.Distance(startPos.x, startPos.y, endPos.x, endPos.y)
+
+    if dist >= self.PlaceRange then
+        owner:PrintMessage(HUD_PRINTCENTER, "Look at the ground to place the car")
+
+        return
+    end
+
+    -- Else, place the car down
+    endPos.z = endPos.z + self.PlaceOffset
     local pitch, yaw, roll = owner:EyeAngles():Unpack()
     pitch = 0
-    local car = simfphys.SpawnVehicleSimple("simfphys_vehicle4", pos, Angle(pitch, yaw, roll))
-    car:SetCurHealth(10)
-    car:SetMaxHealth(10)
+    local car = simfphys.SpawnVehicleSimple("simfphys_vehicle4", endPos, Angle(pitch, yaw, roll))
+    -- Set some properties for later to detect this is a toy car entity
     car.IsDetectiveToyCarPaP = true
     car.DamageMult = self.DamageMult
+    -- Display a message in chat
+    owner:ChatPrint("Press 'H' to honk the horn!")
 
+    -- And fix the driving controls not working
     hook.Add("PlayerButtonUp", "simfphys_fixnumpads_pap", function(ply, btn)
         numpad.Deactivate(ply, btn)
     end)
@@ -79,6 +91,7 @@ function SWEP:PrimaryAttack()
         numpad.Activate(ply, btn)
     end)
 
+    -- Once the car is spawned, remove the weapon, which should in turn remove the car hologram
     self:Remove()
 end
 
@@ -107,7 +120,10 @@ function SWEP:DrawHologram()
         if IsValid(self.Hologram) then
             hologram = self.Hologram
         else
+            -- Make the hologram see-through to indicate it isn't placed yet
             hologram = ClientsideModel(self.WorldModel)
+            hologram:SetColor(Color(200, 200, 200, 200))
+            hologram:SetRenderMode(RENDERMODE_TRANSCOLOR)
             self.Hologram = hologram
         end
 
