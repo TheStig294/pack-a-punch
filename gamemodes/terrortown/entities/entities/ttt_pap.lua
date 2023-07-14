@@ -25,6 +25,21 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 
     table.insert(EquipmentItems[ROLE_TRAITOR], pap)
     table.insert(EquipmentItems[ROLE_DETECTIVE], pap)
+
+    if SERVER then
+        -- Create convars for each weapon to disable being upgradable
+        for _, SWEP in ipairs(weapons.GetList()) do
+            -- Only create convars for TTT-compatible weapons
+            if SWEP.Kind then
+                local class = SWEP.ClassName or SWEP.Classname
+
+                -- Don't add convars for the PaP SWEPs themselves
+                if not string.EndsWith(class, "_pap") then
+                    CreateConVar("ttt_pap_" .. class, 1)
+                end
+            end
+        end
+    end
 end)
 
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
@@ -35,6 +50,12 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
         if not IsValid(wep) then
             ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
             ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
+
+            return false
+        elseif not GetConVar("ttt_pap_" .. wep:GetClass()):GetBool() then
+            -- Preventing purchase if the current weapon has had its upgrade disabled via convar
+            ply:PrintMessage(HUD_PRINTCENTER, "Upgrade disabled, try a different weapon")
+            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out has had its upgrade disabled, try a different one\nIf you spent a credit, it was refunded")
 
             return false
         elseif istable(wep.CanBuy) and not table.IsEmpty(wep.CanBuy) and wep.CanBuy ~= {} then
