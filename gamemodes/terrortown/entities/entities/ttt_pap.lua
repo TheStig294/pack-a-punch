@@ -3,6 +3,7 @@ AddCSLuaFile()
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
+    util.AddNetworkString("TTTPAPToggleEnabledConvar")
 end
 
 if CLIENT then
@@ -26,21 +27,34 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
     table.insert(EquipmentItems[ROLE_TRAITOR], pap)
     table.insert(EquipmentItems[ROLE_DETECTIVE], pap)
 
-    if SERVER then
-        -- Create convars for each weapon to disable being upgradable
-        for _, SWEP in ipairs(weapons.GetList()) do
-            -- Only create convars for TTT-compatible weapons
-            if SWEP.Kind then
-                local class = SWEP.ClassName or SWEP.Classname
+    -- Create convars for each weapon to disable being upgradable
+    for _, SWEP in ipairs(weapons.GetList()) do
+        -- Only create convars for TTT-compatible weapons
+        if SWEP.Kind then
+            local class = SWEP.ClassName or SWEP.Classname
 
-                -- Don't add convars for the PaP SWEPs themselves
-                if not string.EndsWith(class, "_pap") then
-                    CreateConVar("ttt_pap_" .. class, 1)
-                end
+            -- Don't add convars for the PaP SWEPs themselves
+            if not string.EndsWith(class, "_pap") then
+                CreateConVar("ttt_pap_" .. class, 1, {FCVAR_NOTIFY, FCVAR_REPLICATED})
             end
         end
     end
 end)
+
+if SERVER then
+    net.Receive("TTTPAPToggleEnabledConvar", function(len, ply)
+        if not ply:IsAdmin() then return end
+        local class = net.ReadString()
+        if not ConVarExists("ttt_pap_" .. class) then return end
+        local enabledCvar = GetConVar("ttt_pap_" .. class)
+
+        if enabledCvar:GetBool() then
+            GetConVar("ttt_pap_" .. class):SetBool(false)
+        else
+            GetConVar("ttt_pap_" .. class):SetBool(true)
+        end
+    end)
+end
 
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if is_item and math.floor(equipment) == EQUIP_PAP then
