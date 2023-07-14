@@ -31,16 +31,17 @@ TTT_PAP_UPGRADES = {
     weapon_ttt_m16 = {
         name = "Skullcrusher",
         ammoMult = 2,
-        firerateMult = 1
+        firerateMult = 1.2
     },
     weapon_ttt_phammer = {
         name = "The Ghost Ball",
-        ammoMult = 1.5
+        firerateMult = 2,
+        ammoMult = 2
     },
     weapon_ttt_sipistol = {
         name = "Unsilenced Pistol",
         damageMult = 1.5,
-        firerateMult = 1.1
+        firerateMult = 1.2
     },
     weapon_ttt_smokegrenade = {
         name = "Ninja bomb",
@@ -114,8 +115,8 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_sledge = {
         name = "H.U.G.E. 9001",
-        desc = "Minimal recoil!",
-        firerateMult = 1.3,
+        desc = "Minimal recoil, higher fire-rate!",
+        firerateMult = 1.5,
         recoilMult = 0.1
     }
 }
