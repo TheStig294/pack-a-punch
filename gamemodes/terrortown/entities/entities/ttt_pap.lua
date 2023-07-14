@@ -27,15 +27,27 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
     table.insert(EquipmentItems[ROLE_DETECTIVE], pap)
 end)
 
--- Preventing purchase if the currently held weapon is invalid
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if equipment == EQUIP_PAP then
         local wep = ply:GetActiveWeapon()
-        if not IsValid(wep) then return end
-        ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
-        ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
 
-        return false
+        -- Preventing purchase if the currently held weapon is invalid
+        if not IsValid(wep) then
+            ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
+            ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
+
+            return false
+        elseif istable(wep.CanBuy) and not table.IsEmpty(wep.CanBuy) and wep.CanBuy ~= {} then
+            -- Preventing purchase if held weapon is a buyable weapon and it has no custom PaP upgrade
+            local class = wep:GetClass()
+
+            if not TTT_PAP_UPGRADES[class] and not weapons.Get(class .. "_pap") then
+                ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
+                ply:PrintMessage(HUD_PRINTTALK, "This weapon can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+
+                return false
+            end
+        end
     end
 end)
 

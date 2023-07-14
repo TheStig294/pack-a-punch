@@ -22,28 +22,6 @@ TTT_PAP_UPGRADES = {
             end
         end
     },
-    weapon_ttt_decoy = {
-        name = "Does anyone use this?",
-        desc = "No upgrade... here's a credit back",
-        func = function(SWEP)
-            local owner = SWEP:GetOwner()
-
-            if IsValid(owner) then
-                owner:AddCredits(1)
-            end
-
-            function SWEP:PlacedDecoy(decoy)
-                decoy:SetMaterial(TTT_PAP_CAMO)
-                self:GetOwner().decoy = decoy
-                self:TakePrimaryAmmo(1)
-
-                if not self:CanPrimaryAttack() then
-                    self:Remove()
-                    self.Planted = true
-                end
-            end
-        end
-    },
     weapon_ttt_glock = {
         name = "Mini-Glock",
         firerateMult = 1.5,
