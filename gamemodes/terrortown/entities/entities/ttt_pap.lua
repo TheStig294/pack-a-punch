@@ -161,7 +161,7 @@ if CLIENT then
         end
 
         if description then
-            chat.AddText("Special PaP Upgrade: " .. description)
+            chat.AddText("PAP UPGRADE: " .. description)
         end
     end)
 
