@@ -20,7 +20,7 @@ local TraceLine = util.TraceLine
 local RemoveHook = hook.Remove
 
 if CLIENT then
-    SWEP.PrintName = "Player Magneto-tick"
+    SWEP.PrintName = "Player Magneto-stick"
     SWEP.Slot = 4 -- add 1 to get the slot number key
     SWEP.DrawCrosshair = false
     SWEP.ViewModelFlip = false

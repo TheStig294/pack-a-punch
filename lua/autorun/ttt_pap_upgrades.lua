@@ -49,6 +49,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_ttt_smokegrenade = {
         name = "Ninja bomb",
+        desc = "Very large smoke cloud",
         func = function(SWEP)
             function SWEP:GetGrenadeName()
                 return "ttt_smokegrenade_proj_pap"
@@ -68,6 +69,7 @@ TTT_PAP_UPGRADES = {
     },
     weapon_zm_molotov = {
         name = "Forever Fire-Nade",
+        desc = "Larger explosion, fire lasts a very long time!",
         func = function(SWEP)
             function SWEP:GetGrenadeName()
                 return "ttt_firegrenade_proj_pap"
