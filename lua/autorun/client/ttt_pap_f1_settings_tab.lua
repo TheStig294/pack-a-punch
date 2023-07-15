@@ -17,11 +17,7 @@ surface.CreateFont("TrophyDesc", {
 })
 
 local function DrawTrophyBar(list, SWEP)
-    -- If a weapon doesn't have a human-readable name, it probably shouldn't be on this list (e.g. weapon_ttt_base)
-    if not SWEP.PrintName then return end
     local class = SWEP.ClassName or SWEP.Classname
-    -- Check the weapon actually has a convar to toggle
-    if not ConVarExists("ttt_pap_" .. class) then return end
     local enabledCvar = GetConVar("ttt_pap_" .. class)
     -- Icon
     local icon = list:Add("DImage")
@@ -209,7 +205,7 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     end
 
     local text = list:Add("DLabel")
-    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                         (Only admins can access this)")
+    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                            (Only admins can see this)")
     text:SetFont("Trebuchet24")
     text:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
@@ -227,24 +223,20 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
         net.SendToServer()
     end
 
-    -- -- Sorts the trophies by earned/unearned and rarity
-    -- if table.IsEmpty(earnedTrophies) and table.IsEmpty(unearnedTrophies) then
-    --     for id, trophy in pairs(TTTTrophies.trophies) do
-    --         if trophy.earned then
-    --             table.insert(earnedTrophies, trophy)
-    --         else
-    --             table.insert(unearnedTrophies, trophy)
-    --         end
-    --     end
-    -- end
-    -- The list of trophies, showing if they are earned or not
-    -- for id, trophy in SortedPairsByMemberValue(unearnedTrophies, "rarity", false) do
-    --     DrawTrophyBar(list, trophy)
-    -- end
-    -- for id, trophy in SortedPairsByMemberValue(earnedTrophies, "rarity", false) do
-    --     DrawTrophyBar(list, trophy)
-    -- end
+    -- Sorts the weapons by name in alphabetical order
+    local upgradeableWeapons = {}
+
     for _, SWEP in ipairs(weapons.GetList()) do
+        -- If a weapon doesn't have a human-readable name, it probably shouldn't be on this list (e.g. weapon_ttt_base)
+        if not SWEP.PrintName then continue end
+        local class = SWEP.ClassName or SWEP.Classname
+        -- Check the weapon actually has a convar to toggle
+        if not ConVarExists("ttt_pap_" .. class) then continue end
+        local name = LANG.TryTranslation(SWEP.PrintName)
+        upgradeableWeapons[name] = SWEP
+    end
+
+    for _, SWEP in SortedPairs(upgradeableWeapons) do
         DrawTrophyBar(list, SWEP)
     end
 
