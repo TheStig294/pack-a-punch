@@ -128,7 +128,7 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
 
     -- Title text for F1 menu describing what this tab does
     local text = nonScrollList:Add("DLabel")
-    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                            (Only admins can see this)")
+    text:SetText("                       Toggle individual weapon upgrades\n            for the \"Pack-a-Punch\" buyable item! (Admins only)")
     text:SetFont("Trebuchet24")
     text:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
@@ -146,6 +146,12 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
         net.SendToServer()
     end
 
+    -- Search bar
+    local dsearch = nonScrollList:Add("DTextEntry")
+    dsearch:SetSize(560, 20)
+    dsearch:SetPlaceholderText("Search...")
+    dsearch:SetUpdateOnType(true)
+    dsearch.OnValueChange = function(box, value) end
     -- -- Admin options menu
     -- local spacerPanelWidth = 200
     -- if LocalPlayer():IsAdmin() then
@@ -212,7 +218,7 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     -- Scrollbar
     local scroll = vgui.Create("DScrollPanel", basePnl)
     scroll:Dock(FILL)
-    scroll:SetSize(600, 280)
+    -- scroll:SetSize(600, 280)
     -- List of trophies in scrollbar
     local list = vgui.Create("DIconLayout", scroll)
     list:Dock(FILL)
