@@ -33,25 +33,28 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         if SWEP.Kind then
             local class = SWEP.ClassName or SWEP.Classname
 
-            -- Don't add convars for the PaP SWEPs themselves
-            if not string.EndsWith(class, "_pap") then
+            -- Check weapon actually has a unique PaP upgrade
+            if TTT_PAP_UPGRADES[class] or weapons.Get(class .. "_pap") ~= nil then
                 CreateConVar("ttt_pap_" .. class, 1, {FCVAR_NOTIFY, FCVAR_REPLICATED})
             end
         end
     end
+
+    -- Create convar to disable trying to apply the default upgrade on weapons without one
+    CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
 end)
 
 if SERVER then
     net.Receive("TTTPAPToggleEnabledConvar", function(len, ply)
         if not ply:IsAdmin() then return end
-        local class = net.ReadString()
-        if not ConVarExists("ttt_pap_" .. class) then return end
-        local enabledCvar = GetConVar("ttt_pap_" .. class)
+        local cvarName = net.ReadString()
+        if not ConVarExists(cvarName) then return end
+        local enabledCvar = GetConVar(cvarName)
 
         if enabledCvar:GetBool() then
-            GetConVar("ttt_pap_" .. class):SetBool(false)
+            enabledCvar:SetBool(false)
         else
-            GetConVar("ttt_pap_" .. class):SetBool(true)
+            enabledCvar:SetBool(true)
         end
     end)
 end
@@ -66,14 +69,14 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
 
             return false
-        elseif not GetConVar("ttt_pap_" .. wep:GetClass()):GetBool() then
+        elseif ConVarExists("ttt_pap_" .. wep:GetClass()) and not GetConVar("ttt_pap_" .. wep:GetClass()):GetBool() then
             -- Preventing purchase if the current weapon has had its upgrade disabled via convar
-            ply:PrintMessage(HUD_PRINTCENTER, "Upgrade disabled, try a different weapon")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out has had its upgrade disabled, try a different one\nIf you spent a credit, it was refunded")
+            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
+            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 
             return false
-        elseif not wep.AutoSpawnable then
-            -- Preventing purchase if held weapon is not a floor weapon and it has no custom PaP upgrade
+        elseif not GetConVar("ttt_pap_apply_generic_upgrade"):GetBool() or not wep.AutoSpawnable then
+            -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no custom PaP upgrade
             local class = wep:GetClass()
 
             if not TTT_PAP_UPGRADES[class] and not weapons.Get(class .. "_pap") then
