@@ -201,7 +201,8 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     end
 
     local text = list:Add("DLabel")
-    text:SetText("       Enable/disable individual weapon upgrades for the Pack-a-Punch buyable item! Only admins can access this.")
+    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                         (Only admins can access this)")
+    text:SetFont("Trebuchet24")
     text:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
     local genericUpgradesCheck = list:Add("DCheckBoxLabel")
