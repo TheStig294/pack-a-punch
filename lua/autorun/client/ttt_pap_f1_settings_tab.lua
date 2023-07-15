@@ -100,6 +100,14 @@ local function DrawTrophyBar(list, SWEP)
         local cvarName = "ttt_pap_" .. class
         net.WriteString(cvarName)
         net.SendToServer()
+
+        if enabledBox:GetChecked() then
+            alpha = 255
+        else
+            alpha = 100
+        end
+
+        icon:SetAlpha(alpha)
     end
 end
 
