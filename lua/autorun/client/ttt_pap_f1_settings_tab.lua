@@ -49,9 +49,8 @@ local function DrawTrophyBar(list, SWEP)
     -- rarityIcon:SetPos(5, 7)
     -- Title
     local title = vgui.Create("DLabel", background)
-    local name = SWEP.PrintName
-    title:SetText(LANG.TryTranslation(name))
-    title:SetPos(30, 5)
+    title:SetText(LANG.TryTranslation(SWEP.PrintName))
+    title:SetPos(12, 2)
     title:SetFont("Trebuchet24")
     -- local colour
     -- if SWEP.rarity == 1 then
@@ -65,21 +64,29 @@ local function DrawTrophyBar(list, SWEP)
     -- end
     -- title:SetTextColor(colour)
     title:SizeToContents()
-    -- -- Description
-    -- -- Hide descriptions of hidden trophies unless the SWEP is earned, or its description is flagged as forced to show
-    -- -- (Some trophies are too hard to discover if all SWEP descriptions are hidden)
-    -- if SWEP.EquipMenuData and SWEP.EquipMenuData.desc then
-    --     local desc = vgui.Create("DLabel", background)
-    --     local description = SWEP.EquipMenuData.desc
-    --     if isstring(description) then
-    --         description = LANG.TryTranslation(description)
-    --         desc:SetText(description)
-    --         desc:Dock(BOTTOM)
-    --         desc:SetFont("TrophyDesc")
-    --         desc:SetTextColor(COLOUR_WHITE)
-    --         desc:SizeToContents()
-    --     end
-    -- end
+    -- Description
+    -- Displays the name of the upgraded weapon and its description
+    local desc = vgui.Create("DLabel", background)
+    local description = ""
+    local PAPName = ""
+
+    if TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].desc then
+        description = TTT_PAP_UPGRADES[class].desc
+        PAPName = TTT_PAP_UPGRADES[class].name
+    else
+        local PAPWep = weapons.Get(class .. "_pap")
+
+        if PAPWep and PAPWep.PAPDesc then
+            description = PAPWep.PAPDesc
+            PAPName = PAPWep.PrintName
+        end
+    end
+
+    desc:SetText("\"" .. PAPName .. "\" " .. description)
+    desc:Dock(BOTTOM)
+    desc:SetFont("TrophyDesc")
+    desc:SetTextColor(COLOUR_WHITE)
+    desc:SizeToContents()
     -- Enabled/disabled checkbox
     local enabledBox = vgui.Create("DCheckBoxLabel", background)
     enabledBox:SetText("Enabled")
