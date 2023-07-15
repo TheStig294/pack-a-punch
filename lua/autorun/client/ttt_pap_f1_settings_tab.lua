@@ -113,17 +113,39 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     local basePnl = vgui.Create("DPanel")
     basePnl:Dock(FILL)
     basePnl:SetBackgroundColor(COLOR_BLACK)
-    -- -- List outside the scrollbar
-    -- local nonScrollList = vgui.Create("DIconLayout", basePnl)
-    -- nonScrollList:Dock(TOP)
-    -- -- Sets the space between the image and text boxes
-    -- nonScrollList:SetSpaceY(10)
-    -- nonScrollList:SetSpaceX(10)
-    -- -- Sets the space between the edge of the window and the edges of the tab's contents
-    -- nonScrollList:SetBorder(10)
-    -- nonScrollList.Paint = function(self, w, h)
-    --     draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
-    -- end
+    -- List outside the scrollbar
+    local nonScrollList = vgui.Create("DIconLayout", basePnl)
+    nonScrollList:Dock(TOP)
+    -- Sets the space between the image and text boxes
+    nonScrollList:SetSpaceY(10)
+    nonScrollList:SetSpaceX(10)
+    -- Sets the space between the edge of the window and the edges of the tab's contents
+    nonScrollList:SetBorder(10)
+
+    nonScrollList.Paint = function(self, w, h)
+        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+    end
+
+    -- Title text for F1 menu describing what this tab does
+    local text = nonScrollList:Add("DLabel")
+    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                            (Only admins can see this)")
+    text:SetFont("Trebuchet24")
+    text:SizeToContents()
+    -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
+    local genericUpgradesCheck = nonScrollList:Add("DCheckBoxLabel")
+    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrade")
+    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
+    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
+    genericUpgradesCheck:SetIndent(10)
+    genericUpgradesCheck:SizeToContents()
+
+    -- genericUpgradesCheck:SetPos(400, 5)
+    function genericUpgradesCheck:OnChange()
+        net.Start("TTTPAPToggleEnabledConvar")
+        net.WriteString(genericUpgradesCvar:GetName())
+        net.SendToServer()
+    end
+
     -- -- Admin options menu
     -- local spacerPanelWidth = 200
     -- if LocalPlayer():IsAdmin() then
@@ -190,7 +212,7 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     -- Scrollbar
     local scroll = vgui.Create("DScrollPanel", basePnl)
     scroll:Dock(FILL)
-    -- scroll:SetSize(600, 280)
+    scroll:SetSize(600, 280)
     -- List of trophies in scrollbar
     local list = vgui.Create("DIconLayout", scroll)
     list:Dock(FILL)
@@ -202,25 +224,6 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
 
     list.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
-    end
-
-    local text = list:Add("DLabel")
-    text:SetText("              Enable/disable individual weapon upgrades\n                   for the \"Pack-a-Punch\" buyable item!\n                            (Only admins can see this)")
-    text:SetFont("Trebuchet24")
-    text:SizeToContents()
-    -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
-    local genericUpgradesCheck = list:Add("DCheckBoxLabel")
-    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrade")
-    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
-    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
-    genericUpgradesCheck:SetIndent(10)
-    genericUpgradesCheck:SizeToContents()
-
-    -- genericUpgradesCheck:SetPos(400, 5)
-    function genericUpgradesCheck:OnChange()
-        net.Start("TTTPAPToggleEnabledConvar")
-        net.WriteString(genericUpgradesCvar:GetName())
-        net.SendToServer()
     end
 
     -- Sorts the weapons by name in alphabetical order
