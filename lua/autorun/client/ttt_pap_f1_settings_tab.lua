@@ -178,7 +178,7 @@ local function DrawWeaponsList(list, searchQuery)
     end
 end
 
-hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
+hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     if not LocalPlayer():IsAdmin() then return end
     -- Base panel
     local basePnl = vgui.Create("DPanel")
@@ -224,7 +224,7 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     -- Scrollbar
     local scroll = vgui.Create("DScrollPanel", basePnl)
     scroll:Dock(FILL)
-    -- List of trophies in scrollbar
+    -- Weapons list
     local list = vgui.Create("DIconLayout", scroll)
     list:Dock(FILL)
     -- Sets the space between the image and text boxes
