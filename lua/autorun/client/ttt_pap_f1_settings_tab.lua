@@ -1,4 +1,4 @@
-surface.CreateFont("TrophyDesc", {
+surface.CreateFont("PAPDesc", {
     font = "Arial",
     extended = false,
     size = 16,
@@ -16,7 +16,7 @@ surface.CreateFont("TrophyDesc", {
     outline = false,
 })
 
-local function DrawTrophyBar(list, SWEP)
+local function DrawWeaponBar(list, SWEP)
     local class = SWEP.ClassName or SWEP.Classname
     local enabledCvar = GetConVar("ttt_pap_" .. class)
     -- Icon
@@ -38,49 +38,62 @@ local function DrawTrophyBar(list, SWEP)
         draw.RoundedBox(10, 0, 0, w, h, Color(40, 40, 40, alpha))
     end
 
-    -- -- Rarity icon
-    -- local rarityIcon = vgui.Create("DImage", background)
-    -- rarityIcon:SetImage("ttt_trophies/" .. SWEP.rarity .. ".png")
-    -- rarityIcon:SetSize(20, 20)
-    -- rarityIcon:SetPos(5, 7)
-    -- Title
-    local title = vgui.Create("DLabel", background)
-    title:SetText(LANG.TryTranslation(SWEP.PrintName))
-    title:SetPos(12, 2)
-    title:SetFont("Trebuchet24")
-    -- local colour
-    -- if SWEP.rarity == 1 then
-    --     colour = Color(231, 131, 82)
-    -- elseif SWEP.rarity == 2 then
-    --     colour = Color(192, 192, 192)
-    -- elseif SWEP.rarity == 3 then
-    --     colour = Color(212, 175, 55)
-    -- elseif SWEP.rarity == 4 then
-    --     colour = Color(46, 104, 165)
-    -- end
-    -- title:SetTextColor(colour)
-    title:SizeToContents()
-    -- Description
-    -- Displays the name of the upgraded weapon and its description
-    local desc = vgui.Create("DLabel", background)
-    local description = ""
-    local PAPName = ""
+    -- Name
+    local name = vgui.Create("DLabel", background)
+    name:SetText(LANG.TryTranslation(SWEP.PrintName))
+    name:SetPos(12, 2)
+    name:SetFont("Trebuchet24")
 
-    if TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].desc then
+    -- Name colour
+    if istable(SWEP.CanBuy) then
+        local colour
+        local isDetective = table.HasValue(SWEP.CanBuy, ROLE_DETECTIVE)
+        local isTraitor = table.HasValue(SWEP.CanBuy, ROLE_TRAITOR)
+
+        if isDetective and isTraitor then
+            colour = Color(165, 29, 255)
+        elseif isDetective then
+            colour = Color(26, 106, 255)
+        elseif isTraitor then
+            colour = Color(255, 0, 0)
+        else
+            colour = COLOUR_WHITE
+        end
+
+        name:SetTextColor(colour)
+    end
+
+    name:SizeToContents()
+    -- Upgrade Description
+    local desc = vgui.Create("DLabel", background)
+    local description
+    local PAPName
+
+    if TTT_PAP_UPGRADES[class] then
         description = TTT_PAP_UPGRADES[class].desc
         PAPName = TTT_PAP_UPGRADES[class].name
     else
         local PAPWep = weapons.Get(class .. "_pap")
 
-        if PAPWep and PAPWep.PAPDesc then
+        if PAPWep then
             description = PAPWep.PAPDesc
             PAPName = PAPWep.PrintName
         end
     end
 
-    desc:SetText("\"" .. PAPName .. "\" " .. description)
+    local descriptionText = ""
+
+    if PAPName then
+        descriptionText = descriptionText .. "\"" .. PAPName .. "\" "
+    end
+
+    if description then
+        descriptionText = descriptionText .. description
+    end
+
+    desc:SetText(descriptionText)
     desc:Dock(BOTTOM)
-    desc:SetFont("TrophyDesc")
+    desc:SetFont("PAPDesc")
     desc:SetTextColor(COLOUR_WHITE)
     desc:SizeToContents()
     -- Enabled/disabled checkbox
@@ -107,6 +120,64 @@ local function DrawTrophyBar(list, SWEP)
     end
 end
 
+local upgradeableWeapons = {}
+
+-- Sorts the weapons by name in alphabetical order
+local function DrawWeaponsList(list, searchQuery)
+    if not searchQuery then
+        searchQuery = ""
+    end
+
+    -- Only build the upgradeable weapons table if needed
+    if table.IsEmpty(upgradeableWeapons) then
+        for _, SWEP in ipairs(weapons.GetList()) do
+            -- If a weapon doesn't have a human-readable name, it probably shouldn't be on this list (e.g. weapon_ttt_base)
+            if not SWEP.PrintName then continue end
+            local class = SWEP.ClassName or SWEP.Classname
+            -- Check the weapon actually has a convar to toggle
+            if not ConVarExists("ttt_pap_" .. class) then continue end
+            local name = LANG.TryTranslation(SWEP.PrintName)
+            upgradeableWeapons[name] = SWEP
+        end
+    end
+
+    -- If there is a search query, search the weapon's name, the upgraded weapon's name, and the upgrade's description
+    for name, SWEP in SortedPairs(upgradeableWeapons) do
+        local description = ""
+        local class = SWEP.ClassName or SWEP.Classname
+
+        -- Find the upgraded weapon's name and description
+        -- Stat upgrade
+        if TTT_PAP_UPGRADES[class] then
+            if TTT_PAP_UPGRADES[class].name then
+                description = description .. TTT_PAP_UPGRADES[class].name
+            end
+
+            if TTT_PAP_UPGRADES[class].desc then
+                description = description .. TTT_PAP_UPGRADES[class].desc
+            end
+        else
+            -- New SWEP upgrade
+            local PAPWep = weapons.Get(class .. "_pap")
+
+            if PAPWep then
+                if PAPWep.PrintName then
+                    description = description .. LANG.TryTranslation(PAPWep.PrintName)
+                end
+
+                if PAPWep.PAPDesc then
+                    description = description .. PAPWep.PAPDesc
+                end
+            end
+        end
+
+        -- Search for the normal weapon's name, else the upgraded weapon's name and description
+        if string.find(string.lower(name), string.lower(searchQuery), 1, true) or string.find(string.lower(description), string.lower(searchQuery), 1, true) then
+            DrawWeaponBar(list, SWEP)
+        end
+    end
+end
+
 hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
     if not LocalPlayer():IsAdmin() then return end
     -- Base panel
@@ -126,99 +197,33 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
-    -- Title text for F1 menu describing what this tab does
-    local text = nonScrollList:Add("DLabel")
-    text:SetText("                       Toggle individual weapon upgrades\n            for the \"Pack-a-Punch\" buyable item! (Admins only)")
-    text:SetFont("Trebuchet24")
-    text:SizeToContents()
+    -- Title text
+    local titleText = nonScrollList:Add("DLabel")
+    titleText:SetText("                       Toggle individual weapon upgrades\n            for the \"Pack-a-Punch\" buyable item! (Admins only)")
+    titleText:SetFont("Trebuchet24")
+    titleText:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
-    local genericUpgradesCheck = nonScrollList:Add("DCheckBoxLabel")
+    local cvarCheckbox = nonScrollList:Add("DCheckBoxLabel")
     local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrade")
-    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
-    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
-    genericUpgradesCheck:SetIndent(10)
-    genericUpgradesCheck:SizeToContents()
+    cvarCheckbox:SetText(genericUpgradesCvar:GetHelpText())
+    cvarCheckbox:SetChecked(genericUpgradesCvar:GetBool())
+    cvarCheckbox:SetIndent(10)
+    cvarCheckbox:SizeToContents()
 
-    -- genericUpgradesCheck:SetPos(400, 5)
-    function genericUpgradesCheck:OnChange()
+    function cvarCheckbox:OnChange()
         net.Start("TTTPAPToggleEnabledConvar")
         net.WriteString(genericUpgradesCvar:GetName())
         net.SendToServer()
     end
 
     -- Search bar
-    local dsearch = nonScrollList:Add("DTextEntry")
-    dsearch:SetSize(560, 20)
-    dsearch:SetPlaceholderText("Search...")
-    dsearch:SetUpdateOnType(true)
-    dsearch.OnValueChange = function(box, value) end
-    -- -- Admin options menu
-    -- local spacerPanelWidth = 200
-    -- if LocalPlayer():IsAdmin() then
-    --     local optionsButton = nonScrollList:Add("DButton")
-    --     optionsButton:SetText("Admin Options")
-    --     optionsButton:SizeToContents()
-    --     spacerPanelWidth = spacerPanelWidth - optionsButton:GetSize()
-    --     function optionsButton:DoClick()
-    --         AdminOptionsMenu()
-    --     end
-    -- end
-    -- local spacerPanel = nonScrollList:Add("DPanel")
-    -- spacerPanel:SetBackgroundColor(COLOR_BLACK)
-    -- spacerPanel:SetWidth(spacerPanelWidth)
-    -- -- Progress bar text
-    -- local earnedCount = 0
-    -- for _, trophy in pairs(TTTTrophies.trophies) do
-    --     if trophy.earned then
-    --         earnedCount = earnedCount + 1
-    --     end
-    -- end
-    -- local pctEarned = (earnedCount / table.Count(TTTTrophies.trophies)) * 100
-    -- pctEarned = math.Round(pctEarned)
-    -- local progressBarText = nonScrollList:Add("DLabel")
-    -- progressBarText:SetText(pctEarned .. "% of trophies earned!")
-    -- progressBarText:SetFont("TrophyDesc")
-    -- progressBarText:SetTextColor(COLOUR_WHITE)
-    -- progressBarText:SizeToContents()
-    -- -- Progress bar
-    -- local progressBar = nonScrollList:Add("DProgress")
-    -- progressBar:SetFraction(pctEarned / 100)
-    -- progressBar.OwnLine = true
-    -- progressBar:SetSize(580, 20)
-    -- -- Textbox for changing the hotkey to open the trophy list
-    -- local textboxText = nonScrollList:Add("DLabel")
-    -- textboxText:SetText("   Key that opens this window:")
-    -- textboxText:SetFont("TrophyDesc")
-    -- textboxText:SetTextColor(COLOUR_WHITE)
-    -- textboxText:SizeToContents()
-    -- local textbox = nonScrollList:Add("DTextEntry")
-    -- textbox:SetSize(20, 20)
-    -- textbox:SetText(GetConVar("ttt_trophies_hotkey_list"):GetString())
-    -- textbox.OnLoseFocus = function(self)
-    --     GetConVar("ttt_trophies_hotkey_list"):SetString(string.upper(self:GetText()))
-    -- end
-    -- textbox.OnEnter = function(self)
-    --     GetConVar("ttt_trophies_hotkey_list"):SetString(string.upper(self:GetText()))
-    -- end
-    -- -- Textbox for changing the hotkey to toggle the reward for earning all trophies
-    -- local textboxTextReward = nonScrollList:Add("DLabel")
-    -- textboxTextReward:SetText("Key to toggle messages, or reward if all trophies earned:")
-    -- textboxTextReward:SetFont("TrophyDesc")
-    -- textboxTextReward:SetTextColor(COLOUR_WHITE)
-    -- textboxTextReward:SizeToContents()
-    -- local textboxReward = nonScrollList:Add("DTextEntry")
-    -- textboxReward:SetSize(20, 20)
-    -- textboxReward:SetText(GetConVar("ttt_trophies_hotkey_rainbow"):GetString())
-    -- textboxReward.OnLoseFocus = function(self)
-    --     GetConVar("ttt_trophies_hotkey_rainbow"):SetString(string.upper(self:GetText()))
-    -- end
-    -- textboxReward.OnEnter = function(self)
-    --     GetConVar("ttt_trophies_hotkey_rainbow"):SetString(string.upper(self:GetText()))
-    -- end
+    local searchBar = nonScrollList:Add("DTextEntry")
+    searchBar:SetSize(200, 20)
+    searchBar:SetPlaceholderText("Search...")
+    searchBar:SetUpdateOnType(true)
     -- Scrollbar
     local scroll = vgui.Create("DScrollPanel", basePnl)
     scroll:Dock(FILL)
-    -- scroll:SetSize(600, 280)
     -- List of trophies in scrollbar
     local list = vgui.Create("DIconLayout", scroll)
     list:Dock(FILL)
@@ -232,21 +237,14 @@ hook.Add("TTTSettingsTabs", "TTTTrophies", function(dtabs)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
-    -- Sorts the weapons by name in alphabetical order
-    local upgradeableWeapons = {}
+    -- Weapons list
+    DrawWeaponsList(list)
 
-    for _, SWEP in ipairs(weapons.GetList()) do
-        -- If a weapon doesn't have a human-readable name, it probably shouldn't be on this list (e.g. weapon_ttt_base)
-        if not SWEP.PrintName then continue end
-        local class = SWEP.ClassName or SWEP.Classname
-        -- Check the weapon actually has a convar to toggle
-        if not ConVarExists("ttt_pap_" .. class) then continue end
-        local name = LANG.TryTranslation(SWEP.PrintName)
-        upgradeableWeapons[name] = SWEP
-    end
-
-    for _, SWEP in SortedPairs(upgradeableWeapons) do
-        DrawTrophyBar(list, SWEP)
+    -- Refreshes the weapons list according to what is typed in the search bar
+    searchBar.OnValueChange = function(box, value)
+        list:Clear()
+        scroll:Rebuild()
+        DrawWeaponsList(list, value)
     end
 
     -- Adds the tab panel to TTT's F1 menu
