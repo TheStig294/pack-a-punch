@@ -188,10 +188,10 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     local nonScrollList = vgui.Create("DIconLayout", basePnl)
     nonScrollList:Dock(TOP)
     -- Sets the space between the image and text boxes
-    nonScrollList:SetSpaceY(10)
+    nonScrollList:SetSpaceY(8)
     nonScrollList:SetSpaceX(10)
     -- Sets the space between the edge of the window and the edges of the tab's contents
-    nonScrollList:SetBorder(10)
+    nonScrollList:SetBorder(5)
 
     nonScrollList.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
@@ -203,22 +203,50 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
-    local cvarCheckbox = nonScrollList:Add("DCheckBoxLabel")
     local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrade")
-    cvarCheckbox:SetText(genericUpgradesCvar:GetHelpText())
-    cvarCheckbox:SetChecked(genericUpgradesCvar:GetBool())
-    cvarCheckbox:SetIndent(10)
-    cvarCheckbox:SizeToContents()
+    local genericUpgradesCheck = nonScrollList:Add("DCheckBoxLabel")
+    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
+    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
+    genericUpgradesCheck:SetIndent(10)
+    genericUpgradesCheck:SizeToContents()
 
-    function cvarCheckbox:OnChange()
+    function genericUpgradesCheck:OnChange()
         net.Start("TTTPAPToggleEnabledConvar")
         net.WriteString(genericUpgradesCvar:GetName())
         net.SendToServer()
     end
 
+    -- Convar checkbox for the detective being able to buy the Pack-a-Punch
+    local detectiveCvar = GetConVar("ttt_pap_detective")
+    local detectiveCheck = nonScrollList:Add("DCheckBoxLabel")
+    detectiveCheck:SetText(detectiveCvar:GetHelpText())
+    detectiveCheck:SetChecked(detectiveCvar:GetBool())
+    detectiveCheck:SetIndent(10)
+    detectiveCheck:SizeToContents()
+
+    function detectiveCheck:OnChange()
+        net.Start("TTTPAPToggleEnabledConvar")
+        net.WriteString(detectiveCvar:GetName())
+        net.SendToServer()
+    end
+
+    -- Convar checkbox for the traitor being able to buy the Pack-a-Punch
+    local traitorCvar = GetConVar("ttt_pap_traitor")
+    local traitorCheck = nonScrollList:Add("DCheckBoxLabel")
+    traitorCheck:SetText(traitorCvar:GetHelpText())
+    traitorCheck:SetChecked(traitorCvar:GetBool())
+    traitorCheck:SetIndent(10)
+    traitorCheck:SizeToContents()
+
+    function traitorCheck:OnChange()
+        net.Start("TTTPAPToggleEnabledConvar")
+        net.WriteString(traitorCvar:GetName())
+        net.SendToServer()
+    end
+
     -- Search bar
     local searchBar = nonScrollList:Add("DTextEntry")
-    searchBar:SetSize(200, 20)
+    searchBar:SetSize(570, 20)
     searchBar:SetPlaceholderText("Search...")
     searchBar:SetUpdateOnType(true)
     -- Scrollbar

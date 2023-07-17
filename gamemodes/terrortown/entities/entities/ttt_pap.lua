@@ -1,5 +1,13 @@
 AddCSLuaFile()
 
+-- Create convar to disable trying to apply the default upgrade on weapons without one
+local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
+
+-- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
+local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
+
+local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
+
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
@@ -24,8 +32,12 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         desc = "pap_desc"
     }
 
-    table.insert(EquipmentItems[ROLE_TRAITOR], pap)
-    table.insert(EquipmentItems[ROLE_DETECTIVE], pap)
+    -- Add the Pack-a-Punch to every role's buy menu
+    for role, equTable in pairs(EquipmentItems) do
+        if role == ROLE_DETECTIVE and not detectiveCvar:GetBool() then continue end
+        if role == ROLE_TRAITOR and not traitorCvar:GetBool() then continue end
+        table.insert(equTable, pap)
+    end
 
     -- Create convars for each weapon to disable being upgradable
     for _, SWEP in ipairs(weapons.GetList()) do
@@ -39,9 +51,6 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
             end
         end
     end
-
-    -- Create convar to disable trying to apply the default upgrade on weapons without one
-    CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
 end)
 
 if SERVER then
@@ -75,7 +84,7 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 
             return false
-        elseif not GetConVar("ttt_pap_apply_generic_upgrade"):GetBool() or not wep.AutoSpawnable then
+        elseif not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no custom PaP upgrade
             local class = wep:GetClass()
 
