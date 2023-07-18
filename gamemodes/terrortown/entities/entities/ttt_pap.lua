@@ -32,11 +32,26 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         desc = "pap_desc"
     }
 
-    -- Add the Pack-a-Punch to every role's buy menu
+    -- Prevent roles from getting the PaP in their buy menu that shouldn't
+    local bannedRoles = {}
+
+    if not detectiveCvar:GetBool() then
+        bannedRoles[ROLE_DETECTIVE] = true
+    end
+
+    if not traitorCvar:GetBool() then
+        bannedRoles[ROLE_TRAITOR] = true
+    end
+
+    if ROLE_ASSASSIN then
+        bannedRoles[ROLE_ASSASSIN] = true -- Would be too powerful
+    end
+
+    -- Add the PaP to every role's buy menu that isn't banned
     for role, equTable in pairs(EquipmentItems) do
-        if role == ROLE_DETECTIVE and not detectiveCvar:GetBool() then continue end
-        if role == ROLE_TRAITOR and not traitorCvar:GetBool() then continue end
-        table.insert(equTable, pap)
+        if not bannedRoles[role] then
+            table.insert(equTable, pap)
+        end
     end
 
     -- Create convars for each weapon to disable being upgradable
