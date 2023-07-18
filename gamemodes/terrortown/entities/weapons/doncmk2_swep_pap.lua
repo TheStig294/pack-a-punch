@@ -1,6 +1,6 @@
 AddCSLuaFile()
 SWEP.Base = "doncmk2_swep"
-SWEP.PrintName = "Big Donconnon"
+SWEP.PrintName = "Big Boi Donconnon"
 SWEP.PAPDesc = "Bigger hitbox, bigger explosion, leaves fire"
 
 function SWEP:PrimaryAttack()
