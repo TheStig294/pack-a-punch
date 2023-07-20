@@ -43,16 +43,30 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         bannedRoles[ROLE_TRAITOR] = true
     end
 
+    -- Would be too powerful
     if ROLE_ASSASSIN then
-        bannedRoles[ROLE_ASSASSIN] = true -- Would be too powerful
+        bannedRoles[ROLE_ASSASSIN] = true
+    end
+
+    -- Check that the PaP item hasn't been added already
+    local function HasItemWithPropertyValue(tbl, key, val)
+        if not tbl or not key then return end
+
+        for _, v in pairs(tbl) do
+            if v[key] and v[key] == val then return true end
+        end
+
+        return false
     end
 
     -- Add the PaP to every role's buy menu that isn't banned
-    for role, equTable in pairs(EquipmentItems) do
-        if not bannedRoles[role] then
-            table.insert(equTable, pap)
+    hook.Add("TTTBeginRound", "TTTPAPRegister", function()
+        for role, equTable in pairs(EquipmentItems) do
+            if not bannedRoles[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) then
+                table.insert(equTable, pap)
+            end
         end
-    end
+    end)
 
     -- Create convars for each weapon to disable being upgradable
     for _, SWEP in ipairs(weapons.GetList()) do
