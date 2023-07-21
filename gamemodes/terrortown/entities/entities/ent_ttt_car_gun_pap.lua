@@ -51,7 +51,6 @@ function ENT:Initialize()
             self.DistToTarget = math.Distance(truckpos.x, truckpos.y, targetPos.x, targetPos.y)
         end
 
-        -- timer.Simple(0.1, function()
         -- Create separate wheels entity to parent to the truck
         self.Wheels = ents.Create("prop_dynamic")
         self.Wheels:SetModel("models/ttt_pack_a_punch/semitruck/semitruck_wheels.mdl")
@@ -61,7 +60,6 @@ function ENT:Initialize()
         self.Wheels:SetPos(truckpos + Vector(0, 0, 200))
         self.Wheels:SetParent(self)
         self.Wheels:Spawn()
-        -- end)
     end
 end
 
