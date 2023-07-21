@@ -31,8 +31,9 @@ SWEP.DrawCrosshair = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFlip = false
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
-SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
 SWEP.CanBuy = nil
+SWEP.PAPDesc = "Gun doesn't fire until you won't miss!"
 
 function SWEP:Initialize()
     self:SetHoldType(self.HoldType)
@@ -45,6 +46,9 @@ function SWEP:PrimaryAttack()
     if CLIENT or not self:CanPrimaryAttack() then return end
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
+    local TraceResult = owner:GetEyeTrace()
+    if not IsValid(TraceResult.Entity) then return end
+    if not TraceResult.Entity:IsPlayer() then return end
     owner:EmitSound("weapons/pistol/pistol_fire2.wav")
     owner:EmitSound(self.Sound)
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)

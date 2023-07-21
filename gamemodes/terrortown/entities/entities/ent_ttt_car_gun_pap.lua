@@ -15,7 +15,6 @@ ENT.Type = "anim"
 ENT.PrintName = "Truck"
 ENT.AutomaticFrameAdvance = true
 ENT.RenderGroup = RENDERGROUP_OPAQUE
-ENT.Sound = Sound("ttt_truck_gun/mytruck.mp3")
 ENT.TruckTargetDamage = targetDamageCvar:GetInt()
 ENT.TruckDamage = nonTargetDamageCvar:GetInt()
 ENT.TruckSpeed = speedCvar:GetInt()
@@ -43,8 +42,6 @@ function ENT:Initialize()
         local ang = self:GetAngles()
         ang:RotateAroundAxis(ang:Up(), -2)
         self:SetAngles(ang)
-        self:EmitSound(self.Sound)
-        self:EmitSound(self.Sound)
     end
 end
 
@@ -68,8 +65,6 @@ function ENT:Think()
 
     if self.ToRemove then
         if CLIENT then return end
-        self:StopSound(self.Sound)
-        self:StopSound(self.Sound)
         SafeRemoveEntity(self.Trail)
 
         if IsValid(self.Target) and (self.Target:IsFrozen() or self.Target:HasGodMode()) then
