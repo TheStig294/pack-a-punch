@@ -27,6 +27,10 @@ ENT.DistToTarget = 0
 ENT.Wheels = nil
 ENT.WheelOffset = 300
 
+if SERVER then
+    util.AddNetworkString("TTTPAPCarGunVictimPopup")
+end
+
 function ENT:Initialize()
     self.TruckTargetDamage = targetDamageCvar:GetInt()
     self.TruckDamage = nonTargetDamageCvar:GetInt()
@@ -150,5 +154,28 @@ function ENT:StartTouch(ent)
 
         ent:TakeDamageInfo(dmg)
         ent:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+        net.Start("TTTPAPCarGunVictimPopup")
+        net.Send(ent)
     end
+end
+
+if CLIENT then
+    local mat = Material("ttt_pack_a_punch/car_gun/trucking_tuesday.png")
+    local width = ScrW() / 2
+    local height = ScrH() / 2
+    local x = ScrW() / 4
+    local y = ScrH() / 4
+
+    -- Shows a popup of the trucking tuesday logo on the screen
+    net.Receive("TTTPAPCarGunVictimPopup", function()
+        hook.Add("HUDPaint", "TTTPAPCarGunVictimPopup", function()
+            surface.SetDrawColor(255, 255, 255, 255)
+            surface.SetMaterial(mat)
+            surface.DrawTexturedRect(x, y, width, height)
+        end)
+
+        timer.Create("TTTPAPCarGunVictimPopup", 3, 1, function()
+            hook.Remove("HUDPaint", "TTTPAPCarGunVictimPopup")
+        end)
+    end)
 end
