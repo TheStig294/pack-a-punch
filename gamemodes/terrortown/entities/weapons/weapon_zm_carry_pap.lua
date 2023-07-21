@@ -1,6 +1,17 @@
 -- All credit for this code goes to Malivil and Noxx from the 2022 Jingle Jam roles pack: https://github.com/NoxxFlame/TTT-Jingle-Jam-Roles-2022
 -- (I just modified it to work like an upgraded magnito-stick)
 AddCSLuaFile()
+
+CreateConVar("ttt_pap_magneto_release_delay", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "The seconds a victim is stunned for when released", 0, 60)
+
+CreateConVar("ttt_pap_magneto_carry_duration", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "The seconds a victim can be carried for", 0, 60)
+
+CreateConVar("ttt_pap_magneto_struggle_interval", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "The seconds between victim struggles", 0.1, 1)
+
+CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "The seconds a struggle reduces carry duration by", 0.1, 1)
+
+CreateConVar("ttt_pap_magneto_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown of picking up players again", 0, 180)
+
 local CurTime = CurTime
 local ents = ents
 local hook = hook
@@ -63,12 +74,6 @@ function SWEP:Initialize()
 end
 
 if SERVER then
-    CreateConVar("ttt_pap_magneto_release_delay", "2", FCVAR_NONE, "The seconds a victim is stunned for when released", 0, 60)
-    CreateConVar("ttt_pap_magneto_carry_duration", "30", FCVAR_NONE, "The seconds a victim can be carried for", 0, 60)
-    CreateConVar("ttt_pap_magneto_struggle_interval", "0.25", FCVAR_NONE, "The seconds between victim struggles", 0.1, 1)
-    CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", FCVAR_NONE, "The seconds a struggle reduces carry duration by", 0.1, 1)
-    CreateConVar("ttt_pap_magneto_cooldown", "10", FCVAR_NONE, "Seconds cooldown of picking up players again", 0, 180)
-
     function SWEP:Think()
         self.BaseClass.Think(self)
         if self.Victim == nil then return end

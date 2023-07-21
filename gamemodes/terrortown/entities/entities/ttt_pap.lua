@@ -1,12 +1,12 @@
 AddCSLuaFile()
 
 -- Create convar to disable trying to apply the default upgrade on weapons without one
-local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
+local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
-local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
+local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
 
-local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
+local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
 
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
@@ -76,7 +76,7 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 
             -- Check weapon actually has a unique PaP upgrade
             if TTT_PAP_UPGRADES[class] or weapons.Get(class .. "_pap") ~= nil then
-                CreateConVar("ttt_pap_" .. class, 1, {FCVAR_NOTIFY, FCVAR_REPLICATED})
+                CreateConVar("ttt_pap_" .. class, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
             end
         end
     end
