@@ -4,7 +4,7 @@ local targetDamageCvar = CreateConVar("ttt_pap_car_gun_target_damage", "10000", 
 
 local nonTargetDamageCvar = CreateConVar("ttt_pap_car_gun_non_target_damage", "50", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "How much damage players in the way of the truck receive, not the target", 0)
 
-local speedCvar = CreateConVar("ttt_pap_car_gun_speed", "150", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed of the truck prop", 1)
+local speedCvar = CreateConVar("ttt_pap_car_gun_speed", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed of the truck prop", 1)
 
 local scaleCvar = CreateConVar("ttt_pap_car_gun_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of the truck prop", 0.3)
 
