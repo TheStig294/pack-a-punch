@@ -37,11 +37,6 @@ SWEP.AllowDelete = false -- never removed for weapon reduction
 SWEP.AllowDrop = false
 local sound_single = Sound("Weapon_Crowbar.Single")
 
-if SERVER then
-    CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
-    CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
-end
-
 -- only open things that have a name (and are therefore likely to be meant to
 -- open) and are the right class. Opening behaviour also differs per class, so
 -- return one of the OPEN_ values
