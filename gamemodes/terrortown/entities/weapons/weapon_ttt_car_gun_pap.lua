@@ -31,18 +31,8 @@ SWEP.DrawCrosshair = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFlip = false
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
-SWEP.Sound = Sound("ttt_truck_gun/beepbeep.mp3")
-
-SWEP.CanBuy = {ROLE_TRAITOR}
-
-if CLIENT then
-    SWEP.Icon = "vgui/ttt/weapon_ttt_truck_gun.png"
-
-    SWEP.EquipMenuData = {
-        type = "Weapon",
-        desc = "Shoot a flying truck at someone and freeze them in place!\n\nAnyone caught in the way of the truck between you and the victim also takes damage."
-    }
-end
+SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+SWEP.CanBuy = nil
 
 function SWEP:Initialize()
     self:SetHoldType(self.HoldType)
@@ -88,7 +78,7 @@ function SWEP:PrimaryAttack()
 
                     timer.Simple(0, function()
                         victim:Lock()
-                        local truck = ents.Create("ent_ttt_truck_gun")
+                        local truck = ents.Create("ent_ttt_car_gun_pap")
                         truck:SetPos(owner:EyePos() + owner:GetAimVector() * 100)
                         truck:SetAngles(owner:EyeAngles())
                         truck:SetOwner(owner)

@@ -6,7 +6,7 @@ local nonTargetDamageCvar = CreateConVar("ttt_pap_car_gun_non_target_damage", "5
 
 local speedCvar = CreateConVar("ttt_pap_car_gun_speed", "150", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed of the truck prop", 1)
 
-local scaleCvar = CreateConVar("ttt_pap_car_gun_scale", "0.75", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of the truck prop", 0.3)
+local scaleCvar = CreateConVar("ttt_pap_car_gun_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of the truck prop", 0.3)
 
 local rangeCvar = CreateConVar("ttt_pap_car_gun_range", "4000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Range of the truck before it automatically disappears", 10)
 
@@ -91,7 +91,7 @@ function ENT:StartTouch(ent)
     if ent == owner then return end
 
     if ent:Alive() and not ent:IsSpec() then
-        local inflictWep = ents.Create("weapon_ttt_truck_gun")
+        local inflictWep = ents.Create("weapon_ttt_car_gun_pap")
         local dmg = DamageInfo()
         dmg:SetInflictor(inflictWep)
 
@@ -118,6 +118,6 @@ function ENT:StartTouch(ent)
         end
 
         ent:TakeDamageInfo(dmg)
-        self:EmitSound("ttt_truck_gun/beepbeep.mp3")
+        self:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
     end
 end
