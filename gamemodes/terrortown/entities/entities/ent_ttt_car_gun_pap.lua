@@ -23,6 +23,8 @@ ENT.TruckRange = rangeCvar:GetInt()
 ENT.ToRemove = false
 ENT.Dist = 0
 ENT.Target = nil
+ENT.DistToTarget = 0
+ENT.Wheels = nil
 
 function ENT:Initialize()
     self.TruckTargetDamage = targetDamageCvar:GetInt()
@@ -42,6 +44,24 @@ function ENT:Initialize()
         local ang = self:GetAngles()
         ang:RotateAroundAxis(ang:Up(), -2)
         self:SetAngles(ang)
+        local truckpos = self:GetPos()
+
+        if IsValid(self.Target) then
+            local targetPos = self.Target:GetPos()
+            self.DistToTarget = math.Distance(truckpos.x, truckpos.y, targetPos.x, targetPos.y)
+        end
+
+        -- timer.Simple(0.1, function()
+        -- Create separate wheels entity to parent to the truck
+        self.Wheels = ents.Create("prop_dynamic")
+        self.Wheels:SetModel("models/ttt_pack_a_punch/semitruck/semitruck_wheels.mdl")
+        self.Wheels:SetMaterial("models/ttt_pack_a_punch/semitruck/semitruck")
+        self.Wheels:SetModelScale(self.TruckScale)
+        self.Wheels:SetAngles(self:GetAngles())
+        self.Wheels:SetPos(truckpos + Vector(0, 0, 200))
+        self.Wheels:SetParent(self)
+        self.Wheels:Spawn()
+        -- end)
     end
 end
 
@@ -112,7 +132,7 @@ function ENT:StartTouch(ent)
             dmg:SetDamage(self.TruckDamage)
         end
 
-        ent:TakeDamageInfo(dmg)
+        -- ent:TakeDamageInfo(dmg)
         self:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
     end
 end
