@@ -160,21 +160,36 @@ function ENT:StartTouch(ent)
 end
 
 if CLIENT then
-    local mat = Material("ttt_pack_a_punch/car_gun/trucking_tuesday.png")
-    local width = ScrW() / 2
-    local height = ScrH() / 2
-    local x = ScrW() / 4
-    local y = ScrH() / 4
-
     -- Shows a popup of the trucking tuesday logo on the screen
     net.Receive("TTTPAPCarGunVictimPopup", function()
+        local mat = Material("ttt_pack_a_punch/car_gun/trucking_tuesday.png")
+        local width = ScrW() / 2
+        local height = ScrH() / 2
+        local x = ScrW() / 4
+        local y = ScrH() / 4
+        local currentY = -height
+        local unitMovement = (y + height) / 100
+        unitMovement = unitMovement * 4
+
         hook.Add("HUDPaint", "TTTPAPCarGunVictimPopup", function()
             surface.SetDrawColor(255, 255, 255, 255)
             surface.SetMaterial(mat)
-            surface.DrawTexturedRect(x, y, width, height)
+            surface.DrawTexturedRect(x, currentY, width, height)
         end)
 
-        timer.Create("TTTPAPCarGunVictimPopup", 3, 1, function()
+        timer.Create("TTTPAPCarGunPopupInMove", 0.01, 100, function()
+            if currentY < y then
+                currentY = currentY + unitMovement
+            end
+        end)
+
+        timer.Create("TTTPAPCarGunPopupOut", 3, 1, function()
+            timer.Create("TTTPAPCarGunPopupOutMove", 0.01, 100, function()
+                currentY = currentY - unitMovement
+            end)
+        end)
+
+        timer.Create("TTTPAPCarGunVictimPopup", 6, 1, function()
             hook.Remove("HUDPaint", "TTTPAPCarGunVictimPopup")
         end)
     end)
