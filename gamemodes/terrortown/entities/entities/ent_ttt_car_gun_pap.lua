@@ -25,6 +25,7 @@ ENT.Dist = 0
 ENT.Target = nil
 ENT.DistToTarget = 0
 ENT.Wheels = nil
+ENT.WheelOffset = 300
 
 function ENT:Initialize()
     self.TruckTargetDamage = targetDamageCvar:GetInt()
@@ -57,8 +58,7 @@ function ENT:Initialize()
         self.Wheels:SetMaterial("models/ttt_pack_a_punch/semitruck/semitruck")
         self.Wheels:SetModelScale(self.TruckScale)
         self.Wheels:SetAngles(self:GetAngles())
-        self.Wheels:SetPos(truckpos + Vector(0, 0, 200))
-        self.Wheels:SetParent(self)
+        self.Wheels:SetPos(truckpos + Vector(0, 0, self.WheelOffset))
         self.Wheels:Spawn()
     end
 end
@@ -89,6 +89,10 @@ function ENT:Think()
             self.Target:UnLock()
         end
 
+        if IsValid(self.Wheels) then
+            self.Wheels:Remove()
+        end
+
         self:Remove()
 
         return
@@ -96,6 +100,20 @@ function ENT:Think()
 
     local set = pos + forward
     self:SetPos(set)
+
+    if SERVER then
+        self.Wheels:SetAngles(self:GetAngles())
+        -- (self.WheelOffset - (self.WheelOffset * (self.Dist / self.DistToTarget))) --- lerps from 300 to 0 (wheel offset to 0 as truck gets closer)
+        -- (- self.WheelOffset / 2) --- To make up for truck being a large model, entity has to travel slightly less distance to hit the player
+        local wheelOffset = self.WheelOffset - (self.WheelOffset * (self.Dist / self.DistToTarget)) - self.WheelOffset / 2
+
+        if wheelOffset < 0 then
+            wheelOffset = 0
+        end
+
+        pos.z = pos.z + wheelOffset
+        self.Wheels:SetPos(pos)
+    end
 end
 
 function ENT:StartTouch(ent)
@@ -130,7 +148,7 @@ function ENT:StartTouch(ent)
             dmg:SetDamage(self.TruckDamage)
         end
 
-        -- ent:TakeDamageInfo(dmg)
-        self:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+        ent:TakeDamageInfo(dmg)
+        ent:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
     end
 end
