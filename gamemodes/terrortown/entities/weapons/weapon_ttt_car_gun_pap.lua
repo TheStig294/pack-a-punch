@@ -48,7 +48,7 @@ function SWEP:Initialize()
 
     for _, model in ipairs(yogsModels) do
         if util.IsValidModel(model) then
-            SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+            self.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
             break
         end
     end
