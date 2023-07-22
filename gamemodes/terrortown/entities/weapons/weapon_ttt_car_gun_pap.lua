@@ -33,22 +33,7 @@ SWEP.ViewModelFlip = false
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
 SWEP.CanBuy = nil
-SWEP.PAPDesc = "Now shoots a truck! With a much larger hitbox"
-local yogsModelInstalled = false
-
-if SERVER then
-    -- If a yogs playermodel is installed, more yogs-specific references have a chance of happening
-    -- This changes the shoot sound to the yogs trucking tuesday intro, 
-    -- Which also causes the trucking tuesday popup to be shown for the victim
-    local yogsModels = {"models/bradyjharty/yogscast/lankychu.mdl", "models/bradyjharty/yogscast/breeh.mdl", "models/bradyjharty/yogscast/breeh2.mdl", "models/bradyjharty/yogscast/lewis.mdl", "models/bradyjharty/yogscast/sharky.mdl"}
-
-    for _, model in ipairs(yogsModels) do
-        if util.IsValidModel(model) then
-            yogsModelInstalled = true
-            break
-        end
-    end
-end
+SWEP.PAPDesc = "Now shoots a truck! (With a much larger hitbox)"
 
 function SWEP:Initialize()
     self:SetHoldType(self.HoldType)
@@ -56,9 +41,16 @@ function SWEP:Initialize()
     self.Primary.DefaultClip = ammoCvar:GetInt()
     self.Primary.ClipMax = ammoCvar:GetInt()
 
-    -- This changes the shoot sound to the yogs trucking tuesday intro sometimes
-    if yogsModelInstalled and math.random() < 0.5 then
-        self.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+    -- If a yogs playermodel is installed, more yogs-specific references have a chance of happening
+    -- This changes the shoot sound to the yogs trucking tuesday intro, 
+    -- Which also causes the trucking tuesday popup to be shown for the victim
+    local yogsModels = {"models/bradyjharty/yogscast/lankychu.mdl", "models/bradyjharty/yogscast/breeh.mdl", "models/bradyjharty/yogscast/breeh2.mdl", "models/bradyjharty/yogscast/lewis.mdl", "models/bradyjharty/yogscast/sharky.mdl"}
+
+    for _, model in ipairs(yogsModels) do
+        if util.IsValidModel(model) then
+            SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+            break
+        end
     end
 end
 
