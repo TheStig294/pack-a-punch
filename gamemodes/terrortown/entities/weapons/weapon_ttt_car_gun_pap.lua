@@ -31,24 +31,41 @@ SWEP.DrawCrosshair = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFlip = false
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
-SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
 SWEP.CanBuy = nil
-SWEP.PAPDesc = "Gun doesn't fire until you won't miss!"
+SWEP.PAPDesc = "Now shoots a truck! With a much larger hitbox"
+local yogsModelInstalled = false
+
+if SERVER then
+    -- If a yogs playermodel is installed, more yogs-specific references have a chance of happening
+    -- This changes the shoot sound to the yogs trucking tuesday intro, 
+    -- Which also causes the trucking tuesday popup to be shown for the victim
+    local yogsModels = {"models/bradyjharty/yogscast/lankychu.mdl", "models/bradyjharty/yogscast/breeh.mdl", "models/bradyjharty/yogscast/breeh2.mdl", "models/bradyjharty/yogscast/lewis.mdl", "models/bradyjharty/yogscast/sharky.mdl"}
+
+    for _, model in ipairs(yogsModels) do
+        if util.IsValidModel(model) then
+            yogsModelInstalled = true
+            break
+        end
+    end
+end
 
 function SWEP:Initialize()
     self:SetHoldType(self.HoldType)
     self.Primary.ClipSize = ammoCvar:GetInt()
     self.Primary.DefaultClip = ammoCvar:GetInt()
     self.Primary.ClipMax = ammoCvar:GetInt()
+
+    -- This changes the shoot sound to the yogs trucking tuesday intro sometimes
+    if yogsModelInstalled and math.random() < 0.5 then
+        self.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+    end
 end
 
 function SWEP:PrimaryAttack()
     if CLIENT or not self:CanPrimaryAttack() then return end
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
-    local TraceResult = owner:GetEyeTrace()
-    if not IsValid(TraceResult.Entity) then return end
-    if not TraceResult.Entity:IsPlayer() then return end
     owner:EmitSound("weapons/pistol/pistol_fire2.wav")
     owner:EmitSound(self.Sound)
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
@@ -88,6 +105,11 @@ function SWEP:PrimaryAttack()
                         truck:SetOwner(owner)
                         truck.SWEP = self
                         truck.Target = victim
+
+                        if self.Sound == "ttt_pack_a_punch/car_gun/trucking_tuesday.mp3" then
+                            truck.ShowPopup = true
+                        end
+
                         truck:Spawn()
                     end)
                 end
