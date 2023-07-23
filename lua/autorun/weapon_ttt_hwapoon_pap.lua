@@ -9,8 +9,11 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
             SWEP.Primary.ClipMax = 3
             SWEP.Primary.DefaultClip = 3
             SWEP:SetClip1(3)
+            SWEP.Thrown = false
 
             function SWEP:PrimaryAttack()
+                if self.Thrown then return end
+                self.Thrown = true
                 local owner = self:GetOwner()
                 if not IsValid(owner) then return end
                 self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
