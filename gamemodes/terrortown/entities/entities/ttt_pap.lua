@@ -243,6 +243,11 @@ if CLIENT then
         if description then
             chat.AddText("PAP UPGRADE: " .. description)
         end
+
+        -- Function
+        if upgradeData and upgradeData.func then
+            upgradeData:func(wep)
+        end
     end)
 
     -- Camo

@@ -8,17 +8,21 @@ TTT_PAP_UPGRADES = {
         name = "Eagle's Eye",
         desc = "Faster and further zoom",
         func = function(SWEP)
-            SWEP.ZoomLevels = {0, 15, 10, 5}
+            if SERVER then
+                SWEP.ZoomLevels = {0, 15, 10, 5}
 
-            SWEP.ProcessingDelay = 0.1
+                SWEP.ProcessingDelay = 0.1
+            end
         end
     },
     weapon_ttt_confgrenade = {
         name = "The Bristol Pusher",
         desc = "Massive push power, spawns fire!",
         func = function(SWEP)
-            function SWEP:GetGrenadeName()
-                return "ttt_confgrenade_proj_pap"
+            if SERVER then
+                function SWEP:GetGrenadeName()
+                    return "ttt_confgrenade_proj_pap"
+                end
             end
         end
     },
@@ -51,8 +55,10 @@ TTT_PAP_UPGRADES = {
         name = "Ninja bomb",
         desc = "Very large smoke cloud",
         func = function(SWEP)
-            function SWEP:GetGrenadeName()
-                return "ttt_smokegrenade_proj_pap"
+            if SERVER then
+                function SWEP:GetGrenadeName()
+                    return "ttt_smokegrenade_proj_pap"
+                end
             end
         end
     },
@@ -92,12 +98,14 @@ TTT_PAP_UPGRADES = {
         firerateMult = 1.2,
         damageMult = 1.5,
         func = function(SWEP)
-            function SWEP:SetZoom(state)
-                if IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() then
-                    if state then
-                        self:GetOwner():SetFOV(10, 0.4)
-                    else
-                        self:GetOwner():SetFOV(0, 0.2)
+            if SERVER then
+                function SWEP:SetZoom(state)
+                    if IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() then
+                        if state then
+                            self:GetOwner():SetFOV(10, 0.4)
+                        else
+                            self:GetOwner():SetFOV(0, 0.2)
+                        end
                     end
                 end
             end
@@ -109,16 +117,18 @@ TTT_PAP_UPGRADES = {
         firerateMult = 1.1,
         ammoMult = 1.5,
         func = function(SWEP)
-            function SWEP:PerformReload()
-                local ply = self:GetOwner()
-                -- prevent normal shooting in between reloads
-                self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-                if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
-                if self:Clip1() >= self.Primary.ClipSize then return end
-                self:GetOwner():RemoveAmmo(math.min(4, self.Primary.ClipSize - self:Clip1()), self.Primary.Ammo, false)
-                self:SetClip1(math.min(self:Clip1() + 4, self.Primary.ClipSize))
-                self:SendWeaponAnim(ACT_VM_RELOAD)
-                self:SetReloadTimer(CurTime() + self:SequenceDuration())
+            if SERVER then
+                function SWEP:PerformReload()
+                    local ply = self:GetOwner()
+                    -- prevent normal shooting in between reloads
+                    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+                    if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
+                    if self:Clip1() >= self.Primary.ClipSize then return end
+                    self:GetOwner():RemoveAmmo(math.min(4, self.Primary.ClipSize - self:Clip1()), self.Primary.Ammo, false)
+                    self:SetClip1(math.min(self:Clip1() + 4, self.Primary.ClipSize))
+                    self:SendWeaponAnim(ACT_VM_RELOAD)
+                    self:SetReloadTimer(CurTime() + self:SequenceDuration())
+                end
             end
         end
     },
