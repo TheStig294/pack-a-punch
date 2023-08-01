@@ -11,6 +11,39 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
             SWEP:SetClip1(3)
             SWEP.Thrown = false
 
+            function SWEP:CreateArrow(aType, owner)
+                if SERVER then
+                    if not IsValid(owner) then
+                        owner = self:GetOwner()
+                    end
+
+                    if not IsValid(owner) or not IsValid(self) then return end
+                    local ent = ents.Create("hwapoon_arrow")
+                    if not ent then return end
+                    ent.Owner = owner
+                    ent.Arrowtype = aType
+                    ent.Inflictor = self
+                    ent:SetOwner(owner)
+                    local eyeang = owner:GetAimVector():Angle()
+                    local right = eyeang:Right()
+                    local up = eyeang:Up()
+                    local posOffset = 9 - self:Clip1() * 9
+                    ent:SetPos(owner:GetShootPos() + right * posOffset - up * 3)
+                    ent:SetAngles(owner:GetAngles())
+                    ent:SetPhysicsAttacker(owner)
+                    ent:Spawn()
+                    local phys = ent:GetPhysicsObject()
+
+                    if IsValid(phys) then
+                        local fanDegrees = 8
+                        local aimOffset = fanDegrees - self:Clip1() * fanDegrees
+                        local aimVector = owner:GetAimVector()
+                        aimVector:Rotate(Angle(0, aimOffset, 0))
+                        phys:SetVelocity(aimVector * 1750)
+                    end
+                end
+            end
+
             function SWEP:ThrowTripleHarpoonShot(owner)
                 if not IsValid(owner) then return end
                 self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -20,8 +53,8 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                 self.NextShot = CurTime() + 0.5
 
                 if not (game.SinglePlayer() and CLIENT) then
-                    self:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
-                    self:EmitSound("hwapoon" .. math.random(1, 5) .. ".wav", 100, 100)
+                    owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
+                    owner:EmitSound("hwapoon" .. math.random(1, 5) .. ".wav", 100, 100)
                 end
 
                 owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * 10, math.Rand(-0.1, 0.1) * 10, 0))
@@ -37,7 +70,7 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                 local owner = self:GetOwner()
                 SWEP:ThrowTripleHarpoonShot(owner)
 
-                timer.Create("PAPHarpoonThrow", 0.5, self:Clip1(), function()
+                timer.Create("PAPHarpoonThrow", 0.1, self:Clip1(), function()
                     SWEP:ThrowTripleHarpoonShot(owner)
                 end)
             end
