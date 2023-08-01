@@ -19,7 +19,7 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
 
                     if not IsValid(owner) or not IsValid(self) then return end
                     local ent = ents.Create("hwapoon_arrow")
-                    if not ent then return end
+                    if not IsValid(ent) then return end
                     ent.Owner = owner
                     ent.Arrowtype = aType
                     ent.Inflictor = self
@@ -50,12 +50,8 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                 self:TakePrimaryAmmo(1)
                 self:CreateArrow("normal", owner, self)
                 self:SendWeaponAnim(ACT_VM_DRAW)
-
-                if not (game.SinglePlayer() and CLIENT) then
-                    owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
-                    owner:EmitSound("hwapoon" .. math.random(1, 5) .. ".wav", 100, 100)
-                end
-
+                owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
+                owner:EmitSound("hwapoon" .. math.random(1, 5) .. ".wav", 100, 100)
                 owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * 10, math.Rand(-0.1, 0.1) * 10, 0))
 
                 if SERVER and self:Clip1() <= 0 then
