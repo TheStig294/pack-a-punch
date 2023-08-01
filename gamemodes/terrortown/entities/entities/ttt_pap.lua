@@ -149,7 +149,11 @@ end)
 local function ApplyPAP(wep, upgradeData)
     -- NWBool, camo and sound is applied on all weapons
     wep:SetNWBool("IsPackAPunched", true)
-    wep:SetMaterial(TTT_PAP_CAMO)
+
+    if not upgradeData.noCamo then
+        wep:SetMaterial(TTT_PAP_CAMO)
+    end
+
     OverrideWeaponSound(wep)
 
     -- Firerate
@@ -255,8 +259,9 @@ if CLIENT then
 
     hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, ply, weapon)
         if not IsValid(weapon) then return end
+        local class = weapon:GetClass()
 
-        if weapon:GetNWBool("IsPackAPunched") then
+        if weapon:GetNWBool("IsPackAPunched") and not TTT_PAP_UPGRADES[class].noCamo then
             vm:SetMaterial(TTT_PAP_CAMO)
             appliedCamo = true
         elseif appliedCamo then
