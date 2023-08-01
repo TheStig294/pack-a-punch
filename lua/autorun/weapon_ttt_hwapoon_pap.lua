@@ -31,6 +31,7 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                     ent:SetPos(owner:GetShootPos() + right * posOffset - up * 3)
                     ent:SetAngles(owner:GetAngles())
                     ent:SetPhysicsAttacker(owner)
+                    ent:SetMaterial(TTT_PAP_CAMO)
                     ent:Spawn()
                     local phys = ent:GetPhysicsObject()
 
