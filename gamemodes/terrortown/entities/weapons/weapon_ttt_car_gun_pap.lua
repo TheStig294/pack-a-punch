@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-local ammoCvar = CreateConVar("ttt_pap_car_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "How much ammo the truck gun has", 1)
+local ammoCvar = CreateConVar("ttt_pap_car_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
 
 SWEP.PrintName = "Truck Gun"
 SWEP.Spawnable = true
@@ -64,8 +64,7 @@ table.insert(TTT_PAP_CONVARS[class], {
 
 table.insert(TTT_PAP_CONVARS[class], {
     name = "ttt_pap_car_gun_scale",
-    type = "float",
-    decimal = 7
+    type = "float"
 })
 
 table.insert(TTT_PAP_CONVARS[class], {

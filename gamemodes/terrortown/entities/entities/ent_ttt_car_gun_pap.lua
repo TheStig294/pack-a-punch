@@ -1,14 +1,14 @@
 AddCSLuaFile()
 
-local targetDamageCvar = CreateConVar("ttt_pap_car_gun_target_damage", "10000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "How much damage the target receives, not players in the way of the truck", 0)
+local targetDamageCvar = CreateConVar("ttt_pap_car_gun_target_damage", "10000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage target player receives", 0)
 
-local nonTargetDamageCvar = CreateConVar("ttt_pap_car_gun_non_target_damage", "50", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "How much damage players in the way of the truck receive, not the target", 0)
+local nonTargetDamageCvar = CreateConVar("ttt_pap_car_gun_non_target_damage", "50", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage other players receive on touch", 0)
 
-local speedCvar = CreateConVar("ttt_pap_car_gun_speed", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed of the truck prop", 1)
+local speedCvar = CreateConVar("ttt_pap_car_gun_speed", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck speed", 1, 1000)
 
-local scaleCvar = CreateConVar("ttt_pap_car_gun_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of the truck prop", 0.3)
+local scaleCvar = CreateConVar("ttt_pap_car_gun_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck size scale", 0.3, 10)
 
-local rangeCvar = CreateConVar("ttt_pap_car_gun_range", "4000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Range of the truck before it automatically disappears", 10)
+local rangeCvar = CreateConVar("ttt_pap_car_gun_range", "4000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck range", 10, 10000)
 
 ENT.Base = "base_anim"
 ENT.Type = "anim"

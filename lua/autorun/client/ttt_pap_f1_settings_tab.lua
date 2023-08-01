@@ -19,8 +19,8 @@ surface.CreateFont("PAPDesc", {
 local function OptionsMenu(SWEP, PAPClass)
     if not LocalPlayer():IsAdmin() then return end
     local frame = vgui.Create("DFrame")
-    frame:SetSize(600, 400)
-    frame:SetTitle("Extra Options")
+    frame:SetSize(500, 350)
+    frame:SetTitle("Upgrade Options")
     frame:MakePopup()
     frame:Center()
 
@@ -32,10 +32,33 @@ local function OptionsMenu(SWEP, PAPClass)
     scroll:Dock(FILL)
     local layout = vgui.Create("DListLayout", scroll)
     layout:Dock(FILL)
-    local titleText = layout:Add("DLabel")
-    titleText:SetText("    Extra options for this weapon's upgrade:")
-    titleText:SetColor(COLOR_YELLOW)
-    titleText:SizeToContents()
+    local PAPSWEP = weapons.Get(PAPClass)
+    local name = vgui.Create("DLabel", layout)
+    local nameText = LANG.TryTranslation(PAPSWEP.PrintName)
+
+    if isstring(nameText) then
+        nameText = "       " .. nameText
+    else
+        nameText = ""
+    end
+
+    name:SetText(nameText)
+    name:SetFont("Trebuchet24")
+    name:SetTextColor(COLOR_WHITE)
+    name:SizeToContents()
+    local desc = vgui.Create("DLabel", layout)
+    local descText = LANG.TryTranslation(PAPSWEP.PAPDesc)
+
+    if isstring(descText) then
+        descText = "       " .. descText
+    else
+        descText = ""
+    end
+
+    desc:SetText(descText)
+    desc:SetFont("PAPDesc")
+    desc:SetTextColor(COLOR_WHITE)
+    desc:SizeToContents()
 
     for _, cvarInfo in ipairs(TTT_PAP_CONVARS[PAPClass]) do
         if not ConVarExists(cvarInfo.name) then return end
@@ -68,32 +91,38 @@ local function OptionsMenu(SWEP, PAPClass)
             slider:SetSize(300, 100)
             slider:SetText(helpText)
             slider:SetMin(cvar:GetMin() or 0)
-            slider:SetMax(cvar:GetMin() or 100)
+            slider:SetMax(cvar:GetMax() or 100)
             slider:SetDecimals(0)
             slider:SetValue(cvar:GetInt())
+            slider:SetHeight(25)
 
             slider.OnValueChanged = function(self, value)
-                value = math.Round(value, self:GetDecimals())
-                net.Start("TTTPAPChangeConvar")
-                net.WriteString(cvarInfo.name)
-                net.WriteString(tostring(value))
-                net.SendToServer()
+                timer.Create("TTTPAPChangeConvarDelay", 0.5, 1, function()
+                    value = math.Round(value, self:GetDecimals())
+                    net.Start("TTTPAPChangeConvar")
+                    net.WriteString(cvarInfo.name)
+                    net.WriteString(tostring(value))
+                    net.SendToServer()
+                end)
             end
         elseif cvarInfo.type == "float" then
             local slider = layout:Add("DNumSlider")
             slider:SetSize(300, 100)
             slider:SetText(helpText)
             slider:SetMin(cvar:GetMin() or 0)
-            slider:SetMax(cvar:GetMin() or 100)
+            slider:SetMax(cvar:GetMax() or 100)
             slider:SetDecimals(cvarInfo.decimal or 2)
             slider:SetValue(cvar:GetFloat())
+            slider:SetHeight(25)
 
             slider.OnValueChanged = function(self, value)
-                value = math.Round(value, self:GetDecimals())
-                net.Start("TTTPAPChangeConvar")
-                net.WriteString(cvarInfo.name)
-                net.WriteString(tostring(value))
-                net.SendToServer()
+                timer.Create("TTTPAPChangeConvarDelay", 0.5, 1, function()
+                    value = math.Round(value, self:GetDecimals())
+                    net.Start("TTTPAPChangeConvar")
+                    net.WriteString(cvarInfo.name)
+                    net.WriteString(tostring(value))
+                    net.SendToServer()
+                end)
             end
         elseif cvarInfo.type == "string" then
             local text = layout:Add("DLabel")
