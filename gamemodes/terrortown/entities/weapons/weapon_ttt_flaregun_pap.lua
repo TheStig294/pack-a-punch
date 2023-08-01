@@ -15,7 +15,7 @@ if CLIENT then
     SWEP.Icon = "vgui/ttt/icon_flare"
 end
 
-SWEP.PAPDesc = "Sets someone on fire that doesn't go out, unless they go into water"
+SWEP.PAPDesc = "Sets someone on fire that doesn't go out\n(Unless they go into water)"
 SWEP.Base = "weapon_tttbase"
 -- if I run out of ammo types, this weapon is one I could move to a custom ammo
 -- handling strategy, because you never need to pick up ammo for it
