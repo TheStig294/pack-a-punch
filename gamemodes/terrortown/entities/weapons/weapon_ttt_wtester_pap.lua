@@ -137,7 +137,11 @@ end
 
 hook.Add("TTTPrepareRound", "PaPDnaScannerReset", function()
     for _, ply in ipairs(player.GetAll()) do
-        timer.Remove("PaPDnaScannerTest" .. ply:SteamID64())
+        local id = ply:SteamID64()
+
+        if id then
+            timer.Remove("PaPDnaScannerTest" .. ply:SteamID64())
+        end
     end
 end)
 
