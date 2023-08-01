@@ -3,7 +3,13 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
     name = "Triple Poon",
     desc = "Throw 3 hwapoons at once!",
+    noCamo = true,
     func = function(SWEP)
+        if CLIENT then
+            SWEP.VElements.harpoon.material = TTT_PAP_CAMO
+            SWEP.WElements.WHarpoon.material = TTT_PAP_CAMO
+        end
+
         if SERVER then
             SWEP.Primary.ClipSize = 3
             SWEP.Primary.ClipMax = 3
@@ -69,11 +75,6 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                     SWEP:ThrowTripleHarpoonShot(owner)
                 end)
             end
-        end
-
-        if CLIENT then
-            SWEP.VElements.harpoon.material = TTT_PAP_CAMO
-            SWEP.WElements.WHarpoon.material = TTT_PAP_CAMO
         end
     end
 }
