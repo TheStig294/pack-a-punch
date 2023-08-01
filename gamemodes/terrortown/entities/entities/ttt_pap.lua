@@ -261,7 +261,7 @@ if CLIENT then
         if not IsValid(weapon) then return end
         local class = weapon:GetClass()
 
-        if weapon:GetNWBool("IsPackAPunched") and not TTT_PAP_UPGRADES[class].noCamo then
+        if weapon:GetNWBool("IsPackAPunched") and not weapon.PAPNoCamo and not (TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].noCamo) then
             vm:SetMaterial(TTT_PAP_CAMO)
             appliedCamo = true
         elseif appliedCamo then
