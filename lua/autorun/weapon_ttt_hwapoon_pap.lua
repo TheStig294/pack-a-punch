@@ -47,11 +47,9 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
 
             function SWEP:ThrowTripleHarpoonShot(owner)
                 if not IsValid(owner) then return end
-                self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-                if not self:CanPrimaryAttack() then return end
                 self:TakePrimaryAmmo(1)
                 self:CreateArrow("normal", owner, self)
-                self.NextShot = CurTime() + 0.5
+                self:SendWeaponAnim(ACT_VM_DRAW)
 
                 if not (game.SinglePlayer() and CLIENT) then
                     owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
