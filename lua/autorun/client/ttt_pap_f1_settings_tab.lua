@@ -199,7 +199,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
 
     -- Title text
     local titleText = nonScrollList:Add("DLabel")
-    titleText:SetText("                       Toggle individual weapon upgrades\n            for the \"Pack-a-Punch\" buyable item! (Admins only)")
+    titleText:SetText("                             Pack-a-Punch Admin Options")
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
