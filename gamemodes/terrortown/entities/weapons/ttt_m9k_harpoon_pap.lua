@@ -6,6 +6,7 @@ SWEP.Primary.DefaultClip = 3
 SWEP.Thrown = false
 SWEP.PAPNoCamo = true
 SWEP.PAPDesc = "Throw 3 harpoons at once!"
+SWEP.PrintName = "Triple Poon"
 
 function SWEP:Initialize()
     self.BaseClass.Initialize(self)
