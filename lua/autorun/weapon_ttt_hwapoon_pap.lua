@@ -11,10 +11,7 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
             SWEP:SetClip1(3)
             SWEP.Thrown = false
 
-            function SWEP:PrimaryAttack()
-                if self.Thrown then return end
-                self.Thrown = true
-                local owner = self:GetOwner()
+            function SWEP:ThrowTripleHarpoonShot(owner)
                 if not IsValid(owner) then return end
                 self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
                 if not self:CanPrimaryAttack() then return end
@@ -32,6 +29,17 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                 if SERVER and self:Clip1() <= 0 then
                     self:Remove()
                 end
+            end
+
+            function SWEP:PrimaryAttack()
+                if self.Thrown then return end
+                self.Thrown = true
+                local owner = self:GetOwner()
+                SWEP:ThrowTripleHarpoonShot(owner)
+
+                timer.Create("PAPHarpoonThrow", 0.5, self:Clip1(), function()
+                    SWEP:ThrowTripleHarpoonShot(owner)
+                end)
             end
         end
     end
