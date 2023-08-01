@@ -8,8 +8,8 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
             SWEP.Primary.ClipSize = 3
             SWEP.Primary.ClipMax = 3
             SWEP.Primary.DefaultClip = 3
-            SWEP:SetClip1(3)
             SWEP.Thrown = false
+            SWEP:SetClip1(3)
 
             function SWEP:CreateArrow(aType, owner)
                 if SERVER then
@@ -75,6 +75,11 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                     SWEP:ThrowTripleHarpoonShot(owner)
                 end)
             end
+        end
+
+        if CLIENT then
+            SWEP.VElements.harpoon.material = TTT_PAP_CAMO
+            SWEP.WElements.WHarpoon.material = TTT_PAP_CAMO
         end
     end
 }
