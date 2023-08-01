@@ -34,11 +34,6 @@ SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
 SWEP.CanBuy = nil
 SWEP.PAPDesc = "Now shoots a truck! (With a much larger hitbox)"
-
-CreateConVar("ttt_pap_car_gun_dummy_bool", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Test bool convar for the car gun", 0, 1)
-
-CreateConVar("ttt_pap_car_gun_dummy_string", "test blegh", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Test string convar for the car gun")
-
 local class = "weapon_ttt_car_gun_pap"
 TTT_PAP_CONVARS[class] = {}
 
@@ -70,16 +65,6 @@ table.insert(TTT_PAP_CONVARS[class], {
 table.insert(TTT_PAP_CONVARS[class], {
     name = "ttt_pap_car_gun_range",
     type = "int"
-})
-
-table.insert(TTT_PAP_CONVARS[class], {
-    name = "ttt_pap_car_gun_dummy_bool",
-    type = "bool"
-})
-
-table.insert(TTT_PAP_CONVARS[class], {
-    name = "ttt_pap_car_gun_dummy_string",
-    type = "string"
 })
 
 function SWEP:Initialize()
