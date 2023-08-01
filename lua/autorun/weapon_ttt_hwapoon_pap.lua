@@ -1,7 +1,7 @@
 TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 
 TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
-    name = "Triple Hwapoon",
+    name = "Triple Poon",
     desc = "Throw 3 hwapoons at once!",
     func = function(SWEP)
         if SERVER then
