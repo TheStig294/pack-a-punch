@@ -246,7 +246,7 @@ if CLIENT then
 
         -- Function
         if upgradeData and upgradeData.func then
-            upgradeData:func(wep)
+            upgradeData.func(wep)
         end
     end)
 
