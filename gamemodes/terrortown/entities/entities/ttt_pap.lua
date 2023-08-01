@@ -11,7 +11,7 @@ local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOT
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
-    util.AddNetworkString("TTTPAPToggleEnabledConvar")
+    util.AddNetworkString("TTTPAPChangeConvar")
 end
 
 if CLIENT then
@@ -83,16 +83,13 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 end)
 
 if SERVER then
-    net.Receive("TTTPAPToggleEnabledConvar", function(len, ply)
+    net.Receive("TTTPAPChangeConvar", function(len, ply)
         if not ply:IsAdmin() then return end
         local cvarName = net.ReadString()
-        if not ConVarExists(cvarName) then return end
-        local enabledCvar = GetConVar(cvarName)
+        local value = net.ReadString()
 
-        if enabledCvar:GetBool() then
-            enabledCvar:SetBool(false)
-        else
-            enabledCvar:SetBool(true)
+        if ConVarExists(cvarName) then
+            GetConVar(cvarName):SetString(value)
         end
     end)
 end

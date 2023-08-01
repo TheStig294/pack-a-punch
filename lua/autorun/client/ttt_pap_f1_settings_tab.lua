@@ -16,6 +16,103 @@ surface.CreateFont("PAPDesc", {
     outline = false,
 })
 
+local function OptionsMenu(SWEP, PAPClass)
+    if not LocalPlayer():IsAdmin() then return end
+    local frame = vgui.Create("DFrame")
+    frame:SetSize(600, 400)
+    frame:SetTitle("Extra Options")
+    frame:MakePopup()
+    frame:Center()
+
+    frame.Paint = function(self, w, h)
+        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+    end
+
+    local scroll = vgui.Create("DScrollPanel", frame)
+    scroll:Dock(FILL)
+    local layout = vgui.Create("DListLayout", scroll)
+    layout:Dock(FILL)
+    local titleText = layout:Add("DLabel")
+    titleText:SetText("    Extra options for this weapon's upgrade:")
+    titleText:SetColor(COLOR_YELLOW)
+    titleText:SizeToContents()
+
+    for _, cvarInfo in ipairs(TTT_PAP_CONVARS[PAPClass]) do
+        if not ConVarExists(cvarInfo.name) then return end
+        local padding = layout:Add("DPanel")
+        padding:SetBackgroundColor(COLOR_BLACK)
+        padding:SetHeight(10)
+        local cvar = GetConVar(cvarInfo.name)
+        local helpText = cvar:GetHelpText() or ""
+
+        if cvarInfo.type == "bool" then
+            local checkbox = layout:Add("DCheckBoxLabel")
+            checkbox:SetText(helpText)
+            checkbox:SetChecked(cvar:GetBool())
+            checkbox:SizeToContents()
+
+            function checkbox:OnChange()
+                net.Start("TTTPAPChangeConvar")
+                net.WriteString(cvarInfo.name)
+
+                if checkbox:GetChecked() then
+                    net.WriteString("1")
+                else
+                    net.WriteString("0")
+                end
+
+                net.SendToServer()
+            end
+        elseif cvarInfo.type == "int" then
+            local slider = layout:Add("DNumSlider")
+            slider:SetSize(300, 100)
+            slider:SetText(helpText)
+            slider:SetMin(cvar:GetMin() or 0)
+            slider:SetMax(cvar:GetMin() or 100)
+            slider:SetDecimals(0)
+            slider:SetValue(cvar:GetInt())
+
+            slider.OnValueChanged = function(self, value)
+                value = math.Round(value, self:GetDecimals())
+                net.Start("TTTPAPChangeConvar")
+                net.WriteString(cvarInfo.name)
+                net.WriteString(tostring(value))
+                net.SendToServer()
+            end
+        elseif cvarInfo.type == "float" then
+            local slider = layout:Add("DNumSlider")
+            slider:SetSize(300, 100)
+            slider:SetText(helpText)
+            slider:SetMin(cvar:GetMin() or 0)
+            slider:SetMax(cvar:GetMin() or 100)
+            slider:SetDecimals(cvarInfo.decimal or 2)
+            slider:SetValue(cvar:GetFloat())
+
+            slider.OnValueChanged = function(self, value)
+                value = math.Round(value, self:GetDecimals())
+                net.Start("TTTPAPChangeConvar")
+                net.WriteString(cvarInfo.name)
+                net.WriteString(tostring(value))
+                net.SendToServer()
+            end
+        elseif cvarInfo.type == "string" then
+            local text = layout:Add("DLabel")
+            text:SetText(helpText)
+            text:SizeToContents()
+            local textBox = layout:Add("DTextEntry")
+            textBox:SetSize(450, 25)
+            textBox:SetText(cvar:GetString())
+
+            textBox.OnEnter = function(self, value)
+                net.Start("TTTPAPChangeConvar")
+                net.WriteString(cvarInfo.name)
+                net.WriteString(value)
+                net.SendToServer()
+            end
+        end
+    end
+end
+
 local function DrawWeaponBar(list, SWEP)
     local class = SWEP.ClassName or SWEP.Classname
     local enabledCvar = GetConVar("ttt_pap_" .. class)
@@ -105,18 +202,34 @@ local function DrawWeaponBar(list, SWEP)
     enabledBox:SetPos(400, 5)
 
     function enabledBox:OnChange()
-        net.Start("TTTPAPToggleEnabledConvar")
+        net.Start("TTTPAPChangeConvar")
         local cvarName = "ttt_pap_" .. class
         net.WriteString(cvarName)
-        net.SendToServer()
 
         if enabledBox:GetChecked() then
             alpha = 255
+            net.WriteString("1")
         else
             alpha = 100
+            net.WriteString("0")
         end
 
+        net.SendToServer()
         icon:SetAlpha(alpha)
+    end
+
+    -- Options button
+    local PAPClass = class .. "_pap"
+
+    if TTT_PAP_CONVARS[PAPClass] then
+        local optionsButton = vgui.Create("DButton", background)
+        optionsButton:SetText("Options")
+        optionsButton:SizeToContents()
+        optionsButton:SetPos(350, 4)
+
+        function optionsButton:DoClick()
+            OptionsMenu(SWEP, PAPClass)
+        end
     end
 end
 
@@ -211,8 +324,15 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     genericUpgradesCheck:SizeToContents()
 
     function genericUpgradesCheck:OnChange()
-        net.Start("TTTPAPToggleEnabledConvar")
+        net.Start("TTTPAPChangeConvar")
         net.WriteString(genericUpgradesCvar:GetName())
+
+        if genericUpgradesCheck:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
         net.SendToServer()
     end
 
@@ -225,8 +345,15 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     detectiveCheck:SizeToContents()
 
     function detectiveCheck:OnChange()
-        net.Start("TTTPAPToggleEnabledConvar")
+        net.Start("TTTPAPChangeConvar")
         net.WriteString(detectiveCvar:GetName())
+
+        if detectiveCvar:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
         net.SendToServer()
     end
 
@@ -239,8 +366,15 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     traitorCheck:SizeToContents()
 
     function traitorCheck:OnChange()
-        net.Start("TTTPAPToggleEnabledConvar")
+        net.Start("TTTPAPChangeConvar")
         net.WriteString(traitorCvar:GetName())
+
+        if traitorCvar:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
         net.SendToServer()
     end
 

@@ -12,6 +12,34 @@ CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", {FCVAR_ARCHIVE, FCVAR
 
 CreateConVar("ttt_pap_magneto_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown of picking up players again", 0, 180)
 
+local class = "weapon_zm_carry_pap"
+TTT_PAP_CONVARS[class] = {}
+
+table.insert(TTT_PAP_CONVARS[class], {
+    name = "ttt_pap_magneto_release_delay",
+    type = "int"
+})
+
+table.insert(TTT_PAP_CONVARS[class], {
+    name = "ttt_pap_magneto_carry_duration",
+    type = "int"
+})
+
+table.insert(TTT_PAP_CONVARS[class], {
+    name = "ttt_pap_magneto_struggle_interval",
+    type = "float"
+})
+
+table.insert(TTT_PAP_CONVARS[class], {
+    name = "ttt_pap_magneto_struggle_reduction",
+    type = "float"
+})
+
+table.insert(TTT_PAP_CONVARS[class], {
+    name = "ttt_pap_magneto_cooldown",
+    type = "int"
+})
+
 local CurTime = CurTime
 local ents = ents
 local hook = hook
