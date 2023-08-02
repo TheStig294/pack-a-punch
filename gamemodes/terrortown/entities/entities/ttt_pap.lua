@@ -19,6 +19,8 @@ if CLIENT then
     LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
 end
 
+local PAPConvars = {}
+
 -- Registering the passive item
 hook.Add("InitPostEntity", "TTTPAPRegister", function()
     EQUIP_PAP = (GenerateNewEquipmentID and GenerateNewEquipmentID()) or 2048
@@ -76,9 +78,20 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 
             -- Check weapon actually has a unique PaP upgrade
             if TTT_PAP_UPGRADES[class] or weapons.Get(class .. "_pap") ~= nil then
-                CreateConVar("ttt_pap_" .. class, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+                local cvarName = "ttt_pap_" .. class
+
+                CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+
+                -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+                PAPConvars[name] = true
             end
         end
+    end
+
+    -- Add convars from weapon upgrades to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+    -- (All weapon upgrades would have added their convars to TTT_PAP_CONVARS by now, InitPostEntity is called after all weapon scripts have run)
+    for classname, cvarInfo in pairs(TTT_PAP_CONVARS) do
+        PAPConvars[cvarInfo.name] = true
     end
 end)
 
@@ -86,6 +99,8 @@ if SERVER then
     net.Receive("TTTPAPChangeConvar", function(len, ply)
         if not ply:IsAdmin() then return end
         local cvarName = net.ReadString()
+        -- Don't allow non-PAP convars to be changed by this net message
+        if not PAPConvars[cvarName] then return end
         local value = net.ReadString()
 
         if ConVarExists(cvarName) then
