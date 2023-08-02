@@ -83,7 +83,7 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
                 CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
                 -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-                PAPConvars[name] = true
+                PAPConvars[cvarName] = true
             end
         end
     end
