@@ -1,13 +1,5 @@
 AddCSLuaFile()
 
--- Create convar to disable trying to apply the default upgrade on weapons without one
-local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
-
--- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
-local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
-
-local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
-
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
@@ -19,7 +11,19 @@ if CLIENT then
     LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
 end
 
-local PAPConvars = {}
+-- Create convar to disable trying to apply the default upgrade on weapons without one
+local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
+
+-- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
+local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
+
+local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
+
+local PAPConvars = {
+    ttt_pap_apply_generic_upgrade = true,
+    ttt_pap_detective = true,
+    ttt_pap_traitor = true
+}
 
 -- Registering the passive item
 hook.Add("InitPostEntity", "TTTPAPRegister", function()
@@ -90,8 +94,10 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 
     -- Add convars from weapon upgrades to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
     -- (All weapon upgrades would have added their convars to TTT_PAP_CONVARS by now, InitPostEntity is called after all weapon scripts have run)
-    for classname, cvarInfo in pairs(TTT_PAP_CONVARS) do
-        PAPConvars[cvarInfo.name] = true
+    for classname, cvarList in pairs(TTT_PAP_CONVARS) do
+        for _, cvarInfo in ipairs(cvarList) do
+            PAPConvars[cvarInfo.name] = true
+        end
     end
 end)
 

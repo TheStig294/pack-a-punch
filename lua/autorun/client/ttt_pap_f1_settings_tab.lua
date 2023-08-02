@@ -377,7 +377,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
         net.Start("TTTPAPChangeConvar")
         net.WriteString(detectiveCvar:GetName())
 
-        if detectiveCvar:GetChecked() then
+        if detectiveCheck:GetChecked() then
             net.WriteString("1")
         else
             net.WriteString("0")
@@ -398,7 +398,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
         net.Start("TTTPAPChangeConvar")
         net.WriteString(traitorCvar:GetName())
 
-        if traitorCvar:GetChecked() then
+        if traitorCheck:GetChecked() then
             net.WriteString("1")
         else
             net.WriteString("0")
