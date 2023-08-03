@@ -93,7 +93,7 @@ function SWEP:ThrowBall(model_file, throwDown)
     if SERVER then
         local owner = self:GetOwner()
 
-        if IsValid(owner) then
+        if throwDown and IsValid(owner) then
             owner:EmitSound("ttt_moonball_pap/slam.mp3")
         end
 
