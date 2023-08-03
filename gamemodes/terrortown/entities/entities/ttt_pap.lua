@@ -118,29 +118,33 @@ end
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if is_item and math.floor(equipment) == EQUIP_PAP then
         local wep = ply:GetActiveWeapon()
+        local class = wep:GetClass()
+        local papWep = weapons.Get(class .. "_pap")
 
-        -- Preventing purchase if the currently held weapon is invalid
         if not IsValid(wep) then
+            -- Preventing purchase if the currently held weapon is invalid
             ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
             ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
 
             return false
-        elseif ConVarExists("ttt_pap_" .. wep:GetClass()) and not GetConVar("ttt_pap_" .. wep:GetClass()):GetBool() then
+        elseif ConVarExists("ttt_pap_" .. class) and not GetConVar("ttt_pap_" .. class):GetBool() then
             -- Preventing purchase if the current weapon has had its upgrade disabled via convar
             ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
             ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 
             return false
-        elseif not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable then
+        elseif (not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable) and not TTT_PAP_UPGRADES[class] and not papWep then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no custom PaP upgrade
-            local class = wep:GetClass()
+            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
+            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 
-            if not TTT_PAP_UPGRADES[class] and not weapons.Get(class .. "_pap") then
-                ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
-                ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+            return false
+        elseif papWep and papWep.Base and not weapons.Get(papWep.Base) then
+            -- Preventing purchase if the base weapon required for a weapon upgrade isn't installed
+            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
+            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 
-                return false
-            end
+            return false
         end
     end
 end)
