@@ -38,7 +38,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Icon = "vgui/entities/weapon_ballin"
 SWEP.WorldModel = "models/basketball.mdl"
 SWEP.PAPNoCamo = true
-SWEP.PAPDesc = "A basketball that can be picked up again!"
+SWEP.PAPDesc = "Left: throw, Right: slam, R: Spin, E: pick up"
 SWEP.stopdoinganimpls = true
 SWEP.WorldModelOffset = 0
 SWEP.WorldModelMoveDown = true
@@ -397,6 +397,11 @@ if CLIENT then
             local matrix = _Owner:GetBoneMatrix(boneid)
             if not matrix then return end
             local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
+
+            if not self.WorldModeOffset then
+                self.WorldModeOffset = 0
+            end
+
             newPos.z = newPos.z - self.WorldModeOffset
 
             if self.WorldModelMoveDown then
