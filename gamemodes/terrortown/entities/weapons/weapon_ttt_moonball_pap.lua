@@ -68,6 +68,21 @@ function SWEP:Initialize()
                 ent:Remove()
             end
         end)
+
+        -- Make the basketball only damage players if it was slammed, and then remove it
+        hook.Add("EntityTakeDamage", "PAPMoonballTakeDamage", function(ent, dmg)
+            local inflictor = dmg:GetInflictor()
+            if not IsValid(inflictor) then return end
+            local model = inflictor:GetModel()
+
+            if model and model == "models/basketball.mdl" and inflictor:GetClass() == "prop_physics" then
+                if inflictor.WasSlammed and IsValid(inflictor.Thrower) and inflictor.Thrower ~= ent then
+                    inflictor:Remove()
+                else
+                    return true
+                end
+            end
+        end)
     end
 
     timer.Simple(0.1, function()
@@ -283,11 +298,6 @@ function SWEP:ThrowBall(model_file, throwDown)
     entThrown:SetPos(pos)
     -- Set the angles to the player'e eye angles. Then spawn it.
     entThrown:SetAngles(owner:EyeAngles())
-
-    if (IsValid(owner)) then
-        entThrown:SetOwner(owner)
-    end
-
     entThrown:SetNWBool("isBasketBall", true)
     entThrown:Spawn()
     entThrown:SetModelScale(1.3)
@@ -319,6 +329,19 @@ function SWEP:ThrowBall(model_file, throwDown)
         entThrown:Remove()
 
         return
+    end
+
+    -- If the basketball touches a player shortly after the thrower slammed the ball, damage them and remove the ball
+    entThrown.Thrower = owner
+
+    if throwDown then
+        entThrown.WasSlammed = true
+
+        timer.Simple(1, function()
+            if IsValid(entThrown) then
+                entThrown.WasSlammed = false
+            end
+        end)
     end
 
     -- Now we apply the force - so the chair actually throws instead 
