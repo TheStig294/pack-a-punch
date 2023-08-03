@@ -172,7 +172,7 @@ local function ApplyPAP(wep, upgradeData)
     -- NWBool, camo and sound is applied on all weapons
     wep:SetNWBool("IsPackAPunched", true)
 
-    if not upgradeData.noCamo then
+    if not wep.PAPNoCamo and not upgradeData.noCamo then
         wep:SetMaterial(TTT_PAP_CAMO)
     end
 
