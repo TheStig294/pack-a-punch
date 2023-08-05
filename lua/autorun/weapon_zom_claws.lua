@@ -17,7 +17,6 @@ TTT_PAP_UPGRADES.weapon_zom_claws = {
                     return
                 end
 
-                SWEP:GetOwner():PrintMessage(HUD_PRINTTALK, "Playing sound")
                 SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
             end)
         end
@@ -34,7 +33,6 @@ TTT_PAP_UPGRADES.weapon_zom_claws = {
                     return
                 end
 
-                owner:PrintMessage(HUD_PRINTTALK, "Playing sound")
                 owner:EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
             end)
 
