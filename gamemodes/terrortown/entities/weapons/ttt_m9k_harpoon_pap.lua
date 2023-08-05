@@ -1,3 +1,4 @@
+AddCSLuaFile()
 SWEP.Base = "ttt_m9k_harpoon"
 SWEP.CanBuy = {}
 SWEP.Primary.ClipSize = 3

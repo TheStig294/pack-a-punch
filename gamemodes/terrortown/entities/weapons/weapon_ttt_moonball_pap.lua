@@ -1,3 +1,4 @@
+AddCSLuaFile()
 if engine.ActiveGamemode() ~= "terrortown" then return end
 
 -- Modifying the basketball weapon to use TTTBase
