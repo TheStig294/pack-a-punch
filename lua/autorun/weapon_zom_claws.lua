@@ -10,13 +10,14 @@ TTT_PAP_UPGRADES.weapon_zom_claws = {
         if IsValid(SWEP:GetOwner()) then
             local timerName = "TTTPAPZombieClawSounds" .. SWEP:EntIndex()
 
-            timer.Create("TTTPAPZombieClawSounds" .. SWEP:EntIndex(), 5, 0, function()
+            timer.Create("TTTPAPZombieClawSounds" .. SWEP:EntIndex(), 3, 0, function()
                 if not IsValid(SWEP) or not IsValid(SWEP:GetOwner()) then
                     timer.Remove(timerName)
 
                     return
                 end
 
+                SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
                 SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
             end)
         end
@@ -26,13 +27,14 @@ TTT_PAP_UPGRADES.weapon_zom_claws = {
             if not IsValid(owner) then return end
             local timerName = "TTTPAPZombieClawSounds" .. self:EntIndex()
 
-            timer.Create("TTTPAPZombieClawSounds" .. self:EntIndex(), 5, 0, function()
+            timer.Create("TTTPAPZombieClawSounds" .. self:EntIndex(), 3, 0, function()
                 if not IsValid(self) or not IsValid(owner) then
                     timer.Remove(timerName)
 
                     return
                 end
 
+                owner:EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
                 owner:EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
             end)
 
