@@ -6,6 +6,20 @@ TTT_PAP_CONVARS = TTT_PAP_CONVARS or {}
 -- List of pre-defined pack a punch upgrades
 -- If a weapon's upgrade is not defined, defaults to a 1.5x fire rate upgrade
 TTT_PAP_UPGRADES = {
+    tfa_dax_big_glock = {
+        name = "Massive Glock",
+        desc = "Wow... that's big...",
+        func = function(SWEP)
+            local scale = 10
+            local i = 0
+
+            while i < SWEP:GetBoneCount() do
+                SWEP:ManipulateBoneScale(i, Vector(scale, scale, scale))
+                SWEP:ManipulateBoneJiggle(i, 1)
+                i = i + 1
+            end
+        end
+    },
     weapon_ttt_binoculars = {
         name = "Eagle's Eye",
         desc = "Faster and further zoom",
