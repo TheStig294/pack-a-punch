@@ -353,6 +353,11 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
 
     timer.Simple(3.5, function()
         if not ply:HasWeapon(classname) then return end
+
+        if not IsValid(wep) then
+            wep = ply:GetWeapon(classname)
+        end
+
         local upgradeData = TTT_PAP_UPGRADES[classname]
 
         if upgradeData then
