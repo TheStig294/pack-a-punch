@@ -194,7 +194,7 @@ local function ApplyPAP(wep, upgradeData)
     end
 
     -- Ammo
-    if isnumber(wep.Primary.ClipSize) then
+    if isnumber(wep.Primary.ClipSize) and isnumber(wep.Primary.ClipMax) and isnumber(wep.Primary.DefaultClip) then
         local oldClipSize = wep.Primary.ClipSize
         wep.Primary.ClipSize = wep.Primary.ClipSize * upgradeData.ammoMult
         wep.Primary.ClipMax = wep.Primary.ClipMax * upgradeData.ammoMult
@@ -220,12 +220,12 @@ local function ApplyPAP(wep, upgradeData)
 
     net.Start("TTTPAPApply")
     net.WriteEntity(wep)
-    net.WriteFloat(wep.Primary.Delay)
-    net.WriteFloat(wep.Primary.Damage)
-    net.WriteFloat(wep.Primary.Cone)
-    net.WriteFloat(wep.Primary.ClipSize)
-    net.WriteFloat(wep.Primary.Recoil)
-    net.WriteBool(wep.Primary.Automatic)
+    net.WriteFloat(wep.Primary.Delay or -1)
+    net.WriteFloat(wep.Primary.Damage or -1)
+    net.WriteFloat(wep.Primary.Cone or -1)
+    net.WriteFloat(wep.Primary.ClipSize or -1)
+    net.WriteFloat(wep.Primary.Recoil or -1)
+    net.WriteBool(wep.Primary.Automatic or false)
     net.WriteBool(upgradeData.defaultPaPUpgrade)
     net.Broadcast()
 end
