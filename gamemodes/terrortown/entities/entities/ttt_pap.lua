@@ -181,6 +181,8 @@ local function ApplyPAP(wep, upgradeData)
     -- Firerate
     if isnumber(wep.Primary.Delay) then
         wep.Primary.Delay = wep.Primary.Delay / upgradeData.firerateMult
+    elseif isnumber(wep.Primary.RPM) then
+        wep.Primary.RPM = wep.Primary.RPM * upgradeData.firerateMult
     end
 
     -- Damage
@@ -191,6 +193,8 @@ local function ApplyPAP(wep, upgradeData)
     -- Spread
     if isnumber(wep.Primary.Cone) then
         wep.Primary.Cone = wep.Primary.Cone * upgradeData.spreadMult
+    elseif isnumber(wep.Primary.Spread) then
+        wep.Primary.Spread = wep.Primary.Spread * upgradeData.spreadMult
     end
 
     -- Ammo
@@ -206,6 +210,8 @@ local function ApplyPAP(wep, upgradeData)
     -- Recoil
     if isnumber(wep.Primary.Recoil) then
         wep.Primary.Recoil = wep.Primary.Recoil * upgradeData.recoilMult
+    elseif isnumber(wep.Primary.StaticRecoilFactor) then
+        wep.Primary.StaticRecoilFactor = wep.Primary.StaticRecoilFactor * upgradeData.recoilMult
     end
 
     -- Automatic
@@ -221,10 +227,13 @@ local function ApplyPAP(wep, upgradeData)
     net.Start("TTTPAPApply")
     net.WriteEntity(wep)
     net.WriteFloat(wep.Primary.Delay or -1)
+    net.WriteFloat(wep.Primary.RPM or -1)
     net.WriteFloat(wep.Primary.Damage or -1)
     net.WriteFloat(wep.Primary.Cone or -1)
+    net.WriteFloat(wep.Primary.Spread or -1)
     net.WriteFloat(wep.Primary.ClipSize or -1)
     net.WriteFloat(wep.Primary.Recoil or -1)
+    net.WriteFloat(wep.Primary.StaticRecoilFactor or -1)
     net.WriteBool(wep.Primary.Automatic or false)
     net.WriteBool(upgradeData.defaultPaPUpgrade)
     net.Broadcast()
@@ -237,12 +246,15 @@ if CLIENT then
         if not IsValid(wep) then return end
         -- Stats
         wep.Primary.Delay = net.ReadFloat()
+        wep.Primary.RPM = net.ReadFloat()
         wep.Primary.Damage = net.ReadFloat()
         wep.Primary.Cone = net.ReadFloat()
+        wep.Primary.Spread = net.ReadFloat()
         wep.Primary.ClipSize = net.ReadFloat()
         wep.Primary.ClipMax = wep.Primary.ClipSize
         wep.Primary.DefaultClip = wep.Primary.ClipSize
         wep.Primary.Recoil = net.ReadFloat()
+        wep.Primary.StaticRecoilFactor = net.ReadFloat()
         wep.Primary.Automatic = net.ReadBool()
         local defaultPaPUpgrade = net.ReadBool()
         -- Name
