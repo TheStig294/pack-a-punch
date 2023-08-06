@@ -21,6 +21,19 @@ TTT_PAP_UPGRADES = {
             end
         end
     },
+    weapon_unoreverse = {
+        name = "no u",
+        desc = "Lasts twice as long",
+        noSelectWep = true,
+        func = function(SWEP)
+            SWEP.UnoReverseLength = GetConVar("ttt_uno_reverse_length"):GetInt() * 2
+
+            if CLIENT then
+                SWEP.VElements.v_element.material = TTT_PAP_CAMO
+                SWEP.WElements.w_element.material = TTT_PAP_CAMO
+            end
+        end
+    },
     weapon_ttt_binoculars = {
         name = "Eagle's Eye",
         desc = "Faster and further zoom",
