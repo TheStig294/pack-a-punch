@@ -7,9 +7,14 @@ TTT_PAP_CONVARS = TTT_PAP_CONVARS or {}
 -- If a weapon's upgrade is not defined, defaults to a 1.5x fire rate upgrade
 TTT_PAP_UPGRADES = {
     tfa_dax_big_glock = {
-        name = "Massive Glock",
-        desc = "Wow... that's big...",
+        name = "Huge Glock",
+        desc = "Appears huge for everyone else! (So you can still see...)\nTorso shots deal 75 damage",
+        firerateMult = 1,
         func = function(SWEP)
+            SWEP.Primary.Damage = 75
+            SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
+            SWEP.Primary.Ammo = "357"
+            SWEP.AmmoEnt = "item_ammo_357_ttt"
             local scale = 10
             local i = 0
 
