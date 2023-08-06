@@ -360,7 +360,6 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
         end
 
         wep = ply:Give(classname)
-        ply:SelectWeapon(classname)
     end)
 
     timer.Simple(3.5, function()
@@ -380,6 +379,11 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
             if not specialPaPUpgrade then
                 upgradeData.defaultPaPUpgrade = true
             end
+        end
+
+        -- If we don't want the player to hold the weapon straight away, block it
+        if not (wep.PAPNoSelectWep or upgradeData.noSelectWep) then
+            ply:SelectWeapon(classname)
         end
 
         -- Default gun stats for PAP
