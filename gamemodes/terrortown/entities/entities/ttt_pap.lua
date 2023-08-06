@@ -325,9 +325,7 @@ if CLIENT then
     end)
 end
 
--- Making the passive item do something on purchase
-hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_item)
-    if equipment ~= EQUIP_PAP then return end
+local function OrderPAP(ply)
     local wep = ply:GetActiveWeapon()
 
     if not IsValid(wep) then
@@ -407,4 +405,12 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_it
             ApplyPAP(wep, upgradeData)
         end
     end)
+end
+
+concommand.Add("ttt_pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
+
+-- Making the passive item do something on purchase
+hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_item)
+    if equipment ~= EQUIP_PAP then return end
+    OrderPAP(ply)
 end)
