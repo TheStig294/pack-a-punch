@@ -1,0 +1,15 @@
+UnlitGeneric
+{
+	$baseTexture "ttt_pack_a_punch/arsonist_igniter/elmoburn"
+	$alphatest				1
+	
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" 			"$basetexture" //What to animate. Can also be $detail and $bumpmap
+			"animatedTextureFrameNumVar"	"$frame"
+			"animatedTextureFrameRate" 		"30" //FPS HERE
+		}
+	}
+}
