@@ -8,19 +8,15 @@ TTT_PAP_CONVARS = TTT_PAP_CONVARS or {}
 TTT_PAP_UPGRADES = {
     tfa_dax_big_glock = {
         name = "Huge Glock",
-        desc = "Appears huge for everyone else! (So you can still see...)\nTorso shots deal 75 damage",
+        desc = "Appears so huge for everyone else you're a walking gun...",
         firerateMult = 1,
+        noCamo = true,
         func = function(SWEP)
-            SWEP.Primary.Damage = 75
-            SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
-            SWEP.Primary.Ammo = "357"
-            SWEP.AmmoEnt = "item_ammo_357_ttt"
             local scale = 10
             local i = 0
 
             while i < SWEP:GetBoneCount() do
                 SWEP:ManipulateBoneScale(i, Vector(scale, scale, scale))
-                SWEP:ManipulateBoneJiggle(i, 1)
                 i = i + 1
             end
         end
