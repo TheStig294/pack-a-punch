@@ -7,10 +7,9 @@ TTT_PAP_CONVARS = TTT_PAP_CONVARS or {}
 -- If a weapon's upgrade is not defined, defaults to a 1.5x fire rate upgrade
 TTT_PAP_UPGRADES = {
     tfa_dax_big_glock = {
-        name = "Huge Glock",
-        desc = "Appears so huge for everyone else you're a walking gun...",
+        name = "Giant Glock",
+        desc = "Appears so big for everyone else you're a walking gun...",
         firerateMult = 1,
-        noCamo = true,
         func = function(SWEP)
             local scale = 10
             local i = 0
