@@ -1,16 +1,28 @@
 SWEP.Base = "weapon_bod_bodysnatch"
-SWEP.PrintName = "Quick Bodysnatcher"
-SWEP.PAPDesc = "Takes less time to use!"
+SWEP.PrintName = "Rolesnatching Device"
+SWEP.PAPDesc = "Works on living players instead!"
+SWEP.DeadTarget = false
 
-if SERVER then
-    SWEP.DeviceTimeConVar = CreateConVar("ttt_pap_bodysnatcher_device_time", "2.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use bodysnatcher", 0, 60)
+function SWEP:OnSuccess(ply)
+    local owner = self:GetOwner()
+    hook.Call("TTTPlayerRoleChangedByItem", nil, owner, owner, self)
+    net.Start("TTT_Bodysnatched")
+    net.Send(ply)
+    local role = ply:GetRole()
+    net.Start("TTT_ScoreBodysnatch")
+    net.WriteString(ply:Nick())
+    net.WriteString(owner:Nick())
+    net.WriteString(ROLE_STRINGS_EXT[role])
+    net.WriteString(owner:SteamID64())
+    net.Broadcast()
+    owner:SetRole(role)
+    ply:MoveRoleState(owner, true)
+    owner:SelectWeapon("weapon_zm_carry")
+    owner:SetNWBool("WasBodysnatcher", true)
+    SetRoleMaxHealth(owner)
+    SendFullStateUpdate()
 end
 
-local class = "weapon_bod_bodysnatch_pap"
-TTT_PAP_CONVARS[class] = {}
-
-table.insert(TTT_PAP_CONVARS[class], {
-    name = "ttt_pap_bodysnatcher_device_time",
-    type = "float",
-    decimal = 1
-})
+function SWEP:GetProgressMessage(ply, body, bone)
+    return "ROLESNATCHING " .. string.upper(ply:Nick())
+end
