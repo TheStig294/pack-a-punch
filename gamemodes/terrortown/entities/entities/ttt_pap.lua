@@ -69,6 +69,11 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         bannedRoles[ROLE_SWAPPER] = true
     end
 
+    -- Mad scientist has the death radar but no basic shop items so it probably shouldn't have the PaP by default
+    if ROLE_MADSCIENTIST then
+        bannedRoles[ROLE_MADSCIENTIST] = true
+    end
+
     -- Check that the PaP item hasn't been added already
     local function HasItemWithPropertyValue(tbl, key, val)
         if not tbl or not key then return end
