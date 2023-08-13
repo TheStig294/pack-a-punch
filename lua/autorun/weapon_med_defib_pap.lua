@@ -18,7 +18,7 @@ TTT_PAP_UPGRADES.weapon_med_defib = {
             hook.Add("TTTPlayerRoleChangedByItem", "TTTPAPParamedicDevice", function(owner, ply, wep)
                 -- Check it is the PaPed paramedic device
                 if wep:GetClass() ~= "weapon_med_defib" or not wep:GetNWBool("IsPackAPunched") then return end
-                if not ply:IsInnocentTeam() then return end
+                if ply:GetRole() ~= ROLE_INNOCENT then return end
                 -- Getting the list of all enabled innocent roles
                 local enabledInnocentRoles = {}
                 local allowParamedic = canBecomeMedCvar:GetBool()
