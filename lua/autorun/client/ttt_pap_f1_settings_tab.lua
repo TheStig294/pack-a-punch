@@ -16,8 +16,9 @@ surface.CreateFont("PAPDesc", {
     outline = false,
 })
 
-local function OptionsMenu(SWEP, PAPClass)
+local function OptionsMenu(SWEP, PAPClass, class)
     if not LocalPlayer():IsAdmin() then return end
+    -- Main window frame
     local frame = vgui.Create("DFrame")
     frame:SetSize(500, 350)
     frame:SetTitle("Upgrade Options")
@@ -28,13 +29,29 @@ local function OptionsMenu(SWEP, PAPClass)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
+    -- Scrollbar
     local scroll = vgui.Create("DScrollPanel", frame)
     scroll:Dock(FILL)
     local layout = vgui.Create("DListLayout", scroll)
     layout:Dock(FILL)
+    -- Detecting if upgrade is applied or is a SWEP
     local PAPSWEP = weapons.Get(PAPClass)
+    local appliedUpgrade = false
+
+    if not PAPSWEP then
+        PAPSWEP = weapons.Get(class)
+        appliedUpgrade = true
+    end
+
+    -- Name
     local name = vgui.Create("DLabel", layout)
-    local nameText = LANG.TryTranslation(PAPSWEP.PrintName)
+    local nameText = ""
+
+    if appliedUpgrade then
+        nameText = LANG.TryTranslation(TTT_PAP_UPGRADES[class].name)
+    else
+        nameText = LANG.TryTranslation(PAPSWEP.PrintName)
+    end
 
     if isstring(nameText) then
         nameText = "       " .. nameText
@@ -46,8 +63,15 @@ local function OptionsMenu(SWEP, PAPClass)
     name:SetFont("Trebuchet24")
     name:SetTextColor(COLOR_WHITE)
     name:SizeToContents()
+    -- Description
     local desc = vgui.Create("DLabel", layout)
-    local descText = LANG.TryTranslation(PAPSWEP.PAPDesc)
+    local descText = ""
+
+    if appliedUpgrade then
+        descText = LANG.TryTranslation(TTT_PAP_UPGRADES[class].desc)
+    else
+        descText = LANG.TryTranslation(PAPSWEP.PAPDesc)
+    end
 
     if isstring(descText) then
         descText = "       " .. descText
@@ -60,14 +84,17 @@ local function OptionsMenu(SWEP, PAPClass)
     desc:SetTextColor(COLOR_WHITE)
     desc:SizeToContents()
 
-    for _, cvarInfo in ipairs(TTT_PAP_CONVARS[PAPClass]) do
+    -- Convar list
+    for _, cvarInfo in ipairs(TTT_PAP_CONVARS[PAPClass] or TTT_PAP_CONVARS[class]) do
         if not ConVarExists(cvarInfo.name) then return end
+        -- Padding
         local padding = layout:Add("DPanel")
         padding:SetBackgroundColor(COLOR_BLACK)
         padding:SetHeight(10)
         local cvar = GetConVar(cvarInfo.name)
         local helpText = cvar:GetHelpText() or ""
 
+        -- Checkbox boolean convars
         if cvarInfo.type == "bool" then
             local checkbox = layout:Add("DCheckBoxLabel")
             checkbox:SetText(helpText)
@@ -87,6 +114,7 @@ local function OptionsMenu(SWEP, PAPClass)
                 net.SendToServer()
             end
         elseif cvarInfo.type == "int" then
+            -- Slider integer convars
             local slider = layout:Add("DNumSlider")
             slider:SetSize(300, 100)
             slider:SetText(helpText)
@@ -106,6 +134,7 @@ local function OptionsMenu(SWEP, PAPClass)
                 end)
             end
         elseif cvarInfo.type == "float" then
+            -- Slider float convars
             local slider = layout:Add("DNumSlider")
             slider:SetSize(300, 100)
             slider:SetText(helpText)
@@ -125,6 +154,7 @@ local function OptionsMenu(SWEP, PAPClass)
                 end)
             end
         elseif cvarInfo.type == "string" then
+            -- Textbox string convars
             local text = layout:Add("DLabel")
             text:SetText(helpText)
             text:SizeToContents()
@@ -250,14 +280,14 @@ local function DrawWeaponBar(list, SWEP)
     -- Options button
     local PAPClass = class .. "_pap"
 
-    if TTT_PAP_CONVARS[PAPClass] then
+    if TTT_PAP_CONVARS[PAPClass] or TTT_PAP_CONVARS[class] then
         local optionsButton = vgui.Create("DButton", background)
         optionsButton:SetText("Options")
         optionsButton:SizeToContents()
         optionsButton:SetPos(350, 4)
 
         function optionsButton:DoClick()
-            OptionsMenu(SWEP, PAPClass)
+            OptionsMenu(SWEP, PAPClass, class)
         end
     end
 end
@@ -379,7 +409,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
 
         -- Role weapons button description text
         local roleWepsDesc = nonScrollList:Add("DLabel")
-        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the left.\n  (Note: By default, every role with a buy menu can buy the PaP)")
+        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the left.\n  (Note: By default, every role with a buy menu has the PaP)")
         roleWepsDesc:SizeToContents()
     else
         -- Convar checkbox for the detective being able to buy the Pack-a-Punch
