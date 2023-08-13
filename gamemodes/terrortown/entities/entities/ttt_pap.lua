@@ -54,6 +54,21 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         bannedRoles[ROLE_ASSASSIN] = true
     end
 
+    -- Is supposed to have just randomats to buy
+    if ROLE_RANDOMAN then
+        bannedRoles[ROLE_RANDOMAN] = true
+    end
+
+    -- For some reason the PaP is becoming buyable for the Jester/Swapper even though they aren't shop roles?
+    -- SHOP_ROLES[ROLE_JESTER]/SHOP_ROLES[ROLE_SWAPPER] is true
+    if ROLE_JESTER then
+        bannedRoles[ROLE_JESTER] = true
+    end
+
+    if ROLE_SWAPPER then
+        bannedRoles[ROLE_SWAPPER] = true
+    end
+
     -- Check that the PaP item hasn't been added already
     local function HasItemWithPropertyValue(tbl, key, val)
         if not tbl or not key then return end
@@ -68,10 +83,16 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
     -- Add the PaP to every role's buy menu that isn't banned
     hook.Add("TTTBeginRound", "TTTPAPRegister", function()
         for role, equTable in pairs(EquipmentItems) do
-            if not bannedRoles[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) then
+            -- Check:
+            -- Role is not banned
+            -- Role doesn't already have the PaP
+            -- CR is not installed, or role has a shop
+            if not bannedRoles[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) and (not SHOP_ROLES or SHOP_ROLES[role]) then
                 table.insert(equTable, pap)
             end
         end
+
+        hook.Remove("TTTBeginRound", "TTTPAPRegister")
     end)
 
     -- Create convars for each weapon to disable being upgradable
