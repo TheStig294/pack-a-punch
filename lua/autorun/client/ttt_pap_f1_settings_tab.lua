@@ -365,46 +365,64 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
         net.SendToServer()
     end
 
-    -- Convar checkbox for the detective being able to buy the Pack-a-Punch
-    local detectiveCvar = GetConVar("ttt_pap_detective")
-    local detectiveCheck = nonScrollList:Add("DCheckBoxLabel")
-    detectiveCheck:SetText(detectiveCvar:GetHelpText())
-    detectiveCheck:SetChecked(detectiveCvar:GetBool())
-    detectiveCheck:SetIndent(10)
-    detectiveCheck:SizeToContents()
+    if CR_VERSION then
+        -- If Custom Roles for TTT is installed, simply add a button that opens the roleweapons config window,
+        -- since every role with a shop by default can buy the PaP, not just traitor and detective
+        -- Role weapons button
+        local roleWepsButton = nonScrollList:Add("DButton")
+        roleWepsButton:SetText("Buy Menu Editor")
+        roleWepsButton:SetSize(100, 25)
 
-    function detectiveCheck:OnChange()
-        net.Start("TTTPAPChangeConvar")
-        net.WriteString(detectiveCvar:GetName())
-
-        if detectiveCheck:GetChecked() then
-            net.WriteString("1")
-        else
-            net.WriteString("0")
+        function roleWepsButton:DoClick()
+            RunConsoleCommand("ttt_roleweapons")
         end
 
-        net.SendToServer()
-    end
+        -- Role weapons button description text
+        local roleWepsDesc = nonScrollList:Add("DLabel")
+        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the left.\n  (Note: By default, every role with a buy menu can buy the PaP)")
+        roleWepsDesc:SizeToContents()
+    else
+        -- Convar checkbox for the detective being able to buy the Pack-a-Punch
+        local detectiveCvar = GetConVar("ttt_pap_detective")
+        local detectiveCheck = nonScrollList:Add("DCheckBoxLabel")
+        detectiveCheck:SetText(detectiveCvar:GetHelpText())
+        detectiveCheck:SetChecked(detectiveCvar:GetBool())
+        detectiveCheck:SetIndent(10)
+        detectiveCheck:SizeToContents()
 
-    -- Convar checkbox for the traitor being able to buy the Pack-a-Punch
-    local traitorCvar = GetConVar("ttt_pap_traitor")
-    local traitorCheck = nonScrollList:Add("DCheckBoxLabel")
-    traitorCheck:SetText(traitorCvar:GetHelpText())
-    traitorCheck:SetChecked(traitorCvar:GetBool())
-    traitorCheck:SetIndent(10)
-    traitorCheck:SizeToContents()
+        function detectiveCheck:OnChange()
+            net.Start("TTTPAPChangeConvar")
+            net.WriteString(detectiveCvar:GetName())
 
-    function traitorCheck:OnChange()
-        net.Start("TTTPAPChangeConvar")
-        net.WriteString(traitorCvar:GetName())
+            if detectiveCheck:GetChecked() then
+                net.WriteString("1")
+            else
+                net.WriteString("0")
+            end
 
-        if traitorCheck:GetChecked() then
-            net.WriteString("1")
-        else
-            net.WriteString("0")
+            net.SendToServer()
         end
 
-        net.SendToServer()
+        -- Convar checkbox for the traitor being able to buy the Pack-a-Punch
+        local traitorCvar = GetConVar("ttt_pap_traitor")
+        local traitorCheck = nonScrollList:Add("DCheckBoxLabel")
+        traitorCheck:SetText(traitorCvar:GetHelpText())
+        traitorCheck:SetChecked(traitorCvar:GetBool())
+        traitorCheck:SetIndent(10)
+        traitorCheck:SizeToContents()
+
+        function traitorCheck:OnChange()
+            net.Start("TTTPAPChangeConvar")
+            net.WriteString(traitorCvar:GetName())
+
+            if traitorCheck:GetChecked() then
+                net.WriteString("1")
+            else
+                net.WriteString("0")
+            end
+
+            net.SendToServer()
+        end
     end
 
     -- Search bar
