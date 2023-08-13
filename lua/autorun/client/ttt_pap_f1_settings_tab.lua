@@ -100,6 +100,7 @@ local function OptionsMenu(SWEP, PAPClass, class)
             checkbox:SetText(helpText)
             checkbox:SetChecked(cvar:GetBool())
             checkbox:SizeToContents()
+            checkbox:SetIndent(10)
 
             function checkbox:OnChange()
                 net.Start("TTTPAPChangeConvar")
