@@ -1,7 +1,7 @@
 TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 
 TTT_PAP_UPGRADES.weapon_par_cure = {
-    name = "Living Parasite Cure",
+    name = "Parasite Tester",
     desc = "Works on living parasite players instead!",
     func = function(SWEP)
         SWEP.SingleUse = false
