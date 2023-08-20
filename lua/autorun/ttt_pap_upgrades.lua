@@ -38,6 +38,11 @@ TTT_PAP_UPGRADES = {
             end
         end
     },
+    weapon_old_dbshotgun = {
+        name = "Get off my lawn!",
+        desc = "x4 ammo, full-auto, fire-rate up!",
+        ammoMult = 4
+    },
     weapon_unoreverse = {
         name = "no u",
         desc = "Lasts twice as long",
