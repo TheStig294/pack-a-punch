@@ -43,6 +43,24 @@ TTT_PAP_UPGRADES = {
         desc = "x4 ammo, full-auto, fire-rate up!",
         ammoMult = 4
     },
+    weapon_tur_changer = {
+        name = "Team + Health Changer",
+        desc = "Sets you to 100 health!",
+        func = function(SWEP)
+            SWEP.OldPrimaryAttack = SWEP.PrimaryAttack
+
+            function SWEP:PrimaryAttack()
+                local owner = self:GetOwner()
+                SWEP.OldPrimaryAttack(self)
+
+                if SERVER then
+                    if not IsValid(owner) then return end
+                    owner:SetMaxHealth(100)
+                    owner:SetHealth(100)
+                end
+            end
+        end
+    },
     weapon_unoreverse = {
         name = "no u",
         desc = "Lasts twice as long",
