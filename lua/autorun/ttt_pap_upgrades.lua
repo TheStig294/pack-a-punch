@@ -47,11 +47,11 @@ TTT_PAP_UPGRADES = {
         name = "Team + Health Changer",
         desc = "Sets you to 100 health!",
         func = function(SWEP)
-            SWEP.OldPrimaryAttack = SWEP.PrimaryAttack
+            SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack
 
             function SWEP:PrimaryAttack()
                 local owner = self:GetOwner()
-                SWEP.OldPrimaryAttack(self)
+                SWEP.PAPOldPrimaryAttack(self)
 
                 if SERVER then
                     if not IsValid(owner) then return end
