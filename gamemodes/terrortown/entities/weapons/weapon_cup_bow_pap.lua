@@ -63,4 +63,8 @@ function SWEP:Think()
             self:SetNextSecondaryFire(CurTime())
         end
     end
+
+    if IsValid(owner) and owner:GetNWString("TTTCupidTarget3", "") ~= "" then
+        self:Remove()
+    end
 end
