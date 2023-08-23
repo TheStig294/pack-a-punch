@@ -2,7 +2,7 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 
 TTT_PAP_UPGRADES.weapon_qua_bomb_station = {
     name = "Bom bom bom",
-    desc = "Killed players see the 'Directed by Robert B. Weide' meme!",
+    desc = "A player that activates this sees\nthe 'Directed by Robert B. Weide' meme!",
     func = function(SWEP)
         local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 

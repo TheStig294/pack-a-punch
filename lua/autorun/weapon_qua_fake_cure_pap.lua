@@ -2,7 +2,7 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 
 TTT_PAP_UPGRADES.weapon_qua_fake_cure = {
     name = "Parasite Cure",
-    desc = "\"Cures\" a player of a parasite, by exploding them after 5 seconds!",
+    desc = "\"Cures\" a player of a parasite,\nby exploding them after 5 seconds!",
     noCamo = true,
     func = function(SWEP)
         local msg = "That's one way to cure the parasite..."

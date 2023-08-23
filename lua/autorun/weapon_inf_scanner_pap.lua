@@ -12,7 +12,7 @@ table.insert(TTT_PAP_CONVARS[class], {
 
 TTT_PAP_UPGRADES.weapon_inf_scanner = {
     name = "Scanner Pinger",
-    desc = "Left-Click to see everyone through walls\nfor " .. timeCvar:GetInt() .. " seconds, but this removes your scanner!",
+    desc = "Left-Click to see everyone through walls for " .. timeCvar:GetInt() .. " seconds,\nbut this removes your scanner!",
     func = function(SWEP)
         local outlinedPlayers = {}
         local beepSound = Sound("tools/ifm/beep.wav")
