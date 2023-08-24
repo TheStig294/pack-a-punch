@@ -215,3 +215,7 @@ if CLIENT then
         WorldModel:DrawModel()
     end
 end
+
+function SWEP:PAPCondition()
+    return util.IsValidModel(carModel)
+end

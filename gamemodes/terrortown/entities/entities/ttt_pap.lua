@@ -141,6 +141,11 @@ if SERVER then
     end)
 end
 
+local function PAPErrorMessage(ply)
+    ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
+    ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+end
+
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if is_item and math.floor(equipment) == EQUIP_PAP then
         local wep = ply:GetActiveWeapon()
@@ -155,20 +160,22 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             return false
         elseif ConVarExists("ttt_pap_" .. class) and not GetConVar("ttt_pap_" .. class):GetBool() then
             -- Preventing purchase if the current weapon has had its upgrade disabled via convar
-            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+            PAPErrorMessage(ply)
 
             return false
         elseif (not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable) and not TTT_PAP_UPGRADES[class] and not papWep then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no custom PaP upgrade
-            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+            PAPErrorMessage(ply)
 
             return false
         elseif papWep and papWep.Base and not weapons.Get(papWep.Base) then
             -- Preventing purchase if the base weapon required for a weapon upgrade isn't installed
-            ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
+            PAPErrorMessage(ply)
+
+            return false
+        elseif (papWep and papWep.PAPCondition and not papWep:PAPCondition()) or (TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].condition and not TTT_PAP_UPGRADES[class]:condition()) then
+            -- Preventing purchase if the upgrade's condition function returns false
+            PAPErrorMessage(ply)
 
             return false
         end
