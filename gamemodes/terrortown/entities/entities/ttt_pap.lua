@@ -257,6 +257,11 @@ local function ApplyPAP(wep, upgradeData)
         upgradeData.func(wep)
     end
 
+    if isfunction(wep.PAPInitialize) then
+        wep:PAPInitialize()
+    end
+
+    -- Client-side changes
     net.Start("TTTPAPApply")
     net.WriteEntity(wep)
     net.WriteFloat(wep.Primary.Delay or -1)
@@ -318,6 +323,10 @@ if CLIENT then
         -- Function
         if upgradeData and upgradeData.func then
             upgradeData.func(wep)
+        end
+
+        if isfunction(wep.PAPInitialize) then
+            wep:PAPInitialize()
         end
     end)
 
