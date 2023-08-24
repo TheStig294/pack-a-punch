@@ -202,6 +202,15 @@ end)
 
 -- Applies all pack-a-punch effects
 local function ApplyPAP(wep, upgradeData)
+    -- Extras function
+    if isfunction(upgradeData.func) then
+        upgradeData.func(wep)
+    end
+
+    if isfunction(wep.PAPInitialize) then
+        wep:PAPInitialize()
+    end
+
     -- NWBool, camo and sound is applied on all weapons
     wep:SetNWBool("IsPackAPunched", true)
 
@@ -252,15 +261,6 @@ local function ApplyPAP(wep, upgradeData)
         wep.Primary.Automatic = upgradeData.automatic
     end
 
-    -- Extras function
-    if isfunction(upgradeData.func) then
-        upgradeData.func(wep)
-    end
-
-    if isfunction(wep.PAPInitialize) then
-        wep:PAPInitialize()
-    end
-
     -- Client-side changes
     net.Start("TTTPAPApply")
     net.WriteEntity(wep)
@@ -295,9 +295,18 @@ if CLIENT then
         wep.Primary.StaticRecoilFactor = net.ReadFloat()
         wep.Primary.Automatic = net.ReadBool()
         local defaultPaPUpgrade = net.ReadBool()
-        -- Name
         local upgradeData = TTT_PAP_UPGRADES[wep.ClassName]
 
+        -- Function
+        if upgradeData and upgradeData.func then
+            upgradeData.func(wep)
+        end
+
+        if isfunction(wep.PAPInitialize) then
+            wep:PAPInitialize()
+        end
+
+        -- Name
         if upgradeData and upgradeData.name then
             wep.PrintName = upgradeData.name
             -- If no defined name for a gun, shove "PAP" in front
@@ -318,15 +327,6 @@ if CLIENT then
 
         if description then
             chat.AddText("PAP UPGRADE: " .. description)
-        end
-
-        -- Function
-        if upgradeData and upgradeData.func then
-            upgradeData.func(wep)
-        end
-
-        if isfunction(wep.PAPInitialize) then
-            wep:PAPInitialize()
         end
     end)
 
