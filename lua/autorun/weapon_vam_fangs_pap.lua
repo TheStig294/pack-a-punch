@@ -7,13 +7,17 @@ local ForceSetPlayermodel = FindMetaTable("Entity").SetModel
 
 TTT_PAP_UPGRADES.weapon_vam_fangs = {
     name = "Bat Fangs",
-    desc = "You can transform into a flying bat!\n(Right-click and hold Space)",
+    desc = "Temporarily change into an invincible flying bat!\n(Right-click and hold Space)",
     condition = function() return playermodelInstalled or util.IsValidModel(batModel) end,
     func = function(SWEP)
         -- Changes a player into a bat, or a baseball bat...
         local function ActivateBatMode(owner)
             if not IsValid(owner) then return end
             bats[owner] = {}
+
+            if SERVER then
+                owner:GodEnable()
+            end
 
             if playermodelInstalled then
                 bats[owner].playermodel = owner:GetModel()
@@ -46,6 +50,10 @@ TTT_PAP_UPGRADES.weapon_vam_fangs = {
 
         local function DeactivateBatMode(owner)
             if not IsValid(owner) then return end
+
+            if SERVER then
+                owner:GodDisable()
+            end
 
             if playermodelInstalled then
                 ForceSetPlayermodel(owner, bats[owner].playermodel)
