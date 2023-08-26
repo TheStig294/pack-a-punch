@@ -15,4 +15,11 @@ function UPGRADE:Apply(SWEP)
     end
 end
 
-RegisterTTTUpgrade(UPGRADE)
+function UPGRADE:Condition()
+    local randomNum = math.random(1, 2)
+    print("Upgrade condition random num:", randomNum)
+
+    return randomNum == 1
+end
+
+TTTPAP:Register(UPGRADE)

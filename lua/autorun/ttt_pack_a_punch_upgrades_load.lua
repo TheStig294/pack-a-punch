@@ -15,21 +15,6 @@ function pap_meta:Condition()
     return true
 end
 
--- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:
--- Upgrades = {
---    weapon_1 = {
---        upgrade_1,
---        upgrade_2
---    },
---    weapon_2 = {
---        upgrade_1
---    }
---}
-function RegisterPAPUpgrade(upgrade)
-    TTTPAP.upgrades[upgrade.classname] = TTTPAP.upgrades[upgrade.classname] or {}
-    TTTPAP.upgrades[upgrade.classname][upgrade.id] = upgrade
-end
-
 -- These 2 functions are from Malivil's randomat mod, to save having to come up with a unique ID for a hook every time...
 function pap_meta:AddHook(hooktype, callbackfunc, suffix)
     callbackfunc = callbackfunc or self[hooktype]
@@ -60,6 +45,67 @@ function pap_meta:RemoveHook(hooktype, suffix)
             return
         end
     end
+end
+
+-- Create convar to disable trying to apply the default upgrade on weapons without one
+CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
+
+-- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
+CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
+
+CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
+
+local PAPConvars = {
+    ttt_pap_apply_generic_upgrade = true,
+    ttt_pap_detective = true,
+    ttt_pap_traitor = true
+}
+
+-- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:
+-- Upgrades = {
+--    weapon_1 = {
+--        upgrade_1,
+--        upgrade_2
+--    },
+--    weapon_2 = {
+--        upgrade_1
+--    }
+--}
+function TTTPAP:Register(upgrade)
+    -- Register to TTTPAP.upgrades
+    setmetatable(upgrade, pap_meta)
+    TTTPAP.upgrades[upgrade.classname] = TTTPAP.upgrades[upgrade.classname] or {}
+    TTTPAP.upgrades[upgrade.classname][upgrade.id] = upgrade
+    -- Create enable/disable convar
+    local cvarName = "ttt_pap_" .. upgrade.classname .. "_" .. upgrade.id
+
+    CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+
+    -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+    PAPConvars[cvarName] = true
+
+    -- Also add any custom convar settings the upgrade may have
+    if upgrade.convars then
+        for _, cvarInfo in ipairs(upgrade.convars) do
+            PAPConvars[cvarInfo.name] = true
+        end
+    end
+end
+
+if SERVER then
+    util.AddNetworkString("TTTPAPChangeConvar")
+
+    net.Receive("TTTPAPChangeConvar", function(len, ply)
+        if not ply:IsAdmin() then return end
+        local cvarName = net.ReadString()
+        -- Don't allow non-PAP convars to be changed by this net message
+        if not PAPConvars[cvarName] then return end
+        local value = net.ReadString()
+
+        if ConVarExists(cvarName) then
+            GetConVar(cvarName):SetString(value)
+        end
+    end)
 end
 
 -- Reading all weapon upgrade lua files

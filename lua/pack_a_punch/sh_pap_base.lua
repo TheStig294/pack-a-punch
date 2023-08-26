@@ -1,27 +1,12 @@
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
-    util.AddNetworkString("TTTPAPChangeConvar")
 end
 
 if CLIENT then
     LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")
     LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
 end
-
--- Create convar to disable trying to apply the default upgrade on weapons without one
-local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
-
--- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
-local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
-
-local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
-
-local PAPConvars = {
-    ttt_pap_apply_generic_upgrade = true,
-    ttt_pap_detective = true,
-    ttt_pap_traitor = true
-}
 
 -- Registering the passive item
 hook.Add("InitPostEntity", "TTTPAPRegister", function()
@@ -39,11 +24,11 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
     -- Prevent roles from getting the PaP in their buy menu that shouldn't
     local bannedRoles = {}
 
-    if not detectiveCvar:GetBool() then
+    if not GetConVar("ttt_pap_detective"):GetBool() then
         bannedRoles[ROLE_DETECTIVE] = true
     end
 
-    if not traitorCvar:GetBool() then
+    if not GetConVar("ttt_pap_traitor"):GetBool() then
         bannedRoles[ROLE_TRAITOR] = true
     end
 
@@ -97,41 +82,7 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
 
         hook.Remove("TTTBeginRound", "TTTPAPRegister")
     end)
-
-    -- Create convars for each weapon to disable being upgradable
-    for class, upgrades in pairs(TTTPAP.upgrades) do
-        for id, upgrade in pairs(upgrades) do
-            local cvarName = "ttt_pap_" .. class .. "_" .. id
-
-            CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
-
-            -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-            PAPConvars[cvarName] = true
-        end
-    end
-
-    -- Add convars from weapon upgrades to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-    -- (All weapon upgrades would have added their convars to TTTPAP.convars by now, InitPostEntity is called after all upgrade scripts have run)
-    for classname, cvarList in pairs(TTTPAP.convars) do
-        for _, cvarInfo in ipairs(cvarList) do
-            PAPConvars[cvarInfo.name] = true
-        end
-    end
 end)
-
-if SERVER then
-    net.Receive("TTTPAPChangeConvar", function(len, ply)
-        if not ply:IsAdmin() then return end
-        local cvarName = net.ReadString()
-        -- Don't allow non-PAP convars to be changed by this net message
-        if not PAPConvars[cvarName] then return end
-        local value = net.ReadString()
-
-        if ConVarExists(cvarName) then
-            GetConVar(cvarName):SetString(value)
-        end
-    end)
-end
 
 local function PAPErrorMessage(ply)
     ply:PrintMessage(HUD_PRINTCENTER, "Can't be upgraded, try a different weapon")
@@ -140,11 +91,11 @@ end
 
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if is_item and math.floor(equipment) == EQUIP_PAP then
-        local wep = ply:GetActiveWeapon()
-        local class = wep:GetClass()
-        local papWep = weapons.Get(class .. "_pap")
+        local SWEP = ply:GetActiveWeapon()
+        local class = SWEP:GetClass()
+        local upgrades = TTTPAP.upgrades[class]
 
-        if not IsValid(wep) then
+        if not IsValid(SWEP) then
             -- Preventing purchase if the currently held weapon is invalid
             ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
             ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
@@ -155,18 +106,17 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             PAPErrorMessage(ply)
 
             return false
-        elseif (not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable) and not TTTPAP.upgrades[class] then
+        elseif not upgrades and (not SWEP.AutoSpawnable or not GetConVar("ttt_pap_apply_generic_upgrade"):GetBool()) then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
             PAPErrorMessage(ply)
 
             return false
-        elseif papWep and papWep.Base and not weapons.Get(papWep.Base) then
-            -- Preventing purchase if the base weapon required for a weapon upgrade isn't installed
-            PAPErrorMessage(ply)
+        elseif upgrades then
+            -- Preventing purchase if all upgrades' condition functions return false
+            for id, upgrade in pairs(upgrades) do
+                if upgrade:Condition() then return end
+            end
 
-            return false
-        elseif (papWep and papWep.PAPCondition and not papWep:PAPCondition()) or (TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].condition and not TTT_PAP_UPGRADES[class]:condition()) then
-            -- Preventing purchase if the upgrade's condition function returns false
             PAPErrorMessage(ply)
 
             return false
@@ -177,159 +127,148 @@ end)
 -- Applying PAP shoot sound on the server
 local PAPSound = Sound("ttt_pack_a_punch/shoot.mp3")
 
-local function OverrideWeaponSound(wep)
-    if not IsValid(wep) or not wep.Primary then return end
-    wep.Primary.Sound = PAPSound
+local function OverrideWeaponSound(SWEP)
+    if not IsValid(SWEP) or not SWEP.Primary then return end
+    SWEP.Primary.Sound = PAPSound
 end
 
-hook.Add("WeaponEquip", "TTTPAPSoundChange", function(wep, ply)
+hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
     timer.Create("TTTPAPSoundChange", 0.1, 1, function()
-        if not wep:GetNWBool("IsPackAPunched") then return end
-        OverrideWeaponSound(wep)
+        if not SWEP.PAPUpgrade then return end
+        OverrideWeaponSound(SWEP)
         net.Start("TTTPAPApplySound")
-        net.WriteEntity(wep)
+        net.WriteEntity(SWEP)
         net.Send(ply)
     end)
 end)
 
 -- Applies all pack-a-punch effects
-local function ApplyPAP(wep, upgradeData)
-    -- Extras function
-    if isfunction(upgradeData.func) then
-        upgradeData.func(wep)
+local function ApplyPAP(SWEP, UPGRADE)
+    -- Apply the upgrade function!
+    UPGRADE:Apply(SWEP)
+
+    if not UPGRADE.noCamo then
+        SWEP:SetMaterial(TTTPAP.camo)
     end
 
-    if isfunction(wep.PAPInitialize) then
-        wep:PAPInitialize()
-    end
-
-    -- NWBool, camo and sound is applied on all weapons
-    wep:SetNWBool("IsPackAPunched", true)
-
-    if not wep.PAPNoCamo and not upgradeData.noCamo then
-        wep:SetMaterial(TTTPAP.camo)
-    end
-
-    OverrideWeaponSound(wep)
+    OverrideWeaponSound(SWEP)
 
     -- Firerate
-    if isnumber(wep.Primary.Delay) then
-        wep.Primary.Delay = wep.Primary.Delay / upgradeData.firerateMult
-    elseif isnumber(wep.Primary.RPM) then
-        wep.Primary.RPM = wep.Primary.RPM * upgradeData.firerateMult
+    if isnumber(SWEP.Primary.Delay) then
+        SWEP.Primary.Delay = SWEP.Primary.Delay / UPGRADE.firerateMult
+    elseif isnumber(SWEP.Primary.RPM) then
+        SWEP.Primary.RPM = SWEP.Primary.RPM * UPGRADE.firerateMult
     end
 
     -- Damage
-    if isnumber(wep.Primary.Damage) then
-        wep.Primary.Damage = wep.Primary.Damage * upgradeData.damageMult
+    if isnumber(SWEP.Primary.Damage) then
+        SWEP.Primary.Damage = SWEP.Primary.Damage * UPGRADE.damageMult
     end
 
     -- Spread
-    if isnumber(wep.Primary.Cone) then
-        wep.Primary.Cone = wep.Primary.Cone * upgradeData.spreadMult
-    elseif isnumber(wep.Primary.Spread) then
-        wep.Primary.Spread = wep.Primary.Spread * upgradeData.spreadMult
+    if isnumber(SWEP.Primary.Cone) then
+        SWEP.Primary.Cone = SWEP.Primary.Cone * UPGRADE.spreadMult
+    elseif isnumber(SWEP.Primary.Spread) then
+        SWEP.Primary.Spread = SWEP.Primary.Spread * UPGRADE.spreadMult
     end
 
     -- Ammo
-    if isnumber(wep.Primary.ClipSize) and isnumber(wep.Primary.ClipMax) and isnumber(wep.Primary.DefaultClip) then
-        local oldClipSize = wep.Primary.ClipSize
-        wep.Primary.ClipSize = wep.Primary.ClipSize * upgradeData.ammoMult
-        wep.Primary.ClipMax = wep.Primary.ClipMax * upgradeData.ammoMult
-        wep.Primary.DefaultClip = wep.Primary.DefaultClip * upgradeData.ammoMult
+    if isnumber(SWEP.Primary.ClipSize) and isnumber(SWEP.Primary.ClipMax) and isnumber(SWEP.Primary.DefaultClip) then
+        local oldClipSize = SWEP.Primary.ClipSize
+        SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
+        SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
+        SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
         -- Set ammo relative to leftover ammo
-        wep:SetClip1((upgradeData.oldClip / oldClipSize) * wep.Primary.ClipSize)
+        SWEP:SetClip1((UPGRADE.oldClip / oldClipSize) * SWEP.Primary.ClipSize)
     end
 
     -- Recoil
-    if isnumber(wep.Primary.Recoil) then
-        wep.Primary.Recoil = wep.Primary.Recoil * upgradeData.recoilMult
-    elseif isnumber(wep.Primary.StaticRecoilFactor) then
-        wep.Primary.StaticRecoilFactor = wep.Primary.StaticRecoilFactor * upgradeData.recoilMult
+    if isnumber(SWEP.Primary.Recoil) then
+        SWEP.Primary.Recoil = SWEP.Primary.Recoil * UPGRADE.recoilMult
+    elseif isnumber(SWEP.Primary.StaticRecoilFactor) then
+        SWEP.Primary.StaticRecoilFactor = SWEP.Primary.StaticRecoilFactor * UPGRADE.recoilMult
     end
 
     -- Automatic
-    if isbool(wep.Primary.Automatic) then
-        wep.Primary.Automatic = upgradeData.automatic
+    if isbool(SWEP.Primary.Automatic) then
+        SWEP.Primary.Automatic = UPGRADE.automatic
     end
 
+    -- Add upgrade table to the weapon entity itself for easy reference
+    -- Used for Pack-a-Punch camo, sound and some upgrades themselves for detecting if a weapon is Pack-a-Punched
+    SWEP.PAPUpgrade = UPGRADE
     -- Client-side changes
     net.Start("TTTPAPApply")
-    net.WriteEntity(wep)
-    net.WriteFloat(wep.Primary.Delay or -1)
-    net.WriteFloat(wep.Primary.RPM or -1)
-    net.WriteFloat(wep.Primary.Damage or -1)
-    net.WriteFloat(wep.Primary.Cone or -1)
-    net.WriteFloat(wep.Primary.Spread or -1)
-    net.WriteFloat(wep.Primary.ClipSize or -1)
-    net.WriteFloat(wep.Primary.Recoil or -1)
-    net.WriteFloat(wep.Primary.StaticRecoilFactor or -1)
-    net.WriteBool(wep.Primary.Automatic or false)
-    net.WriteBool(upgradeData.defaultPaPUpgrade)
+    net.WriteEntity(SWEP)
+    net.WriteFloat(SWEP.Primary.Delay or -1)
+    net.WriteFloat(SWEP.Primary.RPM or -1)
+    net.WriteFloat(SWEP.Primary.Damage or -1)
+    net.WriteFloat(SWEP.Primary.Cone or -1)
+    net.WriteFloat(SWEP.Primary.Spread or -1)
+    net.WriteFloat(SWEP.Primary.ClipSize or -1)
+    net.WriteFloat(SWEP.Primary.Recoil or -1)
+    net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
+    net.WriteBool(SWEP.Primary.Automatic or false)
+    net.WriteBool(UPGRADE.defaultUpgrade)
+    net.WriteString(UPGRADE.id)
     net.Broadcast()
 end
 
 -- Applying pack-a-punch effects client-side
 if CLIENT then
     net.Receive("TTTPAPApply", function()
-        local wep = net.ReadEntity()
-        if not IsValid(wep) then return end
+        local SWEP = net.ReadEntity()
+        if not IsValid(SWEP) then return end
         -- Stats
-        wep.Primary.Delay = net.ReadFloat()
-        wep.Primary.RPM = net.ReadFloat()
-        wep.Primary.Damage = net.ReadFloat()
-        wep.Primary.Cone = net.ReadFloat()
-        wep.Primary.Spread = net.ReadFloat()
-        wep.Primary.ClipSize = net.ReadFloat()
-        wep.Primary.ClipMax = wep.Primary.ClipSize
-        wep.Primary.DefaultClip = wep.Primary.ClipSize
-        wep.Primary.Recoil = net.ReadFloat()
-        wep.Primary.StaticRecoilFactor = net.ReadFloat()
-        wep.Primary.Automatic = net.ReadBool()
-        local defaultPaPUpgrade = net.ReadBool()
-        local upgradeData = TTT_PAP_UPGRADES[wep.ClassName]
-
-        -- Function
-        if upgradeData and upgradeData.func then
-            upgradeData.func(wep)
-        end
-
-        if isfunction(wep.PAPInitialize) then
-            wep:PAPInitialize()
-        end
+        SWEP.Primary.Delay = net.ReadFloat()
+        SWEP.Primary.RPM = net.ReadFloat()
+        SWEP.Primary.Damage = net.ReadFloat()
+        SWEP.Primary.Cone = net.ReadFloat()
+        SWEP.Primary.Spread = net.ReadFloat()
+        SWEP.Primary.ClipSize = net.ReadFloat()
+        SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
+        SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
+        SWEP.Primary.Recoil = net.ReadFloat()
+        SWEP.Primary.StaticRecoilFactor = net.ReadFloat()
+        SWEP.Primary.Automatic = net.ReadBool()
+        local defaultUpgrade = net.ReadBool()
+        local upgradeID = net.ReadString()
+        local UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
+        -- Apply upgrade function on the client
+        UPGRADE:Apply(SWEP)
 
         -- Name
-        if upgradeData and upgradeData.name then
-            wep.PrintName = upgradeData.name
-            -- If no defined name for a gun, shove "PAP" in front
-        elseif wep.PrintName and not string.EndsWith(wep.ClassName, "_pap") then
-            wep.PrintName = "PAP " .. LANG.TryTranslation(wep.PrintName)
+        if UPGRADE.name then
+            SWEP.PrintName = UPGRADE.name
+            -- If no defined name for a weapon, just call it: "PAP [weapon name]"
+        elseif SWEP.PrintName and not string.EndsWith(SWEP.ClassName, "_pap") then
+            SWEP.PrintName = "PAP " .. LANG.TryTranslation(SWEP.PrintName)
         end
 
         -- Description
         local description
 
-        if defaultPaPUpgrade then
+        if defaultUpgrade then
             description = "x1.5 fire rate increase!"
-        elseif upgradeData and upgradeData.desc then
-            description = upgradeData.desc
-        elseif wep.PAPDesc then
-            description = wep.PAPDesc
+        elseif UPGRADE.desc then
+            description = UPGRADE.desc
         end
 
         if description then
             chat.AddText("PAP UPGRADE: " .. description)
         end
+
+        -- Add upgrade table to the weapon entity itself for easy reference
+        SWEP.PAPUpgrade = UPGRADE
     end)
 
     -- Camo
     local appliedCamo = false
 
-    hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, ply, weapon)
-        if not IsValid(weapon) then return end
-        local class = weapon:GetClass()
+    hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, ply, SWEP)
+        if not IsValid(SWEP) then return end
 
-        if weapon:GetNWBool("IsPackAPunched") and not weapon.PAPNoCamo and not (TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].noCamo) then
+        if SWEP.PAPUpgrade and not SWEP.PAPUpgrade.noCamo then
             vm:SetMaterial(TTTPAP.camo)
             appliedCamo = true
         elseif appliedCamo then
@@ -340,7 +279,7 @@ if CLIENT then
 
     -- Sound
     hook.Add("EntityEmitSound", "TTTPAPApplySound", function(data)
-        if not IsValid(data.Entity) or not data.Entity:GetNWBool("IsPackAPunched") then return end
+        if not IsValid(data.Entity) or not data.Entity.PAPUpgrade then return end
         local current_sound = data.SoundName:lower()
         local fire_start, _ = string.find(current_sound, ".*weapons/.*fire.*%..*")
         local shot_start, _ = string.find(current_sound, ".*weapons/.*shot.*%..*")
@@ -354,15 +293,15 @@ if CLIENT then
     end)
 
     net.Receive("TTTPAPApplySound", function()
-        local wep = net.ReadEntity()
-        OverrideWeaponSound(wep)
+        local SWEP = net.ReadEntity()
+        OverrideWeaponSound(SWEP)
     end)
 end
 
 local function OrderPAP(ply)
-    local wep = ply:GetActiveWeapon()
+    local SWEP = ply:GetActiveWeapon()
 
-    if not IsValid(wep) then
+    if not IsValid(SWEP) then
         ply:PrintMessage(HUD_PRINTCENTER, "Invalid Weapon, try again")
         ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
         ply:AddCredits(1)
@@ -371,10 +310,9 @@ local function OrderPAP(ply)
     end
 
     ply:EmitSound("ttt_pack_a_punch/upgrade.mp3")
-    local classname = wep:GetClass()
-    local oldClip = wep:Clip1()
+    local classname = SWEP:GetClass()
+    local oldClip = SWEP:Clip1()
     ply:StripWeapon(classname)
-    local specialPaPUpgrade = false
 
     timer.Simple(3.4, function()
         for _, w in ipairs(ply:GetWeapons()) do
@@ -384,60 +322,49 @@ local function OrderPAP(ply)
             end
         end
 
-        local papClass = weapons.Get(classname .. "_pap")
-
-        if papClass then
-            classname = classname .. "_pap"
-            specialPaPUpgrade = true
-        end
-
-        wep = ply:Give(classname)
+        SWEP = ply:Give(classname)
     end)
 
     timer.Simple(3.5, function()
         if not ply:HasWeapon(classname) then return end
 
-        if not IsValid(wep) then
-            wep = ply:GetWeapon(classname)
+        if not IsValid(SWEP) then
+            SWEP = ply:GetWeapon(classname)
         end
 
-        local upgradeData = TTT_PAP_UPGRADES[classname]
+        -- Choose a random upgrade from available ones to give to the weapon
+        local UPGRADE = table.Random(TTTPAP.upgrades[classname])
 
-        if upgradeData then
-            upgradeData.defaultPaPUpgrade = false
+        if UPGRADE then
+            UPGRADE.defaultUpgrade = false
         else
-            upgradeData = {}
-
-            if not specialPaPUpgrade then
-                upgradeData.defaultPaPUpgrade = true
-            end
+            UPGRADE = {}
+            UPGRADE.defaultUpgrade = true
         end
 
         -- If we don't want the player to hold the weapon straight away, block it
-        if not (wep.PAPNoSelectWep or upgradeData.noSelectWep) then
+        if not UPGRADE.noSelectWep then
             ply:SelectWeapon(classname)
         end
 
         -- Default gun stats for PAP
         -- By default, weapons get a 1.5 firerate upgrade
         -- Unless specified in the upgrades table
-        upgradeData.firerateMult = upgradeData.firerateMult or 1.5
-        upgradeData.damageMult = upgradeData.damageMult or 1
-        upgradeData.spreadMult = upgradeData.spreadMult or 1
-        upgradeData.ammoMult = upgradeData.ammoMult or 1
-        upgradeData.recoilMult = upgradeData.recoilMult or 1
+        UPGRADE.firerateMult = UPGRADE.firerateMult or 1.5
+        UPGRADE.damageMult = UPGRADE.damageMult or 1
+        UPGRADE.spreadMult = UPGRADE.spreadMult or 1
+        UPGRADE.ammoMult = UPGRADE.ammoMult or 1
+        UPGRADE.recoilMult = UPGRADE.recoilMult or 1
 
         -- By default, go by the gun's specified automatic/non-automatic fire
-        if upgradeData.automatic == nil then
-            upgradeData.automatic = wep.Primary.Automatic
+        if UPGRADE.automatic == nil then
+            UPGRADE.automatic = SWEP.Primary.Automatic
         end
 
         -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
-        upgradeData.oldClip = oldClip
-
-        if upgradeData then
-            ApplyPAP(wep, upgradeData)
-        end
+        UPGRADE.oldClip = oldClip
+        -- Apply the upgrade!
+        ApplyPAP(SWEP, UPGRADE)
     end)
 end
 
