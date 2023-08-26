@@ -71,7 +71,7 @@ function SWEP:HealthDrop()
             health:Spawn()
             health:SetPlacer(ply)
             health:PhysWake()
-            health:SetMaterial(TTT_PAP_CAMO)
+            health:SetMaterial(TTTPAP.camo)
             health.MaxHeal = 50
             health.MaxStored = 400
             health.RechargeRate = 2

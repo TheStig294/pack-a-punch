@@ -233,7 +233,7 @@ function SWEP:Throw()
     self.CanFire = false
     local ent = ents.Create("ttt_kil_crowbar")
     ent:SetDamage(10000)
-    ent:SetMaterial(TTT_PAP_CAMO)
+    ent:SetMaterial(TTTPAP.camo)
     local owner = self:GetOwner()
     ent:SetOwner(owner)
     ent:SetPos(owner:EyePos() + (owner:GetAimVector() * 16))

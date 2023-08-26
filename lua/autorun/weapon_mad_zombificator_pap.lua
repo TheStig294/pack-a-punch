@@ -3,9 +3,9 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 local deviceTimeCvar = CreateConVar("ttt_pap_mad_scientist_device_time", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use upgraded zombification device", 0, 60)
 
 local class = "weapon_mad_zombificator"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_mad_scientist_device_time",
     type = "float",
     decimal = 1

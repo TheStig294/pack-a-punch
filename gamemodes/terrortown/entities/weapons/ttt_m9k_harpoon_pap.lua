@@ -17,8 +17,8 @@ function SWEP:Initialize()
     end)
 
     if CLIENT then
-        self.VElements.harpoon.material = TTT_PAP_CAMO
-        self.WElements.WHarpoon.material = TTT_PAP_CAMO
+        self.VElements.harpoon.material = TTTPAP.camo
+        self.WElements.WHarpoon.material = TTTPAP.camo
     end
 end
 
@@ -42,7 +42,7 @@ if SERVER then
         ent:SetPos(owner:GetShootPos() + right * posOffset - up * 3)
         ent:SetAngles(owner:GetAngles())
         ent:SetPhysicsAttacker(owner)
-        ent:SetMaterial(TTT_PAP_CAMO)
+        ent:SetMaterial(TTTPAP.camo)
         ent:Spawn()
         local phys = ent:GetPhysicsObject()
 

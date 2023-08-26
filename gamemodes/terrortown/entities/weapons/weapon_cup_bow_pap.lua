@@ -49,7 +49,7 @@ function SWEP:Think()
                 arrow:Spawn()
                 arrow:Activate()
                 arrow:SetVelocity(ang:Forward() * 2500 * charge)
-                arrow:SetMaterial(TTT_PAP_CAMO)
+                arrow:SetMaterial(TTTPAP.camo)
                 arrow.Weapon = self
             end
         end

@@ -41,15 +41,15 @@ local damageMultCvar = CreateConVar("ttt_pap_detective_toy_car_damage_mult", 2.5
 local placeRangeCvar = CreateConVar("ttt_pap_detective_toy_car_place_range", 200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Maximum placement distance", 10, 10000)
 
 local class = "equip_airboat_pap"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_detective_toy_car_damage_mult",
     type = "float",
     decimal = 1
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_detective_toy_car_place_range",
     type = "int"
 })

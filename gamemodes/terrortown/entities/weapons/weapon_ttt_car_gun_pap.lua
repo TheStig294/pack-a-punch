@@ -35,34 +35,34 @@ SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
 SWEP.CanBuy = nil
 SWEP.PAPDesc = "Now shoots a truck! (With a much larger hitbox)"
 local class = "weapon_ttt_car_gun_pap"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_ammo",
     type = "int"
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_target_damage",
     type = "int"
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_non_target_damage",
     type = "int"
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_speed",
     type = "int"
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_scale",
     type = "float"
 })
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_car_gun_range",
     type = "int"
 })

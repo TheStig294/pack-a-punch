@@ -35,9 +35,9 @@ if SERVER and file.Exists("lua/autorun/healthregen.lua", "GAME") then
 end
 
 local class = "weapon_ttt_minifier_pap"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_minifier_health",
     type = "int"
 })

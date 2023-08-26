@@ -3,9 +3,9 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 local canBecomeMedCvar = CreateConVar("ttt_pap_paramedic_device_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
 local class = "weapon_med_defib"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_paramedic_device_can_become_paramedic",
     type = "bool"
 })

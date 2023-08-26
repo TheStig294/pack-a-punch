@@ -3,9 +3,9 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 local badgeTimeCvar = CreateConVar("ttt_pap_deputy_badge_time", "4", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use deputy badge", 0, 60)
 
 local class = "weapon_mhl_badge"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_deputy_badge_time",
     type = "float",
     decimal = 1

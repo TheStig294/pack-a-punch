@@ -1,7 +1,7 @@
 -- Global variable to make setting the PaP camo on entities easier
-TTT_PAP_CAMO = "ttt_pack_a_punch/pap_camo"
+TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
 -- Global table for convar types and names used by upgrades
-TTT_PAP_CONVARS = TTT_PAP_CONVARS or {}
+TTTPAP.convars = TTTPAP.convars or {}
 
 -- List of pre-defined pack a punch upgrades
 -- If a weapon's upgrade is not defined, defaults to a 1.5x fire rate upgrade
@@ -69,8 +69,8 @@ TTT_PAP_UPGRADES = {
             SWEP.UnoReverseLength = GetConVar("ttt_uno_reverse_length"):GetInt() * 2
 
             if CLIENT then
-                SWEP.VElements.v_element.material = TTT_PAP_CAMO
-                SWEP.WElements.w_element.material = TTT_PAP_CAMO
+                SWEP.VElements.v_element.material = TTTPAP.camo
+                SWEP.WElements.w_element.material = TTTPAP.camo
             end
         end
     },

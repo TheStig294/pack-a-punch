@@ -85,7 +85,7 @@ local function OptionsMenu(SWEP, PAPClass, class)
     desc:SizeToContents()
 
     -- Convar list
-    for _, cvarInfo in ipairs(TTT_PAP_CONVARS[PAPClass] or TTT_PAP_CONVARS[class]) do
+    for _, cvarInfo in ipairs(TTTPAP.convars[PAPClass] or TTTPAP.convars[class]) do
         if not ConVarExists(cvarInfo.name) then return end
         -- Padding
         local padding = layout:Add("DPanel")
@@ -281,7 +281,7 @@ local function DrawWeaponBar(list, SWEP)
     -- Options button
     local PAPClass = class .. "_pap"
 
-    if TTT_PAP_CONVARS[PAPClass] or TTT_PAP_CONVARS[class] then
+    if TTTPAP.convars[PAPClass] or TTTPAP.convars[class] then
         local optionsButton = vgui.Create("DButton", background)
         optionsButton:SetText("Options")
         optionsButton:SizeToContents()

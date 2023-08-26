@@ -75,7 +75,7 @@ function SWEP:RadioDrop()
             radio:SetOwner(ply)
             radio:Spawn()
             radio:PhysWake()
-            radio:SetMaterial(TTT_PAP_CAMO)
+            radio:SetMaterial(TTTPAP.camo)
             local timerName = radio:EntIndex() .. "TTTPAPRadio"
 
             timer.Create(timerName, 20, 240, function()
@@ -147,7 +147,7 @@ function SWEP:RadioStick()
                     radio:SetAngles(ang)
                     radio:SetOwner(ply)
                     radio:Spawn()
-                    radio:SetMaterial(TTT_PAP_CAMO)
+                    radio:SetMaterial(TTTPAP.camo)
                     local timerName = radio:EntIndex() .. "TTTPAPRadio"
 
                     timer.Create(timerName, 20, 240, function()

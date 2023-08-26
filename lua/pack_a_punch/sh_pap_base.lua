@@ -1,5 +1,3 @@
-AddCSLuaFile()
-
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
@@ -101,26 +99,20 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
     end)
 
     -- Create convars for each weapon to disable being upgradable
-    for _, SWEP in ipairs(weapons.GetList()) do
-        -- Only create convars for TTT-compatible weapons
-        if SWEP.Kind then
-            local class = SWEP.ClassName or SWEP.Classname
+    for class, upgrades in pairs(TTTPAP.upgrades) do
+        for id, upgrade in pairs(upgrades) do
+            local cvarName = "ttt_pap_" .. class .. "_" .. id
 
-            -- Check weapon actually has a unique PaP upgrade
-            if TTT_PAP_UPGRADES[class] or weapons.Get(class .. "_pap") ~= nil then
-                local cvarName = "ttt_pap_" .. class
+            CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
-                CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
-
-                -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-                PAPConvars[cvarName] = true
-            end
+            -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+            PAPConvars[cvarName] = true
         end
     end
 
     -- Add convars from weapon upgrades to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-    -- (All weapon upgrades would have added their convars to TTT_PAP_CONVARS by now, InitPostEntity is called after all weapon scripts have run)
-    for classname, cvarList in pairs(TTT_PAP_CONVARS) do
+    -- (All weapon upgrades would have added their convars to TTTPAP.convars by now, InitPostEntity is called after all upgrade scripts have run)
+    for classname, cvarList in pairs(TTTPAP.convars) do
         for _, cvarInfo in ipairs(cvarList) do
             PAPConvars[cvarInfo.name] = true
         end
@@ -163,8 +155,8 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             PAPErrorMessage(ply)
 
             return false
-        elseif (not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable) and not TTT_PAP_UPGRADES[class] and not papWep then
-            -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no custom PaP upgrade
+        elseif (not genericUpgradesCvar:GetBool() or not wep.AutoSpawnable) and not TTTPAP.upgrades[class] then
+            -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
             PAPErrorMessage(ply)
 
             return false
@@ -215,7 +207,7 @@ local function ApplyPAP(wep, upgradeData)
     wep:SetNWBool("IsPackAPunched", true)
 
     if not wep.PAPNoCamo and not upgradeData.noCamo then
-        wep:SetMaterial(TTT_PAP_CAMO)
+        wep:SetMaterial(TTTPAP.camo)
     end
 
     OverrideWeaponSound(wep)
@@ -338,7 +330,7 @@ if CLIENT then
         local class = weapon:GetClass()
 
         if weapon:GetNWBool("IsPackAPunched") and not weapon.PAPNoCamo and not (TTT_PAP_UPGRADES[class] and TTT_PAP_UPGRADES[class].noCamo) then
-            vm:SetMaterial(TTT_PAP_CAMO)
+            vm:SetMaterial(TTTPAP.camo)
             appliedCamo = true
         elseif appliedCamo then
             vm:SetMaterial("")

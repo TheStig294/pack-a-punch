@@ -39,7 +39,7 @@ function SWEP:Initialize()
 
         if IsValid(owner) and owner:IsPlayer() then
             self.HolsterPAPOwner = owner
-            owner:SetMaterial(TTT_PAP_CAMO)
+            owner:SetMaterial(TTTPAP.camo)
             owner:SetFOV(0)
             owner:SetFOV(owner:GetFOV() * buffScale)
             owner:SetJumpPower(owner:GetJumpPower() * buffScaleJump)

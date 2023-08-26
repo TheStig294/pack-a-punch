@@ -6,8 +6,8 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
     noCamo = true,
     func = function(SWEP)
         if CLIENT then
-            SWEP.VElements.harpoon.material = TTT_PAP_CAMO
-            SWEP.WElements.WHarpoon.material = TTT_PAP_CAMO
+            SWEP.VElements.harpoon.material = TTTPAP.camo
+            SWEP.WElements.WHarpoon.material = TTTPAP.camo
         end
 
         if SERVER then
@@ -36,7 +36,7 @@ TTT_PAP_UPGRADES.weapon_ttt_hwapoon = {
                 ent:SetPos(owner:GetShootPos() + right * posOffset - up * 3)
                 ent:SetAngles(owner:GetAngles())
                 ent:SetPhysicsAttacker(owner)
-                ent:SetMaterial(TTT_PAP_CAMO)
+                ent:SetMaterial(TTTPAP.camo)
                 ent:Spawn()
                 local phys = ent:GetPhysicsObject()
 

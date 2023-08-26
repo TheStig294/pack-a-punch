@@ -3,9 +3,9 @@ TTT_PAP_UPGRADES = TTT_PAP_UPGRADES or {}
 local canBecomeHypCvar = CreateConVar("ttt_pap_hypnotist_device_can_become_hypnotist", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
 
 local class = "weapon_hyp_brainwash"
-TTT_PAP_CONVARS[class] = {}
+TTTPAP.convars[class] = {}
 
-table.insert(TTT_PAP_CONVARS[class], {
+table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_hypnotist_device_can_become_hypnotist",
     type = "bool"
 })

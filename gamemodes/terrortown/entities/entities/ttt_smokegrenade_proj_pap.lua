@@ -9,7 +9,7 @@ function ENT:Initialize()
         self:SetRadius(20)
     end
 
-    self:SetMaterial(TTT_PAP_CAMO)
+    self:SetMaterial(TTTPAP.camo)
     self:SetModelScale(5, 0.0001)
 
     return self.BaseClass.Initialize(self)
