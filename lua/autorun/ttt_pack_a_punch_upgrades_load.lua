@@ -94,18 +94,21 @@ function TTTPAP:Register(UPGRADE)
     setmetatable(UPGRADE, pap_meta)
     TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
     TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
+
     -- Create enable/disable convar
-    local cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    if UPGRADE.id ~= "_default_upgrade" then
+        local cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
 
-    CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+        CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
-    -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-    PAPConvars[cvarName] = true
+        -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+        PAPConvars[cvarName] = true
 
-    -- Also add any custom convar settings the upgrade may have
-    if UPGRADE.convars then
-        for _, cvarInfo in ipairs(UPGRADE.convars) do
-            PAPConvars[cvarInfo.name] = true
+        -- Also add any custom convar settings the upgrade may have
+        if UPGRADE.convars then
+            for _, cvarInfo in ipairs(UPGRADE.convars) do
+                PAPConvars[cvarInfo.name] = true
+            end
         end
     end
 end
