@@ -1,13 +1,33 @@
 local UPGRADE = {}
 UPGRADE.id = "giantglock"
-UPGRADE.classname = "tfa_dax_big_glock"
+UPGRADE.class = "tfa_dax_big_glock"
 UPGRADE.name = "Giant Glock"
-UPGRADE.desc = "Appears so big for everyone else you're a walking gun..."
+UPGRADE.desc = "Appears HUGE for everyone else, or when on the ground!"
 UPGRADE.firerateMult = 1
 
+UPGRADE.convars = {
+    {
+        name = "ttt_pap_big_glock_scale",
+        type = "float",
+        decimal = 1
+    },
+    {
+        name = "ttt_pap_big_glock_use_camo",
+        type = "bool"
+    }
+}
+
+local scaleCvar = CreateConVar("ttt_pap_big_glock_scale", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale multiplier", 1, 20)
+
+local camoCvar = CreateConVar("ttt_pap_big_glock_use_camo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the Pack-a-Punch camo/texture?", 0, 1)
+
 function UPGRADE:Apply(SWEP)
-    local scale = 10
+    local scale = scaleCvar:GetFloat()
     local i = 0
+
+    if not camoCvar:GetBool() then
+        self.noCamo = true
+    end
 
     while i < SWEP:GetBoneCount() do
         SWEP:ManipulateBoneScale(i, Vector(scale, scale, scale))

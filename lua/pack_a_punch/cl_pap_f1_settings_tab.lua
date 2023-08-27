@@ -16,7 +16,7 @@ surface.CreateFont("PAPDesc", {
     outline = false,
 })
 
-local function OptionsMenu(SWEP, PAPClass, class)
+local function OptionsMenu(UPGRADE, SWEP)
     if not LocalPlayer():IsAdmin() then return end
     -- Main window frame
     local frame = vgui.Create("DFrame")
@@ -34,29 +34,12 @@ local function OptionsMenu(SWEP, PAPClass, class)
     scroll:Dock(FILL)
     local layout = vgui.Create("DListLayout", scroll)
     layout:Dock(FILL)
-    -- Detecting if upgrade is applied or is a SWEP
-    local PAPSWEP = weapons.Get(PAPClass)
-    local appliedUpgrade = false
-
-    if not PAPSWEP then
-        PAPSWEP = weapons.Get(class)
-        appliedUpgrade = true
-    end
-
     -- Name
     local name = vgui.Create("DLabel", layout)
     local nameText = ""
 
-    if appliedUpgrade then
-        nameText = LANG.TryTranslation(TTT_PAP_UPGRADES[class].name)
-    else
-        nameText = LANG.TryTranslation(PAPSWEP.PrintName)
-    end
-
-    if isstring(nameText) then
-        nameText = "       " .. nameText
-    else
-        nameText = ""
+    if UPGRADE.name then
+        nameText = "       " .. LANG.TryTranslation(UPGRADE.name)
     end
 
     name:SetText(nameText)
@@ -67,16 +50,8 @@ local function OptionsMenu(SWEP, PAPClass, class)
     local desc = vgui.Create("DLabel", layout)
     local descText = ""
 
-    if appliedUpgrade then
-        descText = LANG.TryTranslation(TTT_PAP_UPGRADES[class].desc)
-    else
-        descText = LANG.TryTranslation(PAPSWEP.PAPDesc)
-    end
-
-    if isstring(descText) then
-        descText = "       " .. descText
-    else
-        descText = ""
+    if UPGRADE.desc then
+        descText = "       " .. LANG.TryTranslation(UPGRADE.desc)
     end
 
     desc:SetText(descText)
@@ -85,7 +60,7 @@ local function OptionsMenu(SWEP, PAPClass, class)
     desc:SizeToContents()
 
     -- Convar list
-    for _, cvarInfo in ipairs(TTTPAP.convars[PAPClass] or TTTPAP.convars[class]) do
+    for _, cvarInfo in ipairs(UPGRADE.convars) do
         if not ConVarExists(cvarInfo.name) then return end
         -- Padding
         local padding = layout:Add("DPanel")
@@ -114,35 +89,21 @@ local function OptionsMenu(SWEP, PAPClass, class)
 
                 net.SendToServer()
             end
-        elseif cvarInfo.type == "int" then
+        elseif cvarInfo.type == "int" or cvarInfo.type == "float" then
             -- Slider integer convars
             local slider = layout:Add("DNumSlider")
             slider:SetSize(300, 100)
             slider:SetText(helpText)
             slider:SetMin(cvar:GetMin() or 0)
             slider:SetMax(cvar:GetMax() or 100)
-            slider:SetDecimals(0)
-            slider:SetValue(cvar:GetInt())
-            slider:SetHeight(25)
 
-            slider.OnValueChanged = function(self, value)
-                timer.Create("TTTPAPChangeConvarDelay", 0.5, 1, function()
-                    value = math.Round(value, self:GetDecimals())
-                    net.Start("TTTPAPChangeConvar")
-                    net.WriteString(cvarInfo.name)
-                    net.WriteString(tostring(value))
-                    net.SendToServer()
-                end)
+            if cvarInfo.type == "int" then
+                slider:SetDecimals(0)
+            else
+                slider:SetDecimals(cvarInfo.decimal or 2)
             end
-        elseif cvarInfo.type == "float" then
-            -- Slider float convars
-            local slider = layout:Add("DNumSlider")
-            slider:SetSize(300, 100)
-            slider:SetText(helpText)
-            slider:SetMin(cvar:GetMin() or 0)
-            slider:SetMax(cvar:GetMax() or 100)
-            slider:SetDecimals(cvarInfo.decimal or 2)
-            slider:SetValue(cvar:GetFloat())
+
+            slider:SetValue(cvar:GetInt())
             slider:SetHeight(25)
 
             slider.OnValueChanged = function(self, value)
@@ -173,9 +134,8 @@ local function OptionsMenu(SWEP, PAPClass, class)
     end
 end
 
-local function DrawWeaponBar(list, SWEP)
-    local class = SWEP.ClassName or SWEP.Classname
-    local enabledCvar = GetConVar("ttt_pap_" .. class)
+local function DrawWeaponBar(list, UPGRADE)
+    local SWEP = weapons.Get(UPGRADE.class)
     -- Icon
     local icon = list:Add("DImage")
     local image = SWEP.Icon or "vgui/ttt/icon_bullet"
@@ -186,6 +146,8 @@ local function DrawWeaponBar(list, SWEP)
     background:SetSize(480, 64)
     background:DockPadding(10, 0, 10, 5)
     local alpha = 255
+    local enabledCvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    local enabledCvar = GetConVar(enabledCvarName)
 
     if not enabledCvar:GetBool() then
         alpha = 100
@@ -197,7 +159,7 @@ local function DrawWeaponBar(list, SWEP)
 
     -- Name
     local name = vgui.Create("DLabel", background)
-    name:SetText(LANG.TryTranslation(SWEP.PrintName))
+    name:SetText(LANG.TryTranslation(SWEP.PrintName or UPGRADE.class))
     name:SetPos(12, 2)
     name:SetFont("Trebuchet24")
 
@@ -223,29 +185,14 @@ local function DrawWeaponBar(list, SWEP)
     name:SizeToContents()
     -- Upgrade Description
     local desc = vgui.Create("DLabel", background)
-    local description
-    local PAPName
-
-    if TTT_PAP_UPGRADES[class] then
-        description = TTT_PAP_UPGRADES[class].desc
-        PAPName = TTT_PAP_UPGRADES[class].name
-    else
-        local PAPWep = weapons.Get(class .. "_pap")
-
-        if PAPWep then
-            description = PAPWep.PAPDesc
-            PAPName = PAPWep.PrintName
-        end
-    end
-
     local descriptionText = ""
 
-    if PAPName then
-        descriptionText = descriptionText .. "\"" .. PAPName .. "\" "
+    if UPGRADE.name then
+        descriptionText = descriptionText .. "\"" .. UPGRADE.name .. "\" "
     end
 
-    if description then
-        descriptionText = descriptionText .. description
+    if UPGRADE.desc then
+        descriptionText = descriptionText .. UPGRADE.desc
     end
 
     desc:SetText(descriptionText)
@@ -263,8 +210,7 @@ local function DrawWeaponBar(list, SWEP)
 
     function enabledBox:OnChange()
         net.Start("TTTPAPChangeConvar")
-        local cvarName = "ttt_pap_" .. class
-        net.WriteString(cvarName)
+        net.WriteString(enabledCvarName)
 
         if enabledBox:GetChecked() then
             alpha = 255
@@ -279,21 +225,19 @@ local function DrawWeaponBar(list, SWEP)
     end
 
     -- Options button
-    local PAPClass = class .. "_pap"
-
-    if TTTPAP.convars[PAPClass] or TTTPAP.convars[class] then
+    if UPGRADE.convars then
         local optionsButton = vgui.Create("DButton", background)
         optionsButton:SetText("Options")
         optionsButton:SizeToContents()
         optionsButton:SetPos(350, 4)
 
         function optionsButton:DoClick()
-            OptionsMenu(SWEP, PAPClass, class)
+            OptionsMenu(UPGRADE, SWEP)
         end
     end
 end
 
-local upgradeableWeapons = {}
+local upgradeList = {}
 
 -- Sorts the weapons by name in alphabetical order
 local function DrawWeaponsList(list, searchQuery)
@@ -301,52 +245,39 @@ local function DrawWeaponsList(list, searchQuery)
         searchQuery = ""
     end
 
-    -- Only build the upgradeable weapons table if needed
-    if table.IsEmpty(upgradeableWeapons) then
-        for _, SWEP in ipairs(weapons.GetList()) do
-            -- If a weapon doesn't have a human-readable name, it probably shouldn't be on this list (e.g. weapon_ttt_base)
-            if not SWEP.PrintName then continue end
-            local class = SWEP.ClassName or SWEP.Classname
-            -- Check the weapon actually has a convar to toggle
-            if not ConVarExists("ttt_pap_" .. class) then continue end
-            local name = LANG.TryTranslation(SWEP.PrintName)
-            upgradeableWeapons[name] = SWEP
+    -- Only build the weapon upgrades table if needed
+    if table.IsEmpty(upgradeList) then
+        for class, upgrades in pairs(TTTPAP.upgrades) do
+            local SWEP = weapons.Get(class)
+            -- If a weapon doesn't have a human-readable name, just use the weapon's classname instead
+            local name = class
+
+            if SWEP.PrintName then
+                name = LANG.TryTranslation(SWEP.PrintName)
+            end
+
+            upgradeList[name] = upgrades
         end
     end
 
     -- If there is a search query, search the weapon's name, the upgraded weapon's name, and the upgrade's description
-    for name, SWEP in SortedPairs(upgradeableWeapons) do
-        local description = ""
-        local class = SWEP.ClassName or SWEP.Classname
+    for name, upgrades in SortedPairs(upgradeList) do
+        -- Find the name and description of each of the weapon's upgrades
+        for id, UPGRADE in pairs(upgrades) do
+            local description = ""
 
-        -- Find the upgraded weapon's name and description
-        -- Stat upgrade
-        if TTT_PAP_UPGRADES[class] then
-            if TTT_PAP_UPGRADES[class].name then
-                description = description .. TTT_PAP_UPGRADES[class].name
+            if UPGRADE.name then
+                description = description .. UPGRADE.name
             end
 
-            if TTT_PAP_UPGRADES[class].desc then
-                description = description .. TTT_PAP_UPGRADES[class].desc
+            if UPGRADE.desc then
+                description = description .. UPGRADE.desc
             end
-        else
-            -- New SWEP upgrade
-            local PAPWep = weapons.Get(class .. "_pap")
 
-            if PAPWep then
-                if PAPWep.PrintName then
-                    description = description .. LANG.TryTranslation(PAPWep.PrintName)
-                end
-
-                if PAPWep.PAPDesc then
-                    description = description .. PAPWep.PAPDesc
-                end
+            -- Search for the normal weapon's name, else the upgraded weapon's name and description
+            if string.find(string.lower(name), string.lower(searchQuery), 1, true) or string.find(string.lower(description), string.lower(searchQuery), 1, true) then
+                DrawWeaponBar(list, UPGRADE)
             end
-        end
-
-        -- Search for the normal weapon's name, else the upgraded weapon's name and description
-        if string.find(string.lower(name), string.lower(searchQuery), 1, true) or string.find(string.lower(description), string.lower(searchQuery), 1, true) then
-            DrawWeaponBar(list, SWEP)
         end
     end
 end

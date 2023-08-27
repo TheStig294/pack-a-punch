@@ -3,7 +3,6 @@
 TTTPAP = {}
 TTTPAP.upgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
-TTTPAP.convars = {}
 -- Creating a fake class of "UPGRADE" using metatables, borrowed from the randomat's "EVENT" class
 local pap_meta = {}
 pap_meta.__index = pap_meta
@@ -63,21 +62,21 @@ local PAPConvars = {
 
 -- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:
 -- Upgrades = {
---    weapon_1 = {
---        upgrade_1,
---        upgrade_2
+--    weapon_1_class = {
+--        upgrade_1_id = {...},
+--        upgrade_2_id = {...}
 --    },
---    weapon_2 = {
---        upgrade_1
+--    weapon_2_class = {
+--        upgrade_1_id = {...}
 --    }
 --}
-function TTTPAP:Register(upgrade)
+function TTTPAP:Register(UPGRADE)
     -- Register to TTTPAP.upgrades
-    setmetatable(upgrade, pap_meta)
-    TTTPAP.upgrades[upgrade.classname] = TTTPAP.upgrades[upgrade.classname] or {}
-    TTTPAP.upgrades[upgrade.classname][upgrade.id] = upgrade
+    setmetatable(UPGRADE, pap_meta)
+    TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
+    TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
     -- Create enable/disable convar
-    local cvarName = "ttt_pap_" .. upgrade.classname .. "_" .. upgrade.id
+    local cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
 
     CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
@@ -85,8 +84,8 @@ function TTTPAP:Register(upgrade)
     PAPConvars[cvarName] = true
 
     -- Also add any custom convar settings the upgrade may have
-    if upgrade.convars then
-        for _, cvarInfo in ipairs(upgrade.convars) do
+    if UPGRADE.convars then
+        for _, cvarInfo in ipairs(UPGRADE.convars) do
             PAPConvars[cvarInfo.name] = true
         end
     end
