@@ -249,6 +249,7 @@ local function DrawWeaponsList(list, searchQuery)
     if table.IsEmpty(upgradeList) then
         for class, upgrades in pairs(TTTPAP.upgrades) do
             local SWEP = weapons.Get(class)
+            if not SWEP then continue end
             -- If a weapon doesn't have a human-readable name, just use the weapon's classname instead
             local name = class
 

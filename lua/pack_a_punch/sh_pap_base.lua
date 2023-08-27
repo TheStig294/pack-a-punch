@@ -1,15 +1,18 @@
+-- 
+-- Creating the Pack-a-Punch passive item, and all the core upgrade logic
+-- 
 if SERVER then
     util.AddNetworkString("TTTPAPApply")
     util.AddNetworkString("TTTPAPApplySound")
 end
 
-if CLIENT then
-    LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")
-    LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
-end
-
 -- Registering the passive item
 hook.Add("InitPostEntity", "TTTPAPRegister", function()
+    if CLIENT then
+        LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")
+        LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
+    end
+
     EQUIP_PAP = (GenerateNewEquipmentID and GenerateNewEquipmentID()) or 2048
 
     local pap = {
@@ -180,7 +183,7 @@ local function ApplyPAP(SWEP, UPGRADE)
         SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
         SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
         -- Set ammo relative to leftover ammo
-        SWEP:SetClip1((UPGRADE.oldClip / oldClipSize) * SWEP.Primary.ClipSize)
+        SWEP:SetClip1((SWEP.PAPOldClip / oldClipSize) * SWEP.Primary.ClipSize)
     end
 
     -- Recoil
@@ -191,7 +194,7 @@ local function ApplyPAP(SWEP, UPGRADE)
     end
 
     -- Automatic
-    if isbool(SWEP.Primary.Automatic) then
+    if isbool(SWEP.Primary.Automatic) and isbool(UPGRADE.automatic) then
         SWEP.Primary.Automatic = UPGRADE.automatic
     end
 
@@ -210,7 +213,6 @@ local function ApplyPAP(SWEP, UPGRADE)
     net.WriteFloat(SWEP.Primary.Recoil or -1)
     net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
     net.WriteBool(SWEP.Primary.Automatic or false)
-    net.WriteBool(UPGRADE.defaultUpgrade)
     net.WriteString(UPGRADE.id)
     net.Broadcast()
 end
@@ -232,9 +234,15 @@ if CLIENT then
         SWEP.Primary.Recoil = net.ReadFloat()
         SWEP.Primary.StaticRecoilFactor = net.ReadFloat()
         SWEP.Primary.Automatic = net.ReadBool()
-        local defaultUpgrade = net.ReadBool()
         local upgradeID = net.ReadString()
-        local UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
+        local UPGRADE
+
+        if upgradeID == "_default_upgrade" then
+            UPGRADE = TTTPAP.upgrades._default_upgrade._default_upgrade
+        else
+            UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
+        end
+
         -- Apply upgrade function on the client
         UPGRADE:Apply(SWEP)
         table.insert(TTTPAP.activeUpgrades, UPGRADE)
@@ -243,21 +251,13 @@ if CLIENT then
         if UPGRADE.name then
             SWEP.PrintName = UPGRADE.name
             -- If no defined name for a weapon, just call it: "PAP [weapon name]"
-        elseif SWEP.PrintName and not string.EndsWith(SWEP.ClassName, "_pap") then
+        elseif SWEP.PrintName then
             SWEP.PrintName = "PAP " .. LANG.TryTranslation(SWEP.PrintName)
         end
 
         -- Description
-        local description
-
-        if defaultUpgrade then
-            description = "x1.5 fire rate increase!"
-        elseif UPGRADE.desc then
-            description = UPGRADE.desc
-        end
-
-        if description then
-            chat.AddText("PAP UPGRADE: " .. description)
+        if UPGRADE.desc then
+            chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
         end
 
         -- Add upgrade table to the weapon entity itself for easy reference
@@ -334,21 +334,17 @@ local function OrderPAP(ply)
             SWEP = ply:GetWeapon(classname)
         end
 
+        -- Default to the default upgrade if none is found
+        local UPGRADE = TTTPAP.upgrades._default_upgrade._default_upgrade
+
         -- Choose a random upgrade from available ones to give to the weapon
-        local UPGRADE
-
-        for id, upg in RandomPairs(TTTPAP.upgrades[classname]) do
-            if upg:Condition() then
-                UPGRADE = upg
-                break
+        if TTTPAP.upgrades[classname] then
+            for id, upg in RandomPairs(TTTPAP.upgrades[classname]) do
+                if upg:Condition() then
+                    UPGRADE = upg
+                    break
+                end
             end
-        end
-
-        if UPGRADE then
-            UPGRADE.defaultUpgrade = false
-        else
-            UPGRADE = {}
-            UPGRADE.defaultUpgrade = true
         end
 
         -- If we don't want the player to hold the weapon straight away, block it
@@ -356,22 +352,8 @@ local function OrderPAP(ply)
             ply:SelectWeapon(classname)
         end
 
-        -- Default gun stats for PAP
-        -- By default, weapons get a 1.5 firerate upgrade
-        -- Unless specified in the upgrades table
-        UPGRADE.firerateMult = UPGRADE.firerateMult or 1.5
-        UPGRADE.damageMult = UPGRADE.damageMult or 1
-        UPGRADE.spreadMult = UPGRADE.spreadMult or 1
-        UPGRADE.ammoMult = UPGRADE.ammoMult or 1
-        UPGRADE.recoilMult = UPGRADE.recoilMult or 1
-
-        -- By default, go by the gun's specified automatic/non-automatic fire
-        if UPGRADE.automatic == nil then
-            UPGRADE.automatic = SWEP.Primary.Automatic
-        end
-
         -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
-        UPGRADE.oldClip = oldClip
+        SWEP.PAPOldClip = oldClip
         -- Apply the upgrade!
         ApplyPAP(SWEP, UPGRADE)
     end)

@@ -4,9 +4,17 @@ TTTPAP = {}
 TTTPAP.upgrades = {}
 TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
+-- 
 -- Creating a fake class of "UPGRADE" using metatables, borrowed from the randomat's "EVENT" class
+-- 
 local pap_meta = {}
 pap_meta.__index = pap_meta
+-- Initialising default stats multipliers
+pap_meta.firerateMult = 1
+pap_meta.damageMult = 1
+pap_meta.spreadMult = 1
+pap_meta.ammoMult = 1
+pap_meta.recoilMult = 1
 
 function pap_meta:Apply(SWEP)
 end
