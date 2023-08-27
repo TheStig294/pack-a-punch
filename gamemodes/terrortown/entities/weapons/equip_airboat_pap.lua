@@ -46,7 +46,7 @@ TTTPAP.convars[class] = {}
 table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_detective_toy_car_damage_mult",
     type = "float",
-    decimal = 1
+    decimals = 1
 })
 
 table.insert(TTTPAP.convars[class], {

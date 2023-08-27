@@ -8,7 +8,7 @@ TTTPAP.convars[class] = {}
 table.insert(TTTPAP.convars[class], {
     name = "ttt_pap_mad_scientist_device_time",
     type = "float",
-    decimal = 1
+    decimals = 1
 })
 
 TTT_PAP_UPGRADES.weapon_mad_zombificator = {

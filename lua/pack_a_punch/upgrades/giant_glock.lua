@@ -8,7 +8,7 @@ UPGRADE.convars = {
     {
         name = "ttt_pap_giant_glock_scale",
         type = "float",
-        decimal = 1
+        decimals = 1
     },
     {
         name = "ttt_pap_giant_glock_use_camo",
