@@ -103,7 +103,7 @@ local function OptionsMenu(UPGRADE)
                 slider:SetDecimals(cvarInfo.decimals or 2)
             end
 
-            slider:SetValue(cvar:GetInt())
+            slider:SetValue(cvar:GetFloat())
             slider:SetHeight(25)
 
             slider.OnValueChanged = function(self, value)
@@ -286,7 +286,7 @@ local function DrawWeaponsList(list, searchQuery)
         end
 
         -- Add all of the default upgrades as well
-        upgradeList[" Default Upgrade "] = table.Copy(TTTPAP.defaultUpgrades)
+        upgradeList["Default Upgrade"] = table.Copy(TTTPAP.defaultUpgrades)
     end
 
     -- If there is a search query, search the weapon's name, the upgraded weapon's name, and the upgrade's description
