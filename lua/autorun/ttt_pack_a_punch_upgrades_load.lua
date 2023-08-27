@@ -131,10 +131,8 @@ end
 
 hook.Add("TTTPrepareRound", "TTTPAPRemoveAllUpgradeHooks", function()
     if TTTPAP.activeUpgrades ~= {} then
-        for _, upgrades in pairs(TTTPAP.activeUpgrades) do
-            for _, UPGRADE in pairs(upgrades) do
-                UPGRADE:CleanUpHooks()
-            end
+        for _, UPGRADE in pairs(TTTPAP.activeUpgrades) do
+            UPGRADE:CleanUpHooks()
         end
 
         TTTPAP.activeUpgrades = {}
