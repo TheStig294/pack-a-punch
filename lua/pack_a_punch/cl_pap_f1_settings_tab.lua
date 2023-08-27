@@ -16,7 +16,7 @@ surface.CreateFont("PAPDesc", {
     outline = false,
 })
 
-local function OptionsMenu(UPGRADE, SWEP)
+local function OptionsMenu(UPGRADE)
     if not LocalPlayer():IsAdmin() then return end
     -- Main window frame
     local frame = vgui.Create("DFrame")
@@ -100,7 +100,7 @@ local function OptionsMenu(UPGRADE, SWEP)
             if cvarInfo.type == "int" then
                 slider:SetDecimals(0)
             else
-                slider:SetDecimals(cvarInfo.decimal or 2)
+                slider:SetDecimals(cvarInfo.decimals or 2)
             end
 
             slider:SetValue(cvar:GetInt())
@@ -138,15 +138,30 @@ local function DrawWeaponBar(list, UPGRADE)
     local SWEP = weapons.Get(UPGRADE.class)
     -- Icon
     local icon = list:Add("DImage")
-    local image = SWEP.Icon or "vgui/ttt/icon_bullet"
+    local image
+
+    if SWEP and SWEP.Icon then
+        image = SWEP.Icon
+    else
+        image = "vgui/ttt/icon_bullet"
+    end
+
     icon:SetImage(image, "vgui/ttt/icon_bullet")
     icon:SetSize(64, 64)
     -- Background box
     local background = list:Add("DPanel")
     background:SetSize(480, 64)
     background:DockPadding(10, 0, 10, 5)
+    -- Enabled cvar
     local alpha = 255
-    local enabledCvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    local enabledCvarName
+
+    if string.StartsWith(UPGRADE.id, "_def_") then
+        enabledCvarName = "ttt_pap_" .. UPGRADE.id
+    else
+        enabledCvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    end
+
     local enabledCvar = GetConVar(enabledCvarName)
 
     if not enabledCvar:GetBool() then
@@ -159,12 +174,22 @@ local function DrawWeaponBar(list, UPGRADE)
 
     -- Name
     local name = vgui.Create("DLabel", background)
-    name:SetText(LANG.TryTranslation(SWEP.PrintName or UPGRADE.class))
+    local nameText
+
+    if SWEP and SWEP.PrintName then
+        nameText = LANG.TryTranslation(SWEP.PrintName)
+    elseif UPGRADE.class then
+        nameText = UPGRADE.class
+    else
+        nameText = "Default Upgrade"
+    end
+
+    name:SetText(nameText)
     name:SetPos(12, 2)
     name:SetFont("Trebuchet24")
 
     -- Name colour
-    if istable(SWEP.CanBuy) then
+    if SWEP and istable(SWEP.CanBuy) then
         local colour
         local isDetective = table.HasValue(SWEP.CanBuy, ROLE_DETECTIVE)
         local isTraitor = table.HasValue(SWEP.CanBuy, ROLE_TRAITOR)
@@ -232,7 +257,7 @@ local function DrawWeaponBar(list, UPGRADE)
         optionsButton:SetPos(350, 4)
 
         function optionsButton:DoClick()
-            OptionsMenu(UPGRADE, SWEP)
+            OptionsMenu(UPGRADE)
         end
     end
 end
@@ -259,6 +284,9 @@ local function DrawWeaponsList(list, searchQuery)
 
             upgradeList[name] = upgrades
         end
+
+        -- Add all of the default upgrades as well
+        upgradeList[" Default Upgrade "] = table.Copy(TTTPAP.defaultUpgrades)
     end
 
     -- If there is a search query, search the weapon's name, the upgraded weapon's name, and the upgrade's description

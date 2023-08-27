@@ -116,8 +116,18 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             return false
         elseif upgrades then
             -- Preventing purchase if all upgrades' condition functions return false
-            for id, upgrade in pairs(upgrades) do
-                if upgrade:Condition() then return end
+            for id, UPGRADE in pairs(upgrades) do
+                if UPGRADE:Condition() then return end
+            end
+
+            PAPErrorMessage(ply)
+
+            return false
+        elseif not upgrades then
+            -- Preventing purchase if all default upgrades' condition functions return false or all have had their convars disabled
+            for id, UPGRADE in pairs(TTTPAP.defaultUpgrades) do
+                -- If even one default upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
+                if UPGRADE:Condition() and ConVarExists("ttt_pap_" .. UPGRADE.id) and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return end
             end
 
             PAPErrorMessage(ply)
@@ -237,8 +247,9 @@ if CLIENT then
         local upgradeID = net.ReadString()
         local UPGRADE
 
-        if upgradeID == "_default_upgrade" then
-            UPGRADE = TTTPAP.upgrades._default_upgrade._default_upgrade
+        -- Default upgrades are signified with a "_def_" in front of their id
+        if string.StartsWith(upgradeID, "_def_") then
+            UPGRADE = TTTPAP.defaultUpgrades[upgradeID]
         else
             UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
         end
@@ -334,16 +345,15 @@ local function OrderPAP(ply)
             SWEP = ply:GetWeapon(classname)
         end
 
-        -- Default to the default upgrade if none is found
-        local UPGRADE = TTTPAP.upgrades._default_upgrade._default_upgrade
-
         -- Choose a random upgrade from available ones to give to the weapon
-        if TTTPAP.upgrades[classname] then
-            for id, upg in RandomPairs(TTTPAP.upgrades[classname]) do
-                if upg:Condition() then
-                    UPGRADE = upg
-                    break
-                end
+        -- Else, pick a random default upgrade if non is found
+        local upgrades = TTTPAP.upgrades[classname] or TTTPAP.defaultUpgrades
+        local UPGRADE
+
+        for id, upg in RandomPairs(upgrades) do
+            if upg:Condition() then
+                UPGRADE = upg
+                break
             end
         end
 

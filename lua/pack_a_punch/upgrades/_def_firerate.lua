@@ -1,0 +1,18 @@
+local UPGRADE = {}
+UPGRADE.id = "_def_firerate"
+UPGRADE.class = nil
+UPGRADE.name = nil
+UPGRADE.desc = "1.5x firerate increase!"
+
+local multCvar = CreateConVar("ttt_pap__def_firerate_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Firerate multiplier", 1, 10)
+
+UPGRADE.convars = {
+    {
+        name = "ttt_pap__def_firerate_multiplier",
+        type = "float",
+        decimals = 1
+    }
+}
+
+UPGRADE.firerateMult = multCvar:GetFloat()
+TTTPAP:Register(UPGRADE)

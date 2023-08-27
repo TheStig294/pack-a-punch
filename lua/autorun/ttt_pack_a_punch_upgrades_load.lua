@@ -2,6 +2,7 @@
 -- The global table used by the client and server to access all upgrade data
 TTTPAP = {}
 TTTPAP.upgrades = {}
+TTTPAP.defaultUpgrades = {}
 TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
 -- 
@@ -66,7 +67,7 @@ function pap_meta:CleanUpHooks()
 end
 
 -- Create convar to disable trying to apply the default upgrade on weapons without one
-CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a 1.5x increase in fire rate", 0, 1)
+CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"default\" upgrade (normally a stats upgrade)", 0, 1)
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
 CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
@@ -90,25 +91,30 @@ local PAPConvars = {
 --    }
 --}
 function TTTPAP:Register(UPGRADE)
-    -- Register to TTTPAP.upgrades
+    local cvarName
     setmetatable(UPGRADE, pap_meta)
-    TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
-    TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
 
-    -- Create enable/disable convar
-    if UPGRADE.id ~= "_default_upgrade" then
-        local cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    -- Register to TTTPAP.upgrades, or TTTPAP.defaultUpgrades if no base weapon to apply to upgrade is defined
+    if UPGRADE.class then
+        TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
+        TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
+        -- Create enable/disable convar
+        cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    else
+        TTTPAP.defaultUpgrades[UPGRADE.id] = TTTPAP.defaultUpgrades[UPGRADE.id] or {}
+        TTTPAP.defaultUpgrades[UPGRADE.id] = UPGRADE
+        cvarName = "ttt_pap_" .. UPGRADE.id
+    end
 
-        CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+    CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
-        -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-        PAPConvars[cvarName] = true
+    -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
+    PAPConvars[cvarName] = true
 
-        -- Also add any custom convar settings the upgrade may have
-        if UPGRADE.convars then
-            for _, cvarInfo in ipairs(UPGRADE.convars) do
-                PAPConvars[cvarInfo.name] = true
-            end
+    -- Also add any custom convar settings the upgrade may have
+    if UPGRADE.convars then
+        for _, cvarInfo in ipairs(UPGRADE.convars) do
+            PAPConvars[cvarInfo.name] = true
         end
     end
 end
