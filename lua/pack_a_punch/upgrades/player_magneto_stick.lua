@@ -5,7 +5,7 @@ UPGRADE.id = "player_magneto_stick"
 UPGRADE.class = "weapon_zm_carry"
 UPGRADE.name = "Player Magneto-stick"
 UPGRADE.desc = "A magneto-stick that exclusively picks up players!"
-UPGRADE.firerateMult = 1
+UPGRADE.automatic = false
 
 UPGRADE.convars = {
     {
@@ -49,24 +49,23 @@ function UPGRADE:Apply(SWEP)
     local table = table
     local timer = timer
     local util = util
-    local AddHook = self.AddHook
     local EntsFindAlongRay = ents.FindAlongRay
     local MathClamp = math.Clamp
     local MathRandom = math.random
     local MathAbs = math.abs
     local TableInsert = table.insert
     local TraceLine = util.TraceLine
-    local RemoveHook = self.RemoveHook
     local sound_single = Sound("Weapon_Crowbar.Single")
+    SWEP.Secondary.Delay = 1
 
     if SERVER then
         -- Don't let the held player pickup weapons
-        AddHook("PlayerCanPickupWeapon", function(ply, wep)
+        self:AddHook("PlayerCanPickupWeapon", function(ply, wep)
             if ply == SWEP.Victim then return false end
         end, SWEP:EntIndex())
 
         -- Prevent fall damage while being carried
-        AddHook("EntityTakeDamage", function(ent, dmginfo)
+        self:AddHook("EntityTakeDamage", function(ent, dmginfo)
             if IsPlayer(ent) and ent == SWEP.Victim and dmginfo:IsFallDamage() then return true end
         end, SWEP:EntIndex())
     end
@@ -266,7 +265,15 @@ function UPGRADE:Apply(SWEP)
 
         local hitEnt = tr_main.Entity
         self:EmitSound(sound_single)
-        if not IsPlayer(hitEnt) or tr_main.HitWorld then return end
+
+        if not IsPlayer(hitEnt) or tr_main.HitWorld then
+            if owner.LagCompensation then
+                owner:LagCompensation(false)
+            end
+
+            return
+        end
+
         self:Pickup(hitEnt)
 
         if owner.LagCompensation then
@@ -334,7 +341,7 @@ function UPGRADE:Apply(SWEP)
             local client = LocalPlayer()
             local entIdx = net.ReadUInt(16)
 
-            AddHook("InputMouseApply", function(cmd, x, y, ang)
+            self:AddHook("InputMouseApply", function(cmd, x, y, ang)
                 if not client:Alive() or client:IsSpec() then return end
                 -- Lock view from going too high up or down
                 ang.pitch = MathClamp(ang.pitch, -35, 35)
@@ -349,7 +356,7 @@ function UPGRADE:Apply(SWEP)
 
         net.Receive("PAP_magnetoCarryEnd", function()
             local entIdx = net.ReadUInt(16)
-            RemoveHook("InputMouseApply", "PAP_magneto_InputMouseApply_" .. entIdx)
+            self:RemoveHook("InputMouseApply", "PAP_magneto_InputMouseApply_" .. entIdx)
         end)
 
         -- Victim
@@ -368,7 +375,7 @@ function UPGRADE:Apply(SWEP)
             local pap_magnetoWeapon = Entity(entIdx)
             local pap_magneto = pap_magnetoWeapon:GetOwner()
 
-            AddHook("StartCommand", function(ply, cmd)
+            self:AddHook("StartCommand", function(ply, cmd)
                 if ply ~= client then return end
                 if not client:Alive() or client:IsSpec() then return end
                 -- Stop them from moving and attacking
@@ -380,7 +387,7 @@ function UPGRADE:Apply(SWEP)
                 cmd:RemoveKey(IN_ATTACK2)
             end, entIdx)
 
-            AddHook("InputMouseApply", function(cmd, x, y, ang)
+            self:AddHook("InputMouseApply", function(cmd, x, y, ang)
                 if not client:Alive() or client:IsSpec() then return end
 
                 -- If we're being held by the owner, lock our view in the center but facing the same direction as owner
@@ -437,7 +444,7 @@ function UPGRADE:Apply(SWEP)
                 fill = Color(75, 150, 255, 255)
             }
 
-            AddHook("HUDPaint", function()
+            self:AddHook("HUDPaint", function()
                 if not client:Alive() or client:IsSpec() then return end
                 -- Don't use carryDuration or the changes to the endTime for the struggle won't reflect accurately
                 local percentage = (CurTime() - startTime) / (endTime - startTime)
@@ -447,7 +454,7 @@ function UPGRADE:Apply(SWEP)
                     net.Start("PAP_magnetoVictimCarryEnd")
                     net.WriteUInt(entIdx, 16)
                     net.SendToServer()
-                    RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
+                    self:RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
 
                     return
                 end
@@ -476,7 +483,7 @@ function UPGRADE:Apply(SWEP)
             -- Increase progress every time they press the struggle button
             local nextStruggle = 0
 
-            AddHook("KeyPress", function(ply, key)
+            self:AddHook("KeyPress", function(ply, key)
                 if ply ~= client then return end
                 if not client:Alive() or client:IsSpec() then return end
                 if key ~= IN_FORWARD then return end
@@ -495,8 +502,8 @@ function UPGRADE:Apply(SWEP)
             local delay = net.ReadUInt(8)
 
             local function End()
-                RemoveHook("StartCommand", "PAP_magneto_Victim_StartCommand_" .. entIdx)
-                RemoveHook("InputMouseApply", "PAP_magneto_Victim_InputMouseApply_" .. entIdx)
+                self:RemoveHook("StartCommand", "PAP_magneto_Victim_StartCommand_" .. entIdx)
+                self:RemoveHook("InputMouseApply", "PAP_magneto_Victim_InputMouseApply_" .. entIdx)
             end
 
             -- End the effect after the given delay, if there is one
@@ -506,8 +513,8 @@ function UPGRADE:Apply(SWEP)
                 End()
             end
 
-            RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
-            RemoveHook("KeyPress", "PAP_magneto_Victim_KeyPress_" .. entIdx)
+            self:RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
+            self:RemoveHook("KeyPress", "PAP_magneto_Victim_KeyPress_" .. entIdx)
         end)
     end
 end

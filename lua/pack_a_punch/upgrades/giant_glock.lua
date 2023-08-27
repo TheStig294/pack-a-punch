@@ -3,7 +3,6 @@ UPGRADE.id = "giant_glock"
 UPGRADE.class = "tfa_dax_big_glock"
 UPGRADE.name = "Giant Glock"
 UPGRADE.desc = "Appears HUGE for everyone else, or when on the ground!"
-UPGRADE.firerateMult = 1
 
 UPGRADE.convars = {
     {
