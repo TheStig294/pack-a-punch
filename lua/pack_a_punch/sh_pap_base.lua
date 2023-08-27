@@ -146,6 +146,7 @@ end)
 local function ApplyPAP(SWEP, UPGRADE)
     -- Apply the upgrade function!
     UPGRADE:Apply(SWEP)
+    table.insert(TTTPAP.activeUpgrades, UPGRADE)
 
     if not UPGRADE.noCamo then
         SWEP:SetMaterial(TTTPAP.camo)
@@ -236,6 +237,7 @@ if CLIENT then
         local UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
         -- Apply upgrade function on the client
         UPGRADE:Apply(SWEP)
+        table.insert(TTTPAP.activeUpgrades, UPGRADE)
 
         -- Name
         if UPGRADE.name then
@@ -333,7 +335,14 @@ local function OrderPAP(ply)
         end
 
         -- Choose a random upgrade from available ones to give to the weapon
-        local UPGRADE = table.Random(TTTPAP.upgrades[classname])
+        local UPGRADE
+
+        for id, upg in RandomPairs(TTTPAP.upgrades[classname]) do
+            if upg:Condition() then
+                UPGRADE = upg
+                break
+            end
+        end
 
         if UPGRADE then
             UPGRADE.defaultUpgrade = false

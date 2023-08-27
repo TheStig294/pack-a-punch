@@ -2,6 +2,7 @@
 -- The global table used by the client and server to access all upgrade data
 TTTPAP = {}
 TTTPAP.upgrades = {}
+TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
 -- Creating a fake class of "UPGRADE" using metatables, borrowed from the randomat's "EVENT" class
 local pap_meta = {}
@@ -14,7 +15,7 @@ function pap_meta:Condition()
     return true
 end
 
--- These 2 functions are from Malivil's randomat mod, to save having to come up with a unique ID for a hook every time...
+-- These 3 functions are from Malivil's randomat mod, to save having to come up with a unique ID for a hook every time...
 function pap_meta:AddHook(hooktype, callbackfunc, suffix)
     callbackfunc = callbackfunc or self[hooktype]
     local id = "TTTPAP." .. self.id .. ":" .. hooktype
@@ -44,6 +45,16 @@ function pap_meta:RemoveHook(hooktype, suffix)
             return
         end
     end
+end
+
+function pap_meta:CleanUpHooks()
+    if not self.Hooks then return end
+
+    for _, ahook in ipairs(self.Hooks) do
+        hook.Remove(ahook[1], ahook[2])
+    end
+
+    table.Empty(self.Hooks)
 end
 
 -- Create convar to disable trying to apply the default upgrade on weapons without one
@@ -106,6 +117,18 @@ if SERVER then
         end
     end)
 end
+
+hook.Add("TTTPrepareRound", "TTTPAPRemoveAllUpgradeHooks", function()
+    if TTTPAP.activeUpgrades ~= {} then
+        for _, upgrades in pairs(TTTPAP.activeUpgrades) do
+            for _, UPGRADE in pairs(upgrades) do
+                UPGRADE:CleanUpHooks()
+            end
+        end
+
+        TTTPAP.activeUpgrades = {}
+    end
+end)
 
 -- Reading all weapon upgrade lua files
 local function AddServer(fil)
