@@ -75,7 +75,7 @@ function pap_meta:GetAlivePlayers(shuffle)
     local plys = {}
 
     for _, ply in ipairs(player.GetAll()) do
-        if ply:Alive() and ply:IsSpec() then
+        if IsValid(ply) and ply:Alive() and ply:IsSpec() then
             table.insert(plys, ply)
         end
     end
