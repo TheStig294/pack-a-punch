@@ -8,7 +8,7 @@ function UPGRADE:Apply(SWEP)
     if SERVER then
         util.AddNetworkString("TTTPAPDarknessKnifeActivate")
     end
-    
+
     function SWEP:SecondaryAttack()
         if CLIENT or self.PAPMapDark then return end
         self.PAPMapDark = true
@@ -29,12 +29,12 @@ function UPGRADE:Apply(SWEP)
     if CLIENT then
         net.Receive("TTTPAPDarknessKnifeActivate", function()
             local activate = net.ReadBool()
-            
+
             if activate then
                 surface.PlaySound("ttt_pack_a_punch/killer_knife/whisper.mp3")
                 self:AddHook("PreDrawSkyBox", function() return true end)
             end
-            
+
             render.RedownloadAllLightmaps(true, true)
         end)
     end

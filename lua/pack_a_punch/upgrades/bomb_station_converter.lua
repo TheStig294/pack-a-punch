@@ -8,7 +8,7 @@ function UPGRADE:Apply(SWEP)
     SWEP.SingleUse = false
 
     -- What could go wrong? (The map entity returns false for IsValid() thankfully...)
-    function SWEP:IsTargetValid(target, bone, primary)
+    function SWEP:IsTargetValid(target, _, _)
         return IsValid(target) and not target.IsPAPStationBomb
     end
 

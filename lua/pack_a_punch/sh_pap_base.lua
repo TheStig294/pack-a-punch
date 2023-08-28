@@ -13,7 +13,7 @@ hook.Add("InitPostEntity", "TTTPAPRegister", function()
         LANG.AddToLanguage("english", "pap_desc", "Upgrades your held weapon!\n\nHold out the weapon you want to upgrade in your hands, then buy this item!")
     end
 
-    EQUIP_PAP = (GenerateNewEquipmentID and GenerateNewEquipmentID()) or 2048
+    EQUIP_PAP = GenerateNewEquipmentID and GenerateNewEquipmentID() or 2048
 
     local pap = {
         id = EQUIP_PAP,
@@ -193,7 +193,7 @@ local function ApplyPAP(SWEP, UPGRADE)
         SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
         SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
         -- Set ammo relative to leftover ammo
-        SWEP:SetClip1((SWEP.PAPOldClip / oldClipSize) * SWEP.Primary.ClipSize)
+        SWEP:SetClip1(SWEP.PAPOldClip / oldClipSize * SWEP.Primary.ClipSize)
     end
 
     -- Recoil
@@ -281,7 +281,7 @@ if CLIENT then
     -- Camo
     local appliedCamo = false
 
-    hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, ply, SWEP)
+    hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, _, SWEP)
         if not IsValid(SWEP) then return end
 
         if SWEP.PAPUpgrade and not SWEP.PAPUpgrade.noCamo then
@@ -355,6 +355,7 @@ local function OrderPAP(ply)
 
         if not upgrades then
             upgrades = TTTPAP.genericUpgrades
+            isGenericUpgrade = true
         end
 
         local UPGRADE
@@ -362,10 +363,11 @@ local function OrderPAP(ply)
         -- Check for an upgrade that has its condition met, and has its convar enabled
         -- (There is garunteed to be at least one by the TTTCanOrderEquipment hook)
         for id, upg in RandomPairs(upgrades) do
-            if upg:Condition() and ((isGenericUpgrade and GetConVar("ttt_pap_" .. upg.id):GetBool()) or (not isGenericUpgrade and GetConVar("ttt_pap_" .. upg.class .. "_" .. upg.id):GetBool())) then
-                UPGRADE = upg
-                break
-            end
+            if not upg:Condition() then continue end
+            if isGenericUpgrade and not GetConVar("ttt_pap_" .. id):GetBool() then continue end
+            if not isGenericUpgrade and not GetConVar("ttt_pap_" .. upg.class .. "_" .. upg.id):GetBool() then continue end
+            UPGRADE = upg
+            break
         end
 
         -- Give the player a completely new base weapon instead if one is specified
@@ -374,18 +376,18 @@ local function OrderPAP(ply)
             classname = UPGRADE.newClass
             SWEP = ply:Give(classname)
 
-            timer.Simple(0.1, function ()
+            timer.Simple(0.1, function()
                 if not ply:HasWeapon(classname) then return end
 
                 if not IsValid(SWEP) then
                     SWEP = ply:GetWeapon(classname)
                 end
-        
+
                 -- If we don't want the player to hold the weapon straight away, block it
                 if not UPGRADE.noSelectWep then
                     ply:SelectWeapon(classname)
                 end
-        
+
                 -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
                 SWEP.PAPOldClip = oldClip
                 -- Apply the upgrade!
@@ -395,7 +397,7 @@ local function OrderPAP(ply)
             if not UPGRADE.noSelectWep then
                 ply:SelectWeapon(classname)
             end
-    
+
             SWEP.PAPOldClip = oldClip
             ApplyPAP(SWEP, UPGRADE)
         end
@@ -405,7 +407,7 @@ end
 concommand.Add("ttt_pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
 
 -- Making the passive item do something on purchase
-hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, is_item)
+hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)
     if equipment ~= EQUIP_PAP then return end
     OrderPAP(ply)
 end)

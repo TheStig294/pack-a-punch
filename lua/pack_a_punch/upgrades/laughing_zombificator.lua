@@ -18,7 +18,7 @@ function UPGRADE:Apply(SWEP)
     if SERVER then
         SWEP.DeviceTimeConVar = deviceTimeCvar
 
-        self:AddHook("TTTMadScientistZombifyBegin", function(owner, ply)
+        self:AddHook("TTTMadScientistZombifyBegin", function(owner, _)
             owner:EmitSound("ttt_pack_a_punch/mad_scientist_device/laugh" .. math.random(1, 7) .. ".mp3")
         end)
     end

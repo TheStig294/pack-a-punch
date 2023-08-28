@@ -1,9 +1,8 @@
 local UPGRADE = {}
 UPGRADE.id = "randomat_diy_kit"
 UPGRADE.class = "weapon_ttt_randomat"
-UPGRADE.name = "Randomat DIY Kit",
+UPGRADE.name = "Randomat DIY Kit"
 UPGRADE.desc = nil
-
 local makeRandomatInstalled
 local malRandomatInstalled
 local randomat2Installed

@@ -7,14 +7,14 @@ UPGRADE.desc = "You can make 3 people fall in love!"
 function UPGRADE:Apply(SWEP)
     function SWEP:Think()
         local holdType = self.HoldTypeTranslate[self.dt.WepState]
-    
+
         if holdType ~= self:GetHoldType() then
             self:SetHoldType(holdType)
         end
-    
+
         if self:GetNextPrimaryFire() >= CurTime() then return end
         local owner = self:GetOwner()
-    
+
         if self.dt.WepState == self.STATE_PULLED then
             if owner:KeyDown(IN_RELOAD) then
                 self.dt.WepState = self.STATE_NOCKED
@@ -22,15 +22,15 @@ function UPGRADE:Apply(SWEP)
             elseif not owner:KeyDown(IN_ATTACK) then
                 self.dt.WepState = self.STATE_RELEASE
                 self:RunActivity(ACT_VM_PRIMARYATTACK)
-    
+
                 if SERVER then
                     local ang = owner:GetAimVector():Angle()
                     local pos = owner:EyePos() + ang:Up() * -7 + ang:Forward() * -4
-    
+
                     if not owner:KeyDown(IN_ATTACK2) then
                         pos = pos + ang:Right() * 1.5
                     end
-    
+
                     local charge = self:GetNextSecondaryFire()
                     charge = math.Clamp(CurTime() - charge, 0, 1)
                     local arrow = ents.Create("ttt_cup_arrow_pap")
@@ -54,7 +54,7 @@ function UPGRADE:Apply(SWEP)
                 self:SetNextSecondaryFire(CurTime())
             end
         end
-    
+
         if IsValid(owner) and owner:GetNWString("TTTCupidTarget3", "") ~= "" then
             self:Remove()
         end

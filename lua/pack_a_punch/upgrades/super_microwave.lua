@@ -17,7 +17,7 @@ function UPGRADE:Apply(SWEP)
             local vvel = ply:GetVelocity()
             local vthrow = vvel + vang * 200
             local health = ents.Create("ttt_health_station")
-    
+
             if IsValid(health) then
                 health:SetPos(vsrc + vang * 10)
                 health:Spawn()
@@ -32,16 +32,16 @@ function UPGRADE:Apply(SWEP)
                 health.HealFreq = 0.1
                 health:SetStoredHealth(400)
                 local phys = health:GetPhysicsObject()
-    
+
                 if IsValid(phys) then
                     phys:SetVelocity(vthrow)
                 end
-    
+
                 self:Remove()
                 self.Planted = true
             end
         end
-    
+
         self:EmitSound(throwsound)
     end
 end

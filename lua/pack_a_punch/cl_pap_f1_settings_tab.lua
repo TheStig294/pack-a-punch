@@ -25,7 +25,7 @@ local function OptionsMenu(UPGRADE)
     frame:MakePopup()
     frame:Center()
 
-    frame.Paint = function(self, w, h)
+    frame.Paint = function(_, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
@@ -124,7 +124,7 @@ local function OptionsMenu(UPGRADE)
             textBox:SetSize(450, 25)
             textBox:SetText(cvar:GetString())
 
-            textBox.OnEnter = function(self, value)
+            textBox.OnEnter = function(_, value)
                 net.Start("TTTPAPChangeConvar")
                 net.WriteString(cvarInfo.name)
                 net.WriteString(value)
@@ -168,7 +168,7 @@ local function DrawWeaponBar(list, UPGRADE)
         alpha = 100
     end
 
-    background.Paint = function(self, w, h)
+    background.Paint = function(_, w, h)
         draw.RoundedBox(10, 0, 0, w, h, Color(40, 40, 40, alpha))
     end
 
@@ -326,7 +326,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     -- Sets the space between the edge of the window and the edges of the tab's contents
     nonScrollList:SetBorder(5)
 
-    nonScrollList.Paint = function(self, w, h)
+    nonScrollList.Paint = function(_, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
@@ -433,7 +433,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     -- Sets the space between the edge of the window and the edges of the tab's contents
     list:SetBorder(10)
 
-    list.Paint = function(self, w, h)
+    list.Paint = function(_, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
     end
 
@@ -441,7 +441,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     DrawWeaponsList(list)
 
     -- Refreshes the weapons list according to what is typed in the search bar
-    searchBar.OnValueChange = function(box, value)
+    searchBar.OnValueChange = function(_, value)
         list:Clear()
         scroll:Rebuild()
         DrawWeaponsList(list, value)

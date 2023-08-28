@@ -20,7 +20,7 @@ function UPGRADE:Apply(SWEP)
         numbul = numbul or 1
         cone = cone or 0.01
         -- 10% accuracy bonus when sighting
-        cone = sights and (cone * 0.9) or cone
+        cone = sights and cone * 0.9 or cone
         local bullet = {}
         bullet.Num = numbul
         bullet.Src = self:GetOwner():GetShootPos()
@@ -29,18 +29,18 @@ function UPGRADE:Apply(SWEP)
         bullet.Tracer = 4
         bullet.Force = 5
         bullet.Damage = dmg
-    
-        bullet.Callback = function(att, tr, dmginfo)
-            if SERVER or (CLIENT and IsFirstTimePredicted()) then
+
+        bullet.Callback = function(_, tr, _)
+            if SERVER or CLIENT and IsFirstTimePredicted() then
                 local ent = tr.Entity
-    
-                if (not tr.HitWorld) and IsValid(ent) then
+
+                if not tr.HitWorld and IsValid(ent) then
                     local edata = EffectData()
                     edata:SetEntity(ent)
                     edata:SetMagnitude(3)
                     edata:SetScale(2)
                     util.Effect("TeslaHitBoxes", edata)
-    
+
                     if SERVER and ent:IsPlayer() then
                         local eyeang = ent:EyeAngles()
                         local j = 15
@@ -51,7 +51,7 @@ function UPGRADE:Apply(SWEP)
                 end
             end
         end
-    
+
         self:GetOwner():FireBullets(bullet)
         self:SendWeaponAnim(self.PrimaryAnim)
         -- Owner can die after firebullets, giving an error at muzzleflash
@@ -59,10 +59,10 @@ function UPGRADE:Apply(SWEP)
         self:GetOwner():MuzzleFlash()
         self:GetOwner():SetAnimation(PLAYER_ATTACK1)
         if self:GetOwner():IsNPC() then return end
-    
-        if ((game.SinglePlayer() and SERVER) or ((not game.SinglePlayer()) and CLIENT and IsFirstTimePredicted())) then
+
+        if game.SinglePlayer() and SERVER or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
             -- reduce recoil if ironsighting
-            recoil = sights and (recoil * 0.75) or recoil
+            recoil = sights and recoil * 0.75 or recoil
             local eyeang = self:GetOwner():EyeAngles()
             eyeang.pitch = eyeang.pitch - recoil
             self:GetOwner():SetEyeAngles(eyeang)

@@ -9,7 +9,7 @@ function UPGRADE:Apply(SWEP)
     local msg = "That's one way to cure the parasite..."
     local warningSound = Sound("items/medcharge4.wav")
 
-    function SWEP:OnSuccess(ply, body)
+    function SWEP:OnSuccess(ply, _)
         ply:ChatPrint(msg)
 
         for _, v in pairs(player.GetAll()) do

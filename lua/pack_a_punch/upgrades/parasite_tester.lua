@@ -1,8 +1,8 @@
 local UPGRADE = {}
 UPGRADE.id = "parasite_tester"
 UPGRADE.class = "weapon_par_cure"
-UPGRADE.name = "Parasite Tester",
-UPGRADE.desc = "Works on living parasite players instead!",
+UPGRADE.name = "Parasite Tester"
+UPGRADE.desc = "Works on living parasite players instead!"
 
 function UPGRADE:Apply(SWEP)
     SWEP.SingleUse = false

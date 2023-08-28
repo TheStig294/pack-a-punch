@@ -60,7 +60,7 @@ function UPGRADE:Apply(SWEP)
 
     if SERVER then
         -- Don't let the held player pickup weapons
-        self:AddHook("PlayerCanPickupWeapon", function(ply, wep)
+        self:AddHook("PlayerCanPickupWeapon", function(ply, _)
             if ply == SWEP.Victim then return false end
         end, SWEP:EntIndex())
 
@@ -250,7 +250,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         local spos = owner:GetShootPos()
-        local sdest = spos + (owner:GetAimVector() * 70)
+        local sdest = spos + owner:GetAimVector() * 70
         local kmins = Vector(1, 1, 1) * -10
         local kmaxs = Vector(1, 1, 1) * 10
 
@@ -319,7 +319,7 @@ function UPGRADE:Apply(SWEP)
 
         local struggle_sounds = {Sound("ttt_pack_a_punch/magneto_stick/struggle1.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle2.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle3.mp3")}
 
-        net.Receive("PAP_magnetoVictimCarryEnd", function(len, ply)
+        net.Receive("PAP_magnetoVictimCarryEnd", function(_, ply)
             local entIdx = net.ReadUInt(16)
             local wep = Entity(entIdx)
             if not IsValid(wep) or not wep:IsWeapon() then return end
@@ -327,7 +327,7 @@ function UPGRADE:Apply(SWEP)
             wep:Reset()
         end)
 
-        net.Receive("PAP_magnetoVictimStruggle", function(len, ply)
+        net.Receive("PAP_magnetoVictimStruggle", function(_, ply)
             if not IsPlayer(ply) or not ply:Alive() or ply:IsSpec() then return end
             local idx = MathRandom(1, #struggle_sounds)
             local chosen_sound = struggle_sounds[idx]
@@ -346,8 +346,8 @@ function UPGRADE:Apply(SWEP)
                 -- Lock view from going too high up or down
                 ang.pitch = MathClamp(ang.pitch, -35, 35)
                 -- Apply the mouse movement to the values and then set the camera angles
-                ang.pitch = ang.pitch + (y / 50)
-                ang.yaw = ang.yaw - (x / 50)
+                ang.pitch = ang.pitch + y / 50
+                ang.yaw = ang.yaw - x / 50
                 cmd:SetViewAngles(ang)
 
                 return true
@@ -387,7 +387,7 @@ function UPGRADE:Apply(SWEP)
                 cmd:RemoveKey(IN_ATTACK2)
             end, entIdx)
 
-            self:AddHook("InputMouseApply", function(cmd, x, y, ang)
+            self:AddHook("InputMouseApply", function(cmd, _, _, ang)
                 if not client:Alive() or client:IsSpec() then return end
 
                 -- If we're being held by the owner, lock our view in the center but facing the same direction as owner

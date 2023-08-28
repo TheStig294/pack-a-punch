@@ -26,8 +26,8 @@ function UPGRADE:Apply(SWEP)
         SetRoleMaxHealth(owner)
         SendFullStateUpdate()
     end
-    
-    function SWEP:GetProgressMessage(ply, body, bone)
+
+    function SWEP:GetProgressMessage(ply, _, _)
         return "ROLESNATCHING " .. string.upper(ply:Nick())
     end
 end

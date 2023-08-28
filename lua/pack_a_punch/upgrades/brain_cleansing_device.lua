@@ -1,8 +1,8 @@
 local UPGRADE = {}
 UPGRADE.id = "brain_cleansing_device"
 UPGRADE.class = "weapon_hyp_brainwash"
-UPGRADE.name = "Brain Cleansing Device",
-UPGRADE.desc = "Turns players into non-vanilla traitors!",
+UPGRADE.name = "Brain Cleansing Device"
+UPGRADE.desc = "Turns players into non-vanilla traitors!"
 
 UPGRADE.convars = {
     {
@@ -13,7 +13,7 @@ UPGRADE.convars = {
 
 local canBecomeHypCvar = CreateConVar("ttt_pap_hypnotist_device_can_become_hypnotist", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
 
-function UPGRADE:Apply(SWEP)
+function UPGRADE:Apply()
     if SERVER then
         -- Getting the list of all enabled traitor roles
         local enabledTraitorRoles = {}
@@ -27,10 +27,9 @@ function UPGRADE:Apply(SWEP)
             end
         end
 
-        self:AddHook("TTTPlayerRoleChangedByItem", function(owner, ply, wep)
+        self:AddHook("TTTPlayerRoleChangedByItem", function(_, ply, wep)
             -- Check it is the PaPed hypnotist device
             if wep:GetClass() ~= self.class or not wep.PAPUpgrade then return end
-            
             -- If only the hypnotist is enabled out of all special traitor roles,
             -- and turning other players into hypnotists is disabled, then the enabled traitor roles table will be empty,
             -- so we return here to avoid errors

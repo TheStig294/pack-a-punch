@@ -28,7 +28,7 @@ function ENT:Touch(ent)
             Damage = 0,
             Attacker = owner,
             Inflictor = self.Weapon,
-            Callback = function(attacker, trace, damageinfo)
+            Callback = function(_, trace, _)
                 tr2 = trace
             end,
             Force = 0,
@@ -114,7 +114,7 @@ function ENT:Touch(ent)
                             for _, v in pairs(player.GetAll()) do
                                 if v == ent or v == ent2 or v == owner then continue end
 
-                                if mode == ANNOUNCE_REVEAL_ALL or (v:IsTraitorTeam() and mode == ANNOUNCE_REVEAL_TRAITORS) or (v:IsInnocentTeam() and mode == ANNOUNCE_REVEAL_INNOCENTS) then
+                                if mode == ANNOUNCE_REVEAL_ALL or v:IsTraitorTeam() and mode == ANNOUNCE_REVEAL_TRAITORS or v:IsInnocentTeam() and mode == ANNOUNCE_REVEAL_INNOCENTS then
                                     v:QueueMessage(MSG_PRINTBOTH, ROLE_STRINGS_EXT[ROLE_CUPID] .. " has made three players fall in love!")
                                 end
                             end

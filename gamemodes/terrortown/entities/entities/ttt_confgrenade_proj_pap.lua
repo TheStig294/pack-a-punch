@@ -10,13 +10,13 @@ local function PushPullRadius(pos, pusher)
     local push_force = 2000
 
     -- pull physics objects and push players
-    for k, target in ipairs(ents.FindInSphere(pos, radius)) do
+    for _, target in ipairs(ents.FindInSphere(pos, radius)) do
         if IsValid(target) then
             local tpos = target:LocalToWorld(target:OBBCenter())
             local dir = (tpos - pos):GetNormal()
             local phys = target:GetPhysicsObject()
 
-            if target:IsPlayer() and (not target:IsFrozen()) and ((not target.was_pushed) or target.was_pushed.t ~= CurTime()) then
+            if target:IsPlayer() and not target:IsFrozen() and (not target.was_pushed or target.was_pushed.t ~= CurTime()) then
                 -- always need an upwards push to prevent the ground's friction from
                 -- stopping nearly all movement
                 dir.z = math.abs(dir.z) + 1
@@ -26,7 +26,7 @@ local function PushPullRadius(pos, pusher)
                 vel.z = math.min(vel.z, push_force)
 
                 -- mess with discomb jumps
-                if pusher == target and (not ttt_allow_jump:GetBool()) then
+                if pusher == target and not ttt_allow_jump:GetBool() then
                     vel = VectorRand() * vel:Length()
                     vel.z = math.abs(vel.z)
                 end

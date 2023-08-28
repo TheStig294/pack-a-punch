@@ -3,7 +3,6 @@ UPGRADE.id = "bat_fangs"
 UPGRADE.class = "weapon_vam_fangs"
 UPGRADE.name = "Bat Fangs"
 UPGRADE.desc = "Temporarily change into an invincible flying bat!\n(Right-click and hold Space)"
-
 local batModel = "models/weapons/gamefreak/w_nessbat.mdl"
 local batPlayermodel = "models/TSBB/Animals/Bat.mdl"
 local bats = {}
@@ -99,7 +98,7 @@ function UPGRADE:Apply(SWEP)
     local moveVelocity = 1200
     local airResistance = 2.5
 
-    self:AddHook("SetupMove", function(ply, moveData, cmd)
+    self:AddHook("SetupMove", function(ply, moveData, _)
         if not bats[ply] then return end
 
         -- Detecting if bat mode should be disabled and the player prevented from flying

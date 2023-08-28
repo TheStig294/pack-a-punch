@@ -109,7 +109,7 @@ function ENT:Think()
         self.Wheels:SetAngles(self:GetAngles())
         -- (self.WheelOffset - (self.WheelOffset * (self.Dist / self.DistToTarget))) --- lerps from 300 to 0 (wheel offset to 0 as truck gets closer)
         -- (- self.WheelOffset / 2) --- To make up for truck being a large model, entity has to travel slightly less distance to hit the player
-        local wheelOffset = self.WheelOffset - (self.WheelOffset * (self.Dist / self.DistToTarget)) - self.WheelOffset / 2
+        local wheelOffset = self.WheelOffset - self.WheelOffset * self.Dist / self.DistToTarget - self.WheelOffset / 2
 
         if wheelOffset < 0 then
             wheelOffset = 0

@@ -7,8 +7,7 @@ UPGRADE.desc = "Greatly increased melee damage,\nfirst throw kills in 1-shot, th
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.Damage = 40
     SWEP.Primary.Delay = 0.5
-    local sound_single = Sound("Weapon_Crowbar.Single")
-    
+
     function SWEP:Throw()
         if not SERVER then return end
         self:ShootEffects()
@@ -20,7 +19,7 @@ function UPGRADE:Apply(SWEP)
         ent:SetMaterial(TTTPAP.camo)
         local owner = self:GetOwner()
         ent:SetOwner(owner)
-        ent:SetPos(owner:EyePos() + (owner:GetAimVector() * 16))
+        ent:SetPos(owner:EyePos() + owner:GetAimVector() * 16)
         ent:SetAngles(owner:EyeAngles())
         ent:Spawn()
         local phys = ent:GetPhysicsObject()

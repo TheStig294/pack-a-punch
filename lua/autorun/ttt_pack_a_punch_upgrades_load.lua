@@ -5,11 +5,9 @@ TTTPAP.upgrades = {}
 TTTPAP.genericUpgrades = {}
 TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
-
 -- 
 -- Creating a fake class of "UPGRADE" using metatables, borrowed from the randomat's "EVENT" class
 -- 
-
 local pap_meta = {}
 pap_meta.__index = pap_meta
 -- Initialising default stats multipliers
@@ -23,7 +21,7 @@ function pap_meta:Condition()
     return true
 end
 
-function pap_meta:Apply(SWEP)
+function pap_meta:Apply()
 end
 
 function pap_meta:Reset()
@@ -90,7 +88,6 @@ end
 -- 
 -- TTTPAP functions and core hook/convar logic
 -- 
-
 -- Create convar to disable trying to apply generic upgrades on weapons without one
 CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"generic\" upgrade (normally a stats upgrade)", 0, 1)
 
@@ -147,7 +144,7 @@ end
 if SERVER then
     util.AddNetworkString("TTTPAPChangeConvar")
 
-    net.Receive("TTTPAPChangeConvar", function(len, ply)
+    net.Receive("TTTPAPChangeConvar", function(_, ply)
         if not ply:IsAdmin() then return end
         local cvarName = net.ReadString()
         -- Don't allow non-PAP convars to be changed by this net message
@@ -172,10 +169,8 @@ hook.Add("TTTPrepareRound", "TTTPAPResetAll", function()
 end)
 
 -- 
--- Loading all UPGRADE object lua files
+-- Loading all UPGRADE object lua files and Pack-a-Punch base code
 -- 
-
--- Reading all weapon upgrade lua files
 local function AddServer(fil)
     if SERVER then
         include(fil)
@@ -195,7 +190,6 @@ end
 AddServer("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/cl_pap_f1_settings_tab.lua")
-
 local genericFiles, _ = file.Find("pack_a_punch/upgrades/*.lua", "LUA")
 
 for _, fil in ipairs(genericFiles) do

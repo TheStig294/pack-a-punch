@@ -16,14 +16,14 @@ function UPGRADE:Apply(SWEP)
         doncon:SetAngles(owner:EyeAngles())
         doncon:SetOwner(owner)
         doncon.SWEP = self
-    
+
         if self.LockOnTarget ~= "none" then
             doncon.Homing = true
             doncon.Target = self.LockOnTarget
         else
             doncon.Homing = false
         end
-    
+
         doncon.DonconDamage = 60
         doncon.DonconSpeed = 200
         doncon.DonconRange = 2000

@@ -42,18 +42,16 @@ function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = ammoCvar:GetInt()
     SWEP.Primary.DefaultClip = ammoCvar:GetInt()
     SWEP.Primary.ClipMax = ammoCvar:GetInt()
-    
     SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
-    
     SWEP:SetHoldType(SWEP.HoldType)
-    
+
     for _, model in ipairs(yogsModels) do
         if util.IsValidModel(model) then
             SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
             break
         end
     end
-    
+
     function SWEP:PrimaryAttack()
         if CLIENT or not self:CanPrimaryAttack() then return end
         local owner = self:GetOwner()
@@ -73,14 +71,14 @@ function UPGRADE:Apply(SWEP)
         bullet.Damage = 1
         bullet.AmmoType = self.Primary.Ammo
         bullet.TracerName = "PhyscannonImpact"
-    
-        bullet.Callback = function(att, tr)
-            if SERVER or (CLIENT and IsFirstTimePredicted()) then
+
+        bullet.Callback = function(_, tr)
+            if SERVER or CLIENT and IsFirstTimePredicted() then
                 local victim = tr.Entity
-    
+
                 if IsValid(victim) then
                     victim:EmitSound(self.Sound)
-    
+
                     if SERVER and victim:IsPlayer() then
                         local victimAim = owner:GetAimVector()
                         victimAim.x = -victimAim.x
@@ -88,7 +86,7 @@ function UPGRADE:Apply(SWEP)
                         victimAim.z = -victimAim.z
                         victimAim = victimAim:Angle()
                         victim:SetEyeAngles(victimAim)
-    
+
                         timer.Simple(0, function()
                             victim:Lock()
                             local truck = ents.Create("ent_ttt_car_gun_pap")
@@ -97,23 +95,23 @@ function UPGRADE:Apply(SWEP)
                             truck:SetOwner(owner)
                             truck.SWEP = self
                             truck.Target = victim
-    
+
                             if self.Sound == "ttt_pack_a_punch/car_gun/trucking_tuesday.mp3" then
                                 truck.ShowPopup = true
                             end
-    
+
                             truck:Spawn()
                         end)
                     end
                 end
             end
         end
-    
+
         owner:FireBullets(bullet)
-    
+
         if SERVER then
             self:TakePrimaryAmmo(1)
-    
+
             if self:Clip1() <= 0 then
                 self:Remove()
             end

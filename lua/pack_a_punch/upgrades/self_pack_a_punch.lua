@@ -55,13 +55,13 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:OnRemove()
         local owner = self.HolsterPAPOwner
-    
+
         if IsValid(owner) and owner:IsPlayer() then
             owner:SetMaterial("")
             owner:SetFOV(0)
             owner:SetJumpPower(owner:GetJumpPower() / jumpScale)
             owner:SetHealth(owner:Health() / healthScale)
-    
+
             if SERVER then
                 owner:ChatPrint("Your pack-a-punch buff has been removed")
                 owner:SetMaxHealth(owner:GetMaxHealth() / healthScale)

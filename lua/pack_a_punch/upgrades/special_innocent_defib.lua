@@ -13,7 +13,7 @@ UPGRADE.convars = {
 
 local canBecomeMedCvar = CreateConVar("ttt_pap_paramedic_device_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
-function UPGRADE:Apply(SWEP)
+function UPGRADE:Apply()
     if SERVER then
         -- Getting the list of all enabled innocent roles
         local enabledInnocentRoles = {}
@@ -27,12 +27,11 @@ function UPGRADE:Apply(SWEP)
             end
         end
 
-        self:AddHook("TTTPlayerRoleChangedByItem", function(owner, ply, wep)
+        self:AddHook("TTTPlayerRoleChangedByItem", function(_, ply, wep)
             -- Check it is the PaPed paramedic device
             if wep:GetClass() ~= self.class or not wep.PAPUpgrade then return end
             -- Vanilla innocents and detectives are revived as special innocents
             if ply:GetRole() ~= ROLE_INNOCENT and not ply:IsDetectiveTeam() then return end
-            
             -- If only the paramedic is enabled out of all special innocent roles,
             -- and turning other players into paramedics is disabled, then the enabled innocent roles table will be empty,
             -- so we return here to avoid errors
