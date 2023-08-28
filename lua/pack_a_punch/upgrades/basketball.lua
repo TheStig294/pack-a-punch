@@ -51,10 +51,10 @@ function UPGRADE:Apply(SWEP)
                 end
             end
 
-            ply:Give("weapon_ttt_moonball_pap")
+            ply:Give(self.newClass)
 
             timer.Simple(0.1, function()
-                ply:SelectWeapon("weapon_ttt_moonball_pap")
+                ply:SelectWeapon(self.newClass)
             end)
 
             ent:Remove()
