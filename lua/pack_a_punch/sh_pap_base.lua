@@ -368,15 +368,37 @@ local function OrderPAP(ply)
             end
         end
 
-        -- If we don't want the player to hold the weapon straight away, block it
-        if not UPGRADE.noSelectWep then
-            ply:SelectWeapon(classname)
-        end
+        -- Give the player a completely new base weapon instead if one is specified
+        if UPGRADE.newClass then
+            ply:StripWeapon(classname)
+            classname = UPGRADE.newClass
+            SWEP = ply:Give(classname)
 
-        -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
-        SWEP.PAPOldClip = oldClip
-        -- Apply the upgrade!
-        ApplyPAP(SWEP, UPGRADE)
+            timer.Simple(0.1, function ()
+                if not ply:HasWeapon(classname) then return end
+
+                if not IsValid(SWEP) then
+                    SWEP = ply:GetWeapon(classname)
+                end
+        
+                -- If we don't want the player to hold the weapon straight away, block it
+                if not UPGRADE.noSelectWep then
+                    ply:SelectWeapon(classname)
+                end
+        
+                -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
+                SWEP.PAPOldClip = oldClip
+                -- Apply the upgrade!
+                ApplyPAP(SWEP, UPGRADE)
+            end)
+        else
+            if not UPGRADE.noSelectWep then
+                ply:SelectWeapon(classname)
+            end
+    
+            SWEP.PAPOldClip = oldClip
+            ApplyPAP(SWEP, UPGRADE)
+        end
     end)
 end
 
