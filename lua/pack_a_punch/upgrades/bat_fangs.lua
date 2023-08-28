@@ -102,7 +102,7 @@ function UPGRADE:Apply(SWEP)
         if not bats[ply] then return end
 
         -- Detecting if bat mode should be disabled and the player prevented from flying
-        if ply:GetNWBool("TTTPAPVampireFangsDisableBatMode") or not ply:Alive() or ply:IsSpec() or not ply:HasWeapon("weapon_vam_fangs") or not ply:GetWeapon("weapon_vam_fangs"):GetNWBool("IsPackAPunched") then
+        if ply:GetNWBool("TTTPAPVampireFangsDisableBatMode") or not ply:Alive() or ply:IsSpec() or not ply:HasWeapon("weapon_vam_fangs") or not ply:GetWeapon("weapon_vam_fangs").PAPUpgrade then
             DeactivateBatMode(ply)
             ply:SetNWBool("TTTPAPVampireFangsDisableBatMode", false)
         end
