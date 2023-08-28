@@ -14,7 +14,7 @@ function ENT:Initialize()
         self:EmitSound(self.Sound, 0)
 
         -- Leaves a trail of fire
-        timer.Create("TTTPAPDonconnonFireTrail", 1, 10, function()
+        timer.Create("TTTPAPDonconnonFireTrail" .. self:EntIndex(), 1, 10, function()
             if not IsValid(self) then
                 timer.Remove("TTTPAPDonconnonFireTrail")
 

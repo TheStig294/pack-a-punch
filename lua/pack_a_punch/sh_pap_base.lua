@@ -146,7 +146,7 @@ local function OverrideWeaponSound(SWEP)
 end
 
 hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
-    timer.Create("TTTPAPSoundChange", 0.1, 1, function()
+    timer.Simple(0.1, function()
         if not SWEP.PAPUpgrade then return end
         OverrideWeaponSound(SWEP)
         net.Start("TTTPAPApplySound")

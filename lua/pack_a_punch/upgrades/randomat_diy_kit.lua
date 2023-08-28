@@ -54,7 +54,7 @@ function UPGRADE:Apply(SWEP)
                     local owner = self:GetOwner()
                     Randomat:TriggerRandomEvent(owner)
 
-                    timer.Create("TTTPAPRandomat1.0RandomEvents", 5, 4, function()
+                    timer.Create("TTTPAPRandomat1.0RandomEvents" .. self:EntIndex(), 5, 4, function()
                         if IsValid(owner) then
                             Randomat:TriggerRandomEvent(owner)
                         end
