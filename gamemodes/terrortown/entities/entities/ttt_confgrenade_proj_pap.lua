@@ -77,13 +77,6 @@ function ENT:Explode(tr)
         end
 
         local pos = self:GetPos()
-        -- Spawn some fire as well!
-        local fireNade = ents.Create("ttt_firegrenade_proj")
-        fireNade:SetPos(pos)
-        fireNade:Spawn()
-        fireNade:SetDmg(20)
-        fireNade:SetThrower(self:GetThrower())
-        fireNade:Explode(tr)
         -- make sure we are removed, even if errors occur later
         self:Remove()
         PushPullRadius(pos, self:GetThrower())
