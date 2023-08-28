@@ -19,11 +19,14 @@ pap_meta.spreadMult = 1
 pap_meta.ammoMult = 1
 pap_meta.recoilMult = 1
 
+function pap_meta:Condition()
+    return true
+end
+
 function pap_meta:Apply(SWEP)
 end
 
-function pap_meta:Condition()
-    return true
+function pap_meta:Reset()
 end
 
 -- These 3 functions are from Malivil's randomat mod, to save having to come up with a unique ID for a hook every time...
@@ -66,6 +69,22 @@ function pap_meta:CleanUpHooks()
     end
 
     table.Empty(self.Hooks)
+end
+
+function pap_meta:GetAlivePlayers(shuffle)
+    local plys = {}
+
+    for _, ply in ipairs(player.GetAll()) do
+        if ply:Alive() and ply:IsSpec() then
+            table.insert(plys, ply)
+        end
+    end
+
+    if shuffle then
+        table.Shuffle(plys)
+    end
+
+    return plys
 end
 
 -- 
@@ -141,9 +160,10 @@ if SERVER then
     end)
 end
 
-hook.Add("TTTPrepareRound", "TTTPAPRemoveAllUpgradeHooks", function()
+hook.Add("TTTPrepareRound", "TTTPAPResetAll", function()
     if TTTPAP.activeUpgrades ~= {} then
         for _, UPGRADE in pairs(TTTPAP.activeUpgrades) do
+            UPGRADE:Reset()
             UPGRADE:CleanUpHooks()
         end
 
