@@ -181,7 +181,7 @@ local function DrawWeaponBar(list, UPGRADE)
     elseif UPGRADE.class then
         nameText = UPGRADE.class
     else
-        nameText = "Default Upgrade"
+        nameText = "Generic Upgrade"
     end
 
     name:SetText(nameText)
@@ -285,8 +285,8 @@ local function DrawWeaponsList(list, searchQuery)
             upgradeList[name] = upgrades
         end
 
-        -- Add all of the default upgrades as well
-        upgradeList["Default Upgrade"] = table.Copy(TTTPAP.defaultUpgrades)
+        -- Add all of the generic upgrades as well
+        upgradeList["Generic Upgrade"] = table.Copy(TTTPAP.genericUpgrades)
     end
 
     -- If there is a search query, search the weapon's name, the upgraded weapon's name, and the upgrade's description
@@ -336,7 +336,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
-    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrade")
+    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrades")
     local genericUpgradesCheck = nonScrollList:Add("DCheckBoxLabel")
     genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
     genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())

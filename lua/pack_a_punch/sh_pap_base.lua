@@ -109,7 +109,7 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             PAPErrorMessage(ply)
 
             return false
-        elseif not upgrades and (not SWEP.AutoSpawnable or not GetConVar("ttt_pap_apply_generic_upgrade"):GetBool()) then
+        elseif not upgrades and (not SWEP.AutoSpawnable or not GetConVar("ttt_pap_apply_generic_upgrades"):GetBool()) then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
             PAPErrorMessage(ply)
 
@@ -124,10 +124,10 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
 
             return false
         elseif not upgrades then
-            -- Preventing purchase if all default upgrades' condition functions return false or all have had their convars disabled
-            for id, UPGRADE in pairs(TTTPAP.defaultUpgrades) do
-                -- If even one default upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
-                if UPGRADE:Condition() and ConVarExists("ttt_pap_" .. UPGRADE.id) and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return end
+            -- Preventing purchase if all generic upgrades' condition functions return false or all have had their convars disabled
+            for id, UPGRADE in pairs(TTTPAP.genericUpgrades) do
+                -- If even one generic upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
+                if UPGRADE:Condition() and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return end
             end
 
             PAPErrorMessage(ply)
@@ -224,6 +224,8 @@ local function ApplyPAP(SWEP, UPGRADE)
     net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
     net.WriteBool(SWEP.Primary.Automatic or false)
     net.WriteString(UPGRADE.id)
+    -- Generic upgrades do not have a weapon class defined
+    net.WriteBool(isstring(UPGRADE.class))
     net.Broadcast()
 end
 
@@ -245,11 +247,12 @@ if CLIENT then
         SWEP.Primary.StaticRecoilFactor = net.ReadFloat()
         SWEP.Primary.Automatic = net.ReadBool()
         local upgradeID = net.ReadString()
+        local isGenericUpgrade = net.ReadBool()
         local UPGRADE
 
-        -- Default upgrades are signified with a "_def_" in front of their id
-        if string.StartsWith(upgradeID, "_def_") then
-            UPGRADE = TTTPAP.defaultUpgrades[upgradeID]
+        -- Generic upgrades do not have a weapon class defined
+        if isGenericUpgrade then
+            UPGRADE = TTTPAP.genericUpgrades[upgradeID]
         else
             UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
         end
@@ -346,12 +349,20 @@ local function OrderPAP(ply)
         end
 
         -- Choose a random upgrade from available ones to give to the weapon
-        -- Else, pick a random default upgrade if non is found
-        local upgrades = TTTPAP.upgrades[classname] or TTTPAP.defaultUpgrades
+        -- Else, pick a random generic upgrade if no upgrade is found
+        local upgrades = TTTPAP.upgrades[classname]
+        local isGenericUpgrade = false
+
+        if not upgrades then
+            upgrades = TTTPAP.genericUpgrades
+        end
+
         local UPGRADE
 
+        -- Check for an upgrade that has its condition met, and has its convar enabled
+        -- (There is garunteed to be at least one by the TTTCanOrderEquipment hook)
         for id, upg in RandomPairs(upgrades) do
-            if upg:Condition() then
+            if upg:Condition() and ((isGenericUpgrade and GetConVar("ttt_pap_" .. upg.id):GetBool()) or (not isGenericUpgrade and GetConVar("ttt_pap_" .. upg.class .. "_" .. upg.id):GetBool())) then
                 UPGRADE = upg
                 break
             end

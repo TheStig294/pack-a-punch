@@ -2,7 +2,7 @@
 -- The global table used by the client and server to access all upgrade data
 TTTPAP = {}
 TTTPAP.upgrades = {}
-TTTPAP.defaultUpgrades = {}
+TTTPAP.genericUpgrades = {}
 TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
 -- 
@@ -66,8 +66,8 @@ function pap_meta:CleanUpHooks()
     table.Empty(self.Hooks)
 end
 
--- Create convar to disable trying to apply the default upgrade on weapons without one
-CreateConVar("ttt_pap_apply_generic_upgrade", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"default\" upgrade (normally a stats upgrade)", 0, 1)
+-- Create convar to disable trying to apply generic upgrades on weapons without one
+CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"generic\" upgrade (normally a stats upgrade)", 0, 1)
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
 CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
@@ -75,7 +75,7 @@ CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICA
 CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
 
 local PAPConvars = {
-    ttt_pap_apply_generic_upgrade = true,
+    ttt_pap_apply_generic_upgrades = true,
     ttt_pap_detective = true,
     ttt_pap_traitor = true
 }
@@ -94,15 +94,15 @@ function TTTPAP:Register(UPGRADE)
     local cvarName
     setmetatable(UPGRADE, pap_meta)
 
-    -- Register to TTTPAP.upgrades, or TTTPAP.defaultUpgrades if no base weapon to apply to upgrade is defined
+    -- Register to TTTPAP.upgrades, or TTTPAP.genericUpgrades if no base weapon to apply to upgrade is defined
     if UPGRADE.class then
         TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
         TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
         -- Create enable/disable convar
         cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
     else
-        TTTPAP.defaultUpgrades[UPGRADE.id] = TTTPAP.defaultUpgrades[UPGRADE.id] or {}
-        TTTPAP.defaultUpgrades[UPGRADE.id] = UPGRADE
+        TTTPAP.genericUpgrades[UPGRADE.id] = TTTPAP.genericUpgrades[UPGRADE.id] or {}
+        TTTPAP.genericUpgrades[UPGRADE.id] = UPGRADE
         cvarName = "ttt_pap_" .. UPGRADE.id
     end
 
@@ -165,6 +165,14 @@ end
 AddServer("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/cl_pap_f1_settings_tab.lua")
+
+local genericFiles, _ = file.Find("pack_a_punch/upgrades/*.lua", "LUA")
+
+for _, fil in ipairs(genericFiles) do
+    AddServer("pack_a_punch/generic_upgrades/" .. fil)
+    AddClient("pack_a_punch/generic_upgrades/" .. fil)
+end
+
 local files, _ = file.Find("pack_a_punch/upgrades/*.lua", "LUA")
 
 for _, fil in ipairs(files) do
