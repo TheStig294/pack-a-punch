@@ -5,9 +5,11 @@ TTTPAP.upgrades = {}
 TTTPAP.genericUpgrades = {}
 TTTPAP.activeUpgrades = {}
 TTTPAP.camo = "ttt_pack_a_punch/pap_camo"
+
 -- 
 -- Creating a fake class of "UPGRADE" using metatables, borrowed from the randomat's "EVENT" class
 -- 
+
 local pap_meta = {}
 pap_meta.__index = pap_meta
 -- Initialising default stats multipliers
@@ -65,6 +67,10 @@ function pap_meta:CleanUpHooks()
 
     table.Empty(self.Hooks)
 end
+
+-- 
+-- TTTPAP functions and core hook/convar logic
+-- 
 
 -- Create convar to disable trying to apply generic upgrades on weapons without one
 CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"generic\" upgrade (normally a stats upgrade)", 0, 1)
@@ -144,6 +150,10 @@ hook.Add("TTTPrepareRound", "TTTPAPRemoveAllUpgradeHooks", function()
         TTTPAP.activeUpgrades = {}
     end
 end)
+
+-- 
+-- Loading all UPGRADE object lua files
+-- 
 
 -- Reading all weapon upgrade lua files
 local function AddServer(fil)
