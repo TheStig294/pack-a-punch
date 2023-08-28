@@ -9,36 +9,36 @@ UPGRADE.automatic = false
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_magneto_release_delay",
+        name = "pap_player_magneto_stick_release_delay",
         type = "int"
     },
     {
-        name = "ttt_pap_magneto_carry_duration",
+        name = "pap_player_magneto_stick_carry_duration",
         type = "int"
     },
     {
-        name = "ttt_pap_magneto_struggle_interval",
+        name = "pap_player_magneto_stick_struggle_interval",
         type = "float"
     },
     {
-        name = "ttt_pap_magneto_struggle_reduction",
+        name = "pap_player_magneto_stick_struggle_reduction",
         type = "float"
     },
     {
-        name = "ttt_pap_magneto_cooldown",
+        name = "pap_player_magneto_stick_cooldown",
         type = "int"
     }
 }
 
-CreateConVar("ttt_pap_magneto_release_delay", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a victim is stunned", 0, 60)
+CreateConVar("pap_player_magneto_stick_release_delay", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a victim is stunned", 0, 60)
 
-CreateConVar("ttt_pap_magneto_carry_duration", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds someone can be carried for", 0, 60)
+CreateConVar("pap_player_magneto_stick_carry_duration", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds someone can be carried for", 0, 60)
 
-CreateConVar("ttt_pap_magneto_struggle_interval", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
+CreateConVar("pap_player_magneto_stick_struggle_interval", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
 
-CreateConVar("ttt_pap_magneto_struggle_reduction", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 1)
+CreateConVar("pap_player_magneto_stick_struggle_reduction", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 1)
 
-CreateConVar("ttt_pap_magneto_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
+CreateConVar("pap_player_magneto_stick_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
 
 function UPGRADE:Apply(SWEP)
     local CurTime = CurTime
@@ -171,7 +171,7 @@ function UPGRADE:Apply(SWEP)
         -- Unlock player movement and camera and hide struggle UI
         net.Start("PAP_magnetoVictimCarryEnd")
         net.WriteUInt(self:EntIndex(), 16)
-        net.WriteUInt(GetConVar("ttt_pap_magneto_release_delay"):GetInt(), 8)
+        net.WriteUInt(GetConVar("pap_player_magneto_stick_release_delay"):GetInt(), 8)
         net.Send(ply)
     end
 
@@ -186,7 +186,7 @@ function UPGRADE:Apply(SWEP)
         else
             ent.PaPMagnetostickCooldown = true
 
-            timer.Simple(GetConVar("ttt_pap_magneto_cooldown"):GetInt(), function()
+            timer.Simple(GetConVar("pap_player_magneto_stick_cooldown"):GetInt(), function()
                 if IsValid(ent) then
                     ent.PaPMagnetostickCooldown = false
                 end
@@ -222,9 +222,9 @@ function UPGRADE:Apply(SWEP)
         -- Also show UI for the held player to struggle
         net.Start("PAP_magnetoVictimCarryStart")
         net.WriteUInt(self:EntIndex(), 16)
-        net.WriteUInt(GetConVar("ttt_pap_magneto_carry_duration"):GetInt(), 8)
-        net.WriteFloat(GetConVar("ttt_pap_magneto_struggle_interval"):GetFloat())
-        net.WriteFloat(GetConVar("ttt_pap_magneto_struggle_reduction"):GetFloat())
+        net.WriteUInt(GetConVar("pap_player_magneto_stick_carry_duration"):GetInt(), 8)
+        net.WriteFloat(GetConVar("pap_player_magneto_stick_struggle_interval"):GetFloat())
+        net.WriteFloat(GetConVar("pap_player_magneto_stick_struggle_reduction"):GetFloat())
         net.Send(self.Victim)
     end
 
@@ -356,7 +356,7 @@ function UPGRADE:Apply(SWEP)
 
         net.Receive("PAP_magnetoCarryEnd", function()
             local entIdx = net.ReadUInt(16)
-            self:RemoveHook("InputMouseApply", "PAP_magneto_InputMouseApply_" .. entIdx)
+            self:RemoveHook("InputMouseApply", entIdx)
         end)
 
         -- Victim
@@ -454,7 +454,7 @@ function UPGRADE:Apply(SWEP)
                     net.Start("PAP_magnetoVictimCarryEnd")
                     net.WriteUInt(entIdx, 16)
                     net.SendToServer()
-                    self:RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
+                    self:RemoveHook("HUDPaint", entIdx)
 
                     return
                 end
@@ -502,8 +502,8 @@ function UPGRADE:Apply(SWEP)
             local delay = net.ReadUInt(8)
 
             local function End()
-                self:RemoveHook("StartCommand", "PAP_magneto_Victim_StartCommand_" .. entIdx)
-                self:RemoveHook("InputMouseApply", "PAP_magneto_Victim_InputMouseApply_" .. entIdx)
+                self:RemoveHook("StartCommand", entIdx)
+                self:RemoveHook("InputMouseApply", entIdx)
             end
 
             -- End the effect after the given delay, if there is one
@@ -513,8 +513,8 @@ function UPGRADE:Apply(SWEP)
                 End()
             end
 
-            self:RemoveHook("HUDPaint", "PAP_magneto_Victim_HUDPaint_" .. entIdx)
-            self:RemoveHook("KeyPress", "PAP_magneto_Victim_KeyPress_" .. entIdx)
+            self:RemoveHook("HUDPaint", entIdx)
+            self:RemoveHook("KeyPress", entIdx)
         end)
     end
 end

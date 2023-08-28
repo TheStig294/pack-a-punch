@@ -6,12 +6,12 @@ UPGRADE.desc = "Makes you absolutely tiny!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_minifier_scale",
+        name = "pap_microfier_scale",
         type = "int"
     }
 }
 
-local scaleCvar = CreateConVar("ttt_pap_minifier_scale", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Minifier scale", 0.1, 1)
+local scaleCvar = CreateConVar("pap_microfier_scale", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Player scale multiplier", 0.1, 1)
 
 function UPGRADE:Apply(SWEP)
     if SERVER and file.Exists("lua/autorun/healthregen.lua", "GAME") then
@@ -109,7 +109,7 @@ function UPGRADE:Apply(SWEP)
             owner:ResetHull()
 
             if SERVER then
-                owner:SetHealth(owner:Health() * 100 / GetConVar("ttt_pap_minifier_scale"):GetInt())
+                owner:SetHealth(owner:Health() * 100 / scaleCvar:GetFloat())
                 owner:SetMaxHealth(owner.oldMaxHealth or 100)
             end
 

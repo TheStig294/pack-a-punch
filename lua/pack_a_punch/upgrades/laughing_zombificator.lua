@@ -6,13 +6,13 @@ UPGRADE.desc = "Make evil laughs, takes less time to use!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_mad_scientist_device_time",
+        name = "pap_laughing_zombificator_time",
         type = "float",
         decimals = 1
     }
 }
 
-local deviceTimeCvar = CreateConVar("ttt_pap_mad_scientist_device_time", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use upgraded zombification device", 0, 60)
+local deviceTimeCvar = CreateConVar("pap_laughing_zombificator_time", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use", 0, 60)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

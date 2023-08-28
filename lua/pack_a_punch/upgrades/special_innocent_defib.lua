@@ -6,12 +6,12 @@ UPGRADE.desc = "Turns innocents into non-vanilla innocents!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_paramedic_device_can_become_paramedic",
+        name = "pap_special_innocent_defib_can_become_paramedic",
         type = "bool"
     }
 }
 
-local canBecomeMedCvar = CreateConVar("ttt_pap_paramedic_device_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
+local canBecomeMedCvar = CreateConVar("pap_special_innocent_defib_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
 function UPGRADE:Apply()
     if SERVER then

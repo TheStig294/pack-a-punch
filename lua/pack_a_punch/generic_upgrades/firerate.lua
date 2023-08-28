@@ -4,11 +4,11 @@ UPGRADE.class = nil
 UPGRADE.name = nil
 UPGRADE.desc = "1.5x firerate increase!"
 
-local multCvar = CreateConVar("ttt_pap_firerate_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Firerate multiplier", 1, 10)
+local multCvar = CreateConVar("pap_firerate_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Firerate multiplier", 1, 10)
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_firerate_multiplier",
+        name = "pap_firerate_multiplier",
         type = "float",
         decimals = 1
     }

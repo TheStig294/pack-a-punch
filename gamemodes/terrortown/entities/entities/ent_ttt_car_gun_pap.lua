@@ -1,14 +1,14 @@
 AddCSLuaFile()
 
-local targetDamageCvar = CreateConVar("pap_detective_toy_car_target_damage", "10000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage to target player", 0)
+local targetDamageCvar = CreateConVar("pap_truck_gun_target_damage", "10000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage to target player", 0)
 
-local nonTargetDamageCvar = CreateConVar("pap_detective_toy_car_non_target_damage", "50", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage to other players", 0)
+local nonTargetDamageCvar = CreateConVar("pap_truck_gun_non_target_damage", "50", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage to other players", 0)
 
-local speedCvar = CreateConVar("pap_detective_toy_car_speed", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck speed", 1, 1000)
+local speedCvar = CreateConVar("pap_truck_gun_speed", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck speed", 1, 1000)
 
-local scaleCvar = CreateConVar("pap_detective_toy_car_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck size scale", 0.3, 10)
+local scaleCvar = CreateConVar("pap_truck_gun_scale", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck size scale", 0.3, 10)
 
-local rangeCvar = CreateConVar("pap_detective_toy_car_range", "4000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck range", 10, 10000)
+local rangeCvar = CreateConVar("pap_truck_gun_range", "4000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck range", 10, 10000)
 
 ENT.Base = "base_anim"
 ENT.Type = "anim"

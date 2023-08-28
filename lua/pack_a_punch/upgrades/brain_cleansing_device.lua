@@ -6,12 +6,12 @@ UPGRADE.desc = "Turns players into non-vanilla traitors!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_hypnotist_device_can_become_hypnotist",
+        name = "pap_brain_cleansing_device_can_become_hypnotist",
         type = "bool"
     }
 }
 
-local canBecomeHypCvar = CreateConVar("ttt_pap_hypnotist_device_can_become_hypnotist", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
+local canBecomeHypCvar = CreateConVar("pap_brain_cleansing_device_can_become_hypnotist", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
 
 function UPGRADE:Apply()
     if SERVER then

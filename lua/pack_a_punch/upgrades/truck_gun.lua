@@ -6,32 +6,32 @@ UPGRADE.desc = "Now shoots a truck! (With a much larger hitbox)"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_car_gun_ammo",
+        name = "pap_truck_gun_ammo",
         type = "int"
     },
     {
-        name = "ttt_pap_car_gun_target_damage",
+        name = "pap_truck_gun_target_damage",
         type = "int"
     },
     {
-        name = "ttt_pap_car_gun_non_target_damage",
+        name = "pap_truck_gun_non_target_damage",
         type = "int"
     },
     {
-        name = "ttt_pap_car_gun_speed",
+        name = "pap_truck_gun_speed",
         type = "int"
     },
     {
-        name = "ttt_pap_car_gun_scale",
+        name = "pap_truck_gun_scale",
         type = "float"
     },
     {
-        name = "ttt_pap_car_gun_range",
+        name = "pap_truck_gun_range",
         type = "int"
     }
 }
 
-local ammoCvar = CreateConVar("ttt_pap_car_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
+local ammoCvar = CreateConVar("pap_truck_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
 
 -- If a yogs playermodel is installed, more yogs-specific references have a chance of happening
 -- This changes the shoot sound to the yogs trucking tuesday intro, 

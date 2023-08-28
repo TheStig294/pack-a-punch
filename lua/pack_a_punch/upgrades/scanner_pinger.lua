@@ -3,13 +3,13 @@ UPGRADE.id = "scanner_pinger"
 UPGRADE.class = "weapon_inf_scanner"
 UPGRADE.name = "Scanner Pinger"
 
-local timeCvar = CreateConVar("ttt_pap_inf_scanner_time", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players can be seen", 1, 60)
+local timeCvar = CreateConVar("pap_scanner_pinger_time", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players can be seen", 1, 60)
 
 UPGRADE.desc = "Left-Click to see everyone through walls for " .. timeCvar:GetInt() .. " seconds,\nbut this removes your scanner!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_inf_scanner_time",
+        name = "pap_scanner_pinger_time",
         type = "int"
     }
 }

@@ -6,19 +6,19 @@ UPGRADE.desc = "Appears HUGE for everyone else, or when on the ground!"
 
 UPGRADE.convars = {
     {
-        name = "ttt_pap_glock_giant_scale",
+        name = "pap_glock_giant_scale",
         type = "float",
         decimals = 1
     },
     {
-        name = "ttt_pap_glock_giant_use_camo",
+        name = "pap_glock_giant_use_camo",
         type = "bool"
     }
 }
 
-local scaleCvar = CreateConVar("ttt_pap_glock_giant_scale", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale multiplier", 1, 20)
+local scaleCvar = CreateConVar("pap_glock_giant_scale", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale multiplier", 1, 20)
 
-local camoCvar = CreateConVar("ttt_pap_glock_giant_use_camo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the Pack-a-Punch camo/texture?", 0, 1)
+local camoCvar = CreateConVar("pap_glock_giant_use_camo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the Pack-a-Punch camo/texture?", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     local scale = scaleCvar:GetFloat()
