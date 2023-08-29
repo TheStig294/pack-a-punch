@@ -190,7 +190,7 @@ end
 AddServer("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/sh_pap_base.lua")
 AddClient("pack_a_punch/cl_pap_f1_settings_tab.lua")
-local genericFiles, _ = file.Find("pack_a_punch/upgrades/*.lua", "LUA")
+local genericFiles, _ = file.Find("pack_a_punch/generic_upgrades/*.lua", "LUA")
 
 for _, fil in ipairs(genericFiles) do
     AddServer("pack_a_punch/generic_upgrades/" .. fil)

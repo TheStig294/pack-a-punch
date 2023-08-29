@@ -7,8 +7,7 @@ UPGRADE.desc = "Takes less time to use!"
 UPGRADE.convars = {
     {
         name = "pap_sheriff_badge_time",
-        type = "float",
-        decimals = 1
+        type = "int"
     }
 }
 

@@ -156,10 +156,10 @@ local function DrawWeaponBar(list, UPGRADE)
     local alpha = 255
     local enabledCvarName
 
-    if string.StartsWith(UPGRADE.id, "_def_") then
-        enabledCvarName = "ttt_pap_" .. UPGRADE.id
-    else
+    if UPGRADE.class then
         enabledCvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
+    else
+        enabledCvarName = "ttt_pap_" .. UPGRADE.id
     end
 
     local enabledCvar = GetConVar(enabledCvarName)

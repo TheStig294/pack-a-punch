@@ -4,7 +4,7 @@ UPGRADE.class = nil
 UPGRADE.name = nil
 UPGRADE.desc = "10x less recoil!"
 
-local multCvar = CreateConVar("pap_recoil_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Recoil multiplier", 0, 1)
+local multCvar = CreateConVar("pap_recoil_multiplier", "0.1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Recoil multiplier", 0, 1)
 
 UPGRADE.convars = {
     {
