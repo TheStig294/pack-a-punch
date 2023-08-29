@@ -225,7 +225,7 @@ local function ApplyPAP(SWEP, UPGRADE)
     net.WriteBool(SWEP.Primary.Automatic or false)
     net.WriteString(UPGRADE.id)
     -- Generic upgrades do not have a weapon class defined
-    net.WriteBool(isstring(UPGRADE.class))
+    net.WriteBool(not UPGRADE.class)
     net.Broadcast()
 end
 
