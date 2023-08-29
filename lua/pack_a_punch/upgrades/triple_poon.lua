@@ -3,7 +3,7 @@ UPGRADE.id = "triple_poon"
 UPGRADE.class = "ttt_m9k_harpoon"
 UPGRADE.name = "Triple Poon"
 UPGRADE.desc = "Throw 3 harpoons at once!"
-UPGRADE.PAPNoCamo = true
+UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = 3
@@ -12,12 +12,12 @@ function UPGRADE:Apply(SWEP)
     SWEP.Thrown = false
 
     timer.Simple(0.1, function()
-        self:SetClip1(3)
+        SWEP:SetClip1(3)
     end)
 
     if CLIENT then
-        self.VElements.harpoon.material = TTTPAP.camo
-        self.WElements.WHarpoon.material = TTTPAP.camo
+        SWEP.VElements.harpoon.material = TTTPAP.camo
+        SWEP.WElements.WHarpoon.material = TTTPAP.camo
     end
 
     if SERVER then

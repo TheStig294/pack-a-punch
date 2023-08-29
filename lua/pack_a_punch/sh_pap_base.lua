@@ -225,7 +225,7 @@ local function ApplyPAP(SWEP, UPGRADE)
     net.WriteBool(SWEP.Primary.Automatic or false)
     net.WriteString(UPGRADE.id)
     -- Generic upgrades do not have a weapon class defined
-    net.WriteBool(not UPGRADE.class)
+    net.WriteString(UPGRADE.class or "")
     net.Broadcast()
 end
 
@@ -247,14 +247,14 @@ if CLIENT then
         SWEP.Primary.StaticRecoilFactor = net.ReadFloat()
         SWEP.Primary.Automatic = net.ReadBool()
         local upgradeID = net.ReadString()
-        local isGenericUpgrade = net.ReadBool()
+        local upgradeClass = net.ReadString()
         local UPGRADE
 
         -- Generic upgrades do not have a weapon class defined
-        if isGenericUpgrade then
+        if upgradeClass == "" then
             UPGRADE = TTTPAP.genericUpgrades[upgradeID]
         else
-            UPGRADE = TTTPAP.upgrades[SWEP.ClassName][upgradeID]
+            UPGRADE = TTTPAP.upgrades[upgradeClass][upgradeID]
         end
 
         -- Apply upgrade function on the client
@@ -404,7 +404,7 @@ local function OrderPAP(ply)
     end)
 end
 
-concommand.Add("ttt_pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
+concommand.Add("pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
 
 -- Making the passive item do something on purchase
 hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)

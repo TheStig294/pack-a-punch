@@ -59,6 +59,28 @@ function UPGRADE:Apply(SWEP)
             self:Remove()
         end
     end
+
+    -- Kills all players in the "Love triangle" when one dies
+    self:AddHook("PostPlayerDeath", function(deadPly)
+        local plys = {SWEP.Target1, SWEP.Target2, SWEP.Target3}
+
+        local killPlys = false
+
+        for _, ply in ipairs(plys) do
+            if IsValid(ply) and ply == deadPly then
+                killPlys = true
+                break
+            end
+        end
+
+        if killPlys then
+            for _, ply in ipairs(plys) do
+                if IsValid(ply) and ply:Alive() and not ply:IsSpec() then
+                    ply:Kill()
+                end
+            end
+        end
+    end)
 end
 
 function UPGRADE:Reset()

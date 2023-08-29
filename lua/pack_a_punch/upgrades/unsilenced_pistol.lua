@@ -3,6 +3,6 @@ UPGRADE.id = "unsilenced_pistol"
 UPGRADE.class = "weapon_ttt_sipistol"
 UPGRADE.name = "Unsilenced Pistol"
 UPGRADE.desc = "Higher DPS, unsilenced"
-UPGRADE.damageMult = 1.5
-UPGRADE.firerateMult = 1.2
+UPGRADE.damageMult = 1.3
+UPGRADE.firerateMult = 1.1
 TTTPAP:Register(UPGRADE)

@@ -17,29 +17,42 @@ if engine.ActiveGamemode() == "terrortown" then
 
         if SWEP then
             SWEP.Base = "weapon_tttbase"
+
+            -- Check if the moonball is a floor weapon or not
+            if ConVarExists("ttt_joke_weapons_moonball_spawn_on_floor") and not GetConVar("ttt_joke_weapons_moonball_spawn_on_floor"):GetBool() then
+                SWEP.Kind = 317
+                SWEP.Slot = 9
+            else
+                SWEP.Kind = WEAPON_NADE
+                SWEP.Slot = 3
+            end
         end
     end)
 end
 
-function UPGRADE:Apply(SWEP)
-    -- Check if the moonball is a floor weapon or not
-    if ConVarExists("ttt_joke_weapons_moonball_spawn_on_floor") and not GetConVar("ttt_joke_weapons_moonball_spawn_on_floor"):GetBool() then
-        SWEP.Kind = 317
-        SWEP.Slot = 9
-    else
-        SWEP.Kind = WEAPON_NADE
-        SWEP.Slot = 3
-    end
+if SERVER then
+    util.AddNetworkString("TTTPAPBasketballPickup")
+end
 
+if CLIENT then
+    net.Receive("TTTPAPBasketballPickup", function()
+        local SWEP = net.ReadEntity()
+        UPGRADE:Apply(SWEP)
+    end)
+end
+
+function UPGRADE:Apply(SWEP)
+    SWEP.PrintName = self.name
+    SWEP.WorldModel = "models/basketball.mdl"
     local SWEPKind = SWEP.Kind
 
     timer.Simple(0.1, function()
-        if not IsValid(self) then return end
-        self:SetClip1(1)
+        if not IsValid(SWEP) then return end
+        SWEP:SetClip1(-1)
     end)
 
     -- Add a hook to give the basketball weapon to a player if they interact with the thrown ball entity
-    self:AddHook("PlayerUse", "PAPMoonballUseBasketball", function(ply, ent)
+    self:AddHook("PlayerUse", function(ply, ent)
         if not IsValid(ent) then return end
         local model = ent:GetModel()
 
@@ -51,9 +64,13 @@ function UPGRADE:Apply(SWEP)
                 end
             end
 
-            ply:Give(self.newClass)
+            local newSWEP = ply:Give(self.newClass)
 
             timer.Simple(0.1, function()
+                self:Apply(newSWEP)
+                net.Start("TTTPAPBasketballPickup")
+                net.WriteEntity(newSWEP)
+                net.Broadcast()
                 ply:SelectWeapon(self.newClass)
             end)
 
@@ -62,7 +79,7 @@ function UPGRADE:Apply(SWEP)
     end)
 
     -- Make the basketball only damage players if it was slammed, and then remove it
-    self:AddHook("EntityTakeDamage", "PAPMoonballTakeDamage", function(ent, dmg)
+    self:AddHook("EntityTakeDamage", function(ent, dmg)
         local inflictor = dmg:GetInflictor()
         if not IsValid(inflictor) then return end
         local model = inflictor:GetModel()
@@ -381,6 +398,55 @@ function UPGRADE:Apply(SWEP)
         end
 
         self:Remove()
+    end
+
+    if CLIENT then
+        local WorldModel = ClientsideModel(SWEP.WorldModel)
+        -- Settings...
+        WorldModel:SetSkin(1)
+        WorldModel:SetNoDraw(true)
+
+        function SWEP:DrawWorldModel()
+            local _Owner = self:GetOwner()
+
+            if IsValid(_Owner) then
+                -- Specify a good position
+                local offsetVec = Vector(5, -2.7, -3.4)
+                local offsetAng = Angle(180, -90, 0)
+                local boneid = _Owner:LookupBone("ValveBiped.Bip01_L_Hand") -- Left Hand
+                if not boneid then return end
+                local matrix = _Owner:GetBoneMatrix(boneid)
+                if not matrix then return end
+                local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
+
+                if not self.WorldModeOffset then
+                    self.WorldModeOffset = 0
+                end
+
+                newPos.z = newPos.z - self.WorldModeOffset
+
+                if self.WorldModelMoveDown then
+                    self.WorldModeOffset = self.WorldModeOffset + 1
+                else
+                    self.WorldModeOffset = self.WorldModeOffset - 1
+                end
+
+                WorldModel:SetPos(newPos)
+                WorldModel:SetAngles(newAng)
+                WorldModel:SetupBones()
+
+                if self.WorldModelMoveDown and self.WorldModeOffset >= 32 then
+                    self.WorldModelMoveDown = false
+                elseif not self.WorldModelMoveDown and self.WorldModeOffset <= 0 then
+                    self.WorldModelMoveDown = true
+                end
+            else
+                WorldModel:SetPos(self:GetPos())
+                WorldModel:SetAngles(self:GetAngles())
+            end
+
+            WorldModel:DrawModel()
+        end
     end
 end
 

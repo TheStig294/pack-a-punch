@@ -30,6 +30,10 @@ function UPGRADE:Apply(SWEP)
     function SWEP:GetProgressMessage(ply, _, _)
         return "ROLESNATCHING " .. string.upper(ply:Nick())
     end
+
+    function SWEP:GetAbortMessage()
+        return "ROLESNATCH ABORTED"
+    end
 end
 
 TTTPAP:Register(UPGRADE)

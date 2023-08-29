@@ -6,18 +6,21 @@ UPGRADE.desc = "Throw 3 hwapoons at once!"
 UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
+    SWEP.Primary.ClipSize = 3
+    SWEP.Primary.ClipMax = 3
+    SWEP.Primary.DefaultClip = 3
+    SWEP.Thrown = false
+
+    timer.Simple(0.1, function()
+        SWEP:SetClip1(3)
+    end)
+
     if CLIENT then
         SWEP.VElements.harpoon.material = TTTPAP.camo
         SWEP.WElements.WHarpoon.material = TTTPAP.camo
     end
 
     if SERVER then
-        SWEP.Primary.ClipSize = 3
-        SWEP.Primary.ClipMax = 3
-        SWEP.Primary.DefaultClip = 3
-        SWEP.Thrown = false
-        SWEP:SetClip1(3)
-
         function SWEP:CreateArrow(aType, owner)
             if not IsValid(owner) then
                 owner = self:GetOwner()

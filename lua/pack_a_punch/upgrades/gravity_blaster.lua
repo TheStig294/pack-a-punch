@@ -11,7 +11,7 @@ function UPGRADE:Apply(SWEP)
     SWEP.Overheated = false
 
     timer.Simple(0.2, function()
-        self:SetClip1(self.Primary.ClipSize)
+        SWEP:SetClip1(SWEP.Primary.DefaultClip)
     end)
 
     function SWEP:PrimaryAttack()

@@ -65,6 +65,7 @@ function ENT:Touch(ent)
                 if target1 == "" then
                     ent:SetNWString("TTTCupidShooter", owner:SteamID64())
                     owner:SetNWString("TTTCupidTarget1", ent:SteamID64())
+                    self.Weapon.Target1 = ent
                     owner:QueueMessage(MSG_PRINTBOTH, ent:Nick() .. " has been hit with your first arrow.")
                     ent:QueueMessage(MSG_PRINTBOTH, "You have been hit by cupid's arrow!")
                 elseif target2 == "" then
@@ -73,6 +74,7 @@ function ENT:Touch(ent)
                     else
                         ent:SetNWString("TTTCupidShooter", owner:SteamID64())
                         owner:SetNWString("TTTCupidTarget2", ent:SteamID64())
+                        self.Weapon.Target2 = ent
                         owner:QueueMessage(MSG_PRINTBOTH, ent:Nick() .. " has been hit with your second arrow.")
                         ent:QueueMessage(MSG_PRINTBOTH, "You have been hit by cupid's arrow!")
                     end
@@ -84,6 +86,7 @@ function ENT:Touch(ent)
                         local ent3 = player.GetBySteamID64(target2)
                         ent:SetNWString("TTTCupidShooter", owner:SteamID64())
                         owner:SetNWString("TTTCupidTarget3", ent3:SteamID64())
+                        self.Weapon.Target3 = ent
                         ent:QueueMessage(MSG_PRINTBOTH, "You have fallen in love with " .. ent2:Nick() .. " and " .. ent3:Nick() .. "!")
                         ent2:QueueMessage(MSG_PRINTBOTH, "You have fallen in love with " .. ent2:Nick() .. " and " .. ent3:Nick() .. "!")
                         owner:QueueMessage(MSG_PRINTBOTH, "You have created a love triangle between " .. ent:Nick() .. ", " .. ent2:Nick() .. " and " .. ent3:Nick() .. "!")

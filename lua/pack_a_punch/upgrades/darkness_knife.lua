@@ -41,7 +41,9 @@ function UPGRADE:Apply(SWEP)
 end
 
 function UPGRADE:Reset()
-    render.RedownloadAllLightmaps(true, true)
+    if CLIENT then
+        render.RedownloadAllLightmaps(true, true)
+    end
 end
 
 TTTPAP:Register(UPGRADE)

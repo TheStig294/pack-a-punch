@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local deviceTimeCvar = CreateConVar("pap_laughing_zombificator_time", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use", 0, 60)
+local deviceTimeCvar = CreateConVar("pap_laughing_zombificator_time", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to use", 0, 20)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

@@ -1,3 +1,4 @@
+if engine.ActiveGamemode() ~= "terrortown" then return end
 -- This file sets up all the core important logic of the Pack-a-Punch weapon upgrades, as well as loads all other lua files in the right order
 -- The global table used by the client and server to access all upgrade data
 TTTPAP = {}
@@ -89,7 +90,7 @@ end
 -- TTTPAP functions and core hook/convar logic
 -- 
 -- Create convar to disable trying to apply generic upgrades on weapons without one
-CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow weapons without designated upgrades to *try* to be upgraded, with a random \"generic\" upgrade (normally a stats upgrade)", 0, 1)
+CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
 CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)

@@ -10,8 +10,8 @@ function UPGRADE:Apply(SWEP)
     SWEP.Primary.DefaultClip = 45
 
     timer.Simple(0.1, function()
-        if self:Clip1() < self.Primary.ClipMax then
-            self:SetClip1(self.Primary.ClipMax)
+        if SWEP:Clip1() < SWEP.Primary.ClipMax then
+            SWEP:SetClip1(SWEP.Primary.ClipMax)
         end
     end)
 

@@ -6,7 +6,93 @@ UPGRADE.desc = "+1 extra use, one-shot kills!"
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.Damage = 10000
-    SWEP.KnifeCount = 0
+    SWEP.KnifeUses = 2
+
+    function SWEP:StabKill(tr, spos, sdest)
+        local target = tr.Entity
+        local dmg = DamageInfo()
+        dmg:SetDamage(2000)
+        dmg:SetAttacker(self:GetOwner())
+        dmg:SetInflictor(self)
+        dmg:SetDamageForce(self:GetOwner():GetAimVector())
+        dmg:SetDamagePosition(self:GetOwner():GetPos())
+        dmg:SetDamageType(DMG_SLASH)
+
+        -- now that we use a hull trace, our hitpos is guaranteed to be
+        -- terrible, so try to make something of it with a separate trace and
+        -- hope our effect_fn trace has more luck
+        -- first a straight up line trace to see if we aimed nicely
+        local retr = util.TraceLine({
+            start = spos,
+            endpos = sdest,
+            filter = self:GetOwner(),
+            mask = MASK_SHOT_HULL
+        })
+
+        -- if that fails, just trace to worldcenter so we have SOMETHING
+        if retr.Entity ~= target then
+            local center = target:LocalToWorld(target:OBBCenter())
+
+            retr = util.TraceLine({
+                start = spos,
+                endpos = center,
+                filter = self:GetOwner(),
+                mask = MASK_SHOT_HULL
+            })
+        end
+
+        -- create knife effect creation fn
+        local bone = retr.PhysicsBone
+        local pos = retr.HitPos
+        local norm = tr.Normal
+        local ang = Angle(-28, 0, 0) + norm:Angle()
+        ang:RotateAroundAxis(ang:Right(), -90)
+        pos = pos - ang:Forward() * 7
+        local ignore = self:GetOwner()
+
+        target.effect_fn = function(rag)
+            -- we might find a better location
+            local rtr = util.TraceLine({
+                start = pos,
+                endpos = pos + norm * 40,
+                filter = ignore,
+                mask = MASK_SHOT_HULL
+            })
+
+            if IsValid(rtr.Entity) and rtr.Entity == rag then
+                bone = rtr.PhysicsBone
+                pos = rtr.HitPos
+                ang = Angle(-28, 0, 0) + rtr.Normal:Angle()
+                ang:RotateAroundAxis(ang:Right(), -90)
+                pos = pos - ang:Forward() * 10
+            end
+
+            local knife = ents.Create("prop_physics")
+            knife:SetModel("models/weapons/w_knife_t.mdl")
+            knife:SetPos(pos)
+            knife:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+            knife:SetAngles(ang)
+            knife.CanPickup = false
+            knife:Spawn()
+            local phys = knife:GetPhysicsObject()
+
+            if IsValid(phys) then
+                phys:EnableCollisions(false)
+            end
+
+            constraint.Weld(rag, knife, bone, 0, 0, true)
+
+            -- need to close over knife in order to keep a valid ref to it
+            rag:CallOnRemove("ttt_knife_cleanup", function()
+                SafeRemoveEntity(knife)
+            end)
+        end
+
+        -- seems the spos and sdest are purely for effects/forces?
+        target:DispatchTraceAttack(dmg, spos + self:GetOwner():GetAimVector() * 3, sdest)
+        -- target appears to die right there, so we could theoretically get to
+        -- the ragdoll in here...
+    end
 
     function SWEP:PrimaryAttack()
         self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -77,9 +163,9 @@ function UPGRADE:Apply(SWEP)
                 hitEnt:DispatchTraceAttack(dmg, spos + self:GetOwner():GetAimVector() * 3, sdest)
             end
 
-            self.KnifeCount = self.KnifeCount + 1
+            self.KnifeUses = self.KnifeUses - 1
 
-            if self.KnifeCount >= 2 then
+            if self.KnifeUses <= 0 then
                 self:Remove()
             end
         end
@@ -128,9 +214,9 @@ function UPGRADE:Apply(SWEP)
                 phys:Wake()
             end
 
-            self.KnifeCount = self.KnifeCount + 1
+            self.KnifeUses = self.KnifeUses - 1
 
-            if self.KnifeCount >= 2 then
+            if self.KnifeUses <= 0 then
                 self:Remove()
             end
         end

@@ -2,12 +2,22 @@ local UPGRADE = {}
 UPGRADE.id = "traitor_tester"
 UPGRADE.class = "weapon_ttt_wtester"
 UPGRADE.name = "Traitor Tester"
-UPGRADE.desc = "Use on someone while standing next to them to test them!\nTests take longer with each use"
+UPGRADE.desc = "Use on someone while standing next to them to test them!\nTesting delay time doubles with each use"
+
+UPGRADE.convars = {
+    {
+        name = "pap_traitor_tester_initial_seconds",
+        type = "int"
+    }
+}
+
+local secsCvar = CreateConVar("pap_traitor_tester_initial_seconds", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Initial testing delay in seconds", 1, 60)
+
+local beep_miss = Sound("player/suit_denydevice.wav")
 
 function UPGRADE:Apply(SWEP)
-    SWEP.TestDelay = 30
+    SWEP.TestDelay = secsCvar:GetInt()
     SWEP.TestInProgress = false
-    local beep_miss = Sound("player/suit_denydevice.wav")
 
     function SWEP:PrimaryAttack()
         -- Checking if item use is valid
@@ -18,7 +28,6 @@ function UPGRADE:Apply(SWEP)
         -- Preventing multiple uses of the tester at once
         if self.TestInProgress then
             owner:PrintMessage(HUD_PRINTCENTER, "You can only test 1 player at a time!")
-            owner:PrintMessage(HUD_PRINTTALK, "You can only test 1 player at a time!")
             self:EmitSound(beep_miss)
 
             return
@@ -36,10 +45,16 @@ function UPGRADE:Apply(SWEP)
         })
 
         local hitent = tr.Entity
-        if not IsValid(hitent) or not hitent:IsPlayer() then return end
+
+        if not IsValid(hitent) or not hitent:IsPlayer() then
+            owner:PrintMessage(HUD_PRINTCENTER, "You must get near a player to test them!")
+            self:EmitSound(beep_miss)
+
+            return
+        end
+
         if not hitent:Alive() or hitent:IsSpec() then return end
         self:EmitSound(beep_miss)
-        print("Hit player:", hitent)
         -- Displaying a message to the player to be tested
         local message
         local displayedDelay = self.TestDelay
@@ -87,11 +102,16 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:PreDrop()
-        if IsValid(self:GetOwner()) then
-            self:GetOwner().scanner_weapon = nil
+        local owner = self:GetOwner()
+
+        if IsValid(owner) then
+            owner.scanner_weapon = nil
             timer.Remove("PAPDNAScannerTest" .. owner:SteamID64())
             self.TestInProgress = false
         end
+    end
+
+    function SWEP:SecondaryAttack()
     end
 end
 

@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "detective_toy_car"
 UPGRADE.class = "equip_airboat"
 UPGRADE.name = "Detective Toy Car"
-UPGRADE.desc = "Drive around in your very own little detective toy car!\n\nTakes damage from being shot."
+UPGRADE.desc = "Drive around in your very own little detective toy car!\nTakes damage from being shot."
 
 UPGRADE.convars = {
     {
@@ -54,20 +54,22 @@ function UPGRADE:Apply(SWEP)
     SWEP.PlaceRange = placeRangeCvar:GetFloat()
 
     -- Scaling damage of the car so its health can effectively be adjusted
-    self:AddHook("EntityTakeDamage", "TTTDetectiveToyCarPaPDamageMult", function(target, dmg)
+    self:AddHook("EntityTakeDamage", function(target, dmg)
         if target.IsDetectiveToyCarPaP and target.DamageMult then
             dmg:ScaleDamage(target.DamageMult)
         end
     end)
 
     -- Fix the driving controls not working
-    self:AddHook("PlayerButtonUp", function(ply, btn)
-        numpad.Deactivate(ply, btn)
-    end)
+    if SERVER then
+        self:AddHook("PlayerButtonUp", function(ply, btn)
+            numpad.Deactivate(ply, btn)
+        end)
 
-    self:AddHook("PlayerButtonDown", function(ply, btn)
-        numpad.Activate(ply, btn)
-    end)
+        self:AddHook("PlayerButtonDown", function(ply, btn)
+            numpad.Activate(ply, btn)
+        end)
+    end
 
     -- Spawns car where the player is looking
     function SWEP:PrimaryAttack()

@@ -53,7 +53,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     if CLIENT then
-        self:AddHook("PreDrawHalos", "TTTPAPUsedInformantScanner", function()
+        self:AddHook("PreDrawHalos", function()
             for i, ply in ipairs(outlinedPlayers) do
                 if IsValid(ply) and (not ply:Alive() or ply:IsSpec()) then
                     outlinedPlayers[i] = false

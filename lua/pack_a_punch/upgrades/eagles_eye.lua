@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "eagles_eye"
 UPGRADE.class = "weapon_ttt_binoculars"
 UPGRADE.name = "Eagle's Eye"
-UPGRADE.desc = "Faster and further zoom"
+UPGRADE.desc = "Faster and further zoom, instantly search bodies!"
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

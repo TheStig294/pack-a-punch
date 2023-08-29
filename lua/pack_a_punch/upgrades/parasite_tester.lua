@@ -20,6 +20,14 @@ function UPGRADE:Apply(SWEP)
             owner:QueueMessage(MSG_PRINTCENTER, ply:Nick() .. " is not " .. ROLE_STRINGS_EXT[ROLE_PARASITE] .. "...")
         end
     end
+
+    function SWEP:GetProgressMessage(ply, _, _)
+        return "TESTING " .. string.upper(ply:Nick())
+    end
+
+    function SWEP:GetAbortMessage()
+        return "TEST ABORTED"
+    end
 end
 
 TTTPAP:Register(UPGRADE)

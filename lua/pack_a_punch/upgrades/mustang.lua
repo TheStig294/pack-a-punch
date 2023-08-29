@@ -1,17 +1,27 @@
 local UPGRADE = {}
-UPGRADE.id = "four_shot_mustang"
+UPGRADE.id = "mustang"
 UPGRADE.class = "weapon_zm_pistol"
-UPGRADE.name = "4-Shot Mustang"
-UPGRADE.desc = "Now an incendiary grenade launcher! (With 4 ammo)"
+UPGRADE.name = "Mustang"
+UPGRADE.desc = "Now an incendiary grenade launcher!"
+
+UPGRADE.convars = {
+    {
+        name = "pap_mustang_ammo",
+        type = "int"
+    }
+}
+
+local ammoCvar = CreateConVar("pap_mustang_ammo", "4", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo count", 1, 10)
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.DefaultClip = 4
-    SWEP.Primary.ClipMax = 4
+    SWEP.Primary.DefaultClip = ammoCvar:GetInt()
+    SWEP.Primary.ClipMax = ammoCvar:GetInt()
+    SWEP.Primary.ClipSize = ammoCvar:GetInt()
+    SWEP.AmmoEnt = nil
+    SWEP.Primary.Ammo = "none"
 
     timer.Simple(0.1, function()
-        if self:Clip1() > self.Primary.ClipMax then
-            self:SetClip1(self.Primary.ClipMax)
-        end
+        SWEP:SetClip1(ammoCvar:GetInt())
     end)
 
     -- Shooting functions largely copied from weapon_cs_base
@@ -56,6 +66,9 @@ function UPGRADE:Apply(SWEP)
         end
 
         setnext(self, CurTime() + 0.2)
+    end
+
+    function SWEP:Reload()
     end
 end
 

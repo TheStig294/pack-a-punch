@@ -2,84 +2,83 @@ local UPGRADE = {}
 UPGRADE.id = "bat_fangs"
 UPGRADE.class = "weapon_vam_fangs"
 UPGRADE.name = "Bat Fangs"
-UPGRADE.desc = "Temporarily change into an invincible flying bat!\n(Right-click and hold Space)"
+UPGRADE.desc = "Temporarily become invincible and able to fly!\n(Right-click and hold Space)"
 local batModel = "models/weapons/gamefreak/w_nessbat.mdl"
 local batPlayermodel = "models/TSBB/Animals/Bat.mdl"
 local bats = {}
-local playermodelInstalled = util.IsValidModel(batPlayermodel)
+local batInstalled = util.IsValidModel(batModel)
+local batPlayerModelInstalled = util.IsValidModel(batPlayermodel)
 local ForceSetPlayermodel = FindMetaTable("Entity").SetModel
 
-function UPGRADE:Condition()
-    return playermodelInstalled or util.IsValidModel(batModel)
+-- Changes a player into a bat, baseball bat, or a smoke cloud, depending on what models are installed
+local function ActivateBatMode(owner)
+    if not IsValid(owner) then return end
+    bats[owner] = {}
+
+    if SERVER then
+        owner:GodEnable()
+        owner:SetNWBool("TTTPAPVampireFangsBatModeActive", true)
+    end
+
+    if batPlayerModelInstalled then
+        bats[owner].playermodel = owner:GetModel()
+        ForceSetPlayermodel(owner, batPlayermodel)
+
+        if SERVER then
+            owner:DrawWorldModel(false)
+        end
+
+        timer.Simple(0, function()
+            owner:SetMaterial("")
+        end)
+    else
+        owner:SetNoDraw(true)
+
+        if SERVER and batInstalled then
+            local bat = ents.Create("prop_dynamic")
+            bat:SetModel(batModel)
+            local pos = owner:GetPos()
+            pos.z = pos.z + 20
+            bat:SetPos(pos)
+            bat:SetAngles(Angle(90, 0, 0))
+            bat:SetParent(owner)
+            bat:Spawn()
+            bat:PhysWake()
+            bats[owner].bat = bat
+        end
+    end
+end
+
+local function DeactivateBatMode(owner)
+    if not IsValid(owner) then return end
+
+    if SERVER then
+        owner:GodDisable()
+        owner:SetNWBool("TTTPAPVampireFangsBatModeActive", false)
+    end
+
+    if batPlayerModelInstalled then
+        ForceSetPlayermodel(owner, bats[owner].playermodel)
+
+        if SERVER then
+            owner:DrawWorldModel(true)
+        end
+    else
+        owner:SetNoDraw(false)
+
+        if SERVER and batInstalled then
+            local bat = bats[owner].bat
+
+            if IsValid(bat) then
+                bat:Remove()
+            end
+        end
+    end
+
+    bats[owner] = nil
 end
 
 function UPGRADE:Apply(SWEP)
-    -- Changes a player into a bat, or a baseball bat...
-    local function ActivateBatMode(owner)
-        if not IsValid(owner) then return end
-        bats[owner] = {}
-
-        if SERVER then
-            owner:GodEnable()
-        end
-
-        if playermodelInstalled then
-            bats[owner].playermodel = owner:GetModel()
-            ForceSetPlayermodel(owner, batPlayermodel)
-
-            if SERVER then
-                owner:DrawWorldModel(false)
-            end
-
-            timer.Simple(0, function()
-                owner:SetMaterial("")
-            end)
-        else
-            owner:SetNoDraw(true)
-
-            if SERVER then
-                local bat = ents.Create("prop_dynamic")
-                bat:SetModel(batModel)
-                local pos = owner:GetPos()
-                pos.z = pos.z + 20
-                bat:SetPos(pos)
-                bat:SetAngles(Angle(90, 0, 0))
-                bat:SetParent(owner)
-                bat:Spawn()
-                bat:PhysWake()
-                bats[owner].bat = bat
-            end
-        end
-    end
-
-    local function DeactivateBatMode(owner)
-        if not IsValid(owner) then return end
-
-        if SERVER then
-            owner:GodDisable()
-        end
-
-        if playermodelInstalled then
-            ForceSetPlayermodel(owner, bats[owner].playermodel)
-
-            if SERVER then
-                owner:DrawWorldModel(true)
-            end
-        else
-            owner:SetNoDraw(false)
-
-            if SERVER then
-                local bat = bats[owner].bat
-
-                if IsValid(bat) then
-                    bat:Remove()
-                end
-            end
-        end
-
-        bats[owner] = nil
-    end
-
     function SWEP:SecondaryAttack()
         if self:Clip1() == 100 then
             self:SetClip1(0)
@@ -89,8 +88,17 @@ function UPGRADE:Apply(SWEP)
 
     -- Called on normal vampire invisibility deactivating
     self:AddHook("TTTVampireInvisibilityChange", function(owner, isActive)
-        if isActive or not bats[owner] then return end
+        if isActive or not owner:GetNWBool("TTTPAPVampireFangsBatModeActive") then return end
         owner:SetNWBool("TTTPAPVampireFangsDisableBatMode", true)
+    end)
+
+    self:AddHook("TTTShouldPlayerSmoke", function(ply, _, shouldSmoke, smokeColor, smokeParticle, smokeOffset)
+        if ply:GetNWBool("TTTPAPVampireFangsBatModeActive") then
+            shouldSmoke = true
+            smokeOffset = Vector(0, 0, 0)
+        end
+
+        return shouldSmoke, smokeColor, smokeParticle, smokeOffset
     end)
 
     local moveSpeedCap = 224
@@ -99,7 +107,7 @@ function UPGRADE:Apply(SWEP)
     local airResistance = 2.5
 
     self:AddHook("SetupMove", function(ply, moveData, _)
-        if not bats[ply] then return end
+        if not ply:GetNWBool("TTTPAPVampireFangsBatModeActive") then return end
 
         -- Detecting if bat mode should be disabled and the player prevented from flying
         if ply:GetNWBool("TTTPAPVampireFangsDisableBatMode") or not ply:Alive() or ply:IsSpec() or not ply:HasWeapon("weapon_vam_fangs") or not ply:GetWeapon("weapon_vam_fangs").PAPUpgrade then
@@ -138,7 +146,7 @@ end
 
 function UPGRADE:Reset()
     for _, ply in ipairs(player.GetAll()) do
-        if bats[ply] then
+        if ply:GetNWBool("TTTPAPVampireFangsBatModeActive") then
             DeactivateBatMode(ply)
         end
     end
