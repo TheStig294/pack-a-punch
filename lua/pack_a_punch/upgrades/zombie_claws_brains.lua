@@ -18,8 +18,8 @@ function UPGRADE:Apply(SWEP)
                 return
             end
 
-            SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
-            SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
+            SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws_brains/zombie" .. math.random(12) .. ".mp3")
+            SWEP:GetOwner():EmitSound("ttt_pack_a_punch/zombie_claws_brains/zombie" .. math.random(12) .. ".mp3")
         end)
     end
 
@@ -35,8 +35,8 @@ function UPGRADE:Apply(SWEP)
                 return
             end
 
-            owner:EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
-            owner:EmitSound("ttt_pack_a_punch/zombie_claws/zombie" .. math.random(12) .. ".mp3")
+            owner:EmitSound("ttt_pack_a_punch/zombie_claws_brains/zombie" .. math.random(12) .. ".mp3")
+            owner:EmitSound("ttt_pack_a_punch/zombie_claws_brains/zombie" .. math.random(12) .. ".mp3")
         end)
 
         return self.BaseClass.Deploy(self)

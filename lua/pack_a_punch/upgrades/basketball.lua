@@ -377,7 +377,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         if throwDown and IsValid(owner) then
-            owner:EmitSound("ttt_moonball_pap/slam.mp3")
+            owner:EmitSound("ttt_pack_a_punch/basketball/slam.mp3")
         end
 
         self:Remove()

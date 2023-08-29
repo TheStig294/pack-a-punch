@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
         doncon.DonconScale = 1.5
         doncon.DonconTurn = 0.00025
         -- New sound
-        doncon.Sound = "ttt_pack_a_punch/donconnon/o_rubber_tree_big.mp3"
+        doncon.Sound = "ttt_pack_a_punch/big_boi_donconnon/o_rubber_tree_big.mp3"
         doncon:Spawn()
         self:UpdateHalo("none")
         self:Remove()

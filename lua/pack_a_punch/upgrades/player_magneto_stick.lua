@@ -313,11 +313,11 @@ function UPGRADE:Apply(SWEP)
         util.AddNetworkString("PAP_magnetoVictimCarryStart")
         util.AddNetworkString("PAP_magnetoVictimCarryEnd")
         util.AddNetworkString("PAP_magnetoVictimStruggle")
-        resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle1.mp3")
-        resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle2.mp3")
-        resource.AddSingleFile("sound/ttt_pack_a_punch/magneto_stick/struggle3.mp3")
+        resource.AddSingleFile("sound/ttt_pack_a_punch/player_magneto_stick/struggle1.mp3")
+        resource.AddSingleFile("sound/ttt_pack_a_punch/player_magneto_stick/struggle2.mp3")
+        resource.AddSingleFile("sound/ttt_pack_a_punch/player_magneto_stick/struggle3.mp3")
 
-        local struggle_sounds = {Sound("ttt_pack_a_punch/magneto_stick/struggle1.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle2.mp3"), Sound("ttt_pack_a_punch/magneto_stick/struggle3.mp3")}
+        local struggle_sounds = {Sound("ttt_pack_a_punch/player_magneto_stick/struggle1.mp3"), Sound("ttt_pack_a_punch/player_magneto_stick/struggle2.mp3"), Sound("ttt_pack_a_punch/player_magneto_stick/struggle3.mp3")}
 
         net.Receive("PAP_magnetoVictimCarryEnd", function(_, ply)
             local entIdx = net.ReadUInt(16)

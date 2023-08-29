@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
             local activate = net.ReadBool()
 
             if activate then
-                surface.PlaySound("ttt_pack_a_punch/killer_knife/whisper.mp3")
+                surface.PlaySound("ttt_pack_a_punch/darkness_knife/whisper.mp3")
                 self:AddHook("PreDrawSkyBox", function() return true end)
             end
 

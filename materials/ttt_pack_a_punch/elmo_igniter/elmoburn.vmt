@@ -1,6 +1,6 @@
 UnlitGeneric
 {
-	$baseTexture "ttt_pack_a_punch/arsonist_igniter/elmoburn"
+	$baseTexture "ttt_pack_a_punch/elmo_igniter/elmoburn"
 	$alphatest				1
 	
 	"Proxies"

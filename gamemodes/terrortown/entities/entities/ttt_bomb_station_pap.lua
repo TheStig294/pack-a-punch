@@ -22,22 +22,22 @@ end
 
 if CLIENT then
     net.Receive("TTTPAPBombStationPopup", function()
-        local directedByMaterial = Material("ttt_pack_a_punch/bomb_station/directedby1.png")
+        local directedByMaterial = Material("ttt_pack_a_punch/directed_by_station/directedby1.png")
 
         timer.Simple(0.93, function()
-            directedByMaterial = Material("ttt_pack_a_punch/bomb_station/directedby2.png")
+            directedByMaterial = Material("ttt_pack_a_punch/directed_by_station/directedby2.png")
         end)
 
         timer.Simple(4.16, function()
-            directedByMaterial = Material("ttt_pack_a_punch/bomb_station/directedby3.png")
+            directedByMaterial = Material("ttt_pack_a_punch/directed_by_station/directedby3.png")
         end)
 
         timer.Simple(7.49, function()
-            directedByMaterial = Material("ttt_pack_a_punch/bomb_station/directedby4.png")
+            directedByMaterial = Material("ttt_pack_a_punch/directed_by_station/directedby4.png")
         end)
 
-        surface.PlaySound("ttt_pack_a_punch/bomb_station/directed_by.mp3")
-        surface.PlaySound("ttt_pack_a_punch/bomb_station/directed_by.mp3")
+        surface.PlaySound("ttt_pack_a_punch/directed_by_station/directed_by.mp3")
+        surface.PlaySound("ttt_pack_a_punch/directed_by_station/directed_by.mp3")
 
         hook.Add("HUDPaintBackground", "TTTPAPBombStationPopup", function()
             surface.SetDrawColor(255, 255, 255)

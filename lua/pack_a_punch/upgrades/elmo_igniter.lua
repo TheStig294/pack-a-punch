@@ -6,7 +6,7 @@ UPGRADE.desc = "Displays the burning elmo meme while held"
 
 function UPGRADE:Apply(SWEP)
     if SERVER then return end
-    SWEP.ElmoMaterial = Material("ttt_pack_a_punch/arsonist_igniter/elmoburn")
+    SWEP.ElmoMaterial = Material("ttt_pack_a_punch/elmo_igniter/elmoburn")
 
     function SWEP:DrawHUDBackground()
         surface.SetAlphaMultiplier(0.1)

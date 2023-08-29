@@ -42,12 +42,12 @@ function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = ammoCvar:GetInt()
     SWEP.Primary.DefaultClip = ammoCvar:GetInt()
     SWEP.Primary.ClipMax = ammoCvar:GetInt()
-    SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+    SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/honkhonk.mp3")
     SWEP:SetHoldType(SWEP.HoldType)
 
     for _, model in ipairs(yogsModels) do
         if util.IsValidModel(model) then
-            SWEP.Sound = Sound("ttt_pack_a_punch/car_gun/trucking_tuesday.mp3")
+            SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3")
             break
         end
     end
@@ -96,7 +96,7 @@ function UPGRADE:Apply(SWEP)
                             truck.SWEP = self
                             truck.Target = victim
 
-                            if self.Sound == "ttt_pack_a_punch/car_gun/trucking_tuesday.mp3" then
+                            if self.Sound == "ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3" then
                                 truck.ShowPopup = true
                             end
 

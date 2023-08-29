@@ -153,7 +153,7 @@ function ENT:StartTouch(ent)
         end
 
         ent:TakeDamageInfo(dmg)
-        ent:EmitSound("ttt_pack_a_punch/car_gun/honkhonk.mp3")
+        ent:EmitSound("ttt_pack_a_punch/truck_gun/honkhonk.mp3")
 
         -- If no yogscast playermodel is installed, don't show the trucking tuesday popup because they'll have no idea what's going on lol
         -- Else have 1/2 a chance to show the popup (only show if the trucking tuesday intro sound was selected as the shoot sound)
@@ -166,7 +166,7 @@ end
 
 if CLIENT then
     net.Receive("TTTPAPCarGunVictimPopup", function()
-        local mat = Material("ttt_pack_a_punch/car_gun/trucking_tuesday.png")
+        local mat = Material("ttt_pack_a_punch/truck_gun/trucking_tuesday.png")
         local width = ScrW() / 2
         local height = ScrH() / 2
         local x = ScrW() / 4

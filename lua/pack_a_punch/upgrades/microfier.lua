@@ -59,7 +59,7 @@ function UPGRADE:Apply(SWEP)
                 owner.OGMinifierHeight = {owner:GetViewOffset().z, owner:GetViewOffsetDucked().z}
             end
 
-            owner:SendLua("surface.PlaySound(\"ttt_pack_a_punch/minifier/shrink.ogg\")")
+            owner:SendLua("surface.PlaySound(\"ttt_pack_a_punch/microfier/shrink.ogg\")")
             owner:SetModelScale(scaleCvar:GetFloat(), 1)
             owner:SetGravity(1 + scaleCvar:GetFloat())
             self.minified = true
@@ -101,7 +101,7 @@ function UPGRADE:Apply(SWEP)
                 targetViewHeightDucked = owner.OGMinifierHeight[2]
             end
 
-            owner:SendLua("surface.PlaySound(\"ttt_pack_a_punch/minifier/unshrink.ogg\")")
+            owner:SendLua("surface.PlaySound(\"ttt_pack_a_punch/microfier/unshrink.ogg\")")
             owner:SetModelScale(1, 1)
             owner:SetGravity(1)
             self.minified = false
