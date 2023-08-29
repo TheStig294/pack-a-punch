@@ -7,17 +7,17 @@ UPGRADE.desc = "You pack-a-punched yourself!\nSpeed, jump and health boost!"
 UPGRADE.convars = {
     {
         name = "pap_self_pack_a_punch_speed",
-        type = float,
+        type = "float",
         decimals = 1
     },
     {
         name = "pap_self_pack_a_punch_jump",
-        type = float,
+        type = "float",
         decimals = 1
     },
     {
         name = "pap_self_pack_a_punch_health",
-        type = float,
+        type = "float",
         decimals = 1
     }
 }
@@ -28,21 +28,25 @@ local jumpMult = CreateConVar("pap_self_pack_a_punch_jump", "1.5", {FCVAR_ARCHIV
 
 local healthMult = CreateConVar("pap_self_pack_a_punch_health", "1.2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health multiplier", 1, 5)
 
-local speedScale = speedMult:GetFloat()
-local jumpScale = jumpMult:GetFloat()
-local healthScale = healthMult:GetFloat()
+local oldStats = {}
 
 function UPGRADE:Apply(SWEP)
-    self:SetHoldType(self.HoldType)
+    local speedScale = speedMult:GetFloat()
+    local jumpScale = jumpMult:GetFloat()
+    local healthScale = healthMult:GetFloat()
+    SWEP:SetHoldType(SWEP.HoldType)
 
     timer.Simple(0.1, function()
-        local owner = self:GetOwner()
+        local owner = SWEP:GetOwner()
 
         if IsValid(owner) and owner:IsPlayer() then
-            self.HolsterPAPOwner = owner
+            SWEP.HolsterPAPOwner = owner
+            oldStats[owner] = {}
+            oldStats[owner].jump = owner:GetJumpPower()
+            oldStats[owner].health = owner:GetMaxHealth()
+            oldStats[owner].movement = owner:GetLaggedMovementValue()
             owner:SetMaterial(TTTPAP.camo)
-            owner:SetFOV(0)
-            owner:SetFOV(owner:GetFOV() * speedScale)
+            owner:SetFOV(90, 0.5)
             owner:SetJumpPower(owner:GetJumpPower() * jumpScale)
             owner:SetHealth(owner:Health() * healthScale)
 
@@ -59,15 +63,25 @@ function UPGRADE:Apply(SWEP)
         if IsValid(owner) and owner:IsPlayer() then
             owner:SetMaterial("")
             owner:SetFOV(0)
-            owner:SetJumpPower(owner:GetJumpPower() / jumpScale)
-            owner:SetHealth(owner:Health() / healthScale)
+
+            if oldStats[owner] then
+                owner:SetJumpPower(oldStats[owner].jump)
+                owner:SetHealth(owner:Health() / owner:GetMaxHealth() * oldStats[owner].health)
+            end
 
             if SERVER then
                 owner:ChatPrint("Your pack-a-punch buff has been removed")
-                owner:SetMaxHealth(owner:GetMaxHealth() / healthScale)
-                owner:SetLaggedMovementValue(owner:GetLaggedMovementValue() / speedScale)
+
+                if oldStats[owner] then
+                    owner:SetMaxHealth(oldStats[owner].health)
+                    owner:SetLaggedMovementValue(oldStats[owner].movement)
+                end
             end
         end
+    end
+
+    function SWEP:ShouldDrawViewModel()
+        return false
     end
 end
 
@@ -79,6 +93,8 @@ function UPGRADE:Reset()
                 ply:Give("weapon_ttt_unarmed")
             end
         end
+
+        table.Empty(oldStats)
     end
 end
 
