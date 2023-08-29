@@ -17,6 +17,10 @@ function ENT:Initialize()
 
     self:SetMaterial(TTTPAP.camo)
     self:SetModelScale(5, 0.0001)
+    -- Fixing the grenade loosing all momentum after updating its hitbox after increasing its size and updating its physbox using Activate()
+    self.OldVelocity = self:GetVelocity()
+    self:Activate()
+    self:SetVelocity(self.OldVelocity)
 
     return self.BaseClass.Initialize(self)
 end
