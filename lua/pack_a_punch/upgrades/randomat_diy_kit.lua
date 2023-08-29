@@ -42,7 +42,7 @@ function UPGRADE:Apply(SWEP)
                 if IsFirstTimePredicted() then
                     local owner = self:GetOwner()
                     Randomat:SilentTriggerEvent("choose", owner)
-                    DamageLog("RANDOMAT: " .. owner:Nick() .. " [" .. owner:GetRoleString() .. "] used his Randomat")
+                    DamageLog("RANDOMAT: " .. owner:Nick() .. " [" .. owner:GetRoleString() .. "] used their Randomat")
                     self:SetNextPrimaryFire(CurTime() + 10)
                     self:Remove()
                 end
@@ -54,13 +54,13 @@ function UPGRADE:Apply(SWEP)
                     local owner = self:GetOwner()
                     Randomat:TriggerRandomEvent(owner)
 
-                    timer.Create("TTTPAPRandomat1.0RandomEvents" .. self:EntIndex(), 5, 4, function()
+                    timer.Create("TTTPAPRandomat1.0RandomEvents" .. owner:SteamID64(), 5, 4, function()
                         if IsValid(owner) then
                             Randomat:TriggerRandomEvent(owner)
                         end
                     end)
 
-                    DamageLog("RANDOMAT: " .. owner:Nick() .. " [" .. owner:GetRoleString() .. "] used his Randomat")
+                    DamageLog("RANDOMAT: " .. owner:Nick() .. " [" .. owner:GetRoleString() .. "] used their Randomat")
                     self:SetNextPrimaryFire(CurTime() + 10)
                     self:Remove()
                 end
