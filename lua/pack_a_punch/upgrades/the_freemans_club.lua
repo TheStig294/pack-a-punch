@@ -2,15 +2,15 @@ local UPGRADE = {}
 UPGRADE.id = "the_freemans_club"
 UPGRADE.class = "weapon_zm_improvised"
 UPGRADE.name = "The Freeman's Club"
-UPGRADE.desc = "Zero push cooldown, greatly increased damage!"
+UPGRADE.desc = "Zero push cooldown, x2 swing speed!"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.Damage = 40
-    SWEP.Primary.Delay = 0.5
+    SWEP.Primary.Delay = 0.25
+    SWEP.Secondary.Delay = 0.5
     local sound_single = Sound("Weapon_Crowbar.Single")
 
     function SWEP:SecondaryAttack()
-        self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+        self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay)
         self:SetNextSecondaryFire(CurTime() + 0.1)
 
         if self:GetOwner().LagCompensation then
@@ -38,7 +38,7 @@ function UPGRADE:Apply(SWEP)
 
             self:EmitSound(sound_single)
             self:SendWeaponAnim(ACT_VM_HITCENTER)
-            self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+            self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
         end
 
         if self:GetOwner().LagCompensation then
