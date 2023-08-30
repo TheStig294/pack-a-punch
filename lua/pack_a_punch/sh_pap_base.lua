@@ -92,6 +92,7 @@ local function PAPErrorMessage(ply)
     ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded, try a different one\nIf you spent a credit, it was refunded")
 end
 
+-- Preventing the Pack-a-Punch from being bought when it shouldn't be
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     if is_item and math.floor(equipment) == EQUIP_PAP then
         local SWEP = ply:GetActiveWeapon()
@@ -104,20 +105,15 @@ hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, i
             ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
 
             return false
-        elseif ConVarExists("ttt_pap_" .. class) and not GetConVar("ttt_pap_" .. class):GetBool() then
-            -- Preventing purchase if the current weapon has had its upgrade disabled via convar
-            PAPErrorMessage(ply)
-
-            return false
         elseif not upgrades and (not SWEP.AutoSpawnable or not GetConVar("ttt_pap_apply_generic_upgrades"):GetBool()) then
             -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
             PAPErrorMessage(ply)
 
             return false
         elseif upgrades then
-            -- Preventing purchase if all upgrades' condition functions return false
+            -- Preventing purchase if all upgrades' condition functions return false or all have their convars disabled
             for id, UPGRADE in pairs(upgrades) do
-                if UPGRADE:Condition() then return end
+                if UPGRADE:Condition() and GetConVar("ttt_pap_" .. class .. "_" .. UPGRADE.id):GetBool() then return end
             end
 
             PAPErrorMessage(ply)
@@ -274,7 +270,7 @@ if CLIENT then
             chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
         end
 
-        -- Add upgrade table to the weapon entity itself for easy reference
+        -- Upgraded weapon flag/identification
         SWEP.PAPUpgrade = UPGRADE
     end)
 
@@ -314,6 +310,7 @@ if CLIENT then
     end)
 end
 
+-- After TTTCanOrderEquipment is called and the weapon is in fact upgradable, find an upgrade for the weapon and apply it!
 local function OrderPAP(ply)
     local SWEP = ply:GetActiveWeapon()
 
@@ -404,9 +401,10 @@ local function OrderPAP(ply)
     end)
 end
 
+-- Debug command for testing upgrades
 concommand.Add("pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
 
--- Making the passive item do something on purchase
+-- Making the Pack-a-Punch passive item do something on purchase
 hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)
     if equipment ~= EQUIP_PAP then return end
     OrderPAP(ply)
