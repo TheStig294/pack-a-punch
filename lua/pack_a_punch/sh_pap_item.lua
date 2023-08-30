@@ -152,7 +152,7 @@ hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
 end)
 
 -- Applies all pack-a-punch effects
-local function ApplyPAP(SWEP, UPGRADE)
+function TTTPAP:ApplyPAP(SWEP, UPGRADE, oldClip)
     -- Apply the upgrade function!
     UPGRADE:Apply(SWEP)
     table.insert(TTTPAP.activeUpgrades, UPGRADE)
@@ -185,11 +185,12 @@ local function ApplyPAP(SWEP, UPGRADE)
     -- Ammo
     if isnumber(SWEP.Primary.ClipSize) and isnumber(SWEP.Primary.ClipMax) and isnumber(SWEP.Primary.DefaultClip) then
         local oldClipSize = SWEP.Primary.ClipSize
+        oldClip = oldClip or SWEP:Clip1()
         SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
         SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
         SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
         -- Set ammo relative to leftover ammo
-        SWEP:SetClip1(SWEP.PAPOldClip / oldClipSize * SWEP.Primary.ClipSize)
+        SWEP:SetClip1(oldClip / oldClipSize * SWEP.Primary.ClipSize)
     end
 
     -- Recoil
@@ -311,7 +312,7 @@ if CLIENT then
 end
 
 -- After TTTCanOrderEquipment is called and the weapon is in fact upgradable, find an upgrade for the weapon and apply it!
-local function OrderPAP(ply)
+function TTTPAP:OrderPAP(ply)
     local SWEP = ply:GetActiveWeapon()
 
     if not IsValid(SWEP) then
@@ -385,27 +386,25 @@ local function OrderPAP(ply)
                     ply:SelectWeapon(classname)
                 end
 
-                -- The gun's current clip is needed to scale it properly if there's an ammo upgrade
-                SWEP.PAPOldClip = oldClip
                 -- Apply the upgrade!
-                ApplyPAP(SWEP, UPGRADE)
+                TTTPAP:ApplyPAP(SWEP, UPGRADE)
             end)
         else
             if not UPGRADE.noSelectWep then
                 ply:SelectWeapon(classname)
             end
 
-            SWEP.PAPOldClip = oldClip
-            ApplyPAP(SWEP, UPGRADE)
+            -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
+            TTTPAP:ApplyPAP(SWEP, UPGRADE, oldClip)
         end
     end)
 end
 
 -- Debug command for testing upgrades
-concommand.Add("pap_order", OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
+concommand.Add("pap_order", TTTPAP.OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
 
 -- Making the Pack-a-Punch passive item do something on purchase
 hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)
     if equipment ~= EQUIP_PAP then return end
-    OrderPAP(ply)
+    TTTPAP:OrderPAP(ply)
 end)
