@@ -401,7 +401,9 @@ function TTTPAP:OrderPAP(ply)
 end
 
 -- Debug command for testing upgrades
-concommand.Add("pap_order", TTTPAP.OrderPAP, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
+concommand.Add("pap_order", function(ply, _, _, _)
+    TTTPAP:OrderPAP(ply)
+end, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
 
 -- Making the Pack-a-Punch passive item do something on purchase
 hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)
