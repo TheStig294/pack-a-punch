@@ -1,17 +1,17 @@
 local UPGRADE = {}
-UPGRADE.id = "special_innocent_defib"
+UPGRADE.id = "defib_special"
 UPGRADE.class = "weapon_med_defib"
 UPGRADE.name = "Special Innocent Defib"
 UPGRADE.desc = "Turns innocents into non-vanilla innocents!"
 
 UPGRADE.convars = {
     {
-        name = "pap_special_innocent_defib_can_become_paramedic",
+        name = "pap_defib_special_can_become_paramedic",
         type = "bool"
     }
 }
 
-local canBecomeMedCvar = CreateConVar("pap_special_innocent_defib_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
+local canBecomeMedCvar = CreateConVar("pap_defib_special_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
 function UPGRADE:Apply()
     if SERVER then
