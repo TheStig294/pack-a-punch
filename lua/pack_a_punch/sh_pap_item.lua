@@ -152,7 +152,8 @@ hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
 end)
 
 -- Applies all pack-a-punch effects
-function TTTPAP:ApplyPAP(SWEP, UPGRADE, oldClip)
+function TTTPAP:ApplyPAP(SWEP, UPGRADE, noDesc, oldClip)
+    if not IsValid(SWEP) or not IsValid(SWEP:GetOwner()) then return end
     -- Apply the upgrade function!
     UPGRADE:Apply(SWEP)
     table.insert(TTTPAP.activeUpgrades, UPGRADE)
@@ -223,6 +224,7 @@ function TTTPAP:ApplyPAP(SWEP, UPGRADE, oldClip)
     net.WriteString(UPGRADE.id)
     -- Generic upgrades do not have a weapon class defined
     net.WriteString(UPGRADE.class or "")
+    net.WriteBool(noDesc)
     net.Broadcast()
 end
 
@@ -245,6 +247,7 @@ if CLIENT then
         SWEP.Primary.Automatic = net.ReadBool()
         local upgradeID = net.ReadString()
         local upgradeClass = net.ReadString()
+        local noDesc = net.ReadBool()
         local UPGRADE
 
         -- Generic upgrades do not have a weapon class defined
@@ -267,7 +270,7 @@ if CLIENT then
         end
 
         -- Description
-        if UPGRADE.desc then
+        if UPGRADE.desc and not noDesc and LocalPlayer():HasWeapon(SWEP:GetClass()) then
             chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
         end
 
@@ -395,7 +398,7 @@ function TTTPAP:OrderPAP(ply)
             end
 
             -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
-            TTTPAP:ApplyPAP(SWEP, UPGRADE, oldClip)
+            TTTPAP:ApplyPAP(SWEP, UPGRADE, false, oldClip)
         end
     end)
 end
