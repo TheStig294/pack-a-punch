@@ -3,9 +3,9 @@ UPGRADE.id = "the_freemans_club"
 UPGRADE.class = "weapon_zm_improvised"
 UPGRADE.name = "The Freeman's Club"
 UPGRADE.desc = "Zero push cooldown, x2 swing speed!"
+UPGRADE.firerateMult = 2
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.Delay = 0.25
     SWEP.Secondary.Delay = 0.5
     local sound_single = Sound("Weapon_Crowbar.Single")
 

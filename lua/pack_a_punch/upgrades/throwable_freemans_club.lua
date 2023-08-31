@@ -2,12 +2,10 @@ local UPGRADE = {}
 UPGRADE.id = "throwable_freemans_club"
 UPGRADE.class = "weapon_kil_crowbar"
 UPGRADE.name = "Throwable Freeman's Club"
-UPGRADE.desc = "Greatly increased melee damage,\nfirst throw kills in 1-shot, then reverts to an ordinary killer crowbar"
+UPGRADE.desc = "x2 swing speed, first throw kills in 1-shot,\nthen reverts to an ordinary killer crowbar"
+UPGRADE.firerateMult = 2
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.Damage = 40
-    SWEP.Primary.Delay = 0.5
-
     function SWEP:Throw()
         if not SERVER then return end
         self:ShootEffects()
