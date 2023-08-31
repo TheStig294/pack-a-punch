@@ -7,7 +7,7 @@ UPGRADE.desc = "Massive push power!"
 function UPGRADE:Apply(SWEP)
     if SERVER then
         function SWEP:GetGrenadeName()
-            return "ttt_confgrenade_proj_pap"
+            return "ttt_pap_bristol_pusher_nade"
         end
     end
 end

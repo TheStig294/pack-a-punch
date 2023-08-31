@@ -16,7 +16,7 @@ function UPGRADE:Apply(SWEP)
             local vang = ply:GetAimVector()
             local vvel = ply:GetVelocity()
             local vthrow = vvel + vang * 200
-            local bomb = ents.Create("ttt_bomb_station_pap")
+            local bomb = ents.Create("ttt_pap_directed_by_station")
 
             if IsValid(bomb) then
                 bomb:SetPos(vsrc + vang * 10)

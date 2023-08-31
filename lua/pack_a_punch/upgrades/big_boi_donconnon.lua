@@ -10,7 +10,7 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         -- Spawn PAP ent
-        local doncon = ents.Create("doncmk2_en_pap")
+        local doncon = ents.Create("ttt_pap_big_boi_donconnon")
         if not IsValid(doncon) then return end
         doncon:SetPos(owner:EyePos() + owner:GetAimVector() * 200)
         doncon:SetAngles(owner:EyeAngles())

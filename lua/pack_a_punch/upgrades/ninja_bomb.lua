@@ -7,7 +7,7 @@ UPGRADE.desc = "Very large smoke cloud"
 function UPGRADE:Apply(SWEP)
     if SERVER then
         function SWEP:GetGrenadeName()
-            return "ttt_smokegrenade_proj_pap"
+            return "ttt_pap_ninja_bomb_nade"
         end
     end
 end

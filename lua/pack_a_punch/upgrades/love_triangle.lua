@@ -33,7 +33,7 @@ function UPGRADE:Apply(SWEP)
 
                     local charge = self:GetNextSecondaryFire()
                     charge = math.Clamp(CurTime() - charge, 0, 1)
-                    local arrow = ents.Create("ttt_cup_arrow_pap")
+                    local arrow = ents.Create("ttt_pap_love_triangle_arrow")
                     arrow:SetOwner(owner)
                     arrow:SetPos(pos)
                     arrow:SetAngles(ang)

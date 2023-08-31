@@ -89,7 +89,7 @@ function UPGRADE:Apply(SWEP)
 
                         timer.Simple(0, function()
                             victim:Lock()
-                            local truck = ents.Create("ent_ttt_car_gun_pap")
+                            local truck = ents.Create("ttt_pap_truck_gun_truck")
                             truck:SetPos(owner:EyePos() + owner:GetAimVector() * 100)
                             truck:SetAngles(owner:EyeAngles())
                             truck:SetOwner(owner)

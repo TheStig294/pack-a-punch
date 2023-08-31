@@ -7,7 +7,7 @@ UPGRADE.desc = "Larger explosion, fire lasts a very long time!"
 function UPGRADE:Apply(SWEP)
     if SERVER then
         function SWEP:GetGrenadeName()
-            return "ttt_firegrenade_proj_pap"
+            return "ttt_pap_forever_fire_nade"
         end
     end
 end

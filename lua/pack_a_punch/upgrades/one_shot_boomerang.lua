@@ -33,7 +33,7 @@ function UPGRADE:Apply(SWEP)
         self:EmitSound("weapons/slam/throw.wav")
 
         if SERVER then
-            local boomerang = ents.Create("ent_boomerangClose_randomat_pap")
+            local boomerang = ents.Create("ttt_pap_one_shot_boomerang")
             boomerang:SetAngles(Angle(20, 0, 90))
             boomerang:SetPos(owner:GetShootPos())
             boomerang:SetOwner(owner)
