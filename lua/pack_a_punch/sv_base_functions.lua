@@ -2,10 +2,22 @@
 -- Server-side pack-a-punch functions 
 -- 
 -- Debug command for testing upgrades, only works on a peer-to-peer server for the server host if sv_cheats is on
-concommand.Add("pap_order", function(ply, _, _, _)
-    -- Skip upgrade is valid checks as this is a debug command
-    TTTPAP:OrderPAP(ply, true)
-end, nil, "Simulates ordering the Pack-a-Punch item", FCVAR_CHEAT)
+concommand.Add("pap_order", function(ply, _, _, argsStr)
+    -- Searching for the input bot player name number
+    if argsStr ~= "" then
+        for _, p in ipairs(player.GetBots()) do
+            if p:Nick() == "Bot" .. argsStr then
+                -- Skip upgrade is valid checks as this is a debug command
+                TTTPAP:OrderPAP(p, true)
+
+                return
+            end
+        end
+    else
+        -- Skip upgrade is valid checks as this is a debug command
+        TTTPAP:OrderPAP(ply, true)
+    end
+end, nil, "Simulates ordering the Pack-a-Punch item, searches for the input bot player name number if argument given, e.g. pap_order 01 orders for Bot01", FCVAR_CHEAT)
 
 -- Finds an upgrade for the player's held weapon and applies it!
 function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
@@ -22,7 +34,8 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         return
     end
 
-    ply:EmitSound("ttt_pack_a_punch/upgrade.mp3")
+    -- Initial upgrade sound is only heard for the player who bought the Pack-a-Punch
+    ply:SendLua("surface.PlaySound(\"ttt_pack_a_punch/upgrade_begin.mp3\")")
     local classname = SWEP:GetClass()
     local oldClip = SWEP:Clip1()
     ply:StripWeapon(classname)
@@ -36,6 +49,8 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         end
 
         SWEP = ply:Give(classname)
+        -- The final "ding!" sound is heard for anyone nearby
+        ply:EmitSound("ttt_pack_a_punch/upgrade_ding.mp3")
     end)
 
     timer.Simple(3.5, function()
