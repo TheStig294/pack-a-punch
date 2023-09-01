@@ -17,13 +17,20 @@ local function AddClient(fil)
     end
 end
 
+-- Base functions
 AddServer("pack_a_punch/sh_base_functions.lua")
 AddClient("pack_a_punch/sh_base_functions.lua")
+AddServer("pack_a_punch/sv_base_functions.lua")
+AddClient("pack_a_punch/cl_base_functions.lua")
+-- UPGRADE object
 AddServer("pack_a_punch/sh_upgrade_metatable.lua")
 AddClient("pack_a_punch/sh_upgrade_metatable.lua")
+-- Shop passive item
 AddServer("pack_a_punch/sh_pap_item.lua")
 AddClient("pack_a_punch/sh_pap_item.lua")
-AddClient("pack_a_punch/cl_pap_f1_settings_tab.lua")
+-- F1 menu tab
+AddClient("pack_a_punch/cl_f1_settings_tab.lua")
+-- Weapon upgrades
 local genericFiles, _ = file.Find("pack_a_punch/generic_upgrades/*.lua", "LUA")
 
 for _, fil in ipairs(genericFiles) do
