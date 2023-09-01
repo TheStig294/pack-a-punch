@@ -1,18 +1,18 @@
 local UPGRADE = {}
-UPGRADE.id = "the_shrink_ray"
+UPGRADE.id = "shrink_ray"
 UPGRADE.class = "weapon_ttt_minifier"
-UPGRADE.name = "The Shrink Ray"
+UPGRADE.name = "Shrink Ray"
 UPGRADE.desc = "Stand next to something and left-click to shrink it!"
 
 UPGRADE.convars = {
     {
-        name = "pap_the_shrink_ray_scale",
+        name = "pap_shrink_ray_scale",
         type = "float",
         decimal = 2
     }
 }
 
-local scaleCvar = CreateConVar("pap_the_shrink_ray_scale", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Shrinking scale multiplier", 0.1, 1)
+local scaleCvar = CreateConVar("pap_shrink_ray_scale", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Shrinking scale multiplier", 0.1, 1)
 
 function UPGRADE:Apply(SWEP)
     SWEP.ShrinkScale = scaleCvar:GetFloat()
