@@ -41,8 +41,14 @@ net.Receive("TTTPAPApply", function()
     end
 
     -- Description
-    if UPGRADE.desc and not noDesc and LocalPlayer():HasWeapon(SWEP:GetClass()) then
-        chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
+    if UPGRADE.desc and not noDesc then
+        -- Need to check this is the player actually holding the weapon!
+        for _, wep in ipairs(LocalPlayer():GetWeapons()) do
+            if wep == SWEP then
+                chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
+                break
+            end
+        end
     end
 
     -- Upgraded flag
