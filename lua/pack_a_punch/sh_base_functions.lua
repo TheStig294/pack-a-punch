@@ -144,3 +144,15 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
 
     return true
 end
+
+-- Credit to Malivil for this force-switch hook for TFA weapons
+-- If we're switching from a TFA weapon to the holstered when upgrading a weapon, JUST DO IT!
+-- The holster animation causes a delay where the client is not allowed to switch weapons
+-- This means if we tell the user to select a weapon and then block the user from switching weapons immediately after,
+-- the holster animation delay will cause the player to not select the weapon we told them to
+hook.Add("TFA_PreHolster", "TTTPAPUpgradeBlockTFAAutoWeaponSwitch", function(wep, target)
+    if not IsValid(wep) or not IsValid(target) then return end
+    local owner = wep:GetOwner()
+    if not IsPlayer(owner) or not owner:GetNWBool("TTTPAPIsUpgrading") then return end
+    if WEPS.GetClass(target) == "weapon_ttt_unarmed" then return true end
+end)

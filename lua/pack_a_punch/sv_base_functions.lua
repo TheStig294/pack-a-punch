@@ -19,6 +19,16 @@ concommand.Add("pap_order", function(ply, _, _, argsStr)
     end
 end, nil, "Simulates ordering the Pack-a-Punch item, searches for the input bot player name number if argument given, e.g. pap_order 01 orders for Bot01", FCVAR_CHEAT)
 
+-- Preventing a player from using a weapon while they are Pack-a-Punching a weapon
+hook.Add("PlayerSwitchWeapon", "TTTPAPPreventUpgradingSwitch", function(ply, _, newWep)
+    if ply:GetNWBool("TTTPAPIsUpgrading") and ply:HasWeapon("weapon_ttt_unarmed") and IsValid(newWep) and newWep:GetClass() ~= "weapon_ttt_unarmed" then
+        -- This hook is not called for ply:SelectWeapon(), so we're not creating an infinite loop here
+        ply:SelectWeapon("weapon_ttt_unarmed")
+
+        return true
+    end
+end)
+
 -- Finds an upgrade for the player's held weapon and applies it!
 function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     if not IsValid(ply) or not ply:IsPlayer() then return end
@@ -39,6 +49,13 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     local classname = SWEP:GetClass()
     local oldClip = SWEP:Clip1()
     ply:StripWeapon(classname)
+    -- Prevent the player from using a weapon while Pack-a-Punching
+    ply:SetNWBool("TTTPAPIsUpgrading", true)
+    ply:SelectWeapon("weapon_ttt_unarmed")
+
+    timer.Create("TTTPAPPreventWeaponSwitch", 0.1, 34, function()
+        ply:SelectWeapon("weapon_ttt_unarmed")
+    end)
 
     timer.Simple(3.4, function()
         for _, w in ipairs(ply:GetWeapons()) do
@@ -49,11 +66,12 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         end
 
         SWEP = ply:Give(classname)
-        -- The final "ding!" sound is heard for anyone nearby
-        ply:EmitSound("ttt_pack_a_punch/upgrade_ding.mp3")
+        ply:SetNWBool("TTTPAPIsUpgrading", false)
     end)
 
     timer.Simple(3.5, function()
+        -- The final "ding!" sound is heard for anyone nearby
+        ply:EmitSound("ttt_pack_a_punch/upgrade_ding.mp3")
         if not ply:HasWeapon(classname) then return end
 
         if not IsValid(SWEP) then
