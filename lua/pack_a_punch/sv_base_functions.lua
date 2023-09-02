@@ -153,7 +153,7 @@ end)
 util.AddNetworkString("TTTPAPApply")
 
 function TTTPAP:ApplyPAP(SWEP, UPGRADE, noDesc, oldClip)
-    if not IsValid(SWEP) or not IsValid(SWEP:GetOwner()) then return end
+    if not IsValid(SWEP) then return end
     -- Upgrade function (Where all the magic happens...)
     UPGRADE:Apply(SWEP)
     table.insert(TTTPAP.activeUpgrades, UPGRADE)
