@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "flinging_spin_attack"
 UPGRADE.class = "weapon_ttt_whoa_randomat"
 UPGRADE.name = "Flinging Spin Attack"
-UPGRADE.desc = "Spun players get flung away!"
+UPGRADE.desc = "Spun players get flung away! (While at or above full health)"
 
 function UPGRADE:Apply(SWEP)
     local flingSound = Sound("ttt_pack_a_punch/flinging_spin_attack/fling.mp3")
@@ -14,8 +14,8 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(attacker) or not attacker:IsPlayer() then return end
         local inflictor = dmg:GetInflictor()
         if not IsValid(inflictor) or inflictor:GetClass() ~= self.class or not inflictor.PAPUpgrade then return end
-        -- Only fling when the player is about to die
-        if ply:Health() > 10 then return end
+        -- Only fling when the player is at or above max health
+        if ply:Health() >= ply:GetMaxHealth() then return end
 
         if IsValid(attacker) then
             ply:EmitSound(flingSound)
