@@ -100,35 +100,13 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
             break
         end
 
-        -- Give the player a completely new base weapon instead if one is specified
-        if UPGRADE.newClass then
-            ply:StripWeapon(classname)
-            classname = UPGRADE.newClass
-            SWEP = ply:Give(classname)
-
-            timer.Simple(0.1, function()
-                if not ply:HasWeapon(classname) then return end
-
-                if not IsValid(SWEP) then
-                    SWEP = ply:GetWeapon(classname)
-                end
-
-                -- If we don't want the player to hold the weapon straight away, block it
-                if not UPGRADE.noSelectWep then
-                    ply:SelectWeapon(classname)
-                end
-
-                -- Apply the upgrade!
-                TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-            end)
-        else
-            if not UPGRADE.noSelectWep then
-                ply:SelectWeapon(classname)
-            end
-
-            -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
-            TTTPAP:ApplyUpgrade(SWEP, UPGRADE, false, oldClip)
+        if not UPGRADE.noSelectWep then
+            ply:SelectWeapon(classname)
         end
+
+        -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
+        UPGRADE.oldClip = oldClip
+        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end)
 end
 
@@ -152,8 +130,38 @@ end)
 -- Applies all pack-a-punch effects
 util.AddNetworkString("TTTPAPApply")
 
-function TTTPAP:ApplyUpgrade(SWEP, UPGRADE, noDesc, oldClip)
+function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     if not IsValid(SWEP) then return end
+
+    -- Give the player a completely new base weapon instead if one is specified
+    if UPGRADE.newClass and not UPGRADE.skipNewClass then
+        local owner = SWEP:GetOwner()
+
+        if IsValid(owner) then
+            owner:StripWeapon(UPGRADE.class)
+            SWEP = owner:Give(UPGRADE.newClass)
+
+            timer.Simple(0.1, function()
+                if not owner:HasWeapon(UPGRADE.newClass) then return end
+
+                if not IsValid(SWEP) then
+                    SWEP = owner:GetWeapon(UPGRADE.newClass)
+                end
+
+                -- If we don't want the player to hold the weapon straight away, block it
+                if not UPGRADE.noSelectWep then
+                    owner:SelectWeapon(UPGRADE.newClass)
+                end
+            end)
+        end
+
+        -- Apply the upgrade!
+        UPGRADE.skipNewClass = true
+        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+
+        return
+    end
+
     -- Upgrade function (Where all the magic happens...)
     UPGRADE:Apply(SWEP)
     table.insert(TTTPAP.activeUpgrades, UPGRADE)
@@ -190,7 +198,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE, noDesc, oldClip)
     -- Ammo
     if isnumber(SWEP.Primary.ClipSize) and isnumber(SWEP.Primary.ClipMax) and isnumber(SWEP.Primary.DefaultClip) then
         local oldClipSize = SWEP.Primary.ClipSize
-        oldClip = oldClip or SWEP:Clip1()
+        local oldClip = UPGRADE.oldClip or SWEP:Clip1()
         SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
         SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
         SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
@@ -228,6 +236,6 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE, noDesc, oldClip)
     net.WriteString(UPGRADE.id)
     -- Generic upgrades do not have a weapon class defined
     net.WriteString(UPGRADE.class or "")
-    net.WriteBool(noDesc)
+    net.WriteBool(UPGRADE.noDesc or false)
     net.Broadcast()
 end
