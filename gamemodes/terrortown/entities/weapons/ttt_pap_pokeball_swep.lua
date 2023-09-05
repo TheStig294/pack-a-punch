@@ -32,7 +32,7 @@ function SWEP:PrimaryAttack()
     -- self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     local TraceResult = owner:GetEyeTrace()
     local pokeball = ents.Create("ttt_pap_pokeball")
-    pokeball:SetPos(TraceResult.HitPos + Vector(0, 0, 25))
+    pokeball:SetPos(TraceResult.HitPos + Vector(0, 0, 10))
     pokeball:Spawn()
 end
 
