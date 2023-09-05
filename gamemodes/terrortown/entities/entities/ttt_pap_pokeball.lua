@@ -4,7 +4,9 @@ ENT.PrintName = "Pokeball"
 ENT.AutomaticFrameAdvance = true
 ENT.ThrowStrength = 1000
 ENT.ThrowDist = 100
-ENT.MinCatchChance = 50
+ENT.MinCatchChance = 100
+ENT.AllowSelfCapture = true
+ENT.AllowGlobalPickup = true
 
 function ENT:Initialize()
    if SERVER then
@@ -27,16 +29,21 @@ end
 
 if SERVER then
    function ENT:Use(activator)
-      if IsValid(activator) and activator:IsPlayer() then
-         local SWEP = activator:Give("weapon_mhl_badge")
+      if not IsValid(activator) or not activator:IsPlayer() then return end
+      -- Only allow the pokeball to be picked up if there is a player inside and they are the thrower
+      if not self.AllowGlobalPickup and (not IsValid(self.CaughtPly) or activator ~= self.Thrower) then return end
+      local SWEP = activator:Give("weapon_mhl_badge")
 
-         timer.Simple(0.1, function()
-            local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
-            UPGRADE.noDesc = true
-            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-            self:Remove()
-         end)
-      end
+      timer.Simple(0.1, function()
+         -- Turn the weapon into the pokeball again
+         local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
+         UPGRADE.noDesc = true
+         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+         -- Move the caught player to spectating the pokeball
+         SWEP.CaughtPly = self.CaughtPly
+         self.CaughtPly:SpectateEntity(activator)
+         self:Remove()
+      end)
    end
 
    function ENT:Think()
@@ -51,7 +58,7 @@ if SERVER then
       if not IsValid(ply) or not ply:IsPlayer() then return end
       local owner = self.Thrower
       -- -- Prevent the player from catching themselves lol
-      -- if not IsValid(owner) or ply == owner then return end
+      if not self.AllowSelfCapture and (not IsValid(owner) or ply == owner) then return end
       -- Try to catch the player!
       self:ResetSequence("open")
       self:EmitSound("ttt_pack_a_punch/pokeball/catch.mp3")
@@ -110,8 +117,12 @@ if SERVER then
             return
          else
             -- Capture success!
-            self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
+            self:CaptureSuccess()
          end
       end)
+   end
+
+   function ENT:CaptureSuccess()
+      self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
    end
 end

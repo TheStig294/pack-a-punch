@@ -11,7 +11,7 @@ function UPGRADE:Apply(SWEP)
     SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")
     SWEP.ViewModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
     SWEP.WorldModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
-    SWEP.AllowDrop = true
+    SWEP.AllowDrop = false
     SWEP.ModelScale = 0.5
 
     if SERVER then
