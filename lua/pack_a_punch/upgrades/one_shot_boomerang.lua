@@ -65,7 +65,7 @@ function UPGRADE:Apply(SWEP)
 
         if owner.PAP1ShotBoomerang and class == self.class then
             timer.Simple(0.1, function()
-                TTTPAP:ApplyPAP(weapon, self, true)
+                TTTPAP:ApplyUpgrade(weapon, self, true)
             end)
         end
     end)

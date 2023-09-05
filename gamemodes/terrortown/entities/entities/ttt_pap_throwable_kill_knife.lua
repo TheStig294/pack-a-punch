@@ -154,7 +154,7 @@ if SERVER then
       wep.PAPOriginalOwner = self:GetOwner()
 
       timer.Simple(0.1, function()
-         TTTPAP:ApplyPAP(wep, TTTPAP.upgrades.weapon_ttt_impostor_knife_randomat.throwable_kill_knife)
+         TTTPAP:ApplyUpgrade(wep, TTTPAP.upgrades.weapon_ttt_impostor_knife_randomat.throwable_kill_knife)
       end)
 
       return wep

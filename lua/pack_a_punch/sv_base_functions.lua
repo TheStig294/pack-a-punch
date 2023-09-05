@@ -119,7 +119,7 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
                 end
 
                 -- Apply the upgrade!
-                TTTPAP:ApplyPAP(SWEP, UPGRADE)
+                TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
             end)
         else
             if not UPGRADE.noSelectWep then
@@ -127,7 +127,7 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
             end
 
             -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
-            TTTPAP:ApplyPAP(SWEP, UPGRADE, false, oldClip)
+            TTTPAP:ApplyUpgrade(SWEP, UPGRADE, false, oldClip)
         end
     end)
 end
@@ -152,7 +152,7 @@ end)
 -- Applies all pack-a-punch effects
 util.AddNetworkString("TTTPAPApply")
 
-function TTTPAP:ApplyPAP(SWEP, UPGRADE, noDesc, oldClip)
+function TTTPAP:ApplyUpgrade(SWEP, UPGRADE, noDesc, oldClip)
     if not IsValid(SWEP) then return end
     -- Upgrade function (Where all the magic happens...)
     UPGRADE:Apply(SWEP)
