@@ -115,7 +115,7 @@ util.AddNetworkString("TTTPAPApplySound")
 
 hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
     timer.Simple(0.1, function()
-        if not SWEP.PAPUpgrade then return end
+        if not SWEP.PAPUpgrade or SWEP.PAPUpgrade.noSound then return end
 
         if SWEP.Primary then
             SWEP.Primary.Sound = TTTPAP.shootSound
@@ -172,7 +172,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end
 
     -- Sound
-    if SWEP.Primary then
+    if SWEP.Primary and not UPGRADE.noSound then
         SWEP.Primary.Sound = TTTPAP.shootSound
     end
 
