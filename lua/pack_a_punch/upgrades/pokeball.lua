@@ -1,36 +1,28 @@
 local UPGRADE = {}
-UPGRADE.id = "pokeball_marshal"
+UPGRADE.id = "pokeball"
 UPGRADE.class = "weapon_mhl_badge"
-UPGRADE.name = "Sheriff Badge"
-UPGRADE.desc = "Promote players by catching them in a Pokeball!"
-UPGRADE.newClass = "ttt_pap_pokeball_swep"
+UPGRADE.name = "Pokeball"
+UPGRADE.desc = "Promote players to Deputy by catching them in a Pokeball!"
 UPGRADE.noCamo = true
 UPGRADE.noSound = true
+UPGRADE.noSelectWep = true
 
-function UPGRADE:Apply()
-    SWEP.HoldType = "pistol"
-
-    if CLIENT then
-        SWEP.PrintName = "Pokeball"
-        SWEP.Slot = 7
-        SWEP.ViewModelFOV = 54
-        SWEP.ViewModelFlip = false
-        SWEP.Icon = ""
-    end
-
-    SWEP.Primary.Ammo = "AirboatGun"
-    SWEP.Primary.Recoil = 0
-    SWEP.Primary.Damage = 0
-    SWEP.Primary.Delay = 1.0
-    SWEP.Primary.Cone = 0.01
-    SWEP.Primary.ClipSize = -1
-    SWEP.Primary.Automatic = false
-    SWEP.Primary.DefaultClip = -1
-    SWEP.Primary.ClipMax = -1
+function UPGRADE:Apply(SWEP)
+    -- SWEP.HoldType = "pistol"
     SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")
-    SWEP.Kind = WEAPON_EQUIP2
     SWEP.ViewModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
     SWEP.WorldModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
+    SWEP.AllowDrop = true
+
+    if SERVER then
+        local owner = SWEP:GetOwner()
+
+        timer.Simple(0.1, function()
+            if IsValid(owner) then
+                owner:SelectWeapon(self.class)
+            end
+        end)
+    end
 
     function SWEP:PrimaryAttack()
         self:EmitSound(self.Primary.Sound)
