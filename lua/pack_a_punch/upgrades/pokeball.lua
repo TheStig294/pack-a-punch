@@ -8,11 +8,11 @@ UPGRADE.noSound = true
 UPGRADE.noSelectWep = true
 
 function UPGRADE:Apply(SWEP)
-    -- SWEP.HoldType = "pistol"
     SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")
     SWEP.ViewModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
     SWEP.WorldModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
     SWEP.AllowDrop = true
+    SWEP.ModelScale = 0.5
 
     if SERVER then
         local owner = SWEP:GetOwner()
@@ -30,10 +30,8 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         local pokeball = ents.Create("ttt_pap_pokeball")
-        if not IsValid(ent) then return end
-        pokeball:SetPos(owner:EyePos() + owner:GetAimVector() * 200)
-        pokeball:SetAngles(owner:EyeAngles())
-        pokeball:SetOwner(owner)
+        if not IsValid(pokeball) then return end
+        pokeball.Thrower = self:GetOwner()
         pokeball:Spawn()
         self:Remove()
     end
@@ -86,6 +84,7 @@ function UPGRADE:Apply(SWEP)
                 local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
                 WorldModel:SetPos(newPos)
                 WorldModel:SetAngles(newAng)
+                WorldModel:SetModelScale(self.ModelScale)
                 WorldModel:SetupBones()
             else
                 WorldModel:SetPos(self:GetPos())
