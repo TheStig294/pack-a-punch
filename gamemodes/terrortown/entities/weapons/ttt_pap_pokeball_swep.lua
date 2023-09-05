@@ -19,19 +19,24 @@ SWEP.Primary.ClipSize = -1
 SWEP.Primary.Automatic = false
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.ClipMax = -1
+SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")
 SWEP.Kind = WEAPON_EQUIP
 SWEP.UseHands = true
 SWEP.ViewModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
 SWEP.WorldModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
 
 function SWEP:PrimaryAttack()
+    self:EmitSound(self.Primary.Sound)
     if CLIENT then return end
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
-    local TraceResult = owner:GetEyeTrace()
     local pokeball = ents.Create("ttt_pap_pokeball")
-    pokeball:SetPos(TraceResult.HitPos + Vector(0, 0, 10))
+    if not IsValid(ent) then return end
+    pokeball:SetPos(owner:EyePos() + owner:GetAimVector() * 200)
+    pokeball:SetAngles(owner:EyeAngles())
+    pokeball:SetOwner(owner)
     pokeball:Spawn()
+    self:Remove()
 end
 
 function SWEP:SecondaryAttack()
