@@ -1,6 +1,6 @@
 local UPGRADE = {}
 UPGRADE.id = "box_gloves"
-UPGRADE.class = "weapon_box_gloves"
+UPGRADE.class = "weapon_randomat_boxgloves"
 UPGRADE.name = "Box Gloves"
 UPGRADE.desc = "Players you hit turn into boxes"
 
@@ -8,9 +8,18 @@ function UPGRADE:Apply(SWEP)
     local boxModel = "models/props_junk/cardboard_box001a.mdl"
     local sound_single = Sound("Weapon_Crowbar.Single")
 
+    local function IsValidTarget(hitEnt)
+        return hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll"
+    end
+
     function SWEP:DoPunch(owner, onplayerhit)
         -- Don't let the owner keep punching after they've been knocked out
-        if owner:GetNWBool("BoxerKnockedOut", false) then return end
+        if owner:GetNWBool("RdmtBoxingKnockedOut", false) then
+            owner:StopSound(sound_scream)
+
+            return
+        end
+
         local spos = owner:GetShootPos()
         local sdest = spos + owner:GetAimVector() * 70
         local kmins = Vector(1, 1, 1) * -10
@@ -37,7 +46,7 @@ function UPGRADE:Apply(SWEP)
             edata:SetHitBox(tr_main.HitBox)
             edata:SetEntity(hitEnt)
 
-            if hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll" then
+            if IsValidTarget(hitEnt) then
                 util.Effect("BloodImpact", edata)
                 owner:LagCompensation(false)
             else
@@ -48,7 +57,7 @@ function UPGRADE:Apply(SWEP)
         if not CLIENT then
             owner:SetAnimation(PLAYER_ATTACK1)
 
-            if IsPlayer(hitEnt) then
+            if IsValid(hitEnt) and IsValidTarget(hitEnt) then
                 local dmg = DamageInfo()
                 dmg:SetDamage(self.Primary.Damage)
                 dmg:SetAttacker(owner)
@@ -68,7 +77,10 @@ function UPGRADE:Apply(SWEP)
                     hitEnt.PAPBoxingBox = box
                 end
 
-                if onplayerhit then
+                -- Only call the callback if this punch isn't going to kill them
+                local damage = GetConVar("randomat_boxingday_damage"):GetInt()
+
+                if onplayerhit and damage < hitEnt:Health() then
                     onplayerhit(hitEnt)
                 end
             end
@@ -125,7 +137,7 @@ function UPGRADE:Apply(SWEP)
     -- Hide player ragdolls
     self:AddHook("Think", function()
         for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
-            if IsValid(ent:GetNWEntity("BoxerRagdolledPly", nil)) then
+            if IsValid(ent:GetNWEntity("RdmtBoxingRagdolledPly")) then
                 ent:SetNoDraw(true)
             end
         end
