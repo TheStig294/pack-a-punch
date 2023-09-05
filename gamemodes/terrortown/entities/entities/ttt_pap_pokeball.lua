@@ -123,6 +123,19 @@ if SERVER then
    end
 
    function ENT:CaptureSuccess()
+      -- Plays a sound and gives off some sparks
       self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
+      self:SetMaterial("lights/white")
+      local sparks = EffectData()
+      sparks:SetMagnitude(5)
+      sparks:SetScale(5)
+      sparks:SetRadius(5)
+      sparks:SetOrigin(self:GetPos())
+      util.Effect("Sparks", sparks)
+
+      timer.Simple(0.5, function()
+         if not IsValid(self) then return end
+         self:SetMaterial("")
+      end)
    end
 end
