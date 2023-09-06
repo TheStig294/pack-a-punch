@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "pokeball"
 UPGRADE.class = "weapon_mhl_badge"
 UPGRADE.name = "Pokeball"
-UPGRADE.desc = "Catch a player, and instantly promote them on release!"
+UPGRADE.desc = "Catch a player, and instantly promote them on release!\nThe chance to catch them increases if they aren't at full health"
 UPGRADE.noCamo = true
 UPGRADE.noSound = true
 UPGRADE.noSelectWep = true
@@ -22,6 +22,27 @@ function UPGRADE:Apply(SWEP)
                 owner:SelectWeapon(self.class)
             end
         end)
+
+        -- Set via the pokeball entity
+        print("Release secs left:", SWEP.AutoReleaseSecsLeft)
+
+        if SWEP.AutoReleaseSecsLeft then
+            -- Starts a auto-release countdown for the captured player
+            local timername = "TTTPAPPokeballAutoRelease" .. SWEP:EntIndex()
+
+            timer.Create(timername, 1, self.AutoReleaseSecs, function()
+                if not IsValid(SWEP) or not IsValid(SWEP.CaughtPly) then
+                    timer.Remove(timername)
+                else
+                    SWEP.CaughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. timer.RepsLeft(timername))
+
+                    if timer.RepsLeft(timername) == 0 then
+                        -- A function set via the pokeball entity
+                        SWEP:ReleasePlayer(false)
+                    end
+                end
+            end)
+        end
     end
 
     function SWEP:PrimaryAttack()

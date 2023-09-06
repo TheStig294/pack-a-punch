@@ -1,14 +1,23 @@
 AddCSLuaFile()
+-- Tracking values
 ENT.Base = "base_anim"
+ENT.Type = "anim"
 ENT.PrintName = "Pokeball"
 ENT.AutomaticFrameAdvance = true
+ENT.PickedUpWithPlayer = false
+ENT.BounceSoundCount = 0
+ENT.StartedRemoveTimer = false
+ENT.CaptureComplete = false
+ENT.CapturedPickup = false
+ENT.ReleasingPlayer = false
+ENT.AutoReleaseSecsLeft = 20
+-- Convars
 ENT.ThrowStrength = 1000
 ENT.ThrowDist = 25
 ENT.MinCatchChance = 50
 ENT.AllowSelfCapture = true
-ENT.AllowGlobalPickup = false
-ENT.BounceSoundCount = 0
-ENT.PickedUpWithPlayer = false
+ENT.AutoReleaseSecs = 20
+ENT.RemoveSecs = 6
 
 function ENT:Initialize()
    if SERVER then
@@ -36,35 +45,6 @@ function ENT:Initialize()
 end
 
 if SERVER then
-   -- Allows the player to pick up the pokeball again to throw the captured player out
-   function ENT:Use(activator)
-      if not IsValid(activator) or not activator:IsPlayer() then return end
-      -- Only allow the pokeball to be picked up if there is a player inside and they are the thrower, unless the thrower caught themselves...
-      if not self.AllowGlobalPickup and (not IsValid(self.CaughtPly) or IsValid(self.Thrower) and activator ~= self.Thrower and self.CaughtPly ~= self.Thrower) then return end
-      self:GiveSWEP(activator)
-   end
-
-   -- Gives the pokeball SWEP to the player
-   function ENT:GiveSWEP(ply)
-      local SWEP = ply:Give("weapon_mhl_badge")
-      -- Move the caught player to spectating the pokeball
-      SWEP.CaughtPly = self.CaughtPly
-
-      if IsValid(self.CaughtPly) then
-         self.CaughtPly:SpectateEntity(ply)
-      end
-
-      self:Remove()
-
-      timer.Simple(0.1, function()
-         if not IsValid(SWEP) then return end
-         -- Turn the weapon into the pokeball again
-         local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
-         UPGRADE.noDesc = true
-         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-      end)
-   end
-
    -- Allows the 'self:ResetSequence("open")' call to play the pokeball open animation to work in ENT:StartTouch()
    function ENT:Think()
       self:NextThink(CurTime())
@@ -125,8 +105,10 @@ if SERVER then
       timer.Simple(7.375, function()
          if not IsValid(self) then return end
          local captureChancePercent = ply:GetMaxHealth() - math.min(ply:Health(), ply:GetMaxHealth()) + self.MinCatchChance
+         local randomNum = math.random()
+         print(randomNum, captureChancePercent / 100, ply:GetMaxHealth(), math.min(ply:Health(), ply:GetMaxHealth()))
 
-         if math.random() > captureChancePercent / 100 then
+         if randomNum > captureChancePercent / 100 then
             self:ReleasePlayer(true)
          else
             self:CaptureSuccess()
@@ -136,7 +118,7 @@ if SERVER then
 
    -- Applies all of the effects of successfully capturing a player
    function ENT:CaptureSuccess()
-      -- Plays a sound and gives off some sparks
+      -- Plays a sound and gives off some sparks and makes the ball flash white
       self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
       self:SetMaterial("lights/white")
       local sparks = EffectData()
@@ -145,10 +127,68 @@ if SERVER then
       sparks:SetRadius(5)
       sparks:SetOrigin(self:GetPos())
       util.Effect("Sparks", sparks)
+      self.CaptureComplete = true
 
       timer.Simple(0.5, function()
          if not IsValid(self) then return end
          self:SetMaterial("")
+      end)
+
+      -- Starts a auto-release countdown for the captured player
+      local timername = "TTTPAPPokeballAutoRelease" .. self:EntIndex()
+
+      timer.Create(timername, 1, self.AutoReleaseSecs, function()
+         if not IsValid(self) or not IsValid(self.CaughtPly) then
+            timer.Remove(timername)
+         else
+            self.CaughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. timer.RepsLeft(timername))
+
+            if timer.RepsLeft(timername) == 0 then
+               self:ReleasePlayer(false)
+            end
+         end
+      end)
+   end
+
+   -- Allows the player to pick up the pokeball again to throw the captured player out
+   function ENT:Use(activator)
+      -- Don't allow pickup from a non-player, if the ball is empty, or a capture is in progress
+      if not IsValid(activator) or not activator:IsPlayer() or not IsValid(self.CaughtPly) or not self.CaptureComplete then return end
+
+      -- Only allow the pokeball to be picked up if there is a player inside, if you missed, too bad...
+      if IsValid(self.Thrower) then
+         if self.CaughtPly == self.Thrower and activator ~= self.Thrower then
+            -- If the caught player is the thrower, then let anyone pickup the ball other than the thrower themselves
+            self:GiveSWEP(activator)
+         elseif self.CaughtPly ~= self.Thrower and activator == self.Thrower then
+            -- If the caught player is not the thrower, only let the thrower pick up the ball
+            self:GiveSWEP(activator)
+         end
+      end
+   end
+
+   -- Gives the pokeball SWEP to the player
+   function ENT:GiveSWEP(ply)
+      local SWEP = ply:Give("weapon_mhl_badge")
+      -- Move the caught player to spectating the pokeball
+      SWEP.CaughtPly = self.CaughtPly
+      SWEP.AutoReleaseSecsLeft = self.AutoReleaseSecsLeft
+      SWEP.ReleasePlayer = self.ReleasePlayer
+
+      if IsValid(self.CaughtPly) then
+         self.CaughtPly:SpectateEntity(ply)
+      end
+
+      print("Remove give swep")
+      self.CapturedPickup = true
+      self:Remove()
+
+      timer.Simple(0.1, function()
+         if not IsValid(SWEP) then return end
+         -- Turn the weapon into the pokeball again
+         local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
+         UPGRADE.noDesc = true
+         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
       end)
    end
 
@@ -161,11 +201,22 @@ if SERVER then
          -- Else just play a sound
          self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
          self.BounceSoundCount = self.BounceSoundCount + 1
+         -- And remove the ball after a few seconds if the ball caught nothing
+         if self.StartedRemoveTimer then return end
+         self.StartedRemoveTimer = true
+         local timername = "TTTPAPPokeballRemove" .. self:EntIndex()
+
+         timer.Create(timername, 1, self.RemoveSecs, function()
+            if timer.RepsLeft(timername) ~= 0 or not IsValid(self) or IsValid(self.CaughtPly) then return end
+            -- Ball and player is on the ground and time is up
+            print("Remove remove timer")
+            self:Remove()
+         end)
       end
    end
 
    -- Releases the player again if they escaped capture, else changes their role!
-   function ENT:ReleasePlayer(escapedCapture)
+   function ENT:ReleasePlayer(escapedCapture, skipRemove)
       self:EmitSound("ttt_pack_a_punch/pokeball/release.mp3")
       local caughtPly = self.CaughtPly
       caughtPly:UnSpectate()
@@ -183,11 +234,24 @@ if SERVER then
          self:OnSuccess(caughtPly)
       end
 
-      self:Remove()
+      timer.Simple(0.1, function()
+         if not skipRemove and IsValid(self) then
+            print("Remove release player")
+            self.ReleasingPlayer = true
+            self:Remove()
+         end
+      end)
 
       timer.Simple(1, function()
          if not IsValid(caughtPly) then return end
          caughtPly:SetMaterial("")
       end)
+   end
+
+   -- Makes sure to release the player if the pokeball is removed for whatever reason, if we don't expect it to be
+   function ENT:OnRemove()
+      if not self.CapturedPickup and not self.ReleasingPlayer then
+         self:ReleasePlayer(true, true)
+      end
    end
 end
