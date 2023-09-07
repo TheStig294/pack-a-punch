@@ -2,10 +2,10 @@ local UPGRADE = {}
 UPGRADE.id = "pokeball"
 UPGRADE.class = "weapon_mhl_badge"
 UPGRADE.name = "Pokeball"
-UPGRADE.desc = "Catch a player, and instantly promote them on release!"
+UPGRADE.desc = "Catch a player, and instantly promote and heal them on release!"
 
 if ConVarExists("pap_pokeball_min_catch_chance") and GetConVar("pap_pokeball_min_catch_chance"):GetInt() < 100 then
-    UPGRADE.desc = "Catch a player, and instantly promote them on release!\nThe chance to catch them increases if they aren't at full health"
+    UPGRADE.desc = "Catch a player, and instantly promote and heal them on release!\nThe chance to catch them increases if they aren't at full health"
 end
 
 UPGRADE.noCamo = true
