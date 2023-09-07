@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "pokeball"
+UPGRADE.id = "pokeball_marshal"
 UPGRADE.class = "weapon_mhl_badge"
 UPGRADE.name = "Pokeball"
 UPGRADE.desc = "Catch a player, and instantly promote and heal them on release!"
@@ -128,11 +128,12 @@ function UPGRADE:Apply(SWEP)
         local pokeball = ents.Create("ttt_pap_pokeball")
         if not IsValid(pokeball) then return end
         pokeball.Thrower = self:GetOwner()
-        -- Functions from the deputy badge for checking roles
+        -- Functions from the deputy badge for changing roles
         pokeball.ValidateTarget = self.ValidateTarget
         pokeball.OnSuccess = self.OnSuccess
         -- Set via the pokeball entity
         pokeball.CaughtPly = self.CaughtPly
+        pokeball.PAPUpgrade = UPGRADE
         pokeball:Spawn()
         self.ThrowRemove = true
         self:Remove()

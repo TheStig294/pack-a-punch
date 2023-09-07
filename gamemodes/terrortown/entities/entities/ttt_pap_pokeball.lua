@@ -185,7 +185,7 @@ if SERVER then
    -- Gives the pokeball SWEP to the player
    function ENT:GiveSWEP(ply)
       -- Change a weapon's kind if it conflicts with the pokeball
-      local kind = weapons.Get("weapon_mhl_badge").Kind
+      local kind = weapons.Get(self.PAPUpgrade.class).Kind
 
       for _, wep in ipairs(ply:GetWeapons()) do
          if wep.Kind == kind then
@@ -194,7 +194,7 @@ if SERVER then
       end
 
       timer.Simple(0.1, function()
-         local SWEP = ply:Give("weapon_mhl_badge")
+         local SWEP = ply:Give(self.PAPUpgrade.class)
          -- Move the caught player to spectating the pokeball
          SWEP.CaughtPly = self.CaughtPly
          SWEP.AutoReleaseSecsLeft = self.AutoReleaseSecsLeft
@@ -212,7 +212,7 @@ if SERVER then
                self.CapturedPickup = true
                self:Remove()
                -- Turn the weapon into the pokeball again
-               local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
+               local UPGRADE = self.PAPUpgrade
                UPGRADE.noDesc = true
                TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
             end
