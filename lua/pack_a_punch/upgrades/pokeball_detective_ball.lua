@@ -96,7 +96,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- If players are about to be stuck because a player took too long to throw a pokeball, make them not collide with each other
-    self:AddHook("ShouldCollide", function(ent1, ent2)
+    hook.Add("ShouldCollide", "TTTPAPPokeballCollide", function(ent1, ent2)
         if not IsValid(ent1) or not IsValid(ent2) then return end
         if ent1.PAPPokeballNoCollide or ent2.PAPPokeballNoCollide then return false end
     end)
@@ -143,10 +143,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- Extra function for instantly converting a player into a detective
-    -- Code is heavily modified from the detective ball mod: https://steamcommunity.com/sharedfiles/filedetails/?id=1778507380
-    --     Major code cleanup
-    --     Fixed to not allow more than 2 detectives at once, as was intended but not implemented correctly
-    --     Added support for Custom Roles
+    -- Somewhat similar to the detective ball, but very heavily modified
     function SWEP:OnSuccess(ply)
         if not IsValid(ply) or not ply:IsPlayer() or not ply:Alive() or ply:IsSpec() then return end
         local detectiveCount = 0
@@ -160,24 +157,51 @@ function UPGRADE:Apply(SWEP)
         if DETECTIVE_ROLES and DETECTIVE_ROLES[ply:GetRole()] or ply:GetRole() == ROLE_DETECTIVE then
             -- Detective
             ply:SetHealth(100)
+            ply:PrintMessage(HUD_PRINTCENTER, "You are healed!")
             ply:PrintMessage(HUD_PRINTTALK, "You are healed!")
+
+            if IsValid(self.Thrower) then
+                self.Thrower:PrintMessage(HUD_PRINTCENTER, ply:Nick() .. " was healed!")
+                self.Thrower:PrintMessage(HUD_PRINTTALK, ply:Nick() .. " was healed!")
+            end
         elseif ply.IsTraitorTeam and ply:IsTraitorTeam() or ply:GetRole() == ROLE_TRAITOR then
             -- Traitor
-            PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is a Traitor!")
+            ply:PrintMessage(HUD_PRINTCENTER, "You have been revealed!")
+            ply:PrintMessage(HUD_PRINTTALK, "You have been revealed!")
+
+            if IsValid(self.Thrower) then
+                self.Thrower:PrintMessage(HUD_PRINTCENTER, ply:Nick() .. " is a traitor!")
+                self.Thrower:PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is a traitor!")
+            end
         elseif ply.IsInnocentTeam and ply:IsInnocentTeam() or ply:GetRole() == ROLE_INNOCENT then
             -- Innocent
             if detectiveCount <= 1 then
                 ply:SetRole(ROLE_DETECTIVE)
                 ply:SetHealth(100)
                 SendFullStateUpdate()
-                PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is now a Detective!")
+                ply:PrintMessage(HUD_PRINTCENTER, "You are now a detective!")
+                ply:PrintMessage(HUD_PRINTTALK, "You are now a detective!")
+
+                if IsValid(self.Thrower) then
+                    self.Thrower:PrintMessage(HUD_PRINTCENTER, ply:Nick() .. " is now a detective!")
+                    self.Thrower:PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is now a detective!")
+                end
             else
                 ply:SetHealth(100)
-                ply:PrintMessage(HUD_PRINTTALK, "You are healed!")
+                ply:PrintMessage(HUD_PRINTCENTER, "Too many detectives, you are healed!")
+                ply:PrintMessage(HUD_PRINTTALK, "Too many detectives, you are healed!")
+
+                if IsValid(self.Thrower) then
+                    self.Thrower:PrintMessage(HUD_PRINTCENTER, "Too many detectives, " .. ply:Nick() .. " was healed!")
+                    self.Thrower:PrintMessage(HUD_PRINTTALK, "Too many detectives, " .. ply:Nick() .. " was healed!")
+                end
             end
-        else
+        elseif IsValid(self.Thrower) then
             -- Jester/Independent
-            PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is neither innocent nor traitor...")
+            ply:PrintMessage(HUD_PRINTCENTER, "You are are suspicious to " .. self.Thrower:Nick() .. "...")
+            ply:PrintMessage(HUD_PRINTTALK, "You are are suspicious to " .. self.Thrower:Nick() .. "...")
+            self.Thrower:PrintMessage(HUD_PRINTCENTER, ply:Nick() .. " is neither innocent nor traitor...")
+            self.Thrower:PrintMessage(HUD_PRINTTALK, ply:Nick() .. " is neither innocent nor traitor...")
         end
     end
 

@@ -96,7 +96,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- If players are about to be stuck because a player took too long to throw a pokeball, make them not collide with each other
-    self:AddHook("ShouldCollide", function(ent1, ent2)
+    hook.Add("ShouldCollide", "TTTPAPPokeballCollide", function(ent1, ent2)
         if not IsValid(ent1) or not IsValid(ent2) then return end
         if ent1.PAPPokeballNoCollide or ent2.PAPPokeballNoCollide then return false end
     end)
