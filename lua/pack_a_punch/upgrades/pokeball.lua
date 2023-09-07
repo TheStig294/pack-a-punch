@@ -2,10 +2,43 @@ local UPGRADE = {}
 UPGRADE.id = "pokeball"
 UPGRADE.class = "weapon_mhl_badge"
 UPGRADE.name = "Pokeball"
-UPGRADE.desc = "Catch a player, and instantly promote them on release!\nThe chance to catch them increases if they aren't at full health"
+UPGRADE.desc = "Catch a player, and instantly promote them on release!"
+
+if ConVarExists("pap_pokeball_min_catch_chance") and GetConVar("pap_pokeball_min_catch_chance"):GetInt() < 100 then
+    UPGRADE.desc = "Catch a player, and instantly promote them on release!\nThe chance to catch them increases if they aren't at full health"
+end
+
 UPGRADE.noCamo = true
 UPGRADE.noSound = true
 UPGRADE.noSelectWep = true
+
+-- Created in the ttt_pap_pokeball entity lua file
+UPGRADE.convars = {
+    {
+        name = "pap_pokeball_throw_strength",
+        type = "int"
+    },
+    {
+        name = "pap_pokeball_throw_distance",
+        type = "int"
+    },
+    {
+        name = "pap_pokeball_min_catch_chance",
+        type = "int"
+    },
+    {
+        name = "pap_pokeball_auto_release_secs",
+        type = "int"
+    },
+    {
+        name = "pap_pokeball_auto_remove_secs",
+        type = "int"
+    },
+    {
+        name = "pap_pokeball_allow_self_capture",
+        type = "bool"
+    }
+}
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")

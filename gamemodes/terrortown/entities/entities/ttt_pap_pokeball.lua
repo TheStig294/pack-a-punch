@@ -1,11 +1,18 @@
 AddCSLuaFile()
+
 -- Convars
-ENT.ThrowStrength = 1000
-ENT.ThrowDist = 25
-ENT.MinCatchChance = 50
-ENT.AllowSelfCapture = true
-ENT.AutoReleaseSecs = 20
-ENT.RemoveSecs = 6
+ENT.ThrowStrength = CreateConVar("pap_pokeball_throw_strength", 1000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Throw strength", 0, 5000)
+
+ENT.ThrowDist = CreateConVar("pap_pokeball_throw_distance", 25, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance ball spawns from throwing player", 0, 100)
+
+ENT.MinCatchChance = CreateConVar("pap_pokeball_min_catch_chance", 50, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "% chance to catch at full health", 0, 100)
+
+ENT.AutoReleaseSecs = CreateConVar("pap_pokeball_auto_release_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds until players auto-release", 0, 60)
+
+ENT.AutoRemoveSecs = CreateConVar("pap_pokeball_auto_remove_secs", 6, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds until missed ball disappears", 0, 60)
+
+ENT.AllowSelfCapture = CreateConVar("pap_pokeball_allow_self_capture", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow players to capture themselves?", 0, 1)
+
 -- Tracking values
 ENT.Base = "base_anim"
 ENT.Type = "anim"
@@ -22,6 +29,12 @@ ENT.EmptyRemove = false
 
 function ENT:Initialize()
    if SERVER then
+      self.ThrowStrength = self.ThrowStrength:GetInt()
+      self.ThrowDist = self.ThrowDist:GetInt()
+      self.MinCatchChance = self.MinCatchChance:GetInt()
+      self.AutoReleaseSecs = self.AutoReleaseSecs:GetInt()
+      self.AutoRemoveSecs = self.AutoRemoveSecs:GetInt()
+      self.AllowSelfCapture = self.AllowSelfCapture:GetBool()
       self:SetModel("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
       self:SetSolid(SOLID_VPHYSICS)
       self:PhysicsInit(SOLID_VPHYSICS)
@@ -221,7 +234,7 @@ if SERVER then
          self.StartedRemoveTimer = true
          local timername = "TTTPAPPokeballRemove" .. self:EntIndex()
 
-         timer.Create(timername, 1, self.RemoveSecs, function()
+         timer.Create(timername, 1, self.AutoRemoveSecs, function()
             if timer.RepsLeft(timername) ~= 0 or not IsValid(self) or IsValid(self.CaughtPly) then return end
             self.EmptyRemove = true
             self:Remove()
