@@ -1,4 +1,11 @@
 AddCSLuaFile()
+-- Convars
+ENT.ThrowStrength = 1000
+ENT.ThrowDist = 25
+ENT.MinCatchChance = 50
+ENT.AllowSelfCapture = true
+ENT.AutoReleaseSecs = 20
+ENT.RemoveSecs = 6
 -- Tracking values
 ENT.Base = "base_anim"
 ENT.Type = "anim"
@@ -10,14 +17,8 @@ ENT.StartedRemoveTimer = false
 ENT.CaptureComplete = false
 ENT.CapturedPickup = false
 ENT.ReleasingPlayer = false
-ENT.AutoReleaseSecsLeft = 20
--- Convars
-ENT.ThrowStrength = 1000
-ENT.ThrowDist = 25
-ENT.MinCatchChance = 50
-ENT.AllowSelfCapture = true
-ENT.AutoReleaseSecs = 20
-ENT.RemoveSecs = 6
+ENT.AutoReleaseSecsLeft = ENT.AutoReleaseSecs
+ENT.EmptyRemove = false
 
 function ENT:Initialize()
    if SERVER then
@@ -106,7 +107,6 @@ if SERVER then
          if not IsValid(self) then return end
          local captureChancePercent = ply:GetMaxHealth() - math.min(ply:Health(), ply:GetMaxHealth()) + self.MinCatchChance
          local randomNum = math.random()
-         print(randomNum, captureChancePercent / 100, ply:GetMaxHealth(), math.min(ply:Health(), ply:GetMaxHealth()))
 
          if randomNum > captureChancePercent / 100 then
             self:ReleasePlayer(true)
@@ -141,9 +141,10 @@ if SERVER then
          if not IsValid(self) or not IsValid(self.CaughtPly) then
             timer.Remove(timername)
          else
-            self.CaughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. timer.RepsLeft(timername))
+            self.AutoReleaseSecsLeft = timer.RepsLeft(timername)
+            self.CaughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. self.AutoReleaseSecsLeft)
 
-            if timer.RepsLeft(timername) == 0 then
+            if self.AutoReleaseSecsLeft == 0 then
                self:ReleasePlayer(false)
             end
          end
@@ -169,26 +170,39 @@ if SERVER then
 
    -- Gives the pokeball SWEP to the player
    function ENT:GiveSWEP(ply)
-      local SWEP = ply:Give("weapon_mhl_badge")
-      -- Move the caught player to spectating the pokeball
-      SWEP.CaughtPly = self.CaughtPly
-      SWEP.AutoReleaseSecsLeft = self.AutoReleaseSecsLeft
-      SWEP.ReleasePlayer = self.ReleasePlayer
+      -- Change a weapon's kind if it conflicts with the pokeball
+      local kind = weapons.Get("weapon_mhl_badge").Kind
 
-      if IsValid(self.CaughtPly) then
-         self.CaughtPly:SpectateEntity(ply)
+      for _, wep in ipairs(ply:GetWeapons()) do
+         if wep.Kind == kind then
+            wep.Kind = 151 -- Set conflicting weapon to arbitrary weapon kind... you know why I chose the number 151 right?
+         end
       end
 
-      print("Remove give swep")
-      self.CapturedPickup = true
-      self:Remove()
-
       timer.Simple(0.1, function()
-         if not IsValid(SWEP) then return end
-         -- Turn the weapon into the pokeball again
-         local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
-         UPGRADE.noDesc = true
-         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+         local SWEP = ply:Give("weapon_mhl_badge")
+         -- Move the caught player to spectating the pokeball
+         SWEP.CaughtPly = self.CaughtPly
+         SWEP.AutoReleaseSecsLeft = self.AutoReleaseSecsLeft
+         SWEP.ReleasePlayer = self.ReleasePlayer
+
+         timer.Simple(0.1, function()
+            if not IsValid(SWEP) then
+               -- If the weapon cannot be given for whatever reason, simply prevent the player from picking it up
+               ply:PrintMessage(HUD_PRINTCENTER, "Something is blocking pokeball pickup!")
+            else
+               if IsValid(self.CaughtPly) then
+                  self.CaughtPly:SpectateEntity(ply)
+               end
+
+               self.CapturedPickup = true
+               self:Remove()
+               -- Turn the weapon into the pokeball again
+               local UPGRADE = TTTPAP.upgrades.weapon_mhl_badge.pokeball
+               UPGRADE.noDesc = true
+               TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+            end
+         end)
       end)
    end
 
@@ -201,15 +215,14 @@ if SERVER then
          -- Else just play a sound
          self:EmitSound("ttt_pack_a_punch/pokeball/capture.mp3")
          self.BounceSoundCount = self.BounceSoundCount + 1
-         -- And remove the ball after a few seconds if the ball caught nothing
+         -- And remove the ball after a few seconds if the player missed
          if self.StartedRemoveTimer then return end
          self.StartedRemoveTimer = true
          local timername = "TTTPAPPokeballRemove" .. self:EntIndex()
 
          timer.Create(timername, 1, self.RemoveSecs, function()
             if timer.RepsLeft(timername) ~= 0 or not IsValid(self) or IsValid(self.CaughtPly) then return end
-            -- Ball and player is on the ground and time is up
-            print("Remove remove timer")
+            self.EmptyRemove = true
             self:Remove()
          end)
       end
@@ -219,6 +232,7 @@ if SERVER then
    function ENT:ReleasePlayer(escapedCapture, skipRemove)
       self:EmitSound("ttt_pack_a_punch/pokeball/release.mp3")
       local caughtPly = self.CaughtPly
+      if not IsValid(caughtPly) then return end
       caughtPly:UnSpectate()
       caughtPly:Spawn()
       caughtPly:SetPos(self:GetPos())
@@ -229,14 +243,13 @@ if SERVER then
       caughtPly:Freeze(false)
 
       -- If the player was released by someone via throwing the pokeball again, change their role!
-      if not escapedCapture and IsValid(caughtPly) and IsValid(self.Thrower) then
+      if not escapedCapture and IsValid(self.Thrower) then
          self:SetOwner(self.Thrower)
          self:OnSuccess(caughtPly)
       end
 
       timer.Simple(0.1, function()
          if not skipRemove and IsValid(self) then
-            print("Remove release player")
             self.ReleasingPlayer = true
             self:Remove()
          end
@@ -250,8 +263,7 @@ if SERVER then
 
    -- Makes sure to release the player if the pokeball is removed for whatever reason, if we don't expect it to be
    function ENT:OnRemove()
-      if not self.CapturedPickup and not self.ReleasingPlayer then
-         self:ReleasePlayer(true, true)
-      end
+      if self.CapturedPickup or self.ReleasingPlayer or self.EmptyRemove then return end
+      self:ReleasePlayer(true, true)
    end
 end

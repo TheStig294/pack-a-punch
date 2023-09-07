@@ -11,11 +11,12 @@ function UPGRADE:Apply(SWEP)
     SWEP.Primary.Sound = Sound("ttt_pack_a_punch/pokeball/throw.mp3")
     SWEP.ViewModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
     SWEP.WorldModel = Model("models/ttt_pack_a_punch/pokeball/pokeball.mdl")
-    SWEP.AllowDrop = false
+    SWEP.AllowDrop = true
     SWEP.ModelScale = 0.5
 
     if SERVER then
         local owner = SWEP:GetOwner()
+        SWEP.Thrower = owner
 
         timer.Simple(0.1, function()
             if IsValid(owner) then
@@ -24,24 +25,65 @@ function UPGRADE:Apply(SWEP)
         end)
 
         -- Set via the pokeball entity
-        print("Release secs left:", SWEP.AutoReleaseSecsLeft)
-
+        -- Continues the auto-release countdown for the captured player after the ball gets picked up
         if SWEP.AutoReleaseSecsLeft then
-            -- Starts a auto-release countdown for the captured player
             local timername = "TTTPAPPokeballAutoRelease" .. SWEP:EntIndex()
+            local caughtPly = SWEP.CaughtPly
 
-            timer.Create(timername, 1, self.AutoReleaseSecs, function()
-                if not IsValid(SWEP) or not IsValid(SWEP.CaughtPly) then
+            timer.Create(timername, 1, SWEP.AutoReleaseSecsLeft, function()
+                if not IsValid(SWEP) or not IsValid(caughtPly) then
                     timer.Remove(timername)
                 else
-                    SWEP.CaughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. timer.RepsLeft(timername))
+                    caughtPly:PrintMessage(HUD_PRINTCENTER, "Seconds until auto release: " .. timer.RepsLeft(timername))
 
                     if timer.RepsLeft(timername) == 0 then
                         -- A function set via the pokeball entity
                         SWEP:ReleasePlayer(false)
+                        SWEP:SetPlayerNoCollide(owner, caughtPly)
                     end
                 end
             end)
+        end
+    end
+
+    -- Prevents the pokeball owner and captured player from becoming stuck on each other
+    function SWEP:SetPlayerNoCollide(ply1, ply2)
+        if not IsValid(ply1) or not IsValid(ply2) then return end
+        ply2.PAPPokeballNoCollide = true
+        ply1.PAPPokeballNoCollide = true
+        ply2:SetCustomCollisionCheck(true)
+        ply1:SetCustomCollisionCheck(true)
+
+        -- Players have 10 seconds to move out of the way of each other
+        timer.Simple(10, function()
+            if not IsValid(ply1) or not IsValid(ply2) then return end
+            ply2.PAPPokeballNoCollide = nil
+            ply1.PAPPokeballNoCollide = nil
+        end)
+    end
+
+    -- If players are about to be stuck because a player took too long to throw a pokeball, make them not collide with each other
+    self:AddHook("ShouldCollide", function(ent1, ent2)
+        if not IsValid(ent1) or not IsValid(ent2) then return end
+        if ent1.PAPPokeballNoCollide or ent2.PAPPokeballNoCollide then return false end
+    end)
+
+    -- If the pokeball is removed for whatever reason, the pokeball is not being thrown, and there is a player inside, release them
+    function SWEP:OnRemove()
+        if self.ThrowRemove or not self.ReleasePlayer or not IsValid(self.Thrower) or not IsValid(self.CaughtPly) then return end
+        self:ReleasePlayer(false)
+        self:SetPlayerNoCollide(self.Thrower, self.CaughtPly)
+    end
+
+    -- Update the owner and set the captured player to spectate the pokeball if the owner dies or otherwise drops the pokeball
+    function SWEP:OwnerChanged()
+        self.Thrower = self:GetOwner()
+        if not IsValid(self.CaughtPly) then return end
+
+        if IsValid(self.Thrower) then
+            self.CaughtPly:SpectateEntity(self.Thrower)
+        else
+            self.CaughtPly:SpectateEntity(self)
         end
     end
 
@@ -59,6 +101,7 @@ function UPGRADE:Apply(SWEP)
         -- Set via the pokeball entity
         pokeball.CaughtPly = self.CaughtPly
         pokeball:Spawn()
+        self.ThrowRemove = true
         self:Remove()
     end
 
@@ -110,7 +153,14 @@ function UPGRADE:Apply(SWEP)
                 local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
                 WorldModel:SetPos(newPos)
                 WorldModel:SetAngles(newAng)
-                WorldModel:SetModelScale(self.ModelScale)
+
+                -- Set the pokeball to be smaller in a player's hands
+                if IsValid(self.Thrower) then
+                    WorldModel:SetModelScale(self.ModelScale)
+                else
+                    WorldModel:SetModelScale(1)
+                end
+
                 WorldModel:SetupBones()
             else
                 WorldModel:SetPos(self:GetPos())
