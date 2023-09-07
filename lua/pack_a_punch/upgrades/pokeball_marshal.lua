@@ -104,7 +104,7 @@ function UPGRADE:Apply(SWEP)
     -- If the pokeball is removed for whatever reason, the pokeball is not being thrown, and there is a player inside, release them
     function SWEP:OnRemove()
         if self.ThrowRemove or not self.ReleasePlayer or not IsValid(self.Thrower) or not IsValid(self.CaughtPly) then return end
-        self:ReleasePlayer(false)
+        self:ReleasePlayer(true, true)
         self:SetPlayerNoCollide(self.Thrower, self.CaughtPly)
     end
 
