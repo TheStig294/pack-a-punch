@@ -41,6 +41,7 @@ function ENT:Initialize()
       -- If the SWEP set a caught player, then the pokeball will release them when next thrown
       if IsValid(self.CaughtPly) then
          self.PickedUpWithPlayer = true
+         self.CaughtPly:SpectateEntity(self)
       end
    end
 end
