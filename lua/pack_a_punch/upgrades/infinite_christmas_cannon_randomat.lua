@@ -17,7 +17,7 @@ function UPGRADE:Apply(SWEP)
 
         if SERVER then
             owner:SetNWString("SantaLoadedItem", "")
-            local present = ents.Create("ttt_santa_present")
+            local present = ents.Create("randomat_hellosanta_present")
             if not present:IsValid() then return false end
             local ang = owner:EyeAngles()
             present:SetAngles(ang)
