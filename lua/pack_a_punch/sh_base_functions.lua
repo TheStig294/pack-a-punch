@@ -118,7 +118,8 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
     elseif upgrades then
         -- Preventing purchase if all upgrades' condition functions return false or all have their convars disabled
         for id, UPGRADE in pairs(upgrades) do
-            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. class .. "_" .. UPGRADE.id):GetBool() then return end
+            -- If even one upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
+            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. class .. "_" .. UPGRADE.id):GetBool() then return true end
         end
 
         if displayErrorMessage then
@@ -131,7 +132,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         -- Preventing purchase if all generic upgrades' condition functions return false or all have had their convars disabled
         for id, UPGRADE in pairs(TTTPAP.genericUpgrades) do
             -- If even one generic upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
-            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return end
+            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return true end
         end
 
         if displayErrorMessage then
