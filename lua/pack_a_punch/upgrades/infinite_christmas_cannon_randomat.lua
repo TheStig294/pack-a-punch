@@ -9,14 +9,12 @@ function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
         if not IsFirstTimePredicted() then return end
         self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-        self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
         self:EmitSound("weapons/grenade_launcher1.wav")
 
         if SERVER then
-            owner:SetNWString("SantaLoadedItem", "")
             local present = ents.Create("randomat_hellosanta_present")
             if not present:IsValid() then return false end
             local ang = owner:EyeAngles()
