@@ -58,6 +58,10 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     end)
 
     timer.Simple(3.4, function()
+        ply:SetNWBool("TTTPAPIsUpgrading", false)
+        -- Don't let players smuggle the pap between rounds
+        if GetRoundState() == ROUND_PREP then return end
+
         for _, w in ipairs(ply:GetWeapons()) do
             if w.Kind == weapons.Get(classname).Kind then
                 ply:StripWeapon(w.ClassName)
@@ -66,10 +70,11 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         end
 
         SWEP = ply:Give(classname)
-        ply:SetNWBool("TTTPAPIsUpgrading", false)
     end)
 
     timer.Simple(3.5, function()
+        -- Don't let players smuggle the pap between rounds
+        if GetRoundState() == ROUND_PREP then return end
         -- The final "ding!" sound is heard for anyone nearby
         ply:EmitSound("ttt_pack_a_punch/upgrade_ding.mp3")
         if not ply:HasWeapon(classname) then return end
