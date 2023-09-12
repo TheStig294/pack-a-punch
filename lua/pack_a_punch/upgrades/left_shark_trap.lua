@@ -7,6 +7,7 @@ UPGRADE.desc = "Changes the shark's model!"
 function UPGRADE:Apply(SWEP)
     if SERVER then
         -- Code from the shark trap SWEP and cleaned up
+        -- https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000
         function SWEP:PrimaryAttack()
             local owner = self:GetOwner()
 
@@ -25,8 +26,9 @@ function UPGRADE:Apply(SWEP)
                     local ang = tr.HitNormal:Angle()
                     ang:RotateAroundAxis(ang:Right(), -90)
                     ent:SetAngles(ang)
+                    ent:SetMaterial(TTTPAP.camo)
                     ent:Spawn()
-                    ent.Owner = self.GetOwner
+                    ent.Owner = owner
                     ent.fingerprints = self.fingerprints
                     self:Remove()
                 end

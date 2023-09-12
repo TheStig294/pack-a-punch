@@ -1,3 +1,4 @@
+AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "ttt_shark_ent"
 ENT.PrintName = "Left Shark Ent"
