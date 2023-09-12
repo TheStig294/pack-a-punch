@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "the_frenchmans_club"
 UPGRADE.class = "weapon_ttt_baguette_randomat"
 UPGRADE.name = "Le Club des Freemans"
-UPGRADE.desc = "Zero push cooldown, x2 swing speed!"
+UPGRADE.desc = "Temps de recharge nul, vitesse de swing x2!"
 UPGRADE.firerateMult = 2
 
 function UPGRADE:Apply(SWEP)
