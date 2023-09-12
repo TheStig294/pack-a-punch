@@ -105,5 +105,11 @@ function UPGRADE:GetAlivePlayers(shuffle)
     return plys
 end
 
+local ForceSetPlayermodel = FindMetaTable("Entity").SetModel
+
+function UPGRADE:SetModel(ply, model)
+    ForceSetPlayermodel(ply, model)
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
