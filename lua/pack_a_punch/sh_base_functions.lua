@@ -42,13 +42,13 @@ function TTTPAP:Register(UPGRADE)
     if UPGRADE.class then
         TTTPAP.upgrades[UPGRADE.class] = TTTPAP.upgrades[UPGRADE.class] or {}
         TTTPAP.upgrades[UPGRADE.class][UPGRADE.id] = UPGRADE
-        -- Create enable/disable convar
-        cvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
     else
         TTTPAP.genericUpgrades[UPGRADE.id] = TTTPAP.genericUpgrades[UPGRADE.id] or {}
         TTTPAP.genericUpgrades[UPGRADE.id] = UPGRADE
-        cvarName = "ttt_pap_" .. UPGRADE.id
     end
+
+    -- Create enable/disable convar
+    cvarName = "ttt_pap_" .. UPGRADE.id
 
     CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
 
@@ -119,7 +119,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         -- Preventing purchase if all upgrades' condition functions return false or all have their convars disabled
         for id, UPGRADE in pairs(upgrades) do
             -- If even one upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
-            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. class .. "_" .. UPGRADE.id):GetBool() then return true end
+            if UPGRADE:Condition() and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return true end
         end
 
         if displayErrorMessage then

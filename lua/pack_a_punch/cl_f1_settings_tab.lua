@@ -154,14 +154,7 @@ local function DrawWeaponBar(list, UPGRADE)
     background:DockPadding(10, 0, 10, 5)
     -- Enabled cvar
     local alpha = 255
-    local enabledCvarName
-
-    if UPGRADE.class then
-        enabledCvarName = "ttt_pap_" .. UPGRADE.class .. "_" .. UPGRADE.id
-    else
-        enabledCvarName = "ttt_pap_" .. UPGRADE.id
-    end
-
+    local enabledCvarName = "ttt_pap_" .. UPGRADE.id
     local enabledCvar = GetConVar(enabledCvarName)
 
     if not enabledCvar:GetBool() then
