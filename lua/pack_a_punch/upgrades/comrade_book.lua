@@ -9,11 +9,10 @@ function UPGRADE:Apply(SWEP)
     if SERVER then
         local chosenSound = Sound("ttt_pack_a_punch/comrade_book/anthem" .. math.random(1, 4) .. ".mp3")
         local luaString = "surface.PlaySound(\"" .. chosenSound .. "\")"
-        local owner = SWEP:GetOwner()
 
         for _, ply in ipairs(self:GetAlivePlayers()) do
             -- Don't upgrade the player's manifesto endlessly...
-            if IsValid(owner) and owner == ply then continue end
+            if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == self.class then continue end
             ply:ChatPrint("This is OUR upgrade comrade...")
 
             if TTTPAP:CanOrderPAP(ply, true) then
