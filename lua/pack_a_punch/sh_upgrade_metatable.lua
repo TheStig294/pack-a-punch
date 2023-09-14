@@ -111,5 +111,17 @@ function UPGRADE:SetModel(ply, model)
     ForceSetPlayermodel(ply, model)
 end
 
+function UPGRADE:IsPlayer(ply)
+    return IsValid(ply) and ply:IsPlayer()
+end
+
+function UPGRADE:IsAlive(ply)
+    return ply:Alive() and not ply:IsSpec()
+end
+
+function UPGRADE:IsAlivePlayer(ply)
+    return self:IsPlayer(ply) and self:IsAlive(ply)
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
