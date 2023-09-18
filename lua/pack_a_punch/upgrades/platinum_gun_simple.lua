@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "platinum_gun"
+UPGRADE.id = "platinum_gun_simple"
 UPGRADE.class = "weapon_ttt_powerdeagle"
 UPGRADE.name = "Platinum Gun"
 UPGRADE.desc = "Shoot a bad guy: Get to shoot again\nDon't shoot a bad guy: One of them gets an extra life!"
@@ -10,7 +10,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     local function IsBaddie(ply)
-        return (ply.IsTraitorTeam and ply:IsTraitorTeam()) or (ply:GetRole() == ROLE_TRAITOR) or (ply.IsIndependentTeam and ply:IsIndependentTeam())
+        return (ply.IsTraitorTeam and ply:IsTraitorTeam()) or (ply:GetRole() == ROLE_TRAITOR) or (ply.IsIndependentTeam and ply:IsIndependentTeam()) or (ply.IsMonsterTeam and ply:IsMonsterTeam())
     end
 
     self:AddHook("DoPlayerDeath", function(ply, attacker, dmg)
