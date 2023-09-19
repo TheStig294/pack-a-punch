@@ -156,6 +156,30 @@ if CLIENT then
             height = 361,
             name = "download_free_virus.jpg"
         }
+        },
+        {
+            width = 500,
+            height = 106,
+            name = "activatewindows.jpg"
+        }
+        },
+        {
+            width = 500,
+            height = 257,
+            name = "cookies.jpg"
+        }
+        },
+        {
+            width = 750,
+            height = 72,
+            name = "hypercam.jpg"
+        }
+        },
+        {
+            width = 500,
+            height = 275,
+            name = "newsletter.jpg"
+        }
     }
 
     -- Puts a popup on the player's screen and stores it for later so they can be automatically closed after the player dies or the round restarts
