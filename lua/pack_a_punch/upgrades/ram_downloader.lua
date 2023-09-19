@@ -155,25 +155,21 @@ if CLIENT then
             width = 500,
             height = 361,
             name = "download_free_virus.jpg"
-        }
         },
         {
             width = 500,
             height = 106,
             name = "activatewindows.jpg"
-        }
         },
         {
             width = 500,
             height = 257,
             name = "cookies.jpg"
-        }
         },
         {
             width = 750,
             height = 72,
             name = "hypercam.jpg"
-        }
         },
         {
             width = 500,
