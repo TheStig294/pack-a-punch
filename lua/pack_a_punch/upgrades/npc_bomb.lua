@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "npc_bomb"
 UPGRADE.class = "weapon_ttt_id_bomb"
 UPGRADE.name = "NPC Bomb"
-UPGRADE.desc = "Now turns bodies into invincible walking NPCs!\nGetting near an NPC causes them to explode"
+UPGRADE.desc = "Turns a body into an invincible walking NPC!\nGetting near the NPC causes them to explode"
 
 UPGRADE.convars = {
     {
@@ -131,9 +131,10 @@ function UPGRADE:Apply(SWEP)
             npc.PAPNpcBombName = name
 
             npc.PAPExplodeNPCBomb = function()
+                -- "self" refers to the SWEP, not the NPC
                 if self.PAPExploded then return end
                 self.PAPExploded = true
-                local pos = self:GetPos()
+                local pos = self.PAPRevivedNPC:GetPos()
                 local radius = radiusCvar:GetInt()
                 local damage = damageCvar:GetInt()
                 local attacker = self.PAPOwner or self
@@ -148,7 +149,7 @@ function UPGRADE:Apply(SWEP)
                 sound.Play("c4.explode", self:GetPos(), 60, 150)
 
                 if SERVER then
-                    self:Kick()
+                    self.PAPRevivedNPC:Kick()
                 end
             end
 
