@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "ram_downloader"
 UPGRADE.class = "weapon_ttt_popupgun"
 UPGRADE.name = "RAM Downloader"
-UPGRADE.desc = "Temporarily blocks the victim's screen with lots of popups at once!"
+UPGRADE.desc = "Temporarily blocks the victim's screen with lots of popups"
 UPGRADE.ammoMult = 0.05
 
 if SERVER then

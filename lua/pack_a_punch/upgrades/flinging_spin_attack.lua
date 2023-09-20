@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "flinging_spin_attack"
 UPGRADE.class = "weapon_ttt_whoa_randomat"
 UPGRADE.name = "Flinging Spin Attack"
-UPGRADE.desc = "Spun players get flung away! (While at or above full health)"
+UPGRADE.desc = "Spun players get flung away!\n(While at or above full health)"
 
 function UPGRADE:Apply(SWEP)
     local flingSound = Sound("ttt_pack_a_punch/flinging_spin_attack/fling.mp3")

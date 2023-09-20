@@ -23,6 +23,10 @@ if SERVER then
     end
 end
 
+hook.Add("InitPostEntity", "TTTPAPRandomatUpgradeDesc", function()
+    UPGRADE.desc = GetGlobalString("TTTPAPRandomatUpgradeDesc", nil)
+end)
+
 function UPGRADE:Apply(SWEP)
     if CLIENT then
         self.desc = GetGlobalString("TTTPAPRandomatUpgradeDesc")

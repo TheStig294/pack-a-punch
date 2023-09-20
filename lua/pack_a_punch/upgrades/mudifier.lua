@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "mudifier"
 UPGRADE.class = "weapon_ttt_mud_device_randomat"
 UPGRADE.name = "Mudifier"
-UPGRADE.desc = "Turns things into 'mud samples', you are invincible while this weapon is held!"
+UPGRADE.desc = "Turns things into 'mud samples', invincible while holding this out!"
 
 function UPGRADE:Apply(SWEP)
     -- Being invincible while held
