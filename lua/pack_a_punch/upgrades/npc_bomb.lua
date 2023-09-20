@@ -109,7 +109,6 @@ function UPGRADE:Apply(SWEP)
         local ragPly = CORPSE.GetPlayer(rag)
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
-        local role = ragPly:GetRole()
         -- Spawn the npc bot!
         RunConsoleCommand("bot")
 
@@ -121,7 +120,6 @@ function UPGRADE:Apply(SWEP)
             local npc = player.GetBots()[#player.GetBots()]
             npc:SpawnForRound(true)
             npc:SetModel(model)
-            npc:SetRole(role)
             npc:Give("weapon_zm_shotgun")
             -- Used for "ShouldCollide" hook
             npc:SetCustomCollisionCheck(true)
@@ -159,7 +157,21 @@ function UPGRADE:Apply(SWEP)
                 npc:SelectWeapon("weapon_zm_shotgun")
             end)
 
-            SendFullStateUpdate()
+            -- Switching roles of the NPC back and forth so the round can end
+            local timername = "TTTPAPNpcBombRoleSwitch" .. npc:EntIndex()
+
+            timer.Create(timername, 2, 0, function()
+                if not IsValid(npc) then
+                    timer.Remove(timername)
+
+                    return
+                elseif npc:GetRole() == ROLE_TRAITOR then
+                    npc:SetRole(ROLE_INNOCENT)
+                else
+                    npc:SetRole(ROLE_TRAITOR)
+                end
+            end)
+
             -- Make the revive sound
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
