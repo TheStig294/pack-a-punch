@@ -95,28 +95,6 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
-    local function ExplodeNPC(npc)
-        if npc.PAPExploded then return end
-        npc.PAPExploded = true
-        local pos = npc:GetPos()
-        local radius = radiusCvar:GetInt()
-        local damage = damageCvar:GetInt()
-        local attacker = npc.PAPOwner or npc
-        util.BlastDamage(npc, attacker, pos, radius, damage)
-        local effect = EffectData()
-        effect:SetStart(pos)
-        effect:SetOrigin(pos)
-        effect:SetScale(radius)
-        effect:SetRadius(radius)
-        effect:SetMagnitude(damage)
-        util.Effect("Explosion", effect, true, true)
-        sound.Play("c4.explode", npc:GetPos(), 60, 150)
-
-        if SERVER then
-            npc:Kick()
-        end
-    end
-
     -- Spawning the NPC bomb
     function SWEP:PrimaryAttack()
         if CLIENT or self.PAPRevivedNPC then return end
@@ -152,6 +130,28 @@ function UPGRADE:Apply(SWEP)
             npc.PAPOwner = owner
             npc.PAPNpcBombName = name
 
+            npc.PAPExplodeNPCBomb = function()
+                if self.PAPExploded then return end
+                self.PAPExploded = true
+                local pos = self:GetPos()
+                local radius = radiusCvar:GetInt()
+                local damage = damageCvar:GetInt()
+                local attacker = self.PAPOwner or self
+                util.BlastDamage(self, attacker, pos, radius, damage)
+                local effect = EffectData()
+                effect:SetStart(pos)
+                effect:SetOrigin(pos)
+                effect:SetScale(radius)
+                effect:SetRadius(radius)
+                effect:SetMagnitude(damage)
+                util.Effect("Explosion", effect, true, true)
+                sound.Play("c4.explode", self:GetPos(), 60, 150)
+
+                if SERVER then
+                    self:Kick()
+                end
+            end
+
             timer.Simple(0.5, function()
                 npc:SetNWString("PlayerName", name)
                 npc:SetName(name)
@@ -171,7 +171,7 @@ function UPGRADE:Apply(SWEP)
     -- NPC shouldn't be killable, but we all know it's going to happen somehow...
     self:AddHook("PostPlayerDeath", function(ply)
         if not IsValid(ply) or not ply.PAPNpcBomb then return end
-        ExplodeNPC(ply)
+        ply:PAPExplodeNPCBomb()
     end)
 
     -- Exploding NPC on getting near another player
@@ -181,11 +181,11 @@ function UPGRADE:Apply(SWEP)
 
         if ent1:GetPos():Distance(ent2:GetPos()) < triggerRadiusCvar:GetInt() then
             if ent1.PAPNpcBomb then
-                ExplodeNPC(ent1)
+                ent1:PAPExplodeNPCBomb()
             end
 
             if ent2.PAPNpcBomb then
-                ExplodeNPC(ent2)
+                ent2:PAPExplodeNPCBomb()
             end
         end
     end)
