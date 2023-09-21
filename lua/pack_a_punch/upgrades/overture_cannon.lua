@@ -4,7 +4,7 @@ UPGRADE.class = "weapon_ttt_artillery"
 UPGRADE.name = "Overture Cannon"
 UPGRADE.desc = "Auto-shoots, pressing 'E' removes the cannon!"
 -- As per usual, sound is abnormally quiet, so it is played over itself to be louder
-local musicVolume = 8
+local musicVolume = 4
 
 local function PlayMusic(cannon)
     for i = 1, musicVolume do
@@ -81,7 +81,7 @@ function UPGRADE:Apply(SWEP)
             -- For the first 5 seconds, the cannon moves left
             local moveLeftTimer = "TTTPAPOrchestralCannonMoveLeft" .. cannon:EntIndex()
 
-            timer.Create(moveLeftTimer, 1, 12, function()
+            timer.Create(moveLeftTimer, 1, 4, function()
                 if not IsValid(cannon) then
                     timer.Remove(moveLeftTimer)
 
@@ -94,7 +94,7 @@ function UPGRADE:Apply(SWEP)
             end)
 
             -- Then after the music kicks in, the cannon fires in time with it, while also moving right before each shot
-            local shootDelays = {15, 18, 20.8, 23.7, 26.5, 29.3, 32.2, 35.2, 38, 40.9, 43.5, 46.2, 49, 50, 51.6, 52.2, 52.8, 53.5, 54.1, 54.8, 55.5, 56, 56.4, 56.7}
+            local shootDelays = {15, 18, 20.8, 23.7, 26.5, 29.3, 32.2, 35.2}
 
             for _, delay in ipairs(shootDelays) do
                 -- Moving the cannon right
@@ -119,7 +119,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             -- Removes the cannon automatically after it is done
-            timer.Simple(77.4, function()
+            timer.Simple(38, function()
                 if IsValid(cannon) then
                     RemoveCannon(cannon)
                 end
