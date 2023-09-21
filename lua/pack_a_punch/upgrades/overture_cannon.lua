@@ -24,13 +24,15 @@ end
 
 -- Causes the cannon to be removed if any of the shoot UI tries to be used
 hook.Add("InitPostEntity", "TTTPAPModifyOrchestralCannon", function()
-    local oldUse = zay.f.Artillery_USE
+    if zay and zay.f and zay.f.Artillery_USE then
+        local oldUse = zay.f.Artillery_USE
 
-    function zay.f.Artillery_USE(Artillery, ply)
-        if Artillery.PAPUpgrade and Artillery.PAPUpgrade.id == UPGRADE.id then
-            RemoveCannon(Artillery)
-        else
-            return oldUse(Artillery, ply)
+        function zay.f.Artillery_USE(Artillery, ply)
+            if Artillery.PAPUpgrade and Artillery.PAPUpgrade.id == UPGRADE.id then
+                RemoveCannon(Artillery)
+            else
+                return oldUse(Artillery, ply)
+            end
         end
     end
 end)
