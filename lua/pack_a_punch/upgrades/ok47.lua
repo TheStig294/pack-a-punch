@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "ok47"
 UPGRADE.class = "weapon_ttt_ak47"
 UPGRADE.name = "OK-47"
-UPGRADE.desc = "Heals instead!"
+UPGRADE.desc = "While held, basic sources of damage you deal heals instead!"
 
 function UPGRADE:Apply(SWEP)
     SWEP:GetOwner().PAPOk47 = SWEP
