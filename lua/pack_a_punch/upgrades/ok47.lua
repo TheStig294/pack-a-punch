@@ -21,4 +21,10 @@ function UPGRADE:Apply(SWEP)
     end)
 end
 
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        ply.PAPOk47 = nil
+    end
+end
+
 TTTPAP:Register(UPGRADE)
