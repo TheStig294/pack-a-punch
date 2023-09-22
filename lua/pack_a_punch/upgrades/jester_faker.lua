@@ -3,8 +3,11 @@ UPGRADE.id = "jester_faker"
 UPGRADE.class = "weapon_ttt_m4a1_s"
 UPGRADE.name = "Jester Faker"
 UPGRADE.desc = "While held, you can't deal damage to traitors"
+UPGRADE.noCamo = true
+UPGRADE.noSound = true
 
 function UPGRADE:Apply(SWEP)
+    SWEP.Primary.Sound = Sound("Weapon_M4A1.Single")
     SWEP:GetOwner().PAPJesterFaker = SWEP
 
     self:AddHook("EntityTakeDamage", function(victim, dmg)
