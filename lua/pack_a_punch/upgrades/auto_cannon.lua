@@ -1,20 +1,20 @@
 local UPGRADE = {}
-UPGRADE.id = "overture_cannon"
+UPGRADE.id = "auto_cannon"
 UPGRADE.class = "weapon_ttt_artillery"
-UPGRADE.name = "Overture Cannon"
+UPGRADE.name = "Auto Cannon"
 UPGRADE.desc = "Auto-shoots, pressing 'E' removes the cannon!"
 -- As per usual, sound is abnormally quiet, so it is played over itself to be louder
 local musicVolume = 4
 
 local function PlayMusic(cannon)
     for i = 1, musicVolume do
-        cannon:EmitSound("ttt_pack_a_punch/overture_cannon/1812_overture.mp3")
+        cannon:EmitSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")
     end
 end
 
 local function RemoveCannon(cannon)
     for i = 1, musicVolume do
-        cannon:StopSound("ttt_pack_a_punch/overture_cannon/1812_overture.mp3")
+        cannon:StopSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")
     end
 
     if SERVER then
