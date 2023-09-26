@@ -5,7 +5,7 @@
 concommand.Add("pap_order", function(ply, _, _, argsStr)
     -- Searching for the input bot player name number
     if argsStr ~= "" then
-        for _, p in ipairs(player.GetBots()) do
+        for _, p in ipairs(player.GetAll()) do
             if p:Nick() == "Bot" .. argsStr then
                 -- Skip upgrade is valid checks as this is a debug command
                 TTTPAP:OrderPAP(p, true)
