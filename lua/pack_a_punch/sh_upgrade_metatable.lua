@@ -32,6 +32,7 @@ UPGRADE.noSelectWep = nil -- Prevents the upgraded weapon from being automatical
 UPGRADE.newClass = nil -- Defines a different weapon SWEP to be given instead of the same one when a weapon is upgraded
 UPGRADE.noCamo = nil -- Prevents the upgrade camo from being applied to the weapon
 UPGRADE.noSound = nil -- Prevents the PAP shoot sound from being applied
+UPGRADE.noDesc = nil -- Prevents the chat description from being displayed on upgrading
 
 -- If false, prevents the upgrade from being applied. Mainly used for checking if the upgrade's required mods are installed on the server
 function UPGRADE:Condition()
