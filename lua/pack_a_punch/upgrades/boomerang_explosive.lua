@@ -6,6 +6,8 @@ UPGRADE.desc = "Boomerang explodes on touch!"
 UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
+    SWEP:GetOwner().PAPExplosiveBoomerang = true
+
     if CLIENT and SWEP.VElements and SWEP.WElements then
         SWEP.VElements.boomerang.material = TTTPAP.camo
         SWEP.WElements.boomerang.material = TTTPAP.camo
@@ -45,8 +47,6 @@ function UPGRADE:Apply(SWEP)
             boomerang.Hits = self.Hits
             boomerang.LastVelocity = owner:GetAimVector()
             boomerang.Damage = self.Primary.Damage
-            boomerang.PAPUpgrade = UPGRADE
-            print(boomerang.PAPUpgrade.id, "aaaaaaaaaaaaaa")
             local phys = boomerang:GetPhysicsObject()
             phys:SetVelocity(owner:GetAimVector():GetNormalized() * 10)
             phys:AddAngleVelocity(Vector(0, -10, 0))
@@ -57,6 +57,27 @@ function UPGRADE:Apply(SWEP)
     -- Normal return throw is disabled
     function SWEP:SecondaryAttack()
     end
+
+    -- Make every boomerang equipped by a player with this weapon be a PAP version until the next round
+    self:AddHook("WeaponEquip", function(weapon, owner)
+        local class = weapon:GetClass()
+
+        if owner.PAPExplosiveBoomerang and class == self.class then
+            timer.Simple(0.1, function()
+                -- Prevent the upgrade description from being displayed every time the weapon is received
+                self.noDesc = true
+                TTTPAP:ApplyUpgrade(weapon, self)
+            end)
+        end
+    end)
+end
+
+function UPGRADE:Reset()
+    timer.Simple(0.1, function()
+        for _, ply in ipairs(player.GetAll()) do
+            ply.PAPExplosiveBoomerang = false
+        end
+    end)
 end
 
 TTTPAP:Register(UPGRADE)

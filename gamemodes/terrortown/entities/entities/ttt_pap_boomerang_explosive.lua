@@ -13,20 +13,9 @@ function ENT:PhysicsCollide(data, phys)
     if not IsValid(owner) then return end
     if self.Drop or self.Hits >= 4 then return end
     local hitEntity = data.HitEntity
-    print("Heloooo???")
 
     if hitEntity == owner then
-        print("hewifjweofwero")
-        local SWEP = owner:Give("weapon_ttt_boomerang")
-
-        timer.Simple(0.1, function()
-            if IsValid(SWEP) then
-                local UPGRADE = TTTPAP.upgrades.boomerang_explosive
-                UPGRADE.noDesc = true
-                print(UPGRADE, "eeeeeeeeeeeeeeeee")
-                TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-            end
-        end)
+        owner:Give("weapon_ttt_boomerang")
 
         if SERVER then
             self:Remove()
@@ -53,17 +42,18 @@ function ENT:PhysicsCollide(data, phys)
         local explode = ents.Create("env_explosion")
         explode:SetPos(self:GetPos())
 
-        if self:IsPlayer(attacker) then
-            explode:SetOwner(attacker)
+        if IsValid(owner) then
+            explode:SetOwner(owner)
+            owner.PAPExplosiveBoomerang = false
+            -- Leaves a bunch of fire on exploding
+            local tr = util.QuickTrace(self:GetPos(), Vector(0, 0, -1))
+            StartFires(self:GetPos(), tr, 20, 40, false, owner)
         end
 
-        explode:SetKeyValue("iMagnitude", 550)
-        explode:SetKeyValue("iRadiusOverride", 550)
+        explode:SetKeyValue("iMagnitude", 200)
+        explode:SetKeyValue("iRadiusOverride", 200)
         explode:Spawn()
         explode:Fire("Explode", 0, 0)
-        -- Leaves a bunch of fire on exploding
-        local tr = util.QuickTrace(self:GetPos(), Vector(0, 0, -1))
-        StartFires(self:GetPos(), tr, 20, 40, false, self:GetOwner())
         self:Remove()
     end
 
