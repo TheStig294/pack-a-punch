@@ -103,7 +103,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         -- Preventing purchase if the currently held weapon is invalid
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
-            ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Invalid weapon, try again")
         end
 
         return false
@@ -111,7 +111,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "Weapon has no upgrade made for it :(")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
         end
 
         return false
@@ -124,7 +124,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
 
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] The server likely doesn't have the required mod installed for this weapon's upgrade...\nSee the mod page for details")
         end
 
         return false
@@ -137,7 +137,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
 
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "The weapon you're holding out can't be upgraded")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] The server likely doesn't have the required mod installed for this weapon's upgrade...\nSee the mod page for details")
         end
 
         return false
