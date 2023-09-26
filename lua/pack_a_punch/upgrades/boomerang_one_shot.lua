@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "one_shot_boomerang"
+UPGRADE.id = "boomerang_one_shot"
 UPGRADE.class = "weapon_ttt_boomerang_randomat"
 UPGRADE.name = "1-Shot Boomerang"
 UPGRADE.desc = "It's a 1-shot if it hits you once!"
@@ -33,7 +33,7 @@ function UPGRADE:Apply(SWEP)
         self:EmitSound("weapons/slam/throw.wav")
 
         if SERVER then
-            local boomerang = ents.Create("ttt_pap_one_shot_boomerang")
+            local boomerang = ents.Create("ttt_pap_boomerang_one_shot")
             boomerang:SetAngles(Angle(20, 0, 90))
             boomerang:SetPos(owner:GetShootPos())
             boomerang:SetOwner(owner)
@@ -69,14 +69,6 @@ function UPGRADE:Apply(SWEP)
                 self.noDesc = true
                 TTTPAP:ApplyUpgrade(weapon, self)
             end)
-        end
-    end)
-end
-
-function UPGRADE:Reset()
-    timer.Simple(0.1, function()
-        for _, ply in ipairs(player.GetAll()) do
-            ply.PAP1ShotBoomerang = false
         end
     end)
 end
