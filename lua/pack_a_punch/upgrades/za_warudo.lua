@@ -18,7 +18,7 @@ UPGRADE.convars = {
 
 local lengthSecsCvar = CreateConVar("pap_za_warudo_length_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
 
-local dmgResistCvar = CreateConVar("pap_za_warudo_dmg_resist_mult", 0.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
+local dmgResistCvar = CreateConVar("pap_za_warudo_dmg_resist_mult", 0.8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then
