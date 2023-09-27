@@ -2,18 +2,82 @@ local UPGRADE = {}
 UPGRADE.id = "za_warudo"
 UPGRADE.class = "crimson_new"
 UPGRADE.name = "ZA WARUDO"
-UPGRADE.desc = "Press 'R' to time skip!"
+UPGRADE.desc = "Press 'R' to gain damage resistance and\nslow down time, but you move at normal speed!"
 
 UPGRADE.convars = {
     {
         name = "pap_za_warudo_length_secs",
         type = "int"
-    }
+    },
+    {
+        name = "pap_za_warudo_dmg_resist_mult",
+        type = "float",
+        decimal = 1
+    },
 }
 
 local lengthSecsCvar = CreateConVar("pap_za_warudo_length_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
 
+local dmgResistCvar = CreateConVar("pap_za_warudo_dmg_resist_mult", 0.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
+
 function UPGRADE:Apply(SWEP)
+    if SERVER then
+        util.AddNetworkString("TTTPAPZaWarudoScreenEffects")
+        util.AddNetworkString("TTTPAPZaWarudoScreenEffectsRemove")
+    end
+
+    local timername = SWEP:EntIndex() .. "TTTPAPZaWarudoEnd"
+
+    local function StopSkip(wep, owner)
+        timer.Remove(timername)
+
+        if IsValid(owner) then
+            owner.PAPZaWarudoDmgResist = nil
+        end
+
+        net.Start("crimson_new.OwnerSkipStop")
+        net.Broadcast()
+
+        if IsValid(wep) then
+            wep.InSkip = false
+        end
+
+        timer.Simple(0.1, function()
+            if SERVER then
+                game.SetTimeScale(1)
+
+                timer.Simple(0.1, function()
+                    net.Start("crimson_new.SkipStop")
+                    net.Broadcast()
+                end)
+            end
+
+            for _, ply in pairs(player.GetAll()) do
+                if SERVER then
+                    ply:SetLaggedMovementValue(1)
+                end
+
+                ply:SetDSP(0, false)
+                ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
+
+                if IsValid(ply:GetViewModel()) then
+                    ply:GetViewModel():SetPlaybackRate(1)
+                end
+            end
+        end)
+
+        timer.Simple(0.2, function()
+            net.Start("TTTPAPZaWarudoScreenEffectsRemove")
+            net.Broadcast()
+        end)
+    end
+
+    self:AddHook("PostPlayerDeath", function(ply)
+        if ply.PAPZaWarudoDmgResist then
+            StopSkip(nil, ply)
+        end
+    end)
+
     function SWEP:Reload()
         if SERVER and self:Clip1() > 0 then
             self.Delay = self.Delay or CurTime()
@@ -26,20 +90,38 @@ function UPGRADE:Apply(SWEP)
                     self:TakePrimaryAmmo(1)
                     self:SetNextSecondaryFire(CurTime() + lengthSecsCvar:GetInt())
                     local owner = self:GetOwner()
-                    owner:EmitSound("ttt_pack_a_punch/za_warudo/za_warudo.mp3", 0)
+                    BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/za_warudo/za_warudo.mp3\")")
 
                     timer.Simple(7.256, function()
+                        if not IsValid(owner) or not IsValid(self) then return end
                         self:Skip(true)
-                        net.Start("crimson_new.SkipStop")
+                        hook.Remove("StartCommand", "KCSkip")
+                        self.worlddrop:Remove()
+                        self.dummynpc:Remove()
+                        owner.PAPZaWarudoDmgResist = true
+                        owner:SetNotSolid(false)
+
+                        for _, ply in ipairs(player.GetAll()) do
+                            ply:SetDSP(0, false)
+                            ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 200), 0.5, lengthSecsCvar:GetInt() - 0.5)
+                            ply:SetFOV(ply:GetFOV() * 1.5, 0.5)
+
+                            timer.Simple(0.5, function()
+                                ply:SetFOV(0, 0.25)
+                            end)
+
+                            if ply ~= owner then
+                                net.Start("crimson_new.OwnerSkip")
+                                net.Send(ply)
+                            end
+                        end
+
+                        util.ScreenShake(owner:GetPos(), 20, 10, 1.5, 1000, true)
+                        net.Start("TTTPAPZaWarudoScreenEffects")
                         net.Broadcast()
-                        owner:SetFOV(owner:GetFOV() * 1.5, 0.5)
 
-                        timer.Simple(0.5, function()
-                            owner:SetFOV(0, 0.25)
-                        end)
-
-                        timer.Simple(lengthSecsCvar:GetInt(), function()
-                            self:StopSkip(true)
+                        timer.Create(timername, lengthSecsCvar:GetInt(), 1, function()
+                            StopSkip(self, owner)
                         end)
                     end)
                 end
@@ -47,7 +129,31 @@ function UPGRADE:Apply(SWEP)
         end
     end
 
+    self:AddHook("EntityTakeDamage", function(ent, dmg)
+        if IsValid(ent) and ent.PAPZaWarudoDmgResist then
+            dmg:ScaleDamage(dmgResistCvar:GetFloat())
+        end
+    end)
+
     if CLIENT then
+        -- Adds a blur effect around the edges of the screen
+        net.Receive("TTTPAPZaWarudoScreenEffects", function()
+            hook.Remove("PostDrawEffects", "Skip")
+            local starsMat = Material("effects/kcr_stars")
+
+            hook.Add("RenderScreenspaceEffects", "TTTPAPZaWarudoScreenEffects", function()
+                DrawToyTown(4, ScrH() / 1.75)
+                surface.SetDrawColor(255, 255, 255, 128)
+                surface.SetMaterial(starsMat)
+                surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+            end)
+        end)
+
+        net.Receive("TTTPAPZaWarudoScreenEffectsRemove", function()
+            hook.Remove("RenderScreenspaceEffects", "TTTPAPZaWarudoScreenEffects")
+            surface.PlaySound("weapons/crimson_new/crimson3.wav")
+        end)
+
         function SWEP:PostDrawViewModel(vm, wep, ply)
             local model = ""
 
@@ -157,7 +263,7 @@ function UPGRADE:Apply(SWEP)
                 local randvec1 = Vector(3, 5, -5)
                 local randvec2 = Vector(1, 5, 5)
 
-                if IsValid(owner) and IsValid(lupper) and IsValid(randvec1) then
+                if IsValid(owner) and isnumber(lupper) and IsValid(randvec1) then
                     owner:ManipulateBonePosition(lupper, randvec1)
                     owner:ManipulateBonePosition(rupper, randvec2)
                 end
@@ -165,7 +271,7 @@ function UPGRADE:Apply(SWEP)
                 local s = math.sin(CurTime()) * 15
                 local c = math.cos(CurTime()) * 15
 
-                if IsValid(owner) and IsValid(lupper) and IsValid(Angle(c, s, s)) then
+                if IsValid(owner) and isnumber(lupper) and IsValid(Angle(c, s, s)) then
                     owner:ManipulateBoneAngles(lupper, Angle(c, s, s))
                     owner:ManipulateBoneAngles(rupper, Angle(c, c, s))
                     owner:SetupBones()
@@ -177,7 +283,7 @@ function UPGRADE:Apply(SWEP)
                 arms:Remove()
                 local zero = Vector(0, 0, 0)
 
-                if IsValid(owner) and IsValid(lupper) and IsValid(zero) then
+                if IsValid(owner) and isnumber(lupper) and IsValid(zero) then
                     owner:ManipulateBonePosition(lupper, zero)
                     owner:ManipulateBonePosition(llower, zero)
                     owner:ManipulateBonePosition(rupper, zero)
