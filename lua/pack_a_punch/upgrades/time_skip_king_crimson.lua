@@ -1,38 +1,38 @@
 local UPGRADE = {}
-UPGRADE.id = "za_warudo"
+UPGRADE.id = "time_skip_king_crimson"
 UPGRADE.class = "crimson_new"
-UPGRADE.name = "ZA WARUDO"
+UPGRADE.name = "Time Skip Fists"
 UPGRADE.desc = "Press 'R' to gain damage resistance and\nslow down time, but you move at normal speed!"
 
 UPGRADE.convars = {
     {
-        name = "pap_za_warudo_length_secs",
+        name = "pap_time_skip_king_crimson_length_secs",
         type = "int"
     },
     {
-        name = "pap_za_warudo_dmg_resist_mult",
+        name = "pap_time_skip_king_crimson_dmg_resist_mult",
         type = "float",
         decimal = 1
     },
 }
 
-local lengthSecsCvar = CreateConVar("pap_za_warudo_length_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
+local lengthSecsCvar = CreateConVar("pap_time_skip_king_crimson_length_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
 
-local dmgResistCvar = CreateConVar("pap_za_warudo_dmg_resist_mult", 0.8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
+local dmgResistCvar = CreateConVar("pap_time_skip_king_crimson_dmg_resist_mult", 0.8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then
-        util.AddNetworkString("TTTPAPZaWarudoScreenEffects")
-        util.AddNetworkString("TTTPAPZaWarudoScreenEffectsRemove")
+        util.AddNetworkString("TTTPAPTimeSkipKCScreenEffects")
+        util.AddNetworkString("TTTPAPTimeSkipKCScreenEffectsRemove")
     end
 
-    local timername = SWEP:EntIndex() .. "TTTPAPZaWarudoEnd"
+    local timername = SWEP:EntIndex() .. "TTTPAPTimeSkipKCEnd"
 
     local function StopSkip(wep, owner)
         timer.Remove(timername)
 
         if IsValid(owner) then
-            owner.PAPZaWarudoDmgResist = nil
+            owner.PAPTimeSkipKCDmgResist = nil
         end
 
         net.Start("crimson_new.OwnerSkipStop")
@@ -67,13 +67,13 @@ function UPGRADE:Apply(SWEP)
         end)
 
         timer.Simple(0.2, function()
-            net.Start("TTTPAPZaWarudoScreenEffectsRemove")
+            net.Start("TTTPAPTimeSkipKCScreenEffectsRemove")
             net.Broadcast()
         end)
     end
 
     self:AddHook("PostPlayerDeath", function(ply)
-        if ply.PAPZaWarudoDmgResist then
+        if ply.PAPTimeSkipKCDmgResist then
             StopSkip(nil, ply)
         end
     end)
@@ -90,7 +90,7 @@ function UPGRADE:Apply(SWEP)
                     self:TakePrimaryAmmo(1)
                     self:SetNextSecondaryFire(CurTime() + lengthSecsCvar:GetInt())
                     local owner = self:GetOwner()
-                    BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/za_warudo/za_warudo.mp3\")")
+                    BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/time_skip/time_skip.mp3\")")
 
                     timer.Simple(7.256, function()
                         if not IsValid(owner) or not IsValid(self) then return end
@@ -98,7 +98,7 @@ function UPGRADE:Apply(SWEP)
                         hook.Remove("StartCommand", "KCSkip")
                         self.worlddrop:Remove()
                         self.dummynpc:Remove()
-                        owner.PAPZaWarudoDmgResist = true
+                        owner.PAPTimeSkipKCDmgResist = true
                         owner:SetNotSolid(false)
 
                         for _, ply in ipairs(player.GetAll()) do
@@ -117,7 +117,7 @@ function UPGRADE:Apply(SWEP)
                         end
 
                         util.ScreenShake(owner:GetPos(), 20, 10, 1.5, 1000, true)
-                        net.Start("TTTPAPZaWarudoScreenEffects")
+                        net.Start("TTTPAPTimeSkipKCScreenEffects")
                         net.Broadcast()
 
                         timer.Create(timername, lengthSecsCvar:GetInt(), 1, function()
@@ -130,18 +130,18 @@ function UPGRADE:Apply(SWEP)
     end
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
-        if IsValid(ent) and ent.PAPZaWarudoDmgResist then
+        if IsValid(ent) and ent.PAPTimeSkipKCDmgResist then
             dmg:ScaleDamage(dmgResistCvar:GetFloat())
         end
     end)
 
     if CLIENT then
         -- Adds a blur effect around the edges of the screen
-        net.Receive("TTTPAPZaWarudoScreenEffects", function()
+        net.Receive("TTTPAPTimeSkipKCScreenEffects", function()
             hook.Remove("PostDrawEffects", "Skip")
             local starsMat = Material("effects/kcr_stars")
 
-            hook.Add("RenderScreenspaceEffects", "TTTPAPZaWarudoScreenEffects", function()
+            hook.Add("RenderScreenspaceEffects", "TTTPAPTimeSkipKCScreenEffects", function()
                 DrawToyTown(4, ScrH() / 1.75)
                 surface.SetDrawColor(255, 255, 255, 128)
                 surface.SetMaterial(starsMat)
@@ -149,8 +149,8 @@ function UPGRADE:Apply(SWEP)
             end)
         end)
 
-        net.Receive("TTTPAPZaWarudoScreenEffectsRemove", function()
-            hook.Remove("RenderScreenspaceEffects", "TTTPAPZaWarudoScreenEffects")
+        net.Receive("TTTPAPTimeSkipKCScreenEffectsRemove", function()
+            hook.Remove("RenderScreenspaceEffects", "TTTPAPTimeSkipKCScreenEffects")
             surface.PlaySound("weapons/crimson_new/crimson3.wav")
         end)
 
