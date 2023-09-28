@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
     if CLIENT then
         net.Receive("TTTPAPNpcSpawner", function()
             local name = net.ReadString()
-            local npc = player.GetBots()[#player.GetBots()]
+            local npc = player.GetAll()[#player.GetAll()]
             npc.PAPNpc = true
             npc.PAPNpcName = name
 
@@ -70,7 +70,7 @@ function UPGRADE:Apply(SWEP)
                 rag:Remove()
             end
 
-            local npc = player.GetBots()[#player.GetBots()]
+            local npc = player.GetAll()[#player.GetAll()]
             npc:SpawnForRound(true)
             npc:SetModel(model)
             npc:Give("weapon_zm_shotgun")
@@ -114,7 +114,7 @@ end
 function UPGRADE:Reset()
     if CLIENT then return end
 
-    for _, bot in ipairs(player.GetBots()) do
+    for _, bot in ipairs(player.GetAll()) do
         if bot.PAPNpc then
             bot:Kick()
         end

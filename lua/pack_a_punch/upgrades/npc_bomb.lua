@@ -62,7 +62,7 @@ function UPGRADE:Apply(SWEP)
         net.Receive("TTTPAPNpcBombSpawn", function()
             local name = net.ReadString()
             local ply = LocalPlayer()
-            local npc = player.GetBots()[#player.GetBots()]
+            local npc = player.GetAll()[#player.GetAll()]
             npc.PAPNpcBomb = true
             npc.PAPNpcBombName = name
 
@@ -72,7 +72,7 @@ function UPGRADE:Apply(SWEP)
                     local npcs = {}
 
                     -- Don't draw a halo around an NPC if they're dead or not valid
-                    for _, bot in ipairs(player.GetBots()) do
+                    for _, bot in ipairs(player.GetAll()) do
                         if bot.PAPNpcBomb and bot:Alive() and not bot:IsSpec() then
                             table.insert(npcs, bot)
                         end
@@ -117,7 +117,7 @@ function UPGRADE:Apply(SWEP)
                 rag:Remove()
             end
 
-            local npc = player.GetBots()[#player.GetBots()]
+            local npc = player.GetAll()[#player.GetAll()]
             npc:SpawnForRound(true)
             npc:SetModel(model)
             npc:Give("weapon_zm_shotgun")
@@ -130,13 +130,13 @@ function UPGRADE:Apply(SWEP)
 
             npc.PAPExplodeNPCBomb = function()
                 -- "self" refers to the SWEP, not the NPC
-                if self.PAPExploded then return end
-                self.PAPExploded = true
-                local pos = self.PAPRevivedNPC:GetPos()
+                if npc.PAPExploded then return end
+                npc.PAPExploded = true
+                local pos = npc:GetPos()
                 local radius = radiusCvar:GetInt()
                 local damage = damageCvar:GetInt()
-                local attacker = self.PAPOwner or self
-                util.BlastDamage(self, attacker, pos, radius, damage)
+                local attacker = npc.PAPOwner or npc
+                util.BlastDamage(npc, attacker, pos, radius, damage)
                 local effect = EffectData()
                 effect:SetStart(pos)
                 effect:SetOrigin(pos)
@@ -144,10 +144,10 @@ function UPGRADE:Apply(SWEP)
                 effect:SetRadius(radius)
                 effect:SetMagnitude(damage)
                 util.Effect("Explosion", effect, true, true)
-                sound.Play("c4.explode", self:GetPos(), 60, 150)
+                sound.Play("c4.explode", npc:GetPos(), 60, 150)
 
                 if SERVER then
-                    self.PAPRevivedNPC:Kick()
+                    npc:Kick()
                 end
             end
 
@@ -188,26 +188,28 @@ function UPGRADE:Apply(SWEP)
     end)
 
     -- Exploding NPC on getting near another player
-    self:AddHook("ShouldCollide", function(ent1, ent2)
-        if not self:IsPlayer(ent1) or not self:IsPlayer(ent2) then return end
-        if not ent1.PAPNpcBomb and not ent2.PAPNpcBomb then return end
+    if SERVER then
+        self:AddHook("ShouldCollide", function(ent1, ent2)
+            if not self:IsPlayer(ent1) or not self:IsPlayer(ent2) then return end
+            if not ent1.PAPNpcBomb and not ent2.PAPNpcBomb then return end
 
-        if ent1:GetPos():Distance(ent2:GetPos()) < triggerRadiusCvar:GetInt() then
-            if ent1.PAPNpcBomb then
-                ent1:PAPExplodeNPCBomb()
-            end
+            if ent1:GetPos():Distance(ent2:GetPos()) < triggerRadiusCvar:GetInt() then
+                if ent1.PAPNpcBomb then
+                    ent1:PAPExplodeNPCBomb()
+                end
 
-            if ent2.PAPNpcBomb then
-                ent2:PAPExplodeNPCBomb()
+                if ent2.PAPNpcBomb then
+                    ent2:PAPExplodeNPCBomb()
+                end
             end
-        end
-    end)
+        end)
+    end
 end
 
 function UPGRADE:Reset()
     if CLIENT then return end
 
-    for _, bot in ipairs(player.GetBots()) do
+    for _, bot in ipairs(player.GetAll()) do
         if bot.PAPNpcBomb then
             bot:Kick()
         end
