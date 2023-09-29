@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "360_sniper"
 UPGRADE.class = "ttt_combine_sniper_summoner"
 UPGRADE.name = "360 Sniper"
-UPGRADE.desc = "Spins around on the spot, look out!"
+UPGRADE.desc = "Spins around on the spot, watch out!"
 
 function UPGRADE:Apply(SWEP)
     function SWEP:place_sniper(tracedata)
@@ -22,7 +22,15 @@ function UPGRADE:Apply(SWEP)
             ent:SetPos(spawnereasd)
             ent:SetAngles(Angle(pitch, yaw, roll))
             ent:Spawn()
-            ent:SetMaterial(TTTPAP.camo)
+
+            if util.IsValidModel("models/player/Jenssons/kermit.mdl") then
+                ent:SetModel("models/player/Jenssons/kermit.mdl")
+                local randomNum = math.random(1, 2)
+                ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
+                ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
+            else
+                ent:SetMaterial(TTTPAP.camo)
+            end
 
             timer.Create("CombineSniperRotate" .. ent:EntIndex(), 0.1, 0, function()
                 if IsValid(ent) then
