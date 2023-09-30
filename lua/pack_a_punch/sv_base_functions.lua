@@ -111,6 +111,7 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
 
         -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
         UPGRADE.oldClip = oldClip
+        hook.Run("TTTPAPOrder", ply, SWEP, UPGRADE)
         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end)
 end
