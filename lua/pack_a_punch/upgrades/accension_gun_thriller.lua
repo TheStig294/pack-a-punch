@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "accension_gun_thriller"
 UPGRADE.class = "weapon_ttt_thriller"
 UPGRADE.name = "Accension Gun"
-UPGRADE.desc = "x2 ammo, players accend into the sky as they die..."
+UPGRADE.desc = "x2 ammo, players ascend into the sky as they die..."
 UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
