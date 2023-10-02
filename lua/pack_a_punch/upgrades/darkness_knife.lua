@@ -35,14 +35,14 @@ function UPGRADE:Apply(SWEP)
                 self:AddHook("PreDrawSkyBox", function() return true end)
             end
 
-            render.RedownloadAllLightmaps(true, true)
+            render.RedownloadAllLightmaps(false, false)
         end)
     end
 end
 
 function UPGRADE:Reset()
     if CLIENT then
-        render.RedownloadAllLightmaps(true, true)
+        render.RedownloadAllLightmaps(false, false)
     end
 end
 
