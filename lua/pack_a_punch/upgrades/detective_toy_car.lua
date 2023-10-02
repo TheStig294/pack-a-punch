@@ -13,26 +13,6 @@ UPGRADE.convars = {
     {
         name = "pap_detective_toy_car_place_range",
         type = "int"
-    },
-    {
-        name = "pap_detective_toy_car_target_damage",
-        type = "int"
-    },
-    {
-        name = "pap_detective_toy_car_non_target_damage",
-        type = "int"
-    },
-    {
-        name = "pap_detective_toy_car_speed",
-        type = "int"
-    },
-    {
-        name = "pap_detective_toy_car_scale",
-        type = "float"
-    },
-    {
-        name = "pap_detective_toy_car_range",
-        type = "int"
     }
 }
 
