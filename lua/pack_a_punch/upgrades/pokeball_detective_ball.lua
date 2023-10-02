@@ -131,7 +131,6 @@ function UPGRADE:Apply(SWEP)
         local pokeball = ents.Create("ttt_pap_pokeball")
         if not IsValid(pokeball) then return end
         pokeball.Thrower = self:GetOwner()
-        pokeball.ValidateTarget = function() return true end
         -- Role-setting function defined below
         pokeball.OnSuccess = self.OnSuccess
         -- Set via the pokeball entity

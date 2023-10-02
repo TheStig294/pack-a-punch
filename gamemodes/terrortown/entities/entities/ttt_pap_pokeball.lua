@@ -75,16 +75,6 @@ if SERVER then
       local owner = self.Thrower
       -- Prevent the player from catching themselves
       if not self.AllowSelfCapture and (not IsValid(owner) or ply == owner) then return end
-      -- Use the in-built function in the Marshal's badge to check if a player is able to be promoted
-      local validTarget, validTargetMessage = self:ValidateTarget(ply)
-
-      if not validTarget then
-         owner:PrintMessage(HUD_PRINTCENTER, validTargetMessage)
-         self:GiveSWEP(owner)
-
-         return
-      end
-
       -- Try to catch the player!
       self:ResetSequence("open")
       self:EmitSound("ttt_pack_a_punch/pokeball/catch.mp3")

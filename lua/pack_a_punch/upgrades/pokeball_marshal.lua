@@ -129,7 +129,6 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(pokeball) then return end
         pokeball.Thrower = self:GetOwner()
         -- Functions from the deputy badge for changing roles
-        pokeball.ValidateTarget = self.ValidateTarget
         pokeball.OnSuccess = self.OnSuccess
         -- Set via the pokeball entity
         pokeball.CaughtPly = self.CaughtPly
