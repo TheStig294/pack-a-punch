@@ -62,8 +62,20 @@ end
 if SERVER then
     util.AddNetworkString("TTTPAPChangeConvar")
 
+    -- Manually define player:IsAdmin() for TTT2
+    local function IsAdmin(ply)
+        if not IsValid(ply) or not ply:IsPlayer() then return false end
+        local userGroup = ply:GetNWString("UserGroup", "user")
+
+        if userGroup == "superadmin" or userGroup == "admin" then
+            return true
+        else
+            return false
+        end
+    end
+
     net.Receive("TTTPAPChangeConvar", function(_, ply)
-        if not ply:IsAdmin() then return end
+        if not IsAdmin(ply) then return end
         local cvarName = net.ReadString()
         -- Don't allow non-PAP convars to be changed by this net message
         if not PAPConvars[cvarName] then return end

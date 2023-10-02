@@ -16,8 +16,20 @@ surface.CreateFont("PAPDesc", {
     outline = false,
 })
 
+-- Manually define player:IsAdmin() for TTT2
+local function IsAdmin(ply)
+    if not IsValid(ply) or not ply:IsPlayer() then return false end
+    local userGroup = ply:GetNWString("UserGroup", "user")
+
+    if userGroup == "superadmin" or userGroup == "admin" then
+        return true
+    else
+        return false
+    end
+end
+
 local function OptionsMenu(UPGRADE)
-    if not LocalPlayer():IsAdmin() then return end
+    if not IsAdmin(LocalPlayer()) then return end
     -- Main window frame
     local frame = vgui.Create("DFrame")
     frame:SetSize(500, 350)
@@ -305,7 +317,7 @@ local function DrawWeaponsList(list, searchQuery)
 end
 
 hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
-    if not LocalPlayer():IsAdmin() then return end
+    if not IsAdmin(LocalPlayer()) then return end
     -- Base panel
     local basePnl = vgui.Create("DPanel")
     basePnl:Dock(FILL)
