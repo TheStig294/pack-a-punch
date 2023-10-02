@@ -13,11 +13,6 @@ TTTPAP.upgrade_meta = {} -- Set by sh_upgrade_metatable.lua
 -- Create convar to disable trying to apply generic upgrades on weapons without one
 CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
 
--- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
-CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
-
-CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
-
 local PAPConvars = {
     ttt_pap_apply_generic_upgrades = true,
     ttt_pap_detective = true,

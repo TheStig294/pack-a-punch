@@ -25,9 +25,6 @@ AddClient("pack_a_punch/cl_base_functions.lua")
 -- UPGRADE object
 AddServer("pack_a_punch/sh_upgrade_metatable.lua")
 AddClient("pack_a_punch/sh_upgrade_metatable.lua")
--- Shop passive item
-AddServer("pack_a_punch/sh_pap_item.lua")
-AddClient("pack_a_punch/sh_pap_item.lua")
 -- F1 menu tab
 AddClient("pack_a_punch/cl_f1_settings_tab.lua")
 -- Weapon upgrades
