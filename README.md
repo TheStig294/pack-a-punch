@@ -168,12 +168,12 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2087368173>
 
 ## Baguette (Le Club des Freemans)
 
-Temps de recharge nul, vitesse de swing x2!\
+Zero push cooldown, x2 swing speed!\
 \
 *ttt_pap_the_frenchmans_club* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861> or <https://steamcommunity.com/sharedfiles/filedetails/?id=2876412670>
 
 ## Barnacle (Invincible Barnacle)
 
