@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "double_prop_blaster"
 UPGRADE.class = "weapon_prop_blaster"
 UPGRADE.name = "Double Prop Blaster"
-UPGRADE.desc = "Throw 2 grenades! The other takes an extra 20 seconds to explode!"
+UPGRADE.desc = "Throw 2 grenades!\nThe other takes an extra 20 seconds to explode!"
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPOldCreateGrenade = SWEP.CreateGrenade

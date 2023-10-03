@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "royalty_free_gun"
 UPGRADE.class = "weapon_dubstepgun"
 UPGRADE.name = "Royalty Free Gun"
-UPGRADE.desc = "New music, more damage, goes through most explosion immunities!"
+UPGRADE.desc = "New music, more damage,\ngoes through most explosion immunities!"
 
 function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
