@@ -162,7 +162,7 @@ local function DrawWeaponBar(list, UPGRADE)
     icon:SetSize(64, 64)
     -- Background box
     local background = list:Add("DPanel")
-    background:SetSize(480, 64)
+    background:SetSize(475, 64)
     background:DockPadding(10, 0, 10, 5)
     -- Enabled cvar
     local alpha = 255
@@ -320,7 +320,6 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
     if not IsAdmin(LocalPlayer()) then return end
     -- Base panel
     local basePnl = vgui.Create("DPanel")
-    basePnl:Dock(FILL)
     basePnl:SetBackgroundColor(COLOR_BLACK)
     -- List outside the scrollbar
     local nonScrollList = vgui.Create("DIconLayout", basePnl)
@@ -337,7 +336,7 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
 
     -- Title text
     local titleText = nonScrollList:Add("DLabel")
-    titleText:SetText("                             Pack-a-Punch Admin Options")
+    titleText:SetText("                          Pack-a-Punch Admin Options")
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
     -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
