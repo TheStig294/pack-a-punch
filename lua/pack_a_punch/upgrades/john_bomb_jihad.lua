@@ -1,6 +1,6 @@
 local UPGRADE = {}
-UPGRADE.id = "john_bomb"
-UPGRADE.class = "weapon_ttt_suicide"
+UPGRADE.id = "john_bomb_jihad"
+UPGRADE.class = "weapon_ttt_jihad"
 UPGRADE.name = "John Bomb"
 UPGRADE.desc = "Plays the John Cena intro"
 
@@ -9,7 +9,8 @@ function UPGRADE:Apply(SWEP)
         util.PrecacheSound("ttt_pack_a_punch/john_bomb/johncena.mp3")
     end
 
-    function SWEP:Asplode(owner)
+    function SWEP:Asplode()
+        local owner = self:GetOwner()
         local ent = ents.Create("env_explosion")
         ent:SetPos(owner:GetPos())
         ent:SetOwner(owner)
@@ -31,7 +32,7 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
 
         if IsValid(owner) then
-            owner:StopSound("siege/suicide.wav")
+            owner:StopSound("ttt_jihad")
             owner:EmitSound("ttt_pack_a_punch/john_bomb/johncena.mp3")
         end
     end

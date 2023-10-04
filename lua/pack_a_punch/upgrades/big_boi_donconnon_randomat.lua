@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "big_boi_donconnon"
+UPGRADE.id = "big_boi_donconnon_randomat"
 UPGRADE.class = "weapon_ttt_donconnon_randomat"
 UPGRADE.name = "Big Boi Donconnon"
 UPGRADE.desc = "Bigger hitbox, bigger explosion, leaves fire"

@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "box_gloves"
+UPGRADE.id = "box_gloves_randomat"
 UPGRADE.class = "weapon_randomat_boxgloves"
 UPGRADE.name = "Box Gloves"
 UPGRADE.desc = "Players you hit turn into boxes"
