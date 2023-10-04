@@ -166,14 +166,23 @@ Auto-shoots, pressing 'E' removes the cannon!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2087368173>
 
-## Baguette (Le Club des Freemans)
+## Baguette Randomat Weapon (Le Club des Freemans)
 
 Zero push cooldown, x2 swing speed!\
 \
 *ttt_pap_the_frenchmans_club* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861> or <https://steamcommunity.com/sharedfiles/filedetails/?id=2876412670>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
+
+## Baguette Frenchman Role Weapon (Baguette Qui Crie)
+
+Makes French shouting sounds on killing a player\
+\
+*ttt_pap_shouting_baguette* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2876412670>
 
 ## Barnacle (Invincible Barnacle)
 
@@ -255,7 +264,16 @@ Respawn in jail after you die\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2633130293>
 
-## Boomerang (1-Shot Boomerang)
+## Boomerang (Explosive Boomerang)
+
+Boomerang explodes on touch!\
+\
+*ttt_pap_boomerang_explosive* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=922438160>
+
+## Boomerang Randomat Weapon (1-Shot Boomerang)
 
 It's a 1-shot if it hits you once!\
 \
@@ -317,6 +335,15 @@ Infinite PaP presents and coal piece shooting!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739626026>
 
+## Christmas Cannon Randomat Weapon (Infinite Christmas Cannon)
+
+Infinite Pack-a-Punch presents!\
+\
+*ttt_pap_infinite_christmas_cannon_randomat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
+
 ## Claws (Braaaaaains)
 
 Makes zombie sounds for you!\
@@ -325,16 +352,6 @@ Makes zombie sounds for you!\
 \
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
-
-## Clear! Defibrillator (Special Innocent Defib)
-
-Turns innocents into non-vanilla innocents!\
-\
-*ttt_pap_defib_special_clear* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_defib_special_clear_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
 ## Cloaking Device 2.0 (Ghost Cloak)
 
@@ -443,14 +460,32 @@ Testing delay time doubles with each use\
 \
 Upgrade for: Default TTT weapon
 
-## Dance Gun (Accension Gun)
+## Dance Gun Dance till you're dead (Accension Gun)
 
 x2 ammo, players ascend into the sky as they die...\
 \
-*ttt_pap_accension_gun_random* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_accension_gun_dance_dead* - Default: 1 - Whether this upgrade is enabled\
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1433651939>
+
+## Dance Gun Random Music (Accension Gun)
+
+x2 ammo, players ascend into the sky as they die...\
+\
+*ttt_pap_accension_gun_random* - Default: 1 - Whether this upgrade is enabled\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2236051565>
+
+## Dance Gun Thriller Gun (Accension Gun)
+
+x2 ammo, players ascend into the sky as they die...\
+\
+*ttt_pap_accension_gun_thriller* - Default: 1 - Whether this upgrade is enabled\
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=794651430>
 
 ## Deagle (The Head Lifter)
 
@@ -492,15 +527,44 @@ Deaths are more... dramatic?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2552417009>
 
-## Defibrillator (Special Innocent Defib)
+## Defibrillator (Guaranteed Defib)
+
+Always guaranteed to work!\
+\
+*ttt_pap_guaranteed_defib* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=801433502>
+
+## Defibrillator Clear! Randomat Weapon (Special Innocent Defib)
 
 Turns innocents into non-vanilla innocents!\
 \
-*ttt_pap_defib_special_detective* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_defib_special_clear* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_defib_special_clear_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
+
+## Defibrillator Paramedic Role Weapon (Special Innocent Defib)
+
+Turns innocents into non-vanilla innocents!\
+\
+*ttt_pap_defib_special* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_defib_special_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
 \
-Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
+
+## Defibrillator Patient Confidentiality Randomat Weapon (Special Innocent Defib)
+
+Turns innocents into non-vanilla innocents!\
+\
+*ttt_pap_defib_special_patientconf* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_defib_special_patientconf_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
 ## Defuser (Bomb Silencer)
 
@@ -570,15 +634,6 @@ x2 ammo, plays Robin quotes\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2457576268>
 
-## Donconnon (Big Boi Donconnon)
-
-Bigger hitbox, bigger explosion, leaves fire\
-\
-*ttt_pap_big_boi_donconnon* - Default: 1 - Whether this upgrade is enabled
-\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
-
 ## Donconnon MKII (Big Boi Donconnon)
 
 Bigger hitbox, bigger explosion, leaves fire\
@@ -587,6 +642,15 @@ Bigger hitbox, bigger explosion, leaves fire\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2237522867>
+
+## Donconnon Randomat Weapon (Big Boi Donconnon)
+
+Bigger hitbox, bigger explosion, leaves fire\
+\
+*ttt_pap_big_boi_donconnon_randomat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
 ## Double Barrel (Lawn Defender)
 
@@ -668,6 +732,34 @@ Sets someone on fire that doesn't go out
 \
 Upgrade for: Default TTT weapon
 
+## Flare gun Spy Role Weapon (Perma-Fire Gun)
+
+Sets someone on fire that doesn't go out
+(Unless they go into water)\
+\
+*ttt_pap_perma_fire_gun_spy* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
+
+## Fool's Golden Gun (Fool's Platinum Gun)
+
+Turns the person you shoot into an innocent and kills you\
+\
+*ttt_pap_platinum_gun_fools* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2575320481>
+
+## Frag Grenade (Big Boi Frag Grenade)
+
+x2 explosion radius!\
+\
+*ttt_pap_big_boi_frag_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
+
 ## Glock (Mini-Glock)
 
 Big fire rate, ammo, and fire spread increase\
@@ -686,6 +778,15 @@ Players you hit turn into boxes\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739626026>
 
+## Gloves Randomat Weapon (Box Gloves)
+
+Players you hit turn into boxes\
+\
+*ttt_pap_box_gloves_randomat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
+
 ## Gold Dragon (Platinum Dragon)
 
 x3 ammo\
@@ -697,6 +798,16 @@ x3 ammo\
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=337994500>
 
 ## Golden Deagle (Platinum Gun)
+
+Shoot a bad guy: Get to shoot again
+Don't shoot a bad guy: One of them gets an extra life!\
+\
+*ttt_pap_platinum_gun_simple* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=253737047>
+
+## Golden Deagle For Custom Roles (Platinum Gun)
 
 Shoot a bad guy: Get to shoot again
 Don't shoot a bad guy: One of them gets an extra life!\
@@ -729,12 +840,21 @@ Upgrade for: Default TTT weapon
 
 ## Harpoon (Triple Poon)
 
+Throw 3 harpoons at once!\
+\
+*ttt_pap_triple_poon* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=456189236>
+
+## Hwapoon (Triple Poon)
+
 Throw 3 hwapoons at once!\
 \
 *ttt_pap_triple_hwapoon* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1625876886> or <https://steamcommunity.com/sharedfiles/filedetails/?id=456189236>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1625876886>
 
 ## Health Station (Super Microwave)
 
@@ -779,6 +899,28 @@ for 20 seconds!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2377790970>
 
+## ID Bomb (NPC Bomb)
+
+Turns a body into an invincible walking NPC!\
+Getting near the NPC causes them to explode\
+\
+*ttt_pap_npc_bomb* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_npc_bomb_radius* - Default: 400 - Explosion radius\
+*pap_npc_bomb_damage* - Default: 1000 - Explosion damage\
+*pap_npc_bomb_trigger_radius* - Default: 100 - Distance before triggering explosion\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=305101059>
+
+## ID Bomb Defuser (NPC Bomb Defuser)
+
+Removes the NPC bomb you're looking at\
+\
+*ttt_pap_npc_bomb_defuser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=305101059>
+
 ## Igniter (Elmo Igniter)
 
 Displays the burning elmo meme while held\
@@ -797,6 +939,19 @@ Larger explosion, fire lasts a very long time!\
 \
 Upgrade for: Default TTT weapon
 
+## Jetpack (Passive Levitator)
+
+Way better controls, can shoot while flying!\
+\
+*ttt_pap_passive_levitator* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_passive_levitator_move_speed* - Default: 224 - Move speed\
+*pap_passive_levitator_side_move_speed_cap* - Default: 1200 - Side move speed cap\
+*pap_passive_levitator_move_velocity* - Default: 1200 - Move velocity\
+*pap_passive_levitator_air_resistance* - Default: 2.5 - Air resistance\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=284418937>
+
 ## Jetpack Deployer (Slampack)
 
 Immune to fall damage, press crouch to slam!\
@@ -805,6 +960,15 @@ Immune to fall damage, press crouch to slam!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1735229517>
+
+## Jihad Bomb (John Bomb)
+
+Plays the John Cena intro\
+\
+*ttt_pap_john_bomb_jihad* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=105875340>
 
 ## King Crimson (Time Skip Fists)
 
@@ -818,7 +982,34 @@ slow down time, but you move at normal speed!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2291887883>
 
-## Knife (Murder Knife)
+## Knife (Double Knife)
+
++1 extra use, one-shot kills!\
+\
+*ttt_pap_double_knife* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: Default TTT weapon
+
+## Knife Among Us Randomat Weapon (Throwable Kill Knife)
+
+Is now throwable!\
+\
+*ttt_pap_throwable_kill_knife* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428372933>
+
+## Knife Killer Role Weapon (Darkness Knife)
+
+Right-click to make the map go dark, lasts until you die, or lose the knife!\
+\
+*ttt_pap_darkness_knife* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
+
+## Knife Murder Randomat Weapon (Murder Knife)
 
 Right-click to throw knives, one-shot kills!\
 \
@@ -826,6 +1017,25 @@ Right-click to throw knives, one-shot kills!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
+
+## Knife Secret Santa Randomat Weapon (Double Knife)
+
++1 extra use\
+\
+*ttt_pap_double_knife_santa* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2927584355>
+
+## Krampas Claws Role Weapon (Speedy Claws)
+
+Move much faster!\
+\
+*ttt_pap_speedy_claws* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_speedy_claws_mult* - Default: 2 - Speed multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2942056355>
 
 ## Laserpointer (Infinite Laser)
 
@@ -955,7 +1165,16 @@ Do do do do doooo...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
 
-## Parasite Cure (Parasite Cure)
+## Parasite Cure (Parasite Tester)
+
+Works on living parasite players instead!\
+\
+*ttt_pap_parasite_tester* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
+## Parasite Cure Fake (Explosive Parasite Cure)
 
 "Cures" a player of a parasite,
 by exploding them after 5 seconds!\
@@ -965,13 +1184,12 @@ by exploding them after 5 seconds!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
-## Patient Confidentiality Defibrillator (Special Innocent Defib)
+## Pat Down Club Randomat Weapon (The Pat Down Club)
 
-Turns innocents into non-vanilla innocents!\
+Zero push cooldown, x2 swing speed!\
 \
-*ttt_pap_defib_special_patientconf* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_the_pat_down_club* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_defib_special_patientconf_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
@@ -1001,6 +1219,15 @@ Temporarily blocks the victim's screen with lots of popups\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2126493892>
+
+## Possum Disguiser Role Weapon (Possum Disguise)
+
+Increased disguiser capacity\
+\
+*ttt_pap_possum_disguiser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2652805911>
 
 ## Prop Blaster (Double Prop Blaster)
 
@@ -1038,6 +1265,28 @@ Make a randomat instead!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
+
+## Remote Sticky Bomb (NPC Bomb)
+
+Turns a body into an invincible walking NPC!\
+Getting near the NPC causes them to explode\
+\
+*ttt_pap_npc_bomb_remote* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_npc_bomb_remote_radius* - Default: 400 - Explosion radius\
+*pap_npc_bomb_remote_damage* - Default: 1000 - Explosion damage\
+*pap_npc_bomb_remote_trigger_radius* - Default: 100 - Distance before triggering explosion\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=550005969>
+
+## Remote Sticky Bomb Defuser (NPC Bomb Defuser)
+
+Removes the NPC bomb you're looking at\
+\
+*ttt_pap_npc_bomb_remote_defuser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=550005969>
 
 ## Revolver (Noir Quote Pistol)
 
@@ -1188,6 +1437,15 @@ Converts *anything* into a bomb station!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Suicide Bomb (John Bomb)
+
+Plays the John Cena intro\
+\
+*ttt_pap_john_bomb_suicide* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
+
 ## Taxidermy Kit (NPC Spawner)
 
 Turns a body into an invincible walking NPC!\
@@ -1246,14 +1504,14 @@ Lasts longer and gain damage resistance while acitve\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1337349942>
 
-## Traitor Kill Knife (Throwable Kill Knife)
+## Traitor Bike (Fast Bike)
 
-Is now throwable!\
+Move fast while riding!\
 \
-*ttt_pap_throwable_kill_knife* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_fast_bike* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428372933>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1858836015>
 
 ## UMP Prototype (Assault Taser)
 
