@@ -11,7 +11,7 @@ TTTPAP.shootSound = Sound("ttt_pack_a_punch/shoot.mp3")
 TTTPAP.upgrade_meta = {} -- Set by sh_upgrade_metatable.lua
 
 -- Create convar to disable trying to apply generic upgrades on weapons without one
-CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random generic upgrade (Normally a stats upgrade)", 0, 1)
+CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
 
 local PAPConvars = {
     ttt_pap_apply_generic_upgrades = true,
