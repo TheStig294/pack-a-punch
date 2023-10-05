@@ -23,7 +23,7 @@ local multCvar = CreateConVar("pap_potion_strength_mult", "1.5", {FCVAR_ARCHIVE,
 
 local otherPlayerCostCvar = CreateConVar("pap_potion_strength_other_player_cost", "25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Cost on using on other player", 1, 100)
 
-local otherPlayerSecsCvar = CreateConVar("pap_potion_strength_other_player_secs", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs other player dmg buff lasts", 1, 60)
+local otherPlayerSecsCvar = CreateConVar("pap_potion_strength_other_player_secs", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs other player dmg buff lasts", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     local HealSound1 = "minecraft_original/glass1.wav"

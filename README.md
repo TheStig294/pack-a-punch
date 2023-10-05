@@ -1275,7 +1275,7 @@ Increases your damage!\
 \
 *pap_potion_strength_mult* - Default: 1.5 - Damage multiplier\
 *pap_potion_strength_other_player_cost* - Default: 25 - Cost on using on other player\
-*pap_potion_strength_other_player_secs* - Default: 5 - Secs other player dmg buff lasts\
+*pap_potion_strength_other_player_secs* - Default: 10 - Secs other player dmg buff lasts\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
