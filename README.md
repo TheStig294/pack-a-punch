@@ -1046,6 +1046,15 @@ x999 ammo lol\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1386154572>
 
+## Lift Grenade (Rocket Grenade)
+
+Launches players into the sky!\
+\
+*ttt_pap_rocket_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2958417945>
+
 ## M16 (Skullcrusher)
 
 Ammo + fire rate increase\
