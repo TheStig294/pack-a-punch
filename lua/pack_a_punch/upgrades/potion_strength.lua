@@ -41,8 +41,15 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(owner) then return end
         owner.PAPStrengthPotion = true
         self:EmitSound(HealSound2)
+        local timername = "use_ammo" .. self:EntIndex()
 
-        timer.Create("use_ammo" .. self:EntIndex(), 0.1, 0, function()
+        timer.Create(timername, 0.1, 0, function()
+            if not IsValid(self) then
+                timer.Remove(timername)
+
+                return
+            end
+
             if self:Clip1() <= self.MaxAmmo then
                 self:SetClip1(math.min(self:Clip1() - 1, self.MaxAmmo))
             end

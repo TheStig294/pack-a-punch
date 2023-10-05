@@ -29,8 +29,15 @@ function UPGRADE:Apply(SWEP)
         self:TakePrimaryAmmo(1)
         Enabled = true
         local tickRate = mc_invis_tick_rate:GetFloat()
+        local timername = "use_ammo" .. self:EntIndex()
 
         timer.Create("use_ammo" .. self:EntIndex(), tickRate, 0, function()
+            if not IsValid(self) then
+                timer.Remove(timername)
+
+                return
+            end
+
             if self:Clip1() <= self.MaxAmmo then
                 self:SetClip1(math.min(self:Clip1() - 1, self.MaxAmmo))
             end
