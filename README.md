@@ -1238,6 +1238,68 @@ Increased disguiser capacity\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2652805911>
 
+## Potion of Health (Regeneration Potion)
+
+Continually regenerates your health!\
+\
+*ttt_pap_potion_regen* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_potion_regen_delay* - Default: 2 - Secs between heals\
+*pap_potion_regen_amount* - Default: 5 - Heal amount\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Immortality (Invunerability Potion)
+
+Take bullet damage only while held!\
+\
+*ttt_pap_potion_invun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Invisibility (Night Vision Potion)
+
+Lets you see players though walls!\
+\
+*ttt_pap_potion_night_vision* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Jump (Strength Potion)
+
+Increases your damage!\
+\
+*ttt_pap_potion_strength* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_potion_strength_mult* - Default: 1.5 - Damage multiplier\
+*pap_potion_strength_other_player_cost* - Default: 25 - Cost on using on other player\
+*pap_potion_strength_other_player_secs* - Default: 5 - Secs other player dmg buff lasts\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Poison (Slowness Potion)
+
+Slows a player down permenantly!\
+\
+*ttt_pap_potion_slow* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_potion_slow_mult* - Default: 2 - Slowness multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Speed (Leaping Potion)
+
+Turns a body into an invincible walking NPC!\
+Getting near the NPC causes them to explode\
+\
+*ttt_pap_potion_leaping* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_potion_leaping_mult* - Default: 5 - Jump multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
 ## Prop Blaster (Double Prop Blaster)
 
 Throw 2 grenades! The other takes an extra 20 seconds to explode!\

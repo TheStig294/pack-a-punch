@@ -1,0 +1,159 @@
+local UPGRADE = {}
+UPGRADE.id = "potion_strength"
+UPGRADE.class = "weapon_ttt_mc_jumppotion"
+UPGRADE.name = "Strength Potion"
+UPGRADE.desc = "Increases your damage!"
+
+UPGRADE.convars = {
+    {
+        name = "pap_potion_strength_mult",
+        type = "float"
+    },
+    {
+        name = "pap_potion_strength_other_player_cost",
+        type = "int"
+    },
+    {
+        name = "pap_potion_strength_other_player_secs",
+        type = "int"
+    }
+}
+
+local multCvar = CreateConVar("pap_potion_strength_mult", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage multiplier", 1, 3)
+
+local otherPlayerCostCvar = CreateConVar("pap_potion_strength_other_player_cost", "25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Cost on using on other player", 1, 100)
+
+local otherPlayerSecsCvar = CreateConVar("pap_potion_strength_other_player_secs", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs other player dmg buff lasts", 1, 60)
+
+function UPGRADE:Apply(SWEP)
+    local HealSound1 = "minecraft_original/glass1.wav"
+    local HealSound2 = "minecraft_original/launch1.wav"
+    local DenySound = "minecraft_original/wood_click.wav"
+    local DestroySound = "minecraft_original/glass2.wav"
+    local Enabled = false
+
+    timer.Simple(0.1, function()
+        SWEP.MaxAmmo = SWEP:Clip1()
+    end)
+
+    function SWEP:StrengthEnable()
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
+        owner.PAPStrengthPotion = true
+        self:EmitSound(HealSound2)
+
+        timer.Create("use_ammo" .. self:EntIndex(), 0.1, 0, function()
+            if self:Clip1() <= self.MaxAmmo then
+                self:SetClip1(math.min(self:Clip1() - 1, self.MaxAmmo))
+            end
+
+            if self:Clip1() <= 0 then
+                self:StrengthDisable()
+
+                if SERVER then
+                    self:Remove()
+                end
+
+                self:EmitSound(DestroySound)
+            end
+        end)
+
+        Enabled = true
+    end
+
+    function SWEP:StrengthDisable()
+        -- Only play the sound if we're enabled, but run everything else
+        -- so we're VERY SURE this disables
+        if Enabled then
+            self:EmitSound(HealSound1)
+        end
+
+        local owner = self:GetOwner()
+
+        if IsValid(owner) then
+            owner.PAPStrengthPotion = false
+        end
+
+        timer.Remove("use_ammo" .. self:EntIndex())
+        Enabled = false
+    end
+
+    self:AddHook("EntityTakeDamage", function(ent, dmg)
+        local attacker = dmg:GetAttacker()
+
+        if self:IsAlivePlayer(attacker) and attacker.PAPStrengthPotion then
+            dmg:ScaleDamage(multCvar:GetFloat())
+        end
+    end)
+
+    function SWEP:SecondaryAttack()
+        if Enabled then
+            self:StrengthDisable()
+        else
+            self:StrengthEnable()
+        end
+    end
+
+    function SWEP:PreDrop()
+        self.BaseClass.PreDrop(self)
+        timer.Remove("use_ammo" .. self:EntIndex())
+
+        if Enabled then
+            self:StrengthDisable()
+        end
+    end
+
+    function SWEP:PrimaryAttack()
+        if CLIENT then return end
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
+
+        if owner:IsPlayer() then
+            owner:LagCompensation(true)
+        end
+
+        local tr = util.TraceLine({
+            start = owner:GetShootPos(),
+            endpos = owner:GetShootPos() + owner:GetAimVector() * 64,
+            filter = owner
+        })
+
+        local ent = tr.Entity
+
+        if IsValid(ent) and (ent:IsPlayer() or ent:IsNPC()) then
+            self:EmitSound(HealSound2)
+            ent:EmitSound(HealSound2)
+            ent.PAPStrengthPotion = true
+
+            timer.Simple(otherPlayerSecsCvar:GetInt(), function()
+                if IsValid(ent) then
+                    ent.PAPStrengthPotion = false
+                end
+            end)
+
+            local pushCost = otherPlayerCostCvar:GetInt()
+            self:TakePrimaryAmmo(pushCost)
+        else
+            self:EmitSound(DenySound)
+        end
+
+        if self:Clip1() <= 0 then
+            self:Remove()
+            self:EmitSound(DestroySound)
+        end
+    end
+
+    if CLIENT then
+        SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
+
+        function SWEP:DrawWorldModel()
+            SWEP:PAPOldDrawWorldModel()
+
+            if IsValid(self.WorldModelEnt) then
+                self.WorldModelEnt:SetMaterial(TTTPAP.camo)
+            end
+        end
+    end
+end
+
+TTTPAP:Register(UPGRADE)
