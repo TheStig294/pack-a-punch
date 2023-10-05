@@ -1541,6 +1541,16 @@ Lasts longer\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329721936>
 
+## Zap Grenade (Disarm Grenade)
+
+Forces players to drop their weapons and cannot pickup new ones for a few seconds\
+\
+*ttt_pap_disarm_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_disarm_grenade_time* - Default: 10 - Seconds players are disarmed\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3014979716>
+
 ## Zombification Device (Laughing Zombificator)
 
 Make evil laughs, takes less time to use!\
