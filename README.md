@@ -101,6 +101,8 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 "Hitting baseball w. wooden bat.wav" (<https://freesound.org/people/CGEffex/sounds/93136/>) by CGEffex is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
 
+"Recorder Comparisons » Pop, Low, A (H1).wav" (<https://freesound.org/people/InspectorJ/sounds/411639/>) by InspectorJ is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -961,6 +963,15 @@ Larger explosion, fire lasts a very long time!\
 \
 \
 Upgrade for: Default TTT weapon
+
+## Jetgun (Player Trapper)
+
+Sucks in players and kills after 30 seconds. Avoids triggering many on death effects!\
+\
+*ttt_pap_player_trapper* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
 ## Jetpack (Passive Levitator)
 
