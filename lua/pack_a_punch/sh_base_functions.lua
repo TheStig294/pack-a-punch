@@ -114,8 +114,8 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         end
 
         return false
-    elseif not upgrades and (not SWEP.AutoSpawnable or not GetConVar("ttt_pap_apply_generic_upgrades"):GetBool()) then
-        -- Preventing purchase if held weapon is not a floor weapon or generic upgrades are turned off, and the weapon has no PaP upgrade
+    elseif not upgrades and (not SWEP.AutoSpawnable or SWEP.Kind == WEAPON_NADE or not GetConVar("ttt_pap_apply_generic_upgrades"):GetBool()) then
+        -- Preventing purchase if held weapon is either not a floor weapon, is a grenade, or generic upgrades are turned off, and the weapon has no PaP upgrade
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
             ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
