@@ -703,6 +703,16 @@ Multiple uses, kills a phantom without them haunting you!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Fire Dash (Ice Dash)
+
+Briefly freezes players instead! Doesn't kill you, you can swap weapons!\
+\
+*ttt_pap_ice_dash* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_ice_dash_freeze_secs* - Default: 5 - Seconds players are frozen\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966658338>
+
 ## FKG gifter (Free Crowbar Gifter)
 
 Forces them to use a crowbar instead!\

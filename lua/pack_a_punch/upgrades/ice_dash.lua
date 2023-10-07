@@ -14,7 +14,7 @@ UPGRADE.convars = {
 local freezeSecsCvar = CreateConVar("pap_ice_dash_freeze_secs", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs players are frozen", 1, 20)
 
 function UPGRADE:Apply(SWEP)
-    local freezeColour = Color(0, 255, 255)
+    local freezeColour = Color(0, 255, 255, 255)
 
     function SWEP:PrimaryAttack()
         if CLIENT then return end
@@ -24,6 +24,7 @@ function UPGRADE:Apply(SWEP)
         local timerName = owner:SteamID64() .. "TTTFlameRunTimer"
         owner:SetFriction(0)
         owner:SetLaggedMovementValue(self.SpeedMultiplier)
+        owner:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
         owner:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
         owner:SetColor(freezeColour)
         self:SearchForPlayers()
@@ -63,30 +64,40 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
-    local screenFadeColour = Color(255, 255, 255, 128)
-
-    function SWEP:SearchForPlayers()
-        local owner = self:GetOwner()
-
-        for _, ent in ipairs(ents.FindInSphere(owner:GetPos(), self.KillRadius * 2)) do
-            if not UPGRADE:IsPlayer(ent) or ent == owner or ent:IsFrozen() then continue end
-            ent:Freeze(true)
-            ent:ScreenFade(SCREENFADE.OUT, screenFadeColour, 1, freezeSecsCvar:GetInt() - 1)
-            -- Re-use the freeze sound from the cold spaghetti
-            ent:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
-            ent:SetColor(freezeColour)
-
-            timer.Create("TTTPAPIceDash" .. ent:SteamID64(), freezeSecsCvar:GetInt(), 1, function()
-                if IsValid(ent) then
-                    ent:Freeze(false)
-                    ent:SetColor(COLOR_WHITE)
-                end
-            end)
-        end
-    end
-
     function SWEP:Holster()
         return true
+    end
+
+    function SWEP:Think()
+    end
+
+    local screenFadeColour = Color(255, 255, 255, 50)
+
+    if SERVER then
+        local freezeRadius = SWEP.KillRadius * 4
+
+        self:AddHook("PlayerPostThink", function(owner)
+            local wep = owner:GetWeapon(self.class)
+
+            if IsValid(wep) and wep.Active then
+                for _, ent in ipairs(ents.FindInSphere(owner:GetPos(), freezeRadius)) do
+                    if not UPGRADE:IsPlayer(ent) or ent == owner or ent:IsFrozen() then continue end
+                    ent:Freeze(true)
+                    ent:ScreenFade(SCREENFADE.OUT, screenFadeColour, 1, freezeSecsCvar:GetInt() - 1)
+                    -- Re-use the freeze sound from the cold spaghetti
+                    ent:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                    ent:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                    ent:SetColor(freezeColour)
+
+                    timer.Create("TTTPAPIceDash" .. ent:SteamID64(), freezeSecsCvar:GetInt(), 1, function()
+                        if IsValid(ent) then
+                            ent:SetColor(COLOR_WHITE)
+                            ent:Freeze(false)
+                        end
+                    end)
+                end
+            end
+        end)
     end
 end
 
