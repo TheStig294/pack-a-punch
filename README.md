@@ -753,6 +753,17 @@ Turns the person you shoot into an innocent and kills you\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2575320481>
 
+## Fortnite Building Tool (Chug Jug Tool)
+
+Gives you a health shield! Resists 20% of damage\
+\
+*ttt_pap_chug_jug_tool* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_chug_jug_tool_shield* - Default: 100 - No. of shield points\
+*pap_chug_jug_tool_dmg_resist* - Default: 20 - % damage resistance\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1433010063>
+
 ## Frag Grenade (Big Boi Frag Grenade)
 
 x2 explosion radius!\
@@ -1348,6 +1359,15 @@ Make a randomat instead!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
+
+## Red Matter Bomb (White Matter Bomb)
+
+Pushes players and damages those in range instead\
+\
+*ttt_pap_white_matter_bomb* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1461095720>
 
 ## Remote Sticky Bomb (NPC Bomb)
 
