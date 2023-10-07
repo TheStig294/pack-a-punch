@@ -99,6 +99,8 @@ Watch: <https://youtu.be/p7ZsBPK656s> Free Download / Stream: <https://ncs.io/Bl
 
 Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=145914>
 
+"Hitting baseball w. wooden bat.wav" (<https://freesound.org/people/CGEffex/sounds/93136/>) by CGEffex is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -877,6 +879,16 @@ Speed, jump and health boost!\
 *pap_self_pack_a_punch_health* - Default: 1.2 - Health multiplier\
 \
 Upgrade for: Default TTT weapon
+
+## Homerun Bat (Heavy Bat/Cat Bat)
+
+x2 damage, increases gravity for the victim!\
+Also turns the owner into a cat, if model is installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=1187366110\>
+\
+*ttt_pap_heavy_bat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=648957314>
 
 ## Homing Pigeon (Chonk Pigeon)
 
