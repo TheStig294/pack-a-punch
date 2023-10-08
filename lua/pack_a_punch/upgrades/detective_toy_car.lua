@@ -37,6 +37,15 @@ function UPGRADE:Apply(SWEP)
     self:AddHook("EntityTakeDamage", function(target, dmg)
         if target.IsDetectiveToyCarPaP and target.DamageMult then
             dmg:ScaleDamage(target.DamageMult)
+            local driver = target:GetDriver()
+
+            if IsValid(driver) then
+                driver:SetHealth(driver:Health() - dmg:GetDamage() * 0.4 / damageMultCvar:GetFloat())
+
+                if driver:Health() <= 0 then
+                    driver:Kill()
+                end
+            end
         end
     end)
 
