@@ -1470,7 +1470,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
 ## Shark Trap (Left Shark Trap)
 
-Changes the shark's model!\
+2 traps, changes the shark's model!\
 \
 *ttt_pap_left_shark_trap* - Default: 1 - Whether this upgrade is enabled
 \

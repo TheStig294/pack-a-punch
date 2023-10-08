@@ -2,34 +2,49 @@ local UPGRADE = {}
 UPGRADE.id = "left_shark_trap"
 UPGRADE.class = "weapon_shark_trap"
 UPGRADE.name = "Left Shark Trap"
-UPGRADE.desc = "Changes the shark's model!"
+UPGRADE.desc = "2 traps, changes the shark's model!"
+UPGRADE.noSound = true
 
 function UPGRADE:Apply(SWEP)
-    if SERVER then
-        -- Code from the shark trap SWEP and cleaned up
-        -- https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000
-        function SWEP:PrimaryAttack()
-            local owner = self:GetOwner()
+    SWEP.Primary.DefaultClip = 2
+    SWEP.Primary.ClipMax = 2
+    SWEP.Primary.ClipSize = 2
+    SWEP.AmmoEnt = nil
+    SWEP.Primary.Ammo = "AirboatGun"
+    SWEP.Primary.Sound = ""
 
-            local tr = util.TraceLine({
-                start = owner:GetShootPos(),
-                endpos = owner:GetShootPos() + owner:GetAimVector() * 100,
-                filter = owner
-            })
+    timer.Simple(0.1, function()
+        SWEP:SetClip1(2)
+    end)
 
-            if tr.HitWorld then
-                local dot = vector_up:Dot(tr.HitNormal)
+    -- Code from the shark trap SWEP and cleaned up
+    -- https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000
+    function SWEP:PrimaryAttack()
+        if CLIENT or not self:CanPrimaryAttack() then return end
+        local owner = self:GetOwner()
 
-                if dot > 0.55 and dot <= 1 then
-                    local ent = ents.Create("ttt_pap_left_shark_trap")
-                    ent:SetPos(tr.HitPos + tr.HitNormal)
-                    local ang = tr.HitNormal:Angle()
-                    ang:RotateAroundAxis(ang:Right(), -90)
-                    ent:SetAngles(ang)
-                    ent:SetMaterial(TTTPAP.camo)
-                    ent:Spawn()
-                    ent.Owner = owner
-                    ent.fingerprints = self.fingerprints
+        local tr = util.TraceLine({
+            start = owner:GetShootPos(),
+            endpos = owner:GetShootPos() + owner:GetAimVector() * 100,
+            filter = owner
+        })
+
+        if tr.HitWorld then
+            local dot = vector_up:Dot(tr.HitNormal)
+
+            if dot > 0.55 and dot <= 1 then
+                local ent = ents.Create("ttt_pap_left_shark_trap")
+                ent:SetPos(tr.HitPos + tr.HitNormal)
+                local ang = tr.HitNormal:Angle()
+                ang:RotateAroundAxis(ang:Right(), -90)
+                ent:SetAngles(ang)
+                ent:Spawn()
+                ent.Owner = owner
+                ent.fingerprints = self.fingerprints
+                self:TakePrimaryAmmo(1)
+                self:SetNextPrimaryFire(CurTime() + 0.5)
+
+                if self:Clip1() <= 0 then
                     self:Remove()
                 end
             end
