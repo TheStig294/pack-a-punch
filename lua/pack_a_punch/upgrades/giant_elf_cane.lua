@@ -5,19 +5,19 @@ UPGRADE.name = "Giant Elf Cane"
 UPGRADE.desc = "Become larger and have more health!"
 
 function UPGRADE:Apply(SWEP)
-    local owner = SWEP:GetOwner()
+    local own = SWEP:GetOwner()
 
-    if IsValid(owner) then
-        local oldHealth = owner:GetMaxHealth()
+    if IsValid(own) then
+        local oldHealth = own:GetMaxHealth()
 
         if SERVER then
-            owner:SetMaxHealth(oldHealth * 8)
-            owner:SetPlayerScale(4)
-            owner:PrintMessage(HUD_PRINTCENTER, "Crouch to convert players!")
-            owner:PrintMessage(HUD_PRINTTALK, "Crouch to convert players!")
+            own:SetMaxHealth(oldHealth * 8)
+            own:SetPlayerScale(4)
+            own:PrintMessage(HUD_PRINTCENTER, "Crouch to convert players!")
+            own:PrintMessage(HUD_PRINTTALK, "Crouch to convert players!")
         end
 
-        owner:SetHealth(oldHealth * 8)
+        own:SetHealth(oldHealth * 8)
     end
 
     -- Play the slowed christmas sound

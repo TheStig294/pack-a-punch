@@ -17,22 +17,22 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:PrimaryAttack()
         if SERVER and IsFirstTimePredicted() and self:Clip1() > 0 then
-        local owner = self:GetOwner()
-        local ent = owner:GetEyeTrace().Entity
+            local owner = self:GetOwner()
+            local ent = owner:GetEyeTrace().Entity
 
-        if not UPGRADE:IsPlayer(ent) then
-            owner:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
-        
-            for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
-                if IsBaddie(ply) then
-                    ply.PAPPlatinumGunExtraLife = true
-                    ply:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")
-                    ply:PrintMessage(HUD_PRINTTALK, "You got an extra life! Someone whiffed with the Platinum Gun!")
-                    break
+            if not UPGRADE:IsPlayer(ent) then
+                owner:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
+
+                for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
+                    if IsBaddie(ply) then
+                        ply.PAPPlatinumGunExtraLife = true
+                        ply:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")
+                        ply:PrintMessage(HUD_PRINTTALK, "You got an extra life! Someone whiffed with the Platinum Gun!")
+                        break
+                    end
                 end
             end
         end
-    end
 
         SWEP.PAPOldPrimaryAttack(self)
     end
@@ -41,30 +41,30 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:OnPlayerAttacked(ply)
         if SERVER then
-        local attacker = self:GetOwner()
+            local attacker = self:GetOwner()
 
-         -- Shooting platinum gun
-         if IsBaddie(ply) then
-             attacker:ChatPrint("Shot a bad guy! You can shoot again")
-        
-             timer.Simple(0.1, function()
-                 self:SetClip1(1)
-             end)
-         else
-             attacker:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
-        
-             for _, p in ipairs(UPGRADE:GetAlivePlayers()) do
-                 if IsBaddie(p) then
-                     p.PAPPlatinumGunExtraLife = true
-                     p:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")
-                     p:PrintMessage(HUD_PRINTTALK, "You got an extra life! Someone whiffed with the Platinum Gun!")
-                     break
-                 end
-             end
-         end
+            -- Shooting platinum gun
+            if IsBaddie(ply) then
+                attacker:ChatPrint("Shot a bad guy! You can shoot again")
+
+                timer.Simple(0.1, function()
+                    self:SetClip1(1)
+                end)
+            else
+                attacker:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
+
+                for _, p in ipairs(UPGRADE:GetAlivePlayers()) do
+                    if IsBaddie(p) then
+                        p.PAPPlatinumGunExtraLife = true
+                        p:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")
+                        p:PrintMessage(HUD_PRINTTALK, "You got an extra life! Someone whiffed with the Platinum Gun!")
+                        break
+                    end
+                end
+            end
         end
-        
-         self.PAPOldOnPlayerAttacked(self, ply)
+
+        self.PAPOldOnPlayerAttacked(self, ply)
     end
 
     self:AddHook("DoPlayerDeath", function(ply, attacker, dmg)
