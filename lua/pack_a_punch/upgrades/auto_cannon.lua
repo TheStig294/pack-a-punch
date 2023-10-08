@@ -41,7 +41,7 @@ function UPGRADE:Apply(SWEP)
     local owner = SWEP:GetOwner()
     local cannon
 
-    if IsValid(owner) then
+    if SERVER and IsValid(owner) then
         owner:PrintMessage(HUD_PRINTCENTER, "Pressing 'E' REMOVES the cannon!")
     end
 
@@ -77,7 +77,7 @@ function UPGRADE:Apply(SWEP)
 
             -- Warning message
             for _, p in ipairs(player.GetAll()) do
-                p:ChatPrint(UPGRADE.name .. " placed! Disable it before it's too late!")
+                p:ChatPrint(UPGRADE.name .. " placed! Press 'E' to disable it before it's too late!")
             end
 
             -- For the first 5 seconds, the cannon moves left
