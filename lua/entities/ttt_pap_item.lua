@@ -61,6 +61,11 @@ if ROLE_MADSCIENTIST then
     bannedRoles[ROLE_MADSCIENTIST] = true
 end
 
+-- The zombie gets a buy menu too late in loading and probably shouldn't be encouraged to use guns anyway
+if ROLE_ZOMBIE then
+    bannedRoles[ROLE_ZOMBIE] = true
+end
+
 -- Check that the PaP item hasn't been added already
 local function HasItemWithPropertyValue(tbl, key, val)
     if not tbl or not key then return end
