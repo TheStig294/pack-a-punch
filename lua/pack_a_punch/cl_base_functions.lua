@@ -5,17 +5,30 @@ net.Receive("TTTPAPApply", function()
     local SWEP = net.ReadEntity()
     if not IsValid(SWEP) then return end
     -- Stats
-    SWEP.Primary.Delay = net.ReadFloat()
-    SWEP.Primary.RPM = net.ReadFloat()
-    SWEP.Primary.Damage = net.ReadFloat()
-    SWEP.Primary.Cone = net.ReadFloat()
-    SWEP.Primary.Spread = net.ReadFloat()
-    SWEP.Primary.ClipSize = net.ReadFloat()
-    SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
-    SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
-    SWEP.Primary.Recoil = net.ReadFloat()
-    SWEP.Primary.StaticRecoilFactor = net.ReadFloat()
-    SWEP.Primary.Automatic = net.ReadBool()
+    local delay = net.ReadFloat()
+    local RPM = net.ReadFloat()
+    local damage = net.ReadFloat()
+    local cone = net.ReadFloat()
+    local spread = net.ReadFloat()
+    local clipSize = net.ReadFloat()
+    local recoil = net.ReadFloat()
+    local staticRecoilFactor = net.ReadFloat()
+    local automatic = net.ReadBool()
+
+    if istable(SWEP.Primary) then
+        SWEP.Primary.Delay = delay
+        SWEP.Primary.RPM = RPM
+        SWEP.Primary.Damage = damage
+        SWEP.Primary.Cone = cone
+        SWEP.Primary.Spread = spread
+        SWEP.Primary.ClipSize = clipSize
+        SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
+        SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
+        SWEP.Primary.Recoil = recoil
+        SWEP.Primary.StaticRecoilFactor = staticRecoilFactor
+        SWEP.Primary.Automatic = automatic
+    end
+
     local upgradeID = net.ReadString()
     local upgradeClass = net.ReadString()
     local noDesc = net.ReadBool()
