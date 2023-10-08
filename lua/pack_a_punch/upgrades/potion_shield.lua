@@ -1,38 +1,81 @@
 local UPGRADE = {}
-UPGRADE.id = "chug_jug_tool"
-UPGRADE.class = "weapon_ttt_fortnite_building"
-UPGRADE.name = "Chug Jug Tool"
+UPGRADE.id = "potion_shield"
+UPGRADE.class = "weapon_ttt_mc_immortpotion"
+UPGRADE.name = "Shield Potion"
 
 UPGRADE.convars = {
     {
-        name = "pap_chug_jug_tool_shield",
+        name = "pap_potion_shield_max",
         type = "int"
     },
     {
-        name = "pap_chug_jug_tool_dmg_resist",
+        name = "pap_potion_shield_resist",
         type = "int"
     }
 }
 
-local shieldCvar = CreateConVar("pap_chug_jug_tool_shield", 100, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 500)
+local maxCvar = CreateConVar("pap_potion_shield_max", 100, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max no. of shield points", 1, 500)
 
-local dmgResistCvar = CreateConVar("pap_chug_jug_tool_dmg_resist", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
+local dmgResistCvar = CreateConVar("pap_potion_shield_resist", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
 
 UPGRADE.desc = "Gives you a health shield!\nResists " .. dmgResistCvar:GetInt() .. "% of damage, protects from 1-shot deaths!"
 
 function UPGRADE:Apply(SWEP)
-    local owner = SWEP:GetOwner()
-    local maxShield = shieldCvar:GetInt()
-    local dmgResist = 1 - dmgResistCvar:GetInt() / 100
-    owner:SetColor(Color(0, 255, 255))
+    local DestroySound = "minecraft_original/glass2.wav"
+    local Enabled = false
+    local maxShield = maxCvar:GetInt()
 
-    if IsValid(owner) then
-        owner:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
-        owner:SetNWInt("PAPHealthShield", maxShield)
+    function SWEP:Holster()
+        return true
+    end
 
-        if maxShield > 0 then
-            owner:ChatPrint("Having at least 1 shield will protect you from being 1-shot killed!")
+    function SWEP:PreDrop()
+        self.BaseClass.PreDrop(self)
+        timer.Remove("use_ammo" .. self:EntIndex())
+
+        if Enabled then
+            self:ImmortalityDisable()
         end
+    end
+
+    function SWEP:SecondaryAttack()
+        self:ImmortalityEnable()
+    end
+
+    function SWEP:ImmortalityDisable()
+        timer.Remove("use_ammo" .. self:EntIndex())
+        Enabled = false
+    end
+
+    function SWEP:ImmortalityEnable()
+        if Enabled then return end
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
+        owner:SetColor(Color(0, 255, 255))
+        owner:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
+        self:TakePrimaryAmmo(1)
+        Enabled = true
+        local tickRate = 0.02
+        local shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + 1, maxShield)
+        owner:SetNWInt("PAPHealthShield", shieldPoints)
+
+        timer.Create("use_ammo" .. self:EntIndex(), tickRate, 0, function()
+            if self:Clip1() <= self.MaxAmmo then
+                self:SetClip1(math.min(self:Clip1() - 1, self.MaxAmmo))
+            end
+
+            shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + 1, maxShield)
+            owner:SetNWInt("PAPHealthShield", shieldPoints)
+
+            if self:Clip1() <= 0 then
+                self:ImmortalityDisable()
+                self:EmitSound(DestroySound)
+
+                if SERVER then
+                    self:Remove()
+                end
+            end
+        end)
     end
 
     -- Drawing the shield bar
@@ -64,6 +107,8 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- Handling damage
+    local dmgResist = 1 - dmgResistCvar:GetInt() / 100
+
     self:AddHook("EntityTakeDamage", function(ply, dmg)
         if not self:IsPlayer(ply) then return end
         local shield = ply:GetNWInt("PAPHealthShield", 0)
@@ -93,7 +138,7 @@ end
 
 function UPGRADE:Reset()
     for _, ply in ipairs(player.GetAll()) do
-        ply:SetNWInt("PAPHealthShield", nil)
+        ply:SetNWInt("PAPHealthShield", 0)
         ply:SetColor(COLOR_WHITE)
     end
 end

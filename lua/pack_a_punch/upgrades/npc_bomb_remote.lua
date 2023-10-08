@@ -48,7 +48,11 @@ function UPGRADE:Apply(SWEP)
         for _, ply in ipairs(player.GetAll()) do
             if (ply.IsTraitorTeam and ply:IsTraitorTeam()) or ply:GetRole() == ROLE_TRAITOR then
                 local msg = "An NPC bomb has been spawned!"
-                ply:PrintMessage(HUD_PRINTCENTER, msg)
+
+                if ply ~= self:GetOwner() then
+                    ply:PrintMessage(HUD_PRINTCENTER, msg)
+                end
+
                 ply:PrintMessage(HUD_PRINTTALK, msg)
             end
         end
@@ -130,14 +134,28 @@ function UPGRADE:Apply(SWEP)
 
     -- Spawning the NPC bomb
     function SWEP:PrimaryAttack()
-        if CLIENT or self.PAPRevivedNPC then return end
+        if CLIENT then return end
         local owner = self:GetOwner()
+
+        if self.PAPRevivedNPC then
+            owner:PrintMessage(HUD_PRINTCENTER, "Right-click explodes the NPC")
+
+            return
+        end
+
         local tr = owner:GetEyeTrace()
         local rag = tr.Entity
+
         -- ".player_ragdoll = true" is a flag set by vanilla TTT on player bodies
-        if not IsValid(rag) or not rag.player_ragdoll then return end
+        if not IsValid(rag) or not rag.player_ragdoll then
+            owner:PrintMessage(HUD_PRINTCENTER, "Not a valid body")
+
+            return
+        end
+
         -- Only allow to revive once
         self.PAPRevivedNPC = true
+        self.PAPHasRevived = true
         -- Get the info we need from the ragdoll before removing it
         local ragPly = CORPSE.GetPlayer(rag)
         local name = ragPly:Nick()
@@ -245,6 +263,10 @@ function UPGRADE:Apply(SWEP)
 
         if IsValid(self.PAPRevivedNPC) then
             self.PAPRevivedNPC:PAPExplodeNPCBomb()
+        elseif not self.PAPHasRevived then
+            owner:PrintMessage(HUD_PRINTCENTER, "Left-click a body first!")
+
+            return
         elseif IsValid(owner) then
             owner:PrintMessage(HUD_PRINTCENTER, "Couldn't find the NPC!")
             owner:PrintMessage(HUD_PRINTTALK, "Couldn't find the NPC!")

@@ -98,5 +98,12 @@ hook.Add("TTTOrderedEquipment", "TTTPAPPurchase", function(ply, equipment, _)
     if equipment == EQUIP_PAP then
         -- Set skip can upgrade check to true, as this was just done in the TTTCanOrderEquipment hook
         TTTPAP:OrderPAP(ply, true)
+
+        -- Removes the equipment from the player, to make the pack-a-punch item re-buyable
+        timer.Simple(0.1, function()
+            -- Do an exclusive OR bitwise operation, so the only bit that will be affected is the PAP equipment bit
+            ply.equipment_items = bit.bxor(ply.equipment_items, EQUIP_PAP)
+            ply:SendEquipment()
+        end)
     end
 end)

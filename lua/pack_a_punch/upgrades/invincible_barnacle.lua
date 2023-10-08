@@ -31,10 +31,6 @@ function UPGRADE:Apply(SWEP)
         if not barnacle.PAPInvincibleBarnacle then return end
 
         -- Plays the "Help i'm stuck in a barnacle!" sound for everyone
-        if barnacle.CurrentSound > 4 then
-            barnacle.CurrentSound = 1
-        end
-
         if not ent.PAPInvincibleBarnacleSoundCooldown then
             ent:EmitSound("ttt_pack_a_punch/invincible_barnacle/help" .. barnacle.CurrentSound .. ".mp3")
             barnacle.CurrentSound = barnacle.CurrentSound + 1
