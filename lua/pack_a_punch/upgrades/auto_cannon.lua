@@ -6,12 +6,6 @@ UPGRADE.desc = "Auto-shoots, pressing 'E' removes the cannon!"
 -- As per usual, sound is abnormally quiet, so it is played over itself to be louder
 local musicVolume = 4
 
-local function PlayMusic(cannon)
-    for i = 1, musicVolume do
-        cannon:EmitSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")
-    end
-end
-
 local function RemoveCannon(cannon)
     for i = 1, musicVolume do
         cannon:StopSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")
@@ -64,7 +58,11 @@ function UPGRADE:Apply(SWEP)
             cannon:Spawn()
             cannon.PAPUpgrade = self.PAPUpgrade
             cannon:SetMaterial(TTTPAP.camo)
-            PlayMusic(cannon)
+
+            for i = 1, musicVolume do
+                cannon:EmitSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")
+            end
+
             cannon:SetUseType(SIMPLE_USE)
             cannon.UnlimitedAmmo = true
             cannon.Owner = ply
