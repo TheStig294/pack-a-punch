@@ -316,8 +316,7 @@ local function DrawWeaponsList(list, searchQuery)
     end
 end
 
-hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
-    if not IsAdmin(LocalPlayer()) then return end
+local function CreateOptionsMenu()
     -- Base panel
     local basePnl = vgui.Create("DPanel")
     basePnl:Dock(FILL)
@@ -452,6 +451,35 @@ hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
         DrawWeaponsList(list, value)
     end
 
+    return basePnl
+end
+
+hook.Add("OnPlayerChat", "TTTPAPTTT2OptionsMenu", function(ply, text)
+    if not TTT2 then return end
+    if not IsAdmin(LocalPlayer()) or ply ~= LocalPlayer() or string.lower(text) ~= "/papop" then return end
+    local frame = vgui.Create("DFrame")
+    frame:SetSize(600, 480)
+    frame:Center()
+    frame:SetTitle("PAP Admin Options Menu")
+    frame:ShowCloseButton(true)
+    frame:MakePopup()
+    local basePnl = CreateOptionsMenu()
+    basePnl:SetParent(frame)
+
+    return true
+end)
+
+hook.Add("TTTBeginRound", "TTTPAPTTT2OptionsMessage", function()
+    if TTT2 and IsAdmin(LocalPlayer()) then
+        LocalPlayer():ChatPrint("Type /papop to open options window")
+    end
+
+    hook.Remove("TTTBeginRound", "TTTPAPTTT2OptionsMessage")
+end)
+
+hook.Add("TTTSettingsTabs", "TTTPAPUpgradesList", function(dtabs)
+    if TTT2 or not IsAdmin(LocalPlayer()) then return end
+    local basePnl = CreateOptionsMenu()
     -- Adds the tab panel to TTT's F1 menu
     dtabs:AddSheet("PaP", basePnl, "vgui/ttt/icon_pap_16.png", false, false, "Enable/disable individual weapon upgrades for the Pack-a-punch buyable item")
 end)
