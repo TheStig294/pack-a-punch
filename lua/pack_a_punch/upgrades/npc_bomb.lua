@@ -101,8 +101,14 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
         local tr = owner:GetEyeTrace()
         local rag = tr.Entity
+
         -- ".player_ragdoll = true" is a flag set by vanilla TTT on player bodies
-        if not IsValid(rag) or not rag.player_ragdoll then return end
+        if not IsValid(rag) or not rag.player_ragdoll then
+            owner:PrintMessage(HUD_PRINTCENTER, "Not a valid body")
+
+            return
+        end
+
         -- Only allow to revive once
         self.PAPRevivedNPC = true
         -- Get the info we need from the ragdoll before removing it
