@@ -767,12 +767,12 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2575320481>
 
 ## Fortnite Building Tool (Chug Jug Tool)
 
-Gives you a health shield! Resists 20% of damage\
+Gives you a health shield! Resists 10% of damage (by default), protects from 1-shot deaths!\
 \
 *ttt_pap_chug_jug_tool* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_chug_jug_tool_shield* - Default: 100 - No. of shield points\
-*pap_chug_jug_tool_dmg_resist* - Default: 20 - % damage resistance\
+*pap_chug_jug_tool_dmg_resist* - Default: 10 - % damage resistance\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1433010063>
 
@@ -1293,12 +1293,14 @@ Continually regenerates your health!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
-## Potion of Immortality (Invunerability Potion)
+## Potion of Shield (Invunerability Potion)
 
-Take bullet damage only while held!\
+Gives you a health shield! Resists 10% of damage (by default), protects from 1-shot deaths!\
 \
-*ttt_pap_potion_invun* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_potion_shield* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_potion_shield_max* - Default: 100 - Max no. of shield points\
+*pap_potion_shield_resist* - Default: 10 - % damage resistance\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
