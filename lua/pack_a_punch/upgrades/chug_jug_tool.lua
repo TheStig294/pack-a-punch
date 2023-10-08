@@ -29,10 +29,6 @@ function UPGRADE:Apply(SWEP)
     if IsValid(owner) then
         owner:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
         owner:SetNWInt("PAPHealthShield", maxShield)
-
-        if maxShield > 0 then
-            owner:ChatPrint("Having at least 1 shield will protect you from being 1-shot killed!")
-        end
     end
 
     -- Drawing the shield bar
