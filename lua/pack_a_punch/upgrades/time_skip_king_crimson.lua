@@ -20,61 +20,56 @@ local lengthSecsCvar = CreateConVar("pap_time_skip_king_crimson_length_secs", 10
 
 local dmgResistCvar = CreateConVar("pap_time_skip_king_crimson_dmg_resist_mult", 0.8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
 
+local function StopSkip(wep, owner, timername)
+    if timername then
+        timer.Remove(timername)
+    end
+
+    if IsValid(wep) then
+        wep.InSkip = false
+    end
+
+    if IsValid(owner) then
+        owner.PAPTimeSkipKCDmgResist = nil
+    end
+
+    timer.Simple(0.1, function()
+        if SERVER then
+            game.SetTimeScale(1)
+        end
+
+        for _, ply in pairs(player.GetAll()) do
+            if SERVER then
+                ply:SetLaggedMovementValue(1)
+            end
+
+            ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
+
+            if IsValid(ply:GetViewModel()) then
+                ply:GetViewModel():SetPlaybackRate(1)
+            end
+        end
+    end)
+
+    timer.Simple(0.2, function()
+        if SERVER then
+            net.Start("TTTPAPTimeSkipKCScreenEffectsRemove")
+            net.Broadcast()
+        end
+    end)
+end
+
 function UPGRADE:Apply(SWEP)
     if SERVER then
         util.AddNetworkString("TTTPAPTimeSkipKCScreenEffects")
         util.AddNetworkString("TTTPAPTimeSkipKCScreenEffectsRemove")
     end
 
-    local timername = SWEP:EntIndex() .. "TTTPAPTimeSkipKCEnd"
-
-    local function StopSkip(wep, owner)
-        timer.Remove(timername)
-
-        if IsValid(owner) then
-            owner.PAPTimeSkipKCDmgResist = nil
-        end
-
-        net.Start("crimson_new.OwnerSkipStop")
-        net.Broadcast()
-
-        if IsValid(wep) then
-            wep.InSkip = false
-        end
-
-        timer.Simple(0.1, function()
-            if SERVER then
-                game.SetTimeScale(1)
-
-                timer.Simple(0.1, function()
-                    net.Start("crimson_new.SkipStop")
-                    net.Broadcast()
-                end)
-            end
-
-            for _, ply in pairs(player.GetAll()) do
-                if SERVER then
-                    ply:SetLaggedMovementValue(1)
-                end
-
-                ply:SetDSP(0, false)
-                ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
-
-                if IsValid(ply:GetViewModel()) then
-                    ply:GetViewModel():SetPlaybackRate(1)
-                end
-            end
-        end)
-
-        timer.Simple(0.2, function()
-            net.Start("TTTPAPTimeSkipKCScreenEffectsRemove")
-            net.Broadcast()
-        end)
-    end
+    local timername = SWEP:GetOwner():SteamID64() .. "TTTPAPTimeSkipKCEnd"
 
     self:AddHook("PostPlayerDeath", function(ply)
         if ply.PAPTimeSkipKCDmgResist then
-            StopSkip(nil, ply)
+            StopSkip(nil, ply, timername)
         end
     end)
 
@@ -83,48 +78,36 @@ function UPGRADE:Apply(SWEP)
             self.Delay = self.Delay or CurTime()
 
             if CurTime() >= self.Delay then
-                self:SetAMode(not self:GetAMode())
                 self.Delay = CurTime() + 0.2
+                self:TakePrimaryAmmo(1)
+                self:SetNextSecondaryFire(CurTime() + lengthSecsCvar:GetInt())
+                local owner = self:GetOwner()
+                BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/time_skip/time_skip.mp3\")")
 
-                if self:GetAMode() then
-                    self:TakePrimaryAmmo(1)
-                    self:SetNextSecondaryFire(CurTime() + lengthSecsCvar:GetInt())
-                    local owner = self:GetOwner()
-                    BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/time_skip/time_skip.mp3\")")
+                timer.Simple(7.256, function()
+                    if not IsValid(owner) or not IsValid(self) then return end
+                    game.SetTimeScale(0.5)
+                    owner:SetLaggedMovementValue(2)
+                    owner.PAPTimeSkipKCDmgResist = true
+                    self.InSkip = true
 
-                    timer.Simple(7.256, function()
-                        if not IsValid(owner) or not IsValid(self) then return end
-                        self:Skip(true)
-                        hook.Remove("StartCommand", "KCSkip")
-                        self.worlddrop:Remove()
-                        self.dummynpc:Remove()
-                        owner.PAPTimeSkipKCDmgResist = true
-                        owner:SetNotSolid(false)
+                    for _, ply in ipairs(player.GetAll()) do
+                        ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 200), 0.5, lengthSecsCvar:GetInt() - 0.5)
+                        ply:SetFOV(ply:GetFOV() * 1.5, 0.5)
 
-                        for _, ply in ipairs(player.GetAll()) do
-                            ply:SetDSP(0, false)
-                            ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 200), 0.5, lengthSecsCvar:GetInt() - 0.5)
-                            ply:SetFOV(ply:GetFOV() * 1.5, 0.5)
-
-                            timer.Simple(0.5, function()
-                                ply:SetFOV(0, 0.25)
-                            end)
-
-                            if ply ~= owner then
-                                net.Start("crimson_new.OwnerSkip")
-                                net.Send(ply)
-                            end
-                        end
-
-                        util.ScreenShake(owner:GetPos(), 20, 10, 1.5, 1000, true)
-                        net.Start("TTTPAPTimeSkipKCScreenEffects")
-                        net.Broadcast()
-
-                        timer.Create(timername, lengthSecsCvar:GetInt(), 1, function()
-                            StopSkip(self, owner)
+                        timer.Simple(0.5, function()
+                            ply:SetFOV(0, 0.25)
                         end)
+                    end
+
+                    util.ScreenShake(owner:GetPos(), 20, 10, 1.5, 1000, true)
+                    net.Start("TTTPAPTimeSkipKCScreenEffects")
+                    net.Broadcast()
+
+                    timer.Create(timername, lengthSecsCvar:GetInt(), 1, function()
+                        StopSkip(self, owner, timername)
                     end)
-                end
+                end)
             end
         end
     end
@@ -138,7 +121,6 @@ function UPGRADE:Apply(SWEP)
     if CLIENT then
         -- Adds a blur effect around the edges of the screen
         net.Receive("TTTPAPTimeSkipKCScreenEffects", function()
-            hook.Remove("PostDrawEffects", "Skip")
             local starsMat = Material("effects/kcr_stars")
 
             hook.Add("RenderScreenspaceEffects", "TTTPAPTimeSkipKCScreenEffects", function()
@@ -299,6 +281,13 @@ function UPGRADE:Apply(SWEP)
                 owner:SetupBones()
             end
         end
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        timer.Remove(ply:SteamID64() .. "TTTPAPTimeSkipKCEnd")
+        StopSkip(nil, ply)
     end
 end
 
