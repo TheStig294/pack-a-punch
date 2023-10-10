@@ -56,18 +56,24 @@ function UPGRADE:Apply(SWEP)
     function SWEP:Detonate(ply)
         for _, p in ipairs(ents.FindInSphere(self:GetPos(), radiusCvar:GetInt())) do
             if UPGRADE:IsAlivePlayer(p) then
-                p:Lock()
+                p:Freeze(true)
                 p:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
                 p:ChatPrint("Frozen for " .. frozenSecsCvar:GetInt() .. " seconds!")
+                p.PAPColdSpaghettiBlockExplosion = true
 
-                timer.Simple(0.1, function()
-                    p:GodDisable()
+                timer.Simple(1, function()
+                    if IsValid(p) then
+                        p.PAPColdSpaghettiBlockExplosion = false
+                    end
                 end)
 
                 timer.Simple(frozenSecsCvar:GetInt(), function()
-                    if IsValid(p) and p:IsFrozen() then
-                        p:UnLock()
-                        p:ChatPrint("You are unfrozen!")
+                    if IsValid(p) then
+                        if p:IsFrozen() then
+                            p:ChatPrint("You are unfrozen!")
+                        end
+
+                        p:Freeze(false)
                     end
                 end)
             end
@@ -75,6 +81,13 @@ function UPGRADE:Apply(SWEP)
 
         return self:PAPOldDetonate(ply)
     end
+
+    self:AddHook("EntityTakeDamage", function(ent, dmg)
+        if not self:IsPlayer(ent) or not ent.PAPColdSpaghettiBlockExplosion then return end
+        local inflictor = dmg:GetInflictor()
+        if not IsValid(inflictor) then return end
+        if inflictor:GetClass() == "env_explosion" then return true end
+    end)
 
     SWEP.PAPOldPotatoTime = SWEP.PotatoTime
 
@@ -199,10 +212,8 @@ function UPGRADE:Reset()
     if CLIENT then return end
 
     for _, ply in ipairs(player.GetAll()) do
-        if ply:IsFrozen() then
-            ply:UnLock()
-            ply:ChatPrint("You are unfrozen!")
-        end
+        ply:Freeze(false)
+        ply.PAPColdSpaghettiBlockExplosion = nil
     end
 end
 
