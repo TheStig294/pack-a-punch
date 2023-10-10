@@ -26,7 +26,7 @@ function ENT:Explode(tr)
       end
 
       local pos = self:GetPos()
-      local bh = ents.Create("ttt_pap_redblackhole")
+      local bh = ents.Create("ttt_pap_whiteblackhole")
       bh:SetPos(pos)
       bh:SetSpawner(self:GetThrower())
       bh:Spawn()

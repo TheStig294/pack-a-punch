@@ -7,7 +7,7 @@ UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     function SWEP:GetGrenadeName()
-        return "ttt_pap_rmgrenade_proj"
+        return "ttt_pap_wmgrenade_proj"
     end
 
     SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel

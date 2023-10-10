@@ -13,7 +13,7 @@ UPGRADE.convars = {
 
 function UPGRADE:Apply(SWEP)
     function SWEP:GetGrenadeName()
-        return "ttt_pap_zapgren_proj"
+        return "ttt_pap_disarm_grenade"
     end
 
     self:AddHook("PlayerCanPickupWeapon", function(ply, wep)

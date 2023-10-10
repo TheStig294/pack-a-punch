@@ -6,7 +6,7 @@ UPGRADE.desc = "Launches players into the sky!"
 
 function UPGRADE:Apply(SWEP)
     function SWEP:GetGrenadeName()
-        return "ttt_pap_liftgren_proj"
+        return "ttt_pap_rocket_grenade"
     end
 end
 

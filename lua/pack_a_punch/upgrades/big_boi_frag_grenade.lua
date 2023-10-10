@@ -18,7 +18,7 @@ UPGRADE.convars = {
 function UPGRADE:Apply(SWEP)
     if SERVER then
         function SWEP:GetGrenadeName()
-            return "ttt_pap_frag_proj"
+            return "ttt_pap_big_boi_frag"
         end
     end
 end
