@@ -20,52 +20,56 @@ local lengthSecsCvar = CreateConVar("pap_time_skip_time_stop_length_secs", 10, {
 
 local dmgResistCvar = CreateConVar("pap_time_skip_time_stop_dmg_resist_mult", 0.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
 
+local function StopSkip(wep, owner, timername)
+    if timername then
+        timer.Remove(timername)
+    end
+
+    if IsValid(owner) then
+        owner.PAPTimeSkipTSDmgResist = nil
+    end
+
+    if IsValid(wep) then
+        wep:Remove()
+    end
+
+    timer.Simple(0.1, function()
+        if SERVER then
+            game.SetTimeScale(1)
+        end
+
+        for _, ply in pairs(player.GetAll()) do
+            if SERVER then
+                ply:SetLaggedMovementValue(1)
+            end
+
+            ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
+
+            if IsValid(ply:GetViewModel()) then
+                ply:GetViewModel():SetPlaybackRate(1)
+            end
+        end
+    end)
+
+    timer.Simple(0.2, function()
+        if SERVER then
+            net.Start("TTTPAPTimeSkipTSScreenEffectsRemove")
+            net.Broadcast()
+        end
+    end)
+end
+
 function UPGRADE:Apply(SWEP)
     if SERVER then
         util.AddNetworkString("TTTPAPTimeSkipTSScreenEffects")
         util.AddNetworkString("TTTPAPTimeSkipTSScreenEffectsRemove")
     end
 
-    local timername = SWEP:EntIndex() .. "TTTPAPTimeSkipTSEnd"
-
-    local function StopSkip(wep, owner)
-        timer.Remove(timername)
-
-        if IsValid(owner) then
-            owner.PAPTimeSkipTSDmgResist = nil
-        end
-
-        if IsValid(wep) then
-            wep:Remove()
-        end
-
-        timer.Simple(0.1, function()
-            if SERVER then
-                game.SetTimeScale(1)
-            end
-
-            for _, ply in pairs(player.GetAll()) do
-                if SERVER then
-                    ply:SetLaggedMovementValue(1)
-                end
-
-                ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
-
-                if IsValid(ply:GetViewModel()) then
-                    ply:GetViewModel():SetPlaybackRate(1)
-                end
-            end
-        end)
-
-        timer.Simple(0.2, function()
-            net.Start("TTTPAPTimeSkipTSScreenEffectsRemove")
-            net.Broadcast()
-        end)
-    end
+    local timername = SWEP:GetOwner():SteamID64() .. "TTTPAPTimeSkipTSEnd"
 
     self:AddHook("PostPlayerDeath", function(ply)
         if ply.PAPTimeSkipTSDmgResist then
-            StopSkip(nil, ply)
+            StopSkip(nil, ply, timername)
         end
     end)
 
@@ -77,11 +81,7 @@ function UPGRADE:Apply(SWEP)
 
             timer.Simple(7.256, function()
                 if not IsValid(owner) or not IsValid(self) then return end
-
-                timer.Create("TTTPAPTimeSkipTSSlowDown", 0.01, 100, function()
-                    game.SetTimeScale(game.GetTimeScale() - 0.005)
-                end)
-
+                game.SetTimeScale(0.5)
                 owner:SetLaggedMovementValue(2)
                 owner.PAPTimeSkipTSDmgResist = true
 
@@ -99,7 +99,7 @@ function UPGRADE:Apply(SWEP)
                 net.Broadcast()
 
                 timer.Create(timername, lengthSecsCvar:GetInt(), 1, function()
-                    StopSkip(self, owner)
+                    StopSkip(self, owner, timername)
                 end)
             end)
         end
@@ -123,6 +123,13 @@ function UPGRADE:Apply(SWEP)
             hook.Remove("RenderScreenspaceEffects", "TTTPAPTimeSkipTSScreenEffects")
             surface.PlaySound("the_world_time_start.mp3")
         end)
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        timer.Remove(ply:SteamID64() .. "TTTPAPTimeSkipTSEnd")
+        StopSkip(nil, ply)
     end
 end
 
