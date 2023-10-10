@@ -131,10 +131,12 @@ function UPGRADE:Apply(SWEP)
             self:EmitSound(HealSound2)
             ent:EmitSound(HealSound2)
             ent.PAPStrengthPotion = true
+            ent:PrintMessage(HUD_PRINTTALK, "Strength potion! You deal x" .. multCvar:GetFloat() .. " more damage for " .. otherPlayerSecsCvar:GetInt() .. " seconds")
 
             timer.Simple(otherPlayerSecsCvar:GetInt(), function()
                 if IsValid(ent) then
                     ent.PAPStrengthPotion = false
+                    ent:EmitSound(DenySound)
                 end
             end)
 
