@@ -756,6 +756,15 @@ Sets someone on fire that doesn't go out
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
+## Flashbang Grenade (Blinding Grenade)
+
+Permenantly blinds victims, but they can see player outlines
+\
+*ttt_pap_blinding_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067970407>
+
 ## Fool's Golden Gun (Fool's Platinum Gun)
 
 Turns the person you shoot into an innocent and kills you\
