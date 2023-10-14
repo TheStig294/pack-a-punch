@@ -500,6 +500,15 @@ x2 ammo, players ascend into the sky as they die...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=794651430>
 
+## Dead Ringer (Ghost Ringer)
+
+Become a ghost while active!\
+\
+*ttt_pap_ghost_ringer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=810154456>
+
 ## Deagle (The Head Lifter)
 
 High recoil, high damage!\
