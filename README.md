@@ -208,6 +208,15 @@ Spawns big bees!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2577965705>
 
+## Beenade (BFBnade)
+
+Spawns invincible big bees!\
+\
+*ttt_pap_bfbeenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=913310851>
+
 ## Big Glock (Giant Glock)
 
 Appears HUGE for everyone else, or when on the ground!\
