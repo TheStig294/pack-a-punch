@@ -1209,6 +1209,15 @@ Full-auto push gun! Now has ammo\
 \
 Upgrade for: Default TTT weapon
 
+## No Scope AWP (MLG AWP)
+
+Displays MLG popups + ammo and clip size\
+\
+*ttt_pap_mlg_awp* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2860986215>
+
 ## One-Shot Pistol (Pew Pew Pistol)
 
 Makes old school western gunshot sounds!\
