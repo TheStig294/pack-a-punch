@@ -1363,6 +1363,24 @@ Double walk speed\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
 
+## Perk Speed Cola [Passive Item] (Speed Life)
+
+Speeds up your life! (Increased movement and shoot speed for main gun, if you have one)\
+\
+*ttt_pap_perk_speed_life_passive* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
+
+## Perk Vulture Aid [Active Item] (Vision Aid)
+
+See weapons and players through walls!\
+\
+*ttt_pap_perk_vision_aid_active* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
+
 ## Pistol (Standard Issue)
 
 Slower, high damage & accuracy shots\

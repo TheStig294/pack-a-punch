@@ -5,7 +5,13 @@ UPGRADE.name = "PHD Blocker"
 UPGRADE.desc = "Bullet damage only!"
 
 function UPGRADE:Apply(SWEP)
-    SWEP:GetOwner().PAPPHDBlocker = true
+    local owner = SWEP:GetOwner()
+
+    timer.Simple(3.2, function()
+        if IsValid(owner) and GetRoundState() == ROUND_ACTIVE then
+            owner.PAPPHDBlocker = true
+        end
+    end)
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
         if IsValid(ent) and ent.PAPPHDBlocker and ent:GetNWBool("PHDActive", false) and not dmg:IsBulletDamage() then
