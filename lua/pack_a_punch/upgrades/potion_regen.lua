@@ -30,7 +30,7 @@ function UPGRADE:Apply(SWEP)
     function SWEP:DoHeal(ent, primary)
         local owner = self:GetOwner()
 
-        if IsValid(ent) and (ent:IsPlayer() or ent:IsNPC()) and ent:Health() < ent:GetMaxHealth() then
+        if IsValid(ent) and (ent:IsPlayer() or ent:IsNPC()) then
             local timername = "TTTPAPRegenPotion" .. ent:SteamID64()
 
             timer.Create("TTTPAPRegenPotion" .. ent:SteamID64(), delayCvar:GetInt(), 0, function()
