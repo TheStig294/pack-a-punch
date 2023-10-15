@@ -1291,6 +1291,24 @@ Zero push cooldown, x2 swing speed!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
+## Perk Doubletap [Active Item] (Doubletap 0.5)
+
+Slows the shoot speed of other players you shoot!\
+\
+*ttt_pap_perk_doubletap_05_active* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
+
+## Perk Doubletap [Passive Item] (Doubletap 0.5)
+
+Slows the shoot speed of other players you shoot!\
+\
+*ttt_pap_perk_doubletap_05_passive* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
+
 ## Perk Juggernog [Active Item] (Extra Jugg)
 
 +1 extra health boost!\

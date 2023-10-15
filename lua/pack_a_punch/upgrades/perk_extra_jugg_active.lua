@@ -11,7 +11,6 @@ function UPGRADE:Apply(SWEP)
         -- Just apply the health boost function twice
         SWEP:PAPOldOnDrank()
         SWEP:PAPOldOnDrank()
-        self:GetOwner().PAPPHDBlocker = true
     end
 end
 
