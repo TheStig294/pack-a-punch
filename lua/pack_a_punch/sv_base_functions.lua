@@ -58,9 +58,12 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     end)
 
     timer.Simple(3.4, function()
-        ply:SetNWBool("TTTPAPIsUpgrading", false)
         -- Don't let players smuggle the pap between rounds
-        if GetRoundState() == ROUND_PREP then return end
+        if GetRoundState() == ROUND_PREP then
+            ply:SetNWBool("TTTPAPIsUpgrading", false)
+
+            return
+        end
 
         for _, w in ipairs(ply:GetWeapons()) do
             if w.Kind == weapons.Get(classname).Kind then
@@ -70,6 +73,7 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         end
 
         SWEP = ply:Give(classname)
+        ply:SetNWBool("TTTPAPIsUpgrading", false)
     end)
 
     timer.Simple(3.5, function()

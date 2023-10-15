@@ -172,3 +172,29 @@ hook.Add("TFA_PreHolster", "TTTPAPUpgradeBlockTFAAutoWeaponSwitch", function(wep
     if not IsPlayer(owner) or not owner:GetNWBool("TTTPAPIsUpgrading") then return end
     if WEPS.GetClass(target) == "weapon_ttt_unarmed" then return true end
 end)
+
+-- Credit to Hoff for the original PlayerCanPickupWeapon hook
+-- The original intention of this hook is to prevent players from having more than 4 perks at a time, and not allow a player to try to drink more than 1 perk at a time
+-- However, there is currently a bug where the flag "bIsDrinkingPerk" is never cleared if the player's perk bottle is removed mid-drink
+-- Therefore, the player is then unable to pickup any new weapons until the map changes
+-- So we simply allow the player to pickup the perk bottle if they are upgrading a weapon (TTTPAPIsUpgrading NWBool from TTTPAP:OrderPAP()), which eventually removes the "bIsDrinkingPerk" flag when they finish drinking
+hook.Add("InitPostEntity", "TTTPAPOverrideHoffPerkBottleHook", function()
+    hook.Add("PlayerCanPickupWeapon", "CanGetPerk", function(ply, weapon)
+        if ply:GetNWBool("TTTPAPIsUpgrading") then return end
+        if ply:HasWeapon(weapon:GetClass()) and string.match(weapon:GetClass(), "zombies_perk_") then return false end
+        local activeWeapon = ply:GetActiveWeapon()
+        if ply:HasWeapon(weapon:GetClass()) or IsValid(ply) and IsValid(activeWeapon) and string.match(activeWeapon:GetClass(), "zombies_perk_") then return false end
+        if ply:GetNWBool("bIsDrinkingPerk") then return false end
+
+        if string.match(weapon:GetClass(), "zombies_perk_") then
+            local PerkLimit = ConVarExists("Perks_PerkLimit") and GetConVar("Perks_PerkLimit"):GetInt() or 0
+            local PerkTable = {}
+
+            if ply:GetNWString("PerkTable") and #ply:GetNWString("PerkTable") > 0 then
+                PerkTable = string.Explode(",", ply:GetNWString("PerkTable"))
+            end
+
+            if PerkLimit > 0 and table.Count(PerkTable) >= PerkLimit then return false end
+        end
+    end)
+end)
