@@ -25,7 +25,12 @@ function UPGRADE:Apply(SWEP)
     function SWEP:SpeedEnable()
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
-        owner:SetJumpPower(owner:GetJumpPower() * multCvar:GetInt())
+
+        if not owner.PAPLeapingPotionOGJump then
+            owner.PAPLeapingPotionOGJump = owner:GetJumpPower()
+        end
+
+        owner:SetJumpPower(owner.PAPLeapingPotionOGJump * multCvar:GetInt())
         owner.PAPLeappingPotion = true
         local timername = "use_ammo" .. self:EntIndex()
 
@@ -64,7 +69,8 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
 
         if IsValid(owner) then
-            owner:SetJumpPower(owner:GetJumpPower() / multCvar:GetInt())
+            -- 200 is the default jump height
+            owner:SetJumpPower(owner.PAPLeapingPotionOGJump or 200)
             owner.PAPLeappingPotion = false
         end
 
@@ -137,6 +143,12 @@ function UPGRADE:Apply(SWEP)
                 self.WorldModelEnt:SetMaterial(TTTPAP.camo)
             end
         end
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        ply.PAPLeapingPotionOGJump = nil
     end
 end
 
