@@ -1291,6 +1291,24 @@ Zero push cooldown, x2 swing speed!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
+## PHD Flopper [Active Item] (PHD Blocker)
+
+Bullet damage only!\
+\
+*ttt_pap_phd_blocker_hoff* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
+
+## PHD Flopper [Passive Iten] (PHD Blocker)
+
+Bullet damage only!\
+\
+*ttt_pap_phd_blocker_stig* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
+
 ## Pistol (Standard Issue)
 
 Slower, high damage & accuracy shots\
