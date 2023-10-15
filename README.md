@@ -1536,6 +1536,15 @@ Make a randomat instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
+## Raygun (Porter's X2 Ray Gun)
+
+Immune to your own shots + extra ammo!\
+\
+*ttt_pap_porters_x2_raygun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Red Matter Bomb (White Matter Bomb)
 
 Pushes players and damages those in range instead\
