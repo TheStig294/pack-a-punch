@@ -1,0 +1,86 @@
+local UPGRADE = {}
+UPGRADE.id = "thunder"
+UPGRADE.class = "tfa_thundergun"
+UPGRADE.name = "Thunder"
+UPGRADE.desc = "Extra ammo and sound effects!"
+
+function UPGRADE:Apply(SWEP)
+    SWEP:OnPaP()
+    SWEP:SetClip1(4)
+    SWEP.Primary.ClipSize = 4
+
+    function SWEP:PAPPlayThunderSound()
+        if SERVER and IsFirstTimePredicted() then
+            local owner = self:GetOwner()
+
+            if IsValid(owner) then
+                owner:EmitSound("ttt_pack_a_punch/zeus_cannon/thunder" .. math.random(1, 5) .. ".mp3")
+            elseif IsValid(self) then
+                self:EmitSound("ttt_pack_a_punch/zeus_cannon/thunder" .. math.random(1, 5) .. ".mp3")
+            end
+        end
+    end
+
+    SWEP:PAPPlayThunderSound()
+    local timername = "TTTPAPThunderLoopSound" .. SWEP:EntIndex()
+
+    timer.Create(timername, 10, 0, function()
+        if not IsValid(SWEP) then
+            timer.Remove(timername)
+
+            return
+        end
+
+        SWEP:PAPPlayThunderSound()
+    end)
+
+    if not SWEP.ThunderPrimarySoundApplied then
+        SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack
+
+        function SWEP:PrimaryAttack()
+            self:PAPOldPrimaryAttack()
+            self:PAPPlayThunderSound()
+        end
+    end
+
+    function SWEP:Deploy()
+        self:PAPPlayThunderSound()
+
+        return self.BaseClass.Deploy(self)
+    end
+
+    function SWEP:Holster()
+        self:PAPPlayThunderSound()
+
+        return true
+    end
+
+    function SWEP:Equip()
+        self:PAPPlayThunderSound()
+    end
+
+    function SWEP:OnRemove()
+        self:PAPPlayThunderSound()
+    end
+
+    SWEP.PAPOldReload = SWEP.Reload
+
+    function SWEP:Reload()
+        self:PAPOldReload()
+        if self.PAPThunderReloadSoundCooldown then return end
+        self.PAPThunderReloadSoundCooldown = true
+        self:PAPPlayThunderSound()
+
+        timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 1, 1, function()
+            if IsValid(self) then
+                self.PAPThunderReloadSoundCooldown = false
+            end
+        end)
+    end
+
+    function SWEP:PreDrop()
+        self:PAPPlayThunderSound()
+    end
+end
+
+TTTPAP:Register(UPGRADE)

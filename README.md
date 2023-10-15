@@ -1753,6 +1753,15 @@ Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
+## Thundergun (Thunder)
+
+Extra ammo and sound effects!\
+\
+*ttt_pap_thunder* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Time Stop (Time Skip)
 
 Slows down time for everyone but you!
