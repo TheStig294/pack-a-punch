@@ -1254,6 +1254,15 @@ Do do do do doooo...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
 
+## Paper Plane (Double Plane)
+
+Spawns 2 planes that travel much faster\
+\
+*ttt_pap_double_plane* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2150978792>
+
 ## Parasite Cure (Parasite Tester)
 
 Works on living parasite players instead!\
