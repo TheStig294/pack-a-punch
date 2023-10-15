@@ -8,7 +8,7 @@ function UPGRADE:Apply(SWEP)
     SWEP.PAPOldOnDrank = SWEP.OnDrank
 
     function SWEP:OnDrank()
-        SWEP:PAPOldOnDrank()
+        self:PAPOldOnDrank()
         self:GetOwner().PAPPHDBlocker = true
     end
 

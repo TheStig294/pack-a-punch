@@ -9,8 +9,8 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:OnDrank()
         -- Just apply the health boost function twice
-        SWEP:PAPOldOnDrank()
-        SWEP:PAPOldOnDrank()
+        self:PAPOldOnDrank()
+        self:PAPOldOnDrank()
     end
 end
 

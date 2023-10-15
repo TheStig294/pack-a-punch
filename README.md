@@ -1345,6 +1345,24 @@ Bullet damage only!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
 
+## Perk Staminup [Active Item] (Staminmax)
+
+Double walk speed\
+\
+*ttt_pap_perk_staminmax_active* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
+
+## Perk Staminup [Passive Item] (Staminmax)
+
+Double walk speed\
+\
+*ttt_pap_perk_staminmax_passive* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
+
 ## Pistol (Standard Issue)
 
 Slower, high damage & accuracy shots\
