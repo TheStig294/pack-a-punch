@@ -39,7 +39,20 @@ function UPGRADE:Apply(SWEP)
 
         function SWEP:PrimaryAttack()
             self:PAPOldPrimaryAttack()
-            self:PAPPlayThunderSound()
+
+            if self:Clip1() > 0 then
+                self:PAPPlayThunderSound()
+            else
+                if self.PAPThunderReloadSoundCooldown then return end
+                self.PAPThunderReloadSoundCooldown = true
+                self:PAPPlayThunderSound()
+
+                timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 5, 1, function()
+                    if IsValid(self) then
+                        self.PAPThunderReloadSoundCooldown = false
+                    end
+                end)
+            end
         end
     end
 
@@ -71,7 +84,7 @@ function UPGRADE:Apply(SWEP)
         self.PAPThunderReloadSoundCooldown = true
         self:PAPPlayThunderSound()
 
-        timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 1, 1, function()
+        timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 5, 1, function()
             if IsValid(self) then
                 self.PAPThunderReloadSoundCooldown = false
             end
