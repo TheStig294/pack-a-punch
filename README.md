@@ -111,6 +111,15 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 *Italics* indicate convars for any weapon upgrade listed below.
 
+## Acidgat (Insta-gat)
+
+Extra ammo + faster reload!\
+\
+*ttt_pap_acid_insta_gat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## AK47 (OK-47)
 
 While held, basic sources of damage you deal heal instead!\
@@ -247,6 +256,15 @@ Faster and further zoom, instantly search bodies!\
 \
 \
 Upgrade for: Default TTT weapon
+
+## Blundergat (Insta-gat)
+
+Extra ammo + faster reload!\
+\
+*ttt_pap_blunder_insta_gat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
 ## Bodysnatching Device (Rolesnatching Device)
 
