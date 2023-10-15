@@ -1291,20 +1291,38 @@ Zero push cooldown, x2 swing speed!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
-## PHD Flopper [Active Item] (PHD Blocker)
+## Perk Juggernog [Active Item] (Extra Jugg)
 
-Bullet damage only!\
++1 extra health boost!\
 \
-*ttt_pap_phd_blocker_hoff* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_perk_extra_jugg_active* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
 
-## PHD Flopper [Passive Iten] (PHD Blocker)
+## Perk Juggernog [Passive Item] (Extra Jugg)
+
++1 extra health boost!\
+\
+*ttt_pap_perk_extra_jugg_passive* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>
+
+## Perk PHD Flopper [Active Item] (PHD Blocker)
 
 Bullet damage only!\
 \
-*ttt_pap_phd_blocker_stig* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_phd_blocker_active* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
+
+## Perk PHD Flopper [Passive Iten] (PHD Blocker)
+
+Bullet damage only!\
+\
+*ttt_pap_phd_blocker_passive* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2243578658>

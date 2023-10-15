@@ -1,14 +1,19 @@
 local UPGRADE = {}
-UPGRADE.id = "phd_blocker_stig"
-UPGRADE.class = "ttt_perk_phd"
+UPGRADE.id = "phd_blocker_active"
+UPGRADE.class = "zombies_perk_phdflopper"
 UPGRADE.name = "PHD Blocker"
 UPGRADE.desc = "Bullet damage only!"
 
 function UPGRADE:Apply(SWEP)
-    SWEP:GetOwner().PAPPHDBlocker = true
+    SWEP.PAPOldOnDrank = SWEP.OnDrank
+
+    function SWEP:OnDrank()
+        SWEP:PAPOldOnDrank()
+        self:GetOwner().PAPPHDBlocker = true
+    end
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
-        if IsValid(ent) and ent.PAPPHDBlocker and ent:GetNWBool("PHDActive", false) and not dmg:IsBulletDamage() then
+        if IsValid(ent) and ent.PAPPHDBlocker and not dmg:IsBulletDamage() then
             dmg:SetDamage(0)
         end
     end)
