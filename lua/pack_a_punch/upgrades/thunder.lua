@@ -14,9 +14,9 @@ function UPGRADE:Apply(SWEP)
             local owner = self:GetOwner()
 
             if IsValid(owner) then
-                owner:EmitSound("ttt_pack_a_punch/zeus_cannon/thunder" .. math.random(1, 5) .. ".mp3")
+                owner:EmitSound("ttt_pack_a_punch/thunder/thunder" .. math.random(1, 5) .. ".mp3")
             elseif IsValid(self) then
-                self:EmitSound("ttt_pack_a_punch/zeus_cannon/thunder" .. math.random(1, 5) .. ".mp3")
+                self:EmitSound("ttt_pack_a_punch/thunder/thunder" .. math.random(1, 5) .. ".mp3")
             end
         end
     end
