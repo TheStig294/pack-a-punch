@@ -567,6 +567,15 @@ Deaths are more... dramatic?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2552417009>
 
+## Decoy (Radar Flare)
+
+Places many decoys around the map!\
+\
+*ttt_pap_radar_flare* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: Default TTT weapon
+
 ## Defibrillator (Guaranteed Defib)
 
 Always guaranteed to work!\
