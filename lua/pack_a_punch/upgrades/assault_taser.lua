@@ -3,18 +3,9 @@ UPGRADE.id = "assault_taser"
 UPGRADE.class = "weapon_ttt_stungun"
 UPGRADE.name = "Assault Taser"
 UPGRADE.desc = "Increased stun power, 1.5x ammo"
+UPGRADE.ammoMult = 1.5
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipSize = 45
-    SWEP.Primary.ClipMax = 45
-    SWEP.Primary.DefaultClip = 45
-
-    timer.Simple(0.1, function()
-        if SWEP:Clip1() < SWEP.Primary.ClipMax then
-            SWEP:SetClip1(SWEP.Primary.ClipMax)
-        end
-    end)
-
     function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         local sights = self:GetIronsights()
         numbul = numbul or 1

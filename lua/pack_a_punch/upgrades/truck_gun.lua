@@ -40,7 +40,6 @@ local yogsModels = {"models/bradyjharty/yogscast/lankychu.mdl", "models/bradyjha
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = ammoCvar:GetInt()
-    SWEP.Primary.DefaultClip = ammoCvar:GetInt()
     SWEP.Primary.ClipMax = ammoCvar:GetInt()
     SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/honkhonk.mp3")
     SWEP:SetHoldType(SWEP.HoldType)

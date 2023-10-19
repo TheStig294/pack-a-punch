@@ -17,7 +17,6 @@ function UPGRADE:Apply(SWEP)
     -- Range is in source units squared, so 10000 = 100 range
     SWEP.PickupRange = 10000
     SWEP.Primary.ClipSize = 2
-    SWEP.Primary.DefaultClip = 2
     SWEP.Primary.ClipMax = 2
     SWEP.Primary.Ammo = "AirboatGun"
     SWEP.DrawAmmo = true

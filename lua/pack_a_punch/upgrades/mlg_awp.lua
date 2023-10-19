@@ -3,7 +3,6 @@ UPGRADE.id = "mlg_awp"
 UPGRADE.class = "ttt_no_scope_awp"
 UPGRADE.name = "MLG AWP"
 UPGRADE.desc = "Displays MLG popups + ammo and clip size"
-UPGRADE.ammoMult = 1.25
 
 function UPGRADE:Apply(SWEP)
     if SERVER then
@@ -11,8 +10,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     timer.Simple(0.1, function()
-        SWEP.Primary.ClipSize = 6
-        SWEP:Reload()
+        SWEP.Primary.ClipSize = 4
     end)
 
     SWEP.WElements.nsAWP.material = TTTPAP.camo

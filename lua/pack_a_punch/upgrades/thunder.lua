@@ -3,11 +3,11 @@ UPGRADE.id = "thunder"
 UPGRADE.class = "tfa_thundergun"
 UPGRADE.name = "Thunder"
 UPGRADE.desc = "Extra ammo and sound effects!"
+UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
+    -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
     SWEP:OnPaP()
-    SWEP:SetClip1(4)
-    SWEP.Primary.ClipSize = 4
 
     function SWEP:PAPPlayThunderSound()
         if SERVER and IsFirstTimePredicted() then

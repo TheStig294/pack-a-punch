@@ -206,12 +206,11 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end
 
     -- Ammo
-    if isnumber(SWEP.Primary.ClipSize) and isnumber(SWEP.Primary.ClipMax) and isnumber(SWEP.Primary.DefaultClip) then
+    if isnumber(SWEP.Primary.ClipSize) then
         local oldClipSize = SWEP.Primary.ClipSize
         local oldClip = UPGRADE.oldClip or SWEP:Clip1()
         SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
-        SWEP.Primary.ClipMax = SWEP.Primary.ClipMax * UPGRADE.ammoMult
-        SWEP.Primary.DefaultClip = SWEP.Primary.DefaultClip * UPGRADE.ammoMult
+        SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
         -- Set ammo relative to leftover ammo
         SWEP:SetClip1(oldClip / oldClipSize * SWEP.Primary.ClipSize)
     end

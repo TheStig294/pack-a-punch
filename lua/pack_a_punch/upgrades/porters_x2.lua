@@ -1,13 +1,13 @@
 local UPGRADE = {}
-UPGRADE.id = "porters_x2_raygun"
+UPGRADE.id = "porters_x2"
 UPGRADE.class = "tfa_raygun"
-UPGRADE.name = "Porter's X2 Ray Gun"
+UPGRADE.name = "Porter's X2"
 UPGRADE.desc = "Immune to your own shots + extra ammo!"
+UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
+    -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
     SWEP:OnPaP()
-    SWEP.Primary.ClipSize = 40
-    SWEP:SetClip1(SWEP:Clip1() * 2)
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
         local inflictor = dmg:GetInflictor()

@@ -6,7 +6,6 @@ UPGRADE.desc = "2 traps, changes the shark's model!"
 UPGRADE.noSound = true
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.DefaultClip = 2
     SWEP.Primary.ClipMax = 2
     SWEP.Primary.ClipSize = 2
     SWEP.AmmoEnt = nil

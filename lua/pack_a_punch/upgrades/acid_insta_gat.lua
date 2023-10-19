@@ -5,6 +5,7 @@ UPGRADE.name = "Insta-gat"
 UPGRADE.desc = "Extra ammo + faster reload!"
 
 function UPGRADE:Apply(SWEP)
+    -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
     SWEP:OnPaP()
 
     function SWEP:Reload()

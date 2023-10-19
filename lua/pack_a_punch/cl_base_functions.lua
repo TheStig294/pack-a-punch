@@ -4,7 +4,7 @@
 net.Receive("TTTPAPApply", function()
     local SWEP = net.ReadEntity()
     if not IsValid(SWEP) then return end
-    -- Stats
+    -- Reading data from server
     local delay = net.ReadFloat()
     local RPM = net.ReadFloat()
     local damage = net.ReadFloat()
@@ -14,21 +14,6 @@ net.Receive("TTTPAPApply", function()
     local recoil = net.ReadFloat()
     local staticRecoilFactor = net.ReadFloat()
     local automatic = net.ReadBool()
-
-    if istable(SWEP.Primary) then
-        SWEP.Primary.Delay = delay
-        SWEP.Primary.RPM = RPM
-        SWEP.Primary.Damage = damage
-        SWEP.Primary.Cone = cone
-        SWEP.Primary.Spread = spread
-        SWEP.Primary.ClipSize = clipSize
-        SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
-        SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize
-        SWEP.Primary.Recoil = recoil
-        SWEP.Primary.StaticRecoilFactor = staticRecoilFactor
-        SWEP.Primary.Automatic = automatic
-    end
-
     local upgradeID = net.ReadString()
     local upgradeClass = net.ReadString()
     local noDesc = net.ReadBool()
@@ -44,6 +29,20 @@ net.Receive("TTTPAPApply", function()
     -- Apply upgrade function on the client
     UPGRADE:Apply(SWEP)
     table.insert(TTTPAP.activeUpgrades, UPGRADE)
+
+    -- Stats
+    if istable(SWEP.Primary) then
+        SWEP.Primary.Delay = delay
+        SWEP.Primary.RPM = RPM
+        SWEP.Primary.Damage = damage
+        SWEP.Primary.Cone = cone
+        SWEP.Primary.Spread = spread
+        SWEP.Primary.ClipSize = clipSize
+        SWEP.Primary.ClipMax = clipSize
+        SWEP.Primary.Recoil = recoil
+        SWEP.Primary.StaticRecoilFactor = staticRecoilFactor
+        SWEP.Primary.Automatic = automatic
+    end
 
     -- Name
     if UPGRADE.name then

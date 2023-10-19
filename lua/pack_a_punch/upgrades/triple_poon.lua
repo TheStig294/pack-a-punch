@@ -8,7 +8,6 @@ UPGRADE.noCamo = true
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = 3
     SWEP.Primary.ClipMax = 3
-    SWEP.Primary.DefaultClip = 3
     SWEP.Thrown = false
 
     timer.Simple(0.1, function()

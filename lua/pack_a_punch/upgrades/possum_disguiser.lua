@@ -25,7 +25,6 @@ function UPGRADE:Apply(SWEP)
     local ammo = ammoMultCvar:GetFloat() * 100
     SWEP.Primary.ClipSize = ammo
     SWEP.Primary.ClipMax = ammo
-    SWEP.Primary.DefaultClip = ammo
 
     if possumInstalled then
         self:AddHook("PlayerPostThink", function(ply)
