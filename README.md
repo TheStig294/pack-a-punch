@@ -1540,7 +1540,16 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
 Immune to your own shots + extra ammo!\
 \
-*ttt_pap_porters_x2_raygun* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_porters_x2* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
+## Raygun Mark II (Porter's Mark II)
+
+6-round burst + extra ammo\
+\
+*ttt_pap_porters_x2* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
