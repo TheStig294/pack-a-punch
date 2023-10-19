@@ -1770,6 +1770,16 @@ Effectively unlimited uses\
 \
 Upgrade for: Default TTT weapon
 
+## The Baby Maker (The Fractalizer)
+
+Immune to your own shots + extra ammo\
+You make higher-pitched sounds!\
+\
+*ttt_pap_the_fractalizer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Throwable Crowbar (Throwable Freeman's Club)
 
 x2 swing speed, first throw kills in 1-shot,
