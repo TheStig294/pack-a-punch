@@ -1893,6 +1893,16 @@ Extra ammo + slows everyone else down and puts a icy overlay over their screen\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Wunderwaffe DG-2 (Wunderwaffe DG-3)
+
+Arcs lightning between nearby players!\
+\
+*ttt_pap_winters_wunderwaffe_dg3* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Zap Grenade (Disarm Grenade)
 
 Forces players to drop their weapons and cannot pickup new ones for a few seconds\
