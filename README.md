@@ -1743,6 +1743,26 @@ Spun players get flung away!
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
+## Staff of Lightning (Kimat's Bite)
+
+Hold left-click: Charged attack\
+Right-click: Melee attack\
+\
+*ttt_pap_kimats_bite* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
+## Staff of Wind (Boreas' Fury)
+
+Hold left-click: Charged attack\
+Right-click: Melee attack\
+\
+*ttt_pap_boreas_fury* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Station Bomb (Bomb Station Converter)
 
 Converts *anything* into a bomb station!\
