@@ -801,6 +801,15 @@ Permenantly blinds victims, but they can see player outlines
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067970407>
 
+## FN P90 (P100)
+
+100 clip size + ammo refill!\
+\
+*ttt_pap_p100* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
+
 ## Fool's Golden Gun (Fool's Platinum Gun)
 
 Turns the person you shoot into an innocent and kills you\
