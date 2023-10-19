@@ -1858,6 +1858,16 @@ Forces players to drop their weapons and cannot pickup new ones for a few second
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3014979716>
 
+## Zap Guns (Wave Gun)
+
+Shoot at the ground to instantly "microwave" nearby players in an AOE!\
+\
+*ttt_pap_wave_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_wave_gun_radius* - Default: 200 - Radius of AOE shot\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Zombification Device (Laughing Zombificator)
 
 Make evil laughs, takes less time to use!\
