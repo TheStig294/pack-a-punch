@@ -1866,6 +1866,15 @@ Lasts longer\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329721936>
 
+## Visualiser (Spiderman Visualiser)
+
+Shows the pointing spiderman meme\
+\
+*ttt_pap_spiderman_visualiser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: Default TTT weapon
+
 ## Winter's Howl [Standalone] (Winter's Fury)
 
 Extra ammo + slows everyone else down and puts a icy overlay over their screen\
