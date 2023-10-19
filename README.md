@@ -1848,6 +1848,24 @@ Lasts longer\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329721936>
 
+## Winter's Howl [Standalone] (Winter's Fury)
+
+Extra ammo + slows everyone else down and puts a icy overlay over their screen\
+\
+*ttt_pap_winters_fury_standalone* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=788679798>
+
+## Winter's Howl [Wonder weapons pack] (Winter's Fury)
+
+Extra ammo + slows everyone else down and puts a icy overlay over their screen\
+\
+*ttt_pap_winters_fury_pack* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Zap Grenade (Disarm Grenade)
 
 Forces players to drop their weapons and cannot pickup new ones for a few seconds\
