@@ -1,7 +1,7 @@
 local UPGRADE = {}
-UPGRADE.id = "thunder"
+UPGRADE.id = "zeus_cannon"
 UPGRADE.class = "tfa_thundergun"
-UPGRADE.name = "Thunder"
+UPGRADE.name = "Zeus Cannon"
 UPGRADE.desc = "Extra ammo and sound effects!"
 UPGRADE.ammoMult = 2
 

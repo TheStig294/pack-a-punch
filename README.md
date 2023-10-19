@@ -1789,11 +1789,11 @@ Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
-## Thundergun (Thunder)
+## Thundergun (Zeus Cannon)
 
 Extra ammo and sound effects!\
 \
-*ttt_pap_thunder* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_zeus_cannon* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
