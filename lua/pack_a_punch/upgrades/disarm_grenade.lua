@@ -8,6 +8,10 @@ UPGRADE.convars = {
     {
         name = "pap_disarm_grenade_time",
         type = "int"
+    },
+    {
+        name = "pap_disarm_grenade_undroppable_remove",
+        type = "bool"
     }
 }
 

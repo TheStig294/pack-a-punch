@@ -1930,6 +1930,7 @@ Forces players to drop their weapons and cannot pickup new ones for a few second
 *ttt_pap_disarm_grenade* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_disarm_grenade_time* - Default: 10 - Seconds players are disarmed\
+*pap_disarm_grenade_undroppable_remove* - Default: 1 - Remove undroppable weapons?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3014979716>
 

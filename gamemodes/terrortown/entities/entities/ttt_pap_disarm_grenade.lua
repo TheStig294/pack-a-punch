@@ -63,6 +63,8 @@ end)
 
 local disarmTimeCvar = CreateConVar("pap_disarm_grenade_time", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs players are disarmed", 1, 20)
 
+local undroppableRemoveCvar = CreateConVar("pap_disarm_grenade_undroppable_remove", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Remove undroppable weapons?", 0, 1)
+
 function ENT:Explode(tr)
 	if CLIENT then return end
 	self:SetNoDraw(true)
@@ -81,6 +83,7 @@ function ENT:Explode(tr)
 	local shockPlayerSounds = {"vo/ravenholm/monk_pain04.wav", "vo/ravenholm/monk_pain06.wav", "vo/ravenholm/monk_pain09.wav", "vo/ravenholm/monk_pain12.wav"}
 
 	util.ScreenShake(pos, 60, 90, 0.7, 150)
+	local removeUndroppable = undroppableRemoveCvar:GetBool()
 
 	for _, ply in pairs(ents.FindInSphere(self:GetPos(), 150)) do
 		if IsValid(ply) and ply:IsPlayer() then
@@ -108,7 +111,9 @@ function ENT:Explode(tr)
 
 			if ply:Alive() and not ply:IsSpec() then
 				for _, wep in ipairs(ply:GetWeapons()) do
-					ply:DropWeapon(wep)
+					if wep.AllowDrop or removeUndroppable then
+						ply:DropWeapon(wep)
+					end
 				end
 			end
 
