@@ -1905,6 +1905,15 @@ Shows the pointing spiderman meme\
 \
 Upgrade for: Default TTT weapon
 
+## VR-11 (VR-Infinity)
+
+Unlimited ammo!\
+\
+*ttt_pap_vr_infinity* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Winter's Howl [Standalone] (Winter's Fury)
 
 Extra ammo + slows everyone else down and puts a icy overlay over their screen\
