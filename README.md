@@ -1715,6 +1715,16 @@ x1.5 firerate, unsilenced\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
+## Sliquifier (Slime Sprinkler)
+
+Unlimited ammo + higher firerate + full-auto\
+Doesn't deal direct damage\
+\
+*ttt_pap_slime_sprinkler* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
 ## Smoke grenade (Ninja bomb)
 
 Very large smoke cloud\
