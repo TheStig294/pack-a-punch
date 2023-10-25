@@ -237,17 +237,6 @@ Appears HUGE for everyone else, or when on the ground!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2169931075>
 
-## Big Glock (Tiny Glock)
-
-Appears TINY for everyone else, or when on the ground!\
-\
-*ttt_pap_glock_tiny* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_glock_tiny_scale* - Default: 0.1 - Size scale multiplier\
-*pap_glock_tiny_use_camo* - Default: 0 - Apply the Pack-a-Punch camo/texture?\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2169931075>
-
 ## Binoculars (Eagle's Eye)
 
 Faster and further zoom, instantly search bodies!\
