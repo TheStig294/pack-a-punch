@@ -1,6 +1,6 @@
 local UPGRADE = {}
-UPGRADE.id = "directed_by_station"
-UPGRADE.class = "weapon_ttt_bomb_station"
+UPGRADE.id = "directed_by_station_quack"
+UPGRADE.class = "weapon_qua_bomb_station"
 UPGRADE.name = "Directed By Station"
 UPGRADE.desc = "A player that activates this sees\nthe 'Directed by Robert B. Weide' meme!"
 

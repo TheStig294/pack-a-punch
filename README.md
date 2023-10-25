@@ -283,6 +283,16 @@ the 'Directed by Robert B. Weide' meme!\
 *ttt_pap_directed_by_station* - Default: 1 - Whether this upgrade is enabled
 \
 \
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=712675840>
+
+## Bomb Station [Quack Role Weapon] (Directed By Station)
+
+A player that activates this sees
+the 'Directed by Robert B. Weide' meme!\
+\
+*ttt_pap_directed_by_station* - Default: 1 - Whether this upgrade is enabled
+\
+\
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Bone Charm (Jail Bone Charm)
