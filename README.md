@@ -822,6 +822,15 @@ Temporarily become invincible and able to fly!
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Fart Grenade (Double Fart Grenade)
+
+Throw 2 grenades! The other takes an extra 20 seconds to explode!\
+\
+*ttt_pap_double_fart_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=948384112>
+
 ## Flare gun (Perma-Fire Gun)
 
 Sets someone on fire that doesn't go out
