@@ -1351,6 +1351,17 @@ Stand next to something and left-click to shrink it!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2672799157>
 
+## Minigun (Megagun)
+
+Appears HUGE for everyone else, all stats up!\
+\
+*ttt_pap_megagun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_megagun_scale* - Default: 10 - Size scale multiplier\
+*pap_megagun_use_camo* - Default: 0 - Apply the Pack-a-Punch camo/texture?\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2452829736>
+
 ## Moonball (Basketball)
 
 Left: throw, Right: slam, R: Spin, E: pick up\
