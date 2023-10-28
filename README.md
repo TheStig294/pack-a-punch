@@ -974,6 +974,15 @@ Don't shoot a bad guy: One of them gets an extra life!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055695161>
 
+## Graffiti (Graffiti)
+
+Forcibly gives everyone a graffiti can!\
+\
+*ttt_pap_free_graffiti_can* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2705642928>
+
 ## Gravity Changer (Spacetime Hacker)
 
 No cooldown, but be careful not to use it too much...\
