@@ -898,6 +898,16 @@ x2 explosion radius!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
+## Freeze Gun (AOE Freeze Gun)
+
+Freezes nearby players too!\
+\
+*ttt_pap_aoe_freeze_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_aoe_freeze_gun_range* - Default: 200 - Range of the freeze gun AOE\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=888948962>
+
 ## Glock (Mini-Glock)
 
 Big fire rate, ammo, and fire spread increase\
