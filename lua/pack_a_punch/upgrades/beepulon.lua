@@ -62,4 +62,10 @@ function UPGRADE:Apply(SWEP)
     end)
 end
 
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        ply.TTTPAPBeepulonOwner = nil
+    end
+end
+
 TTTPAP:Register(UPGRADE)
