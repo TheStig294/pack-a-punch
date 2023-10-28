@@ -1286,6 +1286,15 @@ Ammo + fire rate increase\
 \
 Upgrade for: Default TTT weapon
 
+## M4 SLAM (Come on and SLAM)
+
+x2 ammo, new detonate sound!\
+\
+*ttt_pap_come_on_and_slam* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=254177306>
+
 ## MAC10 (MAC100)
 
 Super high fire rate and recoil\
