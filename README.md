@@ -2079,6 +2079,15 @@ Move fast while riding!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1858836015>
 
+## Turtle Grenade (Double Turtle Grenade)
+
+Throw 2 grenades! The other takes an extra 20 seconds to explode!\
+\
+*ttt_pap_double_turtle_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=106404821>
+
 ## UMP Prototype (Assault Taser)
 
 Increased stun power, 1.5x ammo\
