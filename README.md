@@ -1032,14 +1032,14 @@ Throw 3 harpoons at once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=456189236>
 
-## Hwapoon (Triple Poon)
+## Headcrab Launcher (Headcrab Spammer)
 
-Throw 3 hwapoons at once!\
+x2.5 ammo!\
 \
-*ttt_pap_triple_hwapoon* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_headcrab_spammer* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1625876886>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1820904987>
 
 ## Health Station (Super Microwave)
 
@@ -1093,6 +1093,15 @@ for 20 seconds!\
 *pap_cold_spaghetti_frozen_secs* - Default: 20 - Seconds players are frozen\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2377790970>
+
+## Hwapoon (Triple Poon)
+
+Throw 3 hwapoons at once!\
+\
+*ttt_pap_triple_hwapoon* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1625876886>
 
 ## ID Bomb (NPC Bomb)
 
