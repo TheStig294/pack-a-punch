@@ -165,6 +165,15 @@ whenever someone walks near\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2887757921>
 
+## Antlion Summoner (Antlion Spammer)
+
+Ammo recharges over time\
+\
+*ttt_pap_antlion_spammer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1839121623>
+
 ## Artillery Cannon (Auto Cannon)
 
 Auto-shoots, pressing 'E' removes the cannon!\
