@@ -1562,6 +1562,16 @@ Slower, high damage & accuracy shots\
 \
 Upgrade for: Default TTT weapon
 
+## Player Swap Gun (Damage Swap Gun)
+
+You only swap after taking damage\
+\
+*ttt_pap_damage_swap_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_damage_swap_gun_cooldown* - Default: 2 - Seconds cooldown for another swap
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3022191155>
+
 ## Poltergeist (The Ghost Ball)
 
 x2 ammo + fire rate increase\
