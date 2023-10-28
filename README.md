@@ -62,11 +62,6 @@ Requires: [Custom Roles for TTT Jingle Jam 2021 Roles Pack](https://steamcommuni
 Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084)\
 (Or any mod that adds a "Jester" role like TTT2 or Town of Terror)
 
-## Clutterbomb
-
-<https://steamcommunity.com/sharedfiles/filedetails/?id=3041239513>\
-Requires: [TTT Prop Blaster](https://steamcommunity.com/sharedfiles/filedetails/?id=2085047179)
-
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -401,11 +396,11 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1389756626>
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
 
-## Clutterbomb (Prop Blaster)
+## Clutterbomb (Barrel Bomb)
 
-Now a full-blown prop blaster!\
+Always spawns explosive barrels!\
 \
-*ttt_pap_prop_blaster* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_barrel_bomb* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3041239513>
