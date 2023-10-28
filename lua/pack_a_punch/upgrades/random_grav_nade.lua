@@ -60,6 +60,7 @@ end
 function UPGRADE:Reset()
     for _, ply in ipairs(player.GetAll()) do
         timer.Remove("TTTPAPRandomGravNade" .. ply:SteamID64())
+        ply.TTTPAPRandomGravNade = nil
     end
 end
 
