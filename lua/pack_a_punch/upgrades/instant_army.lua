@@ -46,6 +46,7 @@ function UPGRADE:Apply(SWEP)
         Nom:Activate()
         Nom:SetMaxHealth(350)
         Nom:SetHealth(350)
+        Nom:SetMaterial(TTTPAP.camo)
 
         --Giving Combine Soldiers their weapons
         if CombineNumber == 10 then
