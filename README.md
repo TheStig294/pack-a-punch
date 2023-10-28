@@ -397,6 +397,15 @@ Infinite Pack-a-Punch presents!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
 
+## Chickenator (KFCenator)
+
+Shoots KFC instead\
+\
+*ttt_pap_kfcenator* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1659437311>
+
 ## Claws (Braaaaaains)
 
 Makes zombie sounds for you!\
