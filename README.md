@@ -935,6 +935,15 @@ Players you hit turn into boxes\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
 
+## Gnome Grenade (Gnomed Grenade)
+
+x2 grenades, victims actually get gnomed\
+\
+*ttt_pap_gnomed_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2175528640>
+
 ## Gold Dragon (Platinum Dragon)
 
 x3 ammo\
