@@ -1672,6 +1672,16 @@ Throw 2 grenades! The other takes an extra 20 seconds to explode!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2085047179>
 
+## Prop Disguiser (Infinite Disguiser)
+
+Unlimited disguise! Play a taunt after a delay\
+\
+*ttt_pap_infinite_disguiser* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_infinite_disguiser_taunt_delay* - Default: 15 - Unlimited disguise! Play a taunt after a delay\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2127939503>
+
 ## Radio (Quad Auto-Radio)
 
 Auto-plays sounds, +3 extra radios!\
