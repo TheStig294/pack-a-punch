@@ -1683,6 +1683,15 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000>
 
+## Shock Trap (Surprise Trap)
+
+Can place 3, 'surprises' the victim\
+\
+*ttt_pap_surprise_trap* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2403506856>
+
 ## Shotgun (Dagon's Glare)
 
 1.5x ammo, fire rate increase, reload multiple bullets at once!\
