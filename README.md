@@ -2174,6 +2174,15 @@ Shoot at the ground to instantly "microwave" nearby players in an AOE!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Zombie Gun (Fast Zombie Gun)
+
+Spawns fast zombies instead!\
+\
+*ttt_pap_fast_zombie_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2614793622>
+
 ## Zombification Device (Laughing Zombificator)
 
 Make evil laughs, takes less time to use!\
