@@ -1984,6 +1984,15 @@ Plays the John Cena intro\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
+## SurpriseSoldiers (Instant Army)
+
+Spawns all 10 surprise soldier NPCs at once!\
+\
+*ttt_pap_instant_army* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2816323301>
+
 ## Taxidermy Kit (NPC Spawner)
 
 Turns a body into an invincible walking NPC!\
