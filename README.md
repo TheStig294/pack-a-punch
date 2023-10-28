@@ -472,6 +472,15 @@ to convert them into a traitor!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1908426838>
 
+## Controllable Manhack (Beepulon)
+
+Deals way more damage, makes beepulon sounds\
+\
+*ttt_pap_beepulon* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1377883019>
+
 ## Corpse Launcher (Player Launcher)
 
 Works on living players instead!\
