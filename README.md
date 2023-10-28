@@ -1927,6 +1927,15 @@ Spins around on the spot, watch out!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2590612326>
 
+## Speedgun (Slowgun)
+
+x1.5 ammo, permenantely slows players instead!\
+\
+*ttt_pap_slowgun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3025469916>
+
 ## Spin Attack (Flinging Spin Attack)
 
 Spun players get flung away!
