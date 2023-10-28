@@ -289,6 +289,16 @@ Respawn in jail after you die\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2633130293>
 
+## Bonk Bat (Horny Jailer)
+
+Jail lasts a very long time or until you release them!\
+\
+*ttt_pap_horny_jailer* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_horny_jailer_secs* - Default: 120 - Seconds jail lasts\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2475989756>
+
 ## Boomerang (Explosive Boomerang)
 
 Boomerang explodes on touch!\
@@ -402,6 +412,7 @@ Always spawns explosive barrels!\
 \
 *ttt_pap_barrel_bomb* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_barrel_bomb_count* - Default: 12 - Seconds to convert a player\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3041239513>
 
