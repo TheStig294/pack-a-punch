@@ -1041,6 +1041,15 @@ x2.5 ammo!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1820904987>
 
+## Healing Maxwell (Maxwell The Rainbow Cat)
+
+Do do do do doooo...\
+\
+*ttt_pap_maxwell_the_rainbow_cat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2917556751>
+
 ## Health Station (Super Microwave)
 
 Heal much faster, x2 capacity\
