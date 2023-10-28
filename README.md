@@ -983,6 +983,15 @@ Forcibly gives everyone a graffiti can!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2705642928>
 
+## Grav Nade (Random Grav Nade)
+
+When the floating ends, changes the victim's gravity!\
+\
+*ttt_pap_random_grav_nade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=422193735>
+
 ## Gravity Changer (Spacetime Hacker)
 
 No cooldown, but be careful not to use it too much...\
