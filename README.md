@@ -1899,6 +1899,16 @@ Doesn't deal direct damage\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Slow Motion Grenade (Fast Motion Grenade)
+
+Speeds everything up instead!\
+\
+*ttt_pap_fast_motion_grenade* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_fast_motion_grenade_speed_mult* - Default: 2 - Game speed multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2960443223>
+
 ## Smoke grenade (Ninja bomb)
 
 Very large smoke cloud\
