@@ -211,6 +211,15 @@ Plays a 'help I'm stuck in a barnacle!' sound for the victim\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067939864>
 
+## Bear Trap (Floating Bear Trap)
+
+You can place 2 traps, floats around immune to your own traps!\
+\
+*ttt_pap_floating_bear_trap* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1361099725>
+
 ## Bee Cannon (Bigby Cannon)
 
 Spawns big bees!\
