@@ -1398,6 +1398,16 @@ Displays MLG popups + ammo and clip size\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2860986215>
 
+## NPC Vault (Random Vault)
+
+Auto-spawns random NPCs!\
+\
+*ttt_pap_random_vault* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_random_vault_spawn_delay* - Default: 5 - Secs between changing npcs
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1541355785>
+
 ## One-Shot Pistol (Pew Pew Pistol)
 
 Makes old school western gunshot sounds!\
