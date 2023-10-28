@@ -931,6 +931,16 @@ Minimal recoil, higher fire-rate!\
 \
 Upgrade for: Default TTT weapon
 
+## Handcuffs (Instant Handcuffs)
+
+Handcuffs everyone for 10 seconds! (Configurable)\
+\
+*ttt_pap_instant_handcuffs* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_instant_handcuffs_secs* - Default: 10 - Seconds players remain handcuffed\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2249861635>
+
 ## Harpoon (Triple Poon)
 
 Throw 3 harpoons at once!\
