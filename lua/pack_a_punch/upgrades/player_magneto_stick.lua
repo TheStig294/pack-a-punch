@@ -21,12 +21,16 @@ UPGRADE.convars = {
         type = "float"
     },
     {
-        name = "pap_player_magneto_stick_struggle_reduction",
+        name = "pap_player_magneto_stick_struggle_reduce",
         type = "float"
     },
     {
         name = "pap_player_magneto_stick_cooldown",
         type = "int"
+    },
+    {
+        name = "pap_player_magneto_stick_multi_pickup",
+        type = "bool"
     }
 }
 
@@ -36,9 +40,11 @@ CreateConVar("pap_player_magneto_stick_carry_duration", "30", {FCVAR_ARCHIVE, FC
 
 CreateConVar("pap_player_magneto_stick_struggle_interval", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
 
-CreateConVar("pap_player_magneto_stick_struggle_reduction", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 1)
+CreateConVar("pap_player_magneto_stick_struggle_reduce", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 5)
 
 CreateConVar("pap_player_magneto_stick_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
+
+CreateConVar("pap_player_magneto_stick_multi_pickup", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Players can be picked up more than once a round", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     local CurTime = CurTime
@@ -178,6 +184,14 @@ function UPGRADE:Apply(SWEP)
     function SWEP:Pickup(ent)
         if IsValid(self.Victim) then return end
         if not IsValid(ent) then return end
+
+        if ent.PaPMagnetostickPickedUpBefore and not GetConVar("pap_player_magneto_stick_multi_pickup"):GetBool() then
+            self:GetOwner():PrintMessage(HUD_PRINTCENTER, "This player has been picked up before!")
+
+            return
+        end
+
+        ent.PaPMagnetostickPickedUpBefore = true
 
         if ent.PaPMagnetostickCooldown then
             self:GetOwner():PrintMessage(HUD_PRINTCENTER, "This player was picked up too recently!")
@@ -516,6 +530,13 @@ function UPGRADE:Apply(SWEP)
             self:RemoveHook("HUDPaint", entIdx)
             self:RemoveHook("KeyPress", entIdx)
         end)
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        ply.PaPMagnetostickCooldown = nil
+        ply.PaPMagnetostickPickedUpBefore = nil
     end
 end
 

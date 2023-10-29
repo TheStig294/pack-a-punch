@@ -1322,8 +1322,9 @@ A magneto-stick that exclusively picks up players!\
 *pap_player_magneto_stick_release_delay* - Default: 2 - Seconds a victim is stunned\
 *pap_player_magneto_stick_carry_duration* - Default: 30 - Seconds someone can be carried for\
 *pap_player_magneto_stick_struggle_interval* - Default: 0.25 - Seconds between struggles\
-*pap_player_magneto_stick_struggle_reduction* - Default: 0.25 - Seconds a struggle reduces carry\
+*pap_player_magneto_stick_struggle_reduce* - Default: 0.5 - Seconds a struggle reduces carry\
 *pap_player_magneto_stick_cooldown* - Default: 10 - Second cooldown between picking up\
+*pap_player_magneto_stick_multi_pickup* - Default: 0 - Players can be picked up more than once a round\
 \
 Upgrade for: Default TTT weapon
 
