@@ -167,6 +167,12 @@ function UPGRADE:Apply(SWEP)
                 local wep = ply:Give(data.class)
                 wep:SetClip1(data.clip1)
                 wep:SetClip2(data.clip2)
+
+                timer.Simple(0.1, function()
+                    if data.upgrade and IsValid(wep) then
+                        TTTPAP:ApplyUpgrade(wep, data.upgrade)
+                    end
+                end)
             end
         end
 
@@ -222,7 +228,8 @@ function UPGRADE:Apply(SWEP)
             TableInsert(self.VictimProps.Weapons, {
                 class = weap:GetClass(),
                 clip1 = weap:Clip1(),
-                clip2 = weap:Clip2()
+                clip2 = weap:Clip2(),
+                upgrade = weap.PAPUpgrade
             })
         end
 
