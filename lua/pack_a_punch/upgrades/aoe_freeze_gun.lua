@@ -16,6 +16,7 @@ local rangeCvar = CreateConVar("pap_aoe_freeze_gun_range", 200, {FCVAR_ARCHIVE, 
 function UPGRADE:Apply(SWEP)
     local freezeDuration = GetConVar("ttt_freezegun_duration")
     local screenColour = Color(0, 238, 255, 20)
+    local freezeColour = Color(0, 255, 255)
 
     local function FreezeTarget(att, path, dmginfo)
         local ent = path.Entity
@@ -35,10 +36,13 @@ function UPGRADE:Apply(SWEP)
                     -- Most use I've ever got out of a single sound effect lol
                     ply:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
                     ply:ScreenFade(SCREENFADE.OUT, screenColour, 1, freezeDuration:GetInt() - 1)
+                    local oldPlayerColour = ply:GetColor()
+                    ply:SetColor(freezeColour)
 
                     timer.Simple(freezeDuration:GetInt() + 0.1, function()
                         if IsValid(ply) then
                             ply:Freeze(false)
+                            ply:SetColor(oldPlayerColour)
                         end
                     end)
                 end
