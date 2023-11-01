@@ -114,13 +114,22 @@ function UPGRADE:Apply(SWEP)
         local shield = ply:GetNWInt("PAPHealthShield", 0)
 
         if shield > 0 then
+            local attacker = dmg:GetAttacker()
             local damage = dmg:GetDamage() * dmgResist
             ply:SetNWInt("PAPHealthShield", math.floor(shield - damage))
             ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/block.mp3")
 
+            if self:IsPlayer(attacker) then
+                attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/block.mp3\")")
+            end
+
             if ply:GetNWInt("PAPHealthShield", 0) <= 0 then
                 ply:SetColor(COLOR_WHITE)
                 ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/break.mp3")
+
+                if self:IsPlayer(attacker) then
+                    attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/break.mp3\")")
+                end
             end
 
             return true
