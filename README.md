@@ -1032,12 +1032,16 @@ Throw 3 harpoons at once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=456189236>
 
-## Headcrab Launcher (Headcrab Spammer)
+## Headcrab Launcher (Big Crab Launcher)
 
-x2.5 ammo!\
+Spawns 1 big crab launcher! Launcher deals direct damage, spawns many poison headcrabs\
 \
-*ttt_pap_headcrab_spammer* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_big_crab_launcher* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_big_crab_launcher_health* - Default: 100 - Health upgraded headcrabs have\
+*pap_big_crab_launcher_crab_count* - Default: 18 - Number of headcrabs spawned\
+*pap_big_crab_launcher_damage* - Default: 30 - Damage direct launcher hit deals\
+*pap_big_crab_launcher_damage_radius* - Default: 150 - AOE range of direct launcher damage\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1820904987>
 
