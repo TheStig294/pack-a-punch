@@ -742,9 +742,18 @@ Bigger hitbox, bigger explosion, leaves fire\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
-## Double Barrel (Lawn Defender)
+## Double Barrel [Floor Weapon] (Lmao Bang)
 
-x4 ammo, full-auto, fire-rate up! (No, not *That double barrel*, the one the "Old Man" role from "Custom Roles for TTT" gets for 3 seconds...)\
+x2 ammo, lmao bang\
+\
+*ttt_pap_lmao_bang* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=337994500>
+
+## Double Barrel [Old Man Role Weapon] (Lawn Defender)
+
+x4 ammo, full-auto, fire-rate up!\
 \
 *ttt_pap_lawn_defender* - Default: 1 - Whether this upgrade is enabled
 \
