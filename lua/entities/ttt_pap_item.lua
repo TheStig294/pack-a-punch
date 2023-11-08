@@ -1,7 +1,7 @@
 -- 
 -- Creating the Pack-a-Punch passive item (It's here in the entities folder because else there's issues syncing the same item id between client and server)
 -- 
-if TTT2 then return end
+if TTT2 or engine.ActiveGamemode() ~= "terrortown" then return end
 AddCSLuaFile()
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
