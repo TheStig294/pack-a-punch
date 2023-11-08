@@ -1800,6 +1800,15 @@ Zoomier zoom, fire rate increase!\
 \
 Upgrade for: Default TTT weapon
 
+## Rocket Thruster (Remote Thruster)
+
+Launches other players instead!\
+\
+*ttt_pap_remote_thruster* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2458340155>
+
 ## Role Guesser (Fruit Guesser)
 
 Guess someone's favourite fruit instead!\
