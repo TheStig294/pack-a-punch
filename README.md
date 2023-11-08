@@ -62,6 +62,11 @@ Requires: [Custom Roles for TTT Jingle Jam 2021 Roles Pack](https://steamcommuni
 Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084)\
 (Or any mod that adds a "Jester" role like TTT2 or Town of Terror)
 
+## Light Gun (D.va pistol)
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>\
+Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -1289,6 +1294,18 @@ Launches players into the sky!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2958417945>
+
+## Light Gun [D.Va Pistol] (Nerf This!)
+
+Sets off a big explosion, you are immune! Doesn't affect people behind cover\
+\
+*ttt_pap_nerf_this* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_nerf_this_radius* - Default: 700 - Radius of explosion\
+*pap_nerf_this_damage* - Default: 10000 - Explosion damage\
+*pap_nerf_this_owner_immune* - Default: 1 - Owner is immune to explosion?\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
 
 ## M16 (Skullcrusher)
 
