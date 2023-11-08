@@ -84,14 +84,14 @@ end)
 
 -- Sound
 hook.Add("EntityEmitSound", "TTTPAPApplySound", function(data)
-    if not IsValid(data.Entity) or not data.Entity.PAPUpgrade then return end
+    if not IsValid(data.Entity) or not data.Entity.PAPUpgrade or data.Entity.PAPUpgrade.noSound then return end
     local current_sound = data.SoundName:lower()
     local fire_start, _ = string.find(current_sound, ".*weapons/.*fire.*%..*")
     local shot_start, _ = string.find(current_sound, ".*weapons/.*shot.*%..*")
     local shoot_start, _ = string.find(current_sound, ".*weapons/.*shoot.*%..*")
 
     if fire_start or shot_start or shoot_start then
-        data.SoundName = PAPSound
+        data.SoundName = TTTPAP.shootSound
 
         return true
     end
