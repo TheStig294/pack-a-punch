@@ -30,27 +30,35 @@ function UPGRADE:Apply(SWEP)
     -- So for things that happen on-upgrade there is no need to create a new network string, everyone will run this code on the client
     if CLIENT then
         surface.PlaySound("ttt_pack_a_punch/nerf_this/nerf_this.mp3")
+
+        timer.Simple(2, function()
+            surface.PlaySound("skill/ultimate2.mp3")
+        end)
     end
 
     if SERVER then
         local own = SWEP:GetOwner()
         local ownerShootPos = own:GetShootPos()
+        -- Place mech in same direction as player is facing
+        local angles = own:GetAngles()
+        angles.z = 0
         local mech = ents.Create("d.va_mech")
+        mech:SetAngles(angles)
         mech:SetPos(own:GetPos())
         mech:Spawn()
+        mech.PAPNerfThisStopDamage = true
 
+        -- Start nerf this explosion after a delay, after the callout sound has finished playing
         timer.Simple(2, function()
             if not IsValid(mech) or not IsValid(own) then return end
             mech:SetNWFloat("UltiCharge", 1000)
             mech.Activator = own
             mech:Self_Destruct()
 
-            for i = 1, 3 do
-                mech:EmitSound("skill/ultimate2.mp3")
-            end
-
+            -- Triggering the explosion a split-second before the mech does it itself, so we can re-block the damage later
             timer.Simple(3.4, function()
                 if not IsValid(mech) or not IsValid(own) then return end
+                mech.PAPNerfThisStopDamage = false
                 local dmg = DamageInfo()
                 dmg:SetDamageType(DMG_BLAST)
                 dmg:SetDamage(damageCvar:GetInt())
@@ -78,6 +86,7 @@ function UPGRADE:Apply(SWEP)
 
                     local TraceResult = util.TraceLine(Trace)
 
+                    -- Only if the trace returns nothing blocking the space between the mech owner's shoot position and the victim, does the damage get applied
                     if not TraceResult.Hit then
                         ent:TakeDamageInfo(dmg)
                     end
@@ -91,7 +100,8 @@ function UPGRADE:Apply(SWEP)
     self:AddHook("EntityTakeDamage", function(ent, dmg)
         local inflictor = dmg:GetInflictor()
         -- Stop the mech's overpowered explosion and replace with our own
-        if IsValid(inflictor) and inflictor.PAPNerfThisStopDamage then return true end
+        -- Also stop the mech from taking damage
+        if (IsValid(inflictor) and inflictor.PAPNerfThisStopDamage) or ent.PAPNerfThisStopDamage then return true end
     end)
 end
 
