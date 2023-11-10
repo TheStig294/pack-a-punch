@@ -23,6 +23,7 @@ ITEM.EquipMenuData = {
 ITEM.credits = 1
 ITEM.material = "vgui/ttt/ttt_pack_a_punch.png"
 ITEM.CanBuy = {}
+ITEM.limited = false
 
 if detCvar:GetBool() then
     table.insert(ITEM.CanBuy, ROLE_DETECTIVE)
