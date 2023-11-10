@@ -2,9 +2,10 @@ local UPGRADE = {}
 UPGRADE.id = "ammo"
 UPGRADE.class = nil
 UPGRADE.name = nil
-UPGRADE.desc = "1.5x ammo increase!"
 
 local multCvar = CreateConVar("pap_ammo_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo multiplier", 1, 10)
+
+UPGRADE.desc = "x" .. math.Round(multCvar:GetFloat(), 1) .. " ammo increase!"
 
 UPGRADE.convars = {
     {

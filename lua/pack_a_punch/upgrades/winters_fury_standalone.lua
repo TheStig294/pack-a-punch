@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "winters_fury_standalone"
 UPGRADE.class = "freeze_swep"
 UPGRADE.name = "Winter's Fury"
-UPGRADE.desc = "Extra ammo + slows everyone else down\nand puts a icy overlay over their screen"
+UPGRADE.desc = "Extra ammo + slows everyone else down\nand puts an icy overlay over their screen"
 UPGRADE.ammoMult = 1.25
 
 function UPGRADE:Apply(SWEP)

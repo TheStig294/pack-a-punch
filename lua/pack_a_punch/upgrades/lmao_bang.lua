@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "lmao_bang"
 UPGRADE.class = "weapon_sp_dbarrel"
 UPGRADE.name = "Lmao Bang"
-UPGRADE.desc = "x2 ammo, lmao bang"
+UPGRADE.desc = "x2 ammo, new gun shoot sounds!"
 UPGRADE.noSound = true
 UPGRADE.ammoMult = 2
 

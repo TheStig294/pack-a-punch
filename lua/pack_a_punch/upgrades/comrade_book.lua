@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "comrade_book"
 UPGRADE.class = "weapon_com_manifesto"
 UPGRADE.name = "Comrade Book"
-UPGRADE.desc = "OUR upgrade, comrade..."
+UPGRADE.desc = "Upgrades everyone else's held weapon!\n(If it's not also a manifesto)"
 
 function UPGRADE:Apply(SWEP)
     -- Upgrades everyone's held weapon and plays a sound

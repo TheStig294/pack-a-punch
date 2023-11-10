@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "winters_fury_pack"
 UPGRADE.class = "tfa_wintershowl"
 UPGRADE.name = "Winter's Fury"
-UPGRADE.desc = "Extra ammo + slows everyone else down\nand puts a icy overlay over their screen"
+UPGRADE.desc = "Extra ammo + slows everyone else down\nand puts an icy overlay over their screen"
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod

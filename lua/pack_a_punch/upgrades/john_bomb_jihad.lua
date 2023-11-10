@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "john_bomb_jihad"
 UPGRADE.class = "weapon_ttt_jihad"
 UPGRADE.name = "John Bomb"
-UPGRADE.desc = "Plays the John Cena intro"
+UPGRADE.desc = "Plays the John Cena intro before exploding!"
 
 function UPGRADE:Apply(SWEP)
     function SWEP:Initialize()

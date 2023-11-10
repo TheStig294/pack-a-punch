@@ -2,9 +2,10 @@ local UPGRADE = {}
 UPGRADE.id = "recoil"
 UPGRADE.class = nil
 UPGRADE.name = nil
-UPGRADE.desc = "10x less recoil!"
 
 local multCvar = CreateConVar("pap_recoil_multiplier", "0.1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Recoil multiplier", 0, 1)
+
+UPGRADE.desc = "x" .. math.Round(1 / multCvar:GetFloat()) .. " less recoil!"
 
 UPGRADE.convars = {
     {
