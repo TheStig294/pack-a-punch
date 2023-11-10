@@ -188,7 +188,7 @@ Auto-shoots, pressing 'E' removes the cannon!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2087368173>
 
-## Baguette Randomat Weapon (Le Club des Freemans)
+## Baguette [Randomat Weapon] (Le Club des Freemans)
 
 Zero push cooldown, x2 swing speed!\
 \
@@ -197,7 +197,7 @@ Zero push cooldown, x2 swing speed!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
-## Baguette Frenchman Role Weapon (Baguette Qui Crie)
+## Baguette [Frenchman Role Weapon] (Baguette Qui Crie)
 
 Makes French shouting sounds on killing a player\
 \
@@ -297,7 +297,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=712675840>
 A player that activates this sees
 the 'Directed by Robert B. Weide' meme!\
 \
-*ttt_pap_directed_by_station* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_directed_by_station_quack* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
@@ -331,7 +331,7 @@ Boomerang explodes on touch!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=922438160>
 
-## Boomerang Randomat Weapon (1-Shot Boomerang)
+## Boomerang [Randomat Weapon] (1-Shot Boomerang)
 
 It's a 1-shot if it hits you once!\
 \
@@ -384,7 +384,7 @@ Now shoots a truck! (With a much larger hitbox)\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966658018>
 
-## Christmas Cannon (Infinite Christmas Cannon)
+## Christmas Cannon [Santa Role Weapon] (Infinite Christmas Cannon)
 
 Infinite PaP presents and coal piece shooting!\
 \
@@ -393,7 +393,7 @@ Infinite PaP presents and coal piece shooting!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739626026>
 
-## Christmas Cannon Randomat Weapon (Infinite Christmas Cannon)
+## Christmas Cannon [Randomat Weapon] (Infinite Christmas Cannon)
 
 Infinite Pack-a-Punch presents!\
 \
@@ -411,7 +411,7 @@ Shoots KFC instead\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1659437311>
 
-## Claws (Braaaaaains)
+## Claws [Zombie Role Weapon] (Braaaaaains)
 
 Makes zombie sounds for you!\
 \
@@ -459,7 +459,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2181940209>
 
 ## Communist Manifesto (Comrade Book)
 
-OUR upgrade, comrade...\
+Upgrades everyone else's held weapon! (If it's also not a manifesto)\
 \
 *ttt_pap_comrade_book* - Default: 1 - Whether this upgrade is enabled
 \
@@ -468,8 +468,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739626026>
 
 ## Comrade Bomb (Communist Manifesto)
 
-Hold left-click next to someone
-to convert them into a traitor!\
+Hold left-click next to someone to convert them into a traitor!\
 \
 *ttt_pap_communist_manifesto* - Default: 1 - Whether this upgrade is enabled
 \
@@ -537,29 +536,29 @@ Testing delay time doubles with each use\
 \
 Upgrade for: Default TTT weapon
 
-## Dance Gun Dance till you're dead (Accension Gun)
+## Dance Gun [Dance till you're dead] (Accension Gun)
 
 x2 ammo, players ascend into the sky as they die...\
 \
-*ttt_pap_accension_gun_dance_dead* - Default: 1 - Whether this upgrade is enabled\
+*ttt_pap_accension_gun_dance_dead* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1433651939>
 
-## Dance Gun Random Music (Accension Gun)
+## Dance Gun [Random Music] (Accension Gun)
 
 x2 ammo, players ascend into the sky as they die...\
 \
-*ttt_pap_accension_gun_random* - Default: 1 - Whether this upgrade is enabled\
+*ttt_pap_accension_gun_random* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2236051565>
 
-## Dance Gun Thriller Gun (Accension Gun)
+## Dance Gun [Thriller Gun] (Accension Gun)
 
 x2 ammo, players ascend into the sky as they die...\
 \
-*ttt_pap_accension_gun_thriller* - Default: 1 - Whether this upgrade is enabled\
+*ttt_pap_accension_gun_thriller* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=794651430>
@@ -631,7 +630,7 @@ Always guaranteed to work!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=801433502>
 
-## Defibrillator Clear! Randomat Weapon (Special Innocent Defib)
+## Defibrillator [Clear! Randomat Weapon] (Special Innocent Defib)
 
 Turns innocents into non-vanilla innocents!\
 \
@@ -641,7 +640,7 @@ Turns innocents into non-vanilla innocents!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
-## Defibrillator Paramedic Role Weapon (Special Innocent Defib)
+## Defibrillator [Paramedic Role Weapon] (Special Innocent Defib)
 
 Turns innocents into non-vanilla innocents!\
 \
@@ -651,7 +650,7 @@ Turns innocents into non-vanilla innocents!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
-## Defibrillator Patient Confidentiality Randomat Weapon (Special Innocent Defib)
+## Defibrillator [Patient Confidentiality Randomat Weapon] (Special Innocent Defib)
 
 Turns innocents into non-vanilla innocents!\
 \
@@ -738,7 +737,7 @@ Bigger hitbox, bigger explosion, leaves fire\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2237522867>
 
-## Donconnon Randomat Weapon (Big Boi Donconnon)
+## Donconnon [Randomat Weapon] (Big Boi Donconnon)
 
 Bigger hitbox, bigger explosion, leaves fire\
 \
@@ -749,7 +748,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
 ## Double Barrel [Floor Weapon] (Lmao Bang)
 
-x2 ammo, lmao bang\
+x2 ammo, new gun shoot sounds!\
 \
 *ttt_pap_lmao_bang* - Default: 1 - Whether this upgrade is enabled
 \
@@ -855,7 +854,7 @@ Sets someone on fire that doesn't go out
 \
 Upgrade for: Default TTT weapon
 
-## Flare gun Spy Role Weapon (Perma-Fire Gun)
+## Flare gun [Spy Role Weapon] (Perma-Fire Gun)
 
 Sets someone on fire that doesn't go out
 (Unless they go into water)\
@@ -931,7 +930,7 @@ Big fire rate, ammo, and fire spread increase\
 \
 Upgrade for: Default TTT weapon
 
-## Gloves (Box Gloves)
+## Gloves [Boxer Role Weapon] (Box Gloves)
 
 Players you hit turn into boxes\
 \
@@ -940,7 +939,7 @@ Players you hit turn into boxes\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739626026>
 
-## Gloves Randomat Weapon (Box Gloves)
+## Gloves [Randomat Weapon] (Box Gloves)
 
 Players you hit turn into boxes\
 \
@@ -970,7 +969,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=337994500>
 
 ## Golden Deagle (Platinum Gun)
 
-Shoot a bad guy: Get to shoot again
+Shoot a bad guy: Get to shoot again\
 Don't shoot a bad guy: One of them gets an extra life!\
 \
 *ttt_pap_platinum_gun_simple* - Default: 1 - Whether this upgrade is enabled
@@ -978,9 +977,9 @@ Don't shoot a bad guy: One of them gets an extra life!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=253737047>
 
-## Golden Deagle For Custom Roles (Platinum Gun)
+## Golden Deagle [Custom Roles] (Platinum Gun)
 
-Shoot a bad guy: Get to shoot again
+Shoot a bad guy: Get to shoot again\
 Don't shoot a bad guy: One of them gets an extra life!\
 \
 *ttt_pap_platinum_gun_custom_roles* - Default: 1 - Whether this upgrade is enabled
@@ -1079,7 +1078,7 @@ Upgrade for: Default TTT weapon
 
 ## Holstered (Self-Pack-a-Punch)
 
-You pack-a-punched yourself!
+You pack-a-punched yourself!\
 Speed, jump and health boost!\
 \
 *ttt_pap_self_pack_a_punch* - Default: 1 - Whether this upgrade is enabled
@@ -1111,8 +1110,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1894982220>
 
 ## Hot Potato (Cold Spaghetti)
 
-Players in the explosion radius become frozen
-for 20 seconds!\
+Players in the explosion radius become frozen for 20 seconds!\
 \
 *ttt_pap_cold_spaghetti* - Default: 1 - Whether this upgrade is enabled
 \
@@ -1203,7 +1201,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1735229517>
 
 ## Jihad Bomb (John Bomb)
 
-Plays the John Cena intro\
+Plays the John Cena intro before exploding!\
 \
 *ttt_pap_john_bomb_jihad* - Default: 1 - Whether this upgrade is enabled
 \
@@ -1212,8 +1210,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=105875340>
 
 ## King Crimson (Time Skip Fists)
 
-Press 'R' to gain damage resistance and
-slow down time, but you move at normal speed!\
+Press 'R' to gain damage resistance and slow down time, but you move at normal speed!\
 \
 *ttt_pap_time_skip_king_crimson* - Default: 1 - Whether this upgrade is enabled
 \
@@ -1231,7 +1228,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2291887883>
 \
 Upgrade for: Default TTT weapon
 
-## Knife Among Us Randomat Weapon (Throwable Kill Knife)
+## Knife [Among Us Randomat Weapon] (Throwable Kill Knife)
 
 Is now throwable!\
 \
@@ -1240,7 +1237,7 @@ Is now throwable!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428372933>
 
-## Knife Killer Role Weapon (Darkness Knife)
+## Knife [Killer Role Weapon] (Darkness Knife)
 
 Right-click to make the map go dark, lasts until you die, or lose the knife!\
 \
@@ -1249,7 +1246,7 @@ Right-click to make the map go dark, lasts until you die, or lose the knife!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
-## Knife Murder Randomat Weapon (Murder Knife)
+## Knife [Murder Randomat Weapon] (Murder Knife)
 
 Right-click to throw knives, one-shot kills!\
 \
@@ -1258,7 +1255,7 @@ Right-click to throw knives, one-shot kills!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
 
-## Knife Secret Santa Randomat Weapon (Double Knife)
+## Knife [Secret Santa Randomat Weapon] (Double Knife)
 
 +1 extra use\
 \
@@ -1267,7 +1264,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2927584355>
 
-## Krampas Claws Role Weapon (Speedy Claws)
+## Krampas Claws (Speedy Claws)
 
 Move much faster!\
 \
@@ -1486,8 +1483,7 @@ Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Parasite Cure Fake (Explosive Parasite Cure)
 
-"Cures" a player of a parasite,
-by exploding them after 5 seconds!\
+"Cures" a player of a parasite, by exploding them after 5 seconds!\
 \
 *ttt_pap_explosive_parasite_cure* - Default: 1 - Whether this upgrade is enabled
 \
@@ -1630,7 +1626,7 @@ Temporarily blocks the victim's screen with lots of popups\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2126493892>
 
-## Possum Disguiser Role Weapon (Possum Disguise)
+## Possum Disguiser (Possum Disguise)
 
 Increased disguiser capacity\
 \
@@ -1694,8 +1690,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
 ## Potion of Speed (Leaping Potion)
 
-Turns a body into an invincible walking NPC!\
-Getting near the NPC causes them to explode\
+Jump much higher, no fall damage!\
 \
 *ttt_pap_potion_leaping* - Default: 1 - Whether this upgrade is enabled
 \
@@ -1718,7 +1713,7 @@ Unlimited disguise! Play a taunt after a delay\
 \
 *ttt_pap_infinite_disguiser* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_infinite_disguiser_taunt_delay* - Default: 15 - Unlimited disguise! Play a taunt after a delay\
+*pap_infinite_disguiser_taunt_delay* - Default: 15 - Seconds between taunt sounds\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2127939503>
 
@@ -1733,7 +1728,7 @@ Upgrade for: Default TTT weapon
 
 ## Random Launcher (Barrel Launcher)
 
-No horse prop! Only launches barrels
+No horse prop! Only launches barrels\
 Have a chance to be explosive!\
 \
 *ttt_pap_barrel_launcher* - Default: 1 - Whether this upgrade is enabled
@@ -1744,6 +1739,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1961665859>
 ## Randomat-4000 (Randomat DIY Kit)
 
 Make a randomat instead!\
+(If base Randomat 2.0 is installed and not my version below, instead always triggers 'Choose an Event!')\
 \
 *ttt_pap_randomat_diy_kit* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2017,7 +2013,7 @@ Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Suicide Bomb (John Bomb)
 
-Plays the John Cena intro\
+Plays the John Cena intro before exploding!\
 \
 *ttt_pap_john_bomb_suicide* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2167,7 +2163,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
 ## Winter's Howl [Standalone] (Winter's Fury)
 
-Extra ammo + slows everyone else down and puts a icy overlay over their screen\
+Extra ammo + slows everyone else down and puts an icy overlay over their screen\
 \
 *ttt_pap_winters_fury_standalone* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2176,7 +2172,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=788679798>
 
 ## Winter's Howl [Wonder weapons pack] (Winter's Fury)
 
-Extra ammo + slows everyone else down and puts a icy overlay over their screen\
+Extra ammo + slows everyone else down and puts an icy overlay over their screen\
 \
 *ttt_pap_winters_fury_pack* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2187,7 +2183,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
 Arcs lightning between nearby players!\
 \
-*ttt_pap_winters_wunderwaffe_dg3* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_wunderwaffe_dg3* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning
 \
@@ -2240,7 +2236,7 @@ These are the backup upgrades that apply to basic weapons if a proper upgrade ha
 
 ## Ammo
 
-1.5x ammo increase!\
+x1.5 ammo increase!\
 \
 *ttt_pap_ammo* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2248,7 +2244,7 @@ These are the backup upgrades that apply to basic weapons if a proper upgrade ha
 
 ## Firerate
 
-1.5x firerate increase!\
+x1.5 firerate increase!\
 \
 *ttt_pap_firerate* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2268,7 +2264,7 @@ All stats up!\
 
 ## Damage
 
-1.2x damage increase!\
+x1.2 damage increase!\
 \
 *ttt_pap_damage* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2276,7 +2272,7 @@ All stats up!\
 
 ## Recoil
 
-10x less recoil!\
+x10 less recoil!\
 \
 *ttt_pap_recoil* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2284,7 +2280,7 @@ All stats up!\
 
 ## Accuracy
 
-x2 tighter bullet spread!\
+x1.5 tighter bullet spread!\
 \
 *ttt_pap_spread* - Default: 1 - Whether this upgrade is enabled
 \
