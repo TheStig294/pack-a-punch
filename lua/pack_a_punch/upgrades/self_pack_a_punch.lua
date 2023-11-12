@@ -28,8 +28,6 @@ local jumpMult = CreateConVar("pap_self_pack_a_punch_jump", "1.5", {FCVAR_ARCHIV
 
 local healthMult = CreateConVar("pap_self_pack_a_punch_health", "1.2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health multiplier", 1, 5)
 
-local oldStats = {}
-
 function UPGRADE:Apply(SWEP)
     local speedScale = speedMult:GetFloat()
     local jumpScale = jumpMult:GetFloat()
@@ -37,14 +35,16 @@ function UPGRADE:Apply(SWEP)
     SWEP:SetHoldType(SWEP.HoldType)
 
     timer.Simple(0.1, function()
+        -- Extra check just in case someone can get the split-second timing just right to smuggle the upgrade buffs into the next round
+        if not IsValid(SWEP) or GetRoundState() == ROUND_PREP then return end
         local owner = SWEP:GetOwner()
 
-        if IsValid(owner) and owner:IsPlayer() then
+        if self:IsPlayer(owner) then
             SWEP.HolsterPAPOwner = owner
-            oldStats[owner] = {}
-            oldStats[owner].jump = owner:GetJumpPower()
-            oldStats[owner].health = owner:GetMaxHealth()
-            oldStats[owner].movement = owner:GetLaggedMovementValue()
+            SWEP.PAPHolsterOldStats = {}
+            SWEP.PAPHolsterOldStats.jump = owner:GetJumpPower()
+            SWEP.PAPHolsterOldStats.health = owner:GetMaxHealth()
+            SWEP.PAPHolsterOldStats.movement = owner:GetLaggedMovementValue()
             owner:SetMaterial(TTTPAP.camo)
             owner:SetFOV(90, 0.5)
             owner:SetJumpPower(owner:GetJumpPower() * jumpScale)
@@ -60,21 +60,21 @@ function UPGRADE:Apply(SWEP)
     function SWEP:OnRemove()
         local owner = self.HolsterPAPOwner
 
-        if IsValid(owner) and owner:IsPlayer() then
+        if IsValid(owner) then
             owner:SetMaterial("")
             owner:SetFOV(0)
 
-            if oldStats[owner] then
-                owner:SetJumpPower(oldStats[owner].jump)
-                owner:SetHealth(owner:Health() / owner:GetMaxHealth() * oldStats[owner].health)
+            if self.PAPHolsterOldStats then
+                owner:SetJumpPower(self.PAPHolsterOldStats.jump or 200)
+                owner:SetHealth(owner:Health() / owner:GetMaxHealth() * self.PAPHolsterOldStats.health or 100)
             end
 
             if SERVER then
                 owner:ChatPrint("Your pack-a-punch buff has been removed")
 
-                if oldStats[owner] then
-                    owner:SetMaxHealth(oldStats[owner].health)
-                    owner:SetLaggedMovementValue(oldStats[owner].movement)
+                if self.PAPHolsterOldStats then
+                    owner:SetMaxHealth(self.PAPHolsterOldStats.health or 100)
+                    owner:SetLaggedMovementValue(self.PAPHolsterOldStats.movement or 1)
                 end
             end
         end
@@ -88,13 +88,13 @@ end
 function UPGRADE:Reset()
     if SERVER then
         for _, ply in ipairs(player.GetAll()) do
-            if ply:HasWeapon("weapon_ttt_unarmed") then
-                ply:StripWeapon("weapon_ttt_unarmed")
+            local holstered = ply:GetWeapon("weapon_ttt_unarmed")
+
+            if IsValid(holstered) and holstered.PAPUpgrade and holstered.PAPUpgrade.id == self.id then
+                holstered:Remove()
                 ply:Give("weapon_ttt_unarmed")
             end
         end
-
-        table.Empty(oldStats)
     end
 end
 
