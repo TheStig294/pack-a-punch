@@ -12,7 +12,7 @@ function ENT:Initialize()
 end
 
 function ENT:Explode()
-	self:EmitSound(Sound("weapons/flashbang/flashbang_explode" .. math.random(1, 2) .. ".wav"))
+	self:EmitSound(Sound("weapons/flashbang/flashbang_explode" .. math.random(2) .. ".wav"))
 
 	for _, ply in ipairs(ents.FindInSphere(self:GetPos(), 300)) do
 		if not IsValid(ply) or not ply:IsPlayer() then continue end

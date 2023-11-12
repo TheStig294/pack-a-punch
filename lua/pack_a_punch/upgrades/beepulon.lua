@@ -25,7 +25,7 @@ function UPGRADE:Apply(SWEP)
 
                 timer.Create(timername, 20, 0, function()
                     if IsValid(manhack) then
-                        local randomNum = math.random(1, 4)
+                        local randomNum = math.random(4)
                         manhack:EmitSound("ttt_pack_a_punch/beepulon/beepulon" .. randomNum .. ".mp3")
                         manhack:EmitSound("ttt_pack_a_punch/beepulon/beepulon" .. randomNum .. ".mp3")
                     else

@@ -93,7 +93,7 @@ function ENT:Explode(tr)
 			local phys = prop:GetPhysicsObject()
 			if not IsValid(phys) then return end
 			phys:AddAngleVelocity(VectorRand() * phys:GetMass() * 0.5)
-			phys:ApplyForceCenter((Vector(table.Random(vectors), table.Random(vectors), 0) * 0.5) * phys:GetMass() * 0.5)
+			phys:ApplyForceCenter((Vector(vectors[math.random(#vectors)], vectors[math.random(#vectors)], 0) * 0.5) * phys:GetMass() * 0.5)
 		end
 
 		local explode = ents.Create("env_physexplosion") -- creates the explosion

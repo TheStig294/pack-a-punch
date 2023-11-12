@@ -7,7 +7,7 @@ UPGRADE.desc = "Upgrades everyone else's held weapon!\n(If it's not also a manif
 function UPGRADE:Apply(SWEP)
     -- Upgrades everyone's held weapon and plays a sound
     if SERVER then
-        local chosenSound = Sound("ttt_pack_a_punch/comrade_book/anthem" .. math.random(1, 4) .. ".mp3")
+        local chosenSound = Sound("ttt_pack_a_punch/comrade_book/anthem" .. math.random(4) .. ".mp3")
         local luaString = "surface.PlaySound(\"" .. chosenSound .. "\")"
 
         for _, ply in ipairs(self:GetAlivePlayers()) do
@@ -32,7 +32,7 @@ function UPGRADE:Apply(SWEP)
         own:StopSound("anthem.mp3")
 
         if IsValid(own) then
-            self.PAPLastSound = "ttt_pack_a_punch/comrade_book/anthem" .. math.random(1, 4) .. ".mp3"
+            self.PAPLastSound = "ttt_pack_a_punch/comrade_book/anthem" .. math.random(4) .. ".mp3"
             own:EmitSound(self.PAPLastSound)
         end
     end

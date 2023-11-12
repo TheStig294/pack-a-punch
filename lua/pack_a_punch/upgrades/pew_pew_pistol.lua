@@ -9,7 +9,7 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:PrimaryAttack()
         self.BaseClass.PrimaryAttack(self)
-        self:EmitSound("ttt_pack_a_punch/pew_pew_pistol/shoot" .. math.random(1, 6) .. ".mp3")
+        self:EmitSound("ttt_pack_a_punch/pew_pew_pistol/shoot" .. math.random(6) .. ".mp3")
     end
 end
 

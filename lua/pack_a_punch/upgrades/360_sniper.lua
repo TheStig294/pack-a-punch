@@ -25,7 +25,7 @@ function UPGRADE:Apply(SWEP)
 
             if util.IsValidModel("models/player/Jenssons/kermit.mdl") then
                 ent:SetModel("models/player/Jenssons/kermit.mdl")
-                local randomNum = math.random(1, 2)
+                local randomNum = math.random(2)
                 ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
                 ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
             else

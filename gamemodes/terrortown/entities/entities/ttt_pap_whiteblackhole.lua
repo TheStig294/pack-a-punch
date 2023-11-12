@@ -29,7 +29,7 @@ if SERVER then
 				if ent:GetRole() == ROLE_TRAITOR or (ent.IsTraitorTeam and ent:IsTraitorTeam()) then
 					ent:TakeDamage(math.random(0, 1), self:GetSpawner())
 				else
-					ent:TakeDamage(math.random(1, 2), self:GetSpawner())
+					ent:TakeDamage(math.random(2), self:GetSpawner())
 				end
 
 				self:IncrRadius(0.2)

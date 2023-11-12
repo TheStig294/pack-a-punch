@@ -61,12 +61,12 @@ function UPGRADE:Apply(SWEP)
                         ply:SetVelocity(force)
 
                         if not IsValid(v[ply:EntIndex()]) then
-                            ply:EmitSound(hurtSounds[math.random(1, 5)])
+                            ply:EmitSound(hurtSounds[math.random(5)])
                             v[ply:EntIndex()] = ply
                         end
 
                         if ply:Health() > 0 then
-                            ply:EmitSound(hurtImpacts[math.random(1, 3)])
+                            ply:EmitSound(hurtImpacts[math.random(3)])
                         end
 
                         if isDead then

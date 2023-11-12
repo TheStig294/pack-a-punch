@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
                     return
                 end
 
-                local randomnum = math.random(1, 9)
+                local randomnum = math.random(9)
 
                 for i = 1, 3 do
                     doncom:EmitSound("ttt_pack_a_punch/robcombine/quote" .. randomnum .. ".mp3", 150)

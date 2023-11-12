@@ -94,7 +94,7 @@ function ENT:Explode(tr)
 			playerteslaedata:SetOrigin(self:GetPos())
 			util.Effect("TeslaHitBoxes", playerteslaedata)
 			ply:EmitSound("npc/scanner/scanner_electric2.wav")
-			local randomshockPlayerSound = shockPlayerSounds[math.random(1, #shockPlayerSounds)]
+			local randomshockPlayerSound = shockPlayerSounds[math.random(#shockPlayerSounds)]
 			ply:EmitSound(randomshockPlayerSound)
 			local d = DamageInfo()
 			d:SetDamage(1)

@@ -22,7 +22,7 @@ function UPGRADE:Apply(SWEP)
     local randomGravityValues = {-4, -2, -1, -0.5, 0.1, 0.4, 0.6, 0.9, 1.5, 2, 3, 4, 5, 6}
 
     local function RandomiseGravity(ply)
-        local gravityValue = randomGravityValues[math.random(1, #randomGravityValues)]
+        local gravityValue = randomGravityValues[math.random(#randomGravityValues)]
         ply:SetGravity(gravityValue)
         ply:ChatPrint("Gravity multiplier: " .. gravityValue)
     end

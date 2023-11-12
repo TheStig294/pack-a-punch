@@ -21,7 +21,7 @@ function UPGRADE:Apply(SWEP)
         local activeWeapon = attacker:GetActiveWeapon()
 
         if IsValid(activeWeapon) and activeWeapon:GetClass() == "ttt_no_scope_awp" then
-            local mlgSound = "ttt_pack_a_punch/mlg_awp/mlg" .. math.random(1, 10) .. ".mp3"
+            local mlgSound = "ttt_pack_a_punch/mlg_awp/mlg" .. math.random(10) .. ".mp3"
 
             if not attacker.PAPMlgAwpTriple then
                 attacker.PAPMlgAwpTriple = 1
@@ -56,7 +56,7 @@ function UPGRADE:Apply(SWEP)
             frame.Paint = function() end
             -- Display the image
             local image = vgui.Create("DImage", frame)
-            image:SetImage("ttt_pack_a_punch/mlg_awp/mlg" .. math.random(1, 6) .. ".jpg")
+            image:SetImage("ttt_pack_a_punch/mlg_awp/mlg" .. math.random(6) .. ".jpg")
             image:SetPos(0, 0)
             image:SetSize(xSize, ySize)
             -- ...and shake it around the screen a bit

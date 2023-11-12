@@ -82,7 +82,7 @@ function UPGRADE:Apply(SWEP)
         -- Jail-releasing stuff
         if ent.PAPHornyJailerWall then
             if SERVER then
-                ent:EmitSound("phx/hmetal" .. math.random(1, 3) .. ".wav")
+                ent:EmitSound("phx/hmetal" .. math.random(3) .. ".wav")
                 ent:Remove()
             end
 

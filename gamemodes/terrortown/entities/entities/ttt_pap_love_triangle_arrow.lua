@@ -40,7 +40,7 @@ function ENT:Touch(ent)
     end
 
     if ent and ent:IsWorld() then
-        sound.Play(table.Random(StickSound), tr.HitPos)
+        sound.Play(StickSound[math.random(#StickSound)], tr.HitPos)
         self:SetMoveType(MOVETYPE_NONE)
         self:PhysicsInit(SOLID_NONE)
         SafeRemoveEntityDelayed(self, 10)
@@ -52,7 +52,7 @@ function ENT:Touch(ent)
 
     if ent:IsNPC() or ent:IsPlayer() then
         if tr2.Entity == ent then
-            sound.Play(table.Random(FleshSound), tr.HitPos)
+            sound.Play(FleshSound[math.random(#FleshSound)], tr.HitPos)
         end
 
         if ent:IsPlayer() and ent:IsActive() then
@@ -130,7 +130,7 @@ function ENT:Touch(ent)
         self:Remove()
     elseif not ShouldIgnoreCollision(ent) then
         self:SetParent(ent)
-        sound.Play(table.Random(StickSound), tr.HitPos)
+        sound.Play(StickSound[math.random(#StickSound)], tr.HitPos)
         self:SetMoveType(MOVETYPE_NONE)
         self:SetSolid(SOLID_NONE)
         SafeRemoveEntityDelayed(self, 10)

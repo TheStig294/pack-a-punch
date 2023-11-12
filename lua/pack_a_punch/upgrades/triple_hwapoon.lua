@@ -58,7 +58,7 @@ function UPGRADE:Apply(SWEP)
             self:CreateArrow("normal", owner, self)
             self:SendWeaponAnim(ACT_VM_DRAW)
             owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 100, 100)
-            owner:EmitSound("hwapoon" .. math.random(1, 5) .. ".wav", 100, 100)
+            owner:EmitSound("hwapoon" .. math.random(5) .. ".wav", 100, 100)
             owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * 10, math.Rand(-0.1, 0.1) * 10, 0))
 
             if self:Clip1() <= 0 then

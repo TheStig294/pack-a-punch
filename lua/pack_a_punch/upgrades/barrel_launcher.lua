@@ -12,7 +12,7 @@ function UPGRADE:Apply(SWEP)
         if CLIENT then return end
         local ent = ents.Create("prop_physics")
         if not IsValid(ent) then return end
-        ent:SetModel(props[math.random(1, #props)])
+        ent:SetModel(props[math.random(#props)])
         local owner = self:GetOwner()
         ent:SetPos(owner:EyePos() + (owner:GetAimVector() * 16))
         ent:SetAngles(owner:EyeAngles())

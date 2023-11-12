@@ -9,7 +9,7 @@ function UPGRADE:Apply()
         if not IsValid(attacker) or not attacker:IsPlayer() then return end
 
         if attacker:HasWeapon(self.class) and attacker:GetWeapon(self.class).PAPUpgrade then
-            attacker:EmitSound("frenchman/death" .. math.random(1, 6) .. ".mp3")
+            attacker:EmitSound("frenchman/death" .. math.random(6) .. ".mp3")
         end
     end)
 end

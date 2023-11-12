@@ -161,8 +161,7 @@ function UPGRADE:Apply(SWEP)
             if IsValid(crab) and crab.TTTPAPBigCrabLauncher then
                 -- Poison headcrabs have 3 separate scream sounds that trigger when attacking a player, so these first 2 sounds only play when a crab attacks
                 if string.StartsWith(data.SoundName, "npc/headcrab_poison/ph_scream") then
-                    -- data.SoundName = "ttt_pack_a_punch/big_crab_launcher/crab" .. math.random(1, 2) .. ".mp3"
-                    local randomNum = math.random(1, 2)
+                    local randomNum = math.random(2)
 
                     if math.random() < 0.3 then
                         for i = 1, 3 do

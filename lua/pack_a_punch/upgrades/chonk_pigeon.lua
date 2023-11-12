@@ -25,7 +25,7 @@ function UPGRADE:Apply(SWEP)
                         ent:StopSound(snd)
                     end
 
-                    local snd = BirdSounds[math.random(1, #BirdSounds)]
+                    local snd = BirdSounds[math.random(#BirdSounds)]
                     ent:EmitSound(snd, 0, 25, 1, CHAN_AUTO, SND_CHANGE_PITCH)
 
                     function ent:Explode()
