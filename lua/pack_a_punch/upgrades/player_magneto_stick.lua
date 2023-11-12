@@ -245,7 +245,7 @@ function UPGRADE:Apply(SWEP)
         net.WriteUInt(self:EntIndex(), 16)
         net.WriteUInt(GetConVar("pap_player_magneto_stick_carry_duration"):GetInt(), 8)
         net.WriteFloat(GetConVar("pap_player_magneto_stick_struggle_interval"):GetFloat())
-        net.WriteFloat(GetConVar("pap_player_magneto_stick_struggle_reduction"):GetFloat())
+        net.WriteFloat(GetConVar("pap_player_magneto_stick_struggle_reduce"):GetFloat())
         net.Send(self.Victim)
     end
 
