@@ -447,7 +447,7 @@ local function CreateOptionsMenu()
     -- Refreshes the weapons list according to what is typed in the search bar
     searchBar.OnValueChange = function(_, value)
         list:Clear()
-        scroll:Rebuild()
+        scroll:InvalidateLayout()
         DrawWeaponsList(list, value)
     end
 
