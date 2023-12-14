@@ -103,6 +103,8 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 "Recorder Comparisons » Pop, Low, A (H1).wav" (<https://freesound.org/people/InspectorJ/sounds/411639/>) by InspectorJ is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
 
+'Happy Happy Game Show' Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License <http://creativecommons.org/licenses/by/4.0/>
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -1116,6 +1118,7 @@ Players in the explosion radius become frozen for 20 seconds!\
 \
 *pap_cold_spaghetti_radius* - Default: 300 - Distance players are frozen\
 *pap_cold_spaghetti_frozen_secs* - Default: 20 - Seconds players are frozen\
+*pap_cold_spaghetti_alt_music* - Default: 0 - Whether the cold spaghetti plays alternative music\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2377790970>
 
