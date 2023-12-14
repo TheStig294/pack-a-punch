@@ -1381,6 +1381,16 @@ Heals you more at once, and other players around you!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=376441841>
 
+## Minecraft Block (Creative Mode)
+
+Place blocks at any distance!\
+\
+*ttt_pap_creative_mode* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_creative_mode_placement_distance* - Default: 1200 - Increased block placement distance!
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2311866661>
+
 ## Minifier (Shrink Ray)
 
 Stand next to something and left-click to shrink it!\
@@ -2210,7 +2220,7 @@ Arcs lightning between nearby players!\
 \
 *ttt_pap_wunderwaffe_dg3* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning
+*pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
