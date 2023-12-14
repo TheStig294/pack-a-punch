@@ -1834,6 +1834,17 @@ Guess someone's favourite fruit instead!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Slappers (Spinning Slappers)
+
+Slaps send people flying! Has a 30 second cooldown (by default)\
+\
+*ttt_pap_spinning_slappers* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_spinning_slappers_cooldown* - Default: 3 - Seconds cooldown on weapon use\
+*pap_spinning_slappers_strength* - Default: 1000 - Fling strength\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Scanner (Scanner Pinger)
 
 Left-Click to see everyone through walls for 30 seconds,
