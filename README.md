@@ -2193,6 +2193,17 @@ Extra ammo + slows everyone else down and puts an icy overlay over their screen\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Writing Pad (Announcement Pad)
+
+Displays messages you write to everyone's screen!\
+\
+*ttt_pap_announcement_pad* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_announcement_pad_cooldown* - Default: 10 - Seconds cooldown on displaying messages\
+*pap_announcement_pad_display_length* - Default: 3 - Seconds message is displayed\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Wunderwaffe DG-2 (Wunderwaffe DG-3)
 
 Arcs lightning between nearby players!\
