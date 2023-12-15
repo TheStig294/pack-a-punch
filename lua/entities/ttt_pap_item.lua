@@ -41,7 +41,7 @@ if ROLE_ASSASSIN then
     bannedRoles[ROLE_ASSASSIN] = true
 end
 
--- Is supposed to have just randomats to buy
+-- Is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
 if ROLE_RANDOMAN then
     bannedRoles[ROLE_RANDOMAN] = true
 end
@@ -54,16 +54,6 @@ end
 
 if ROLE_SWAPPER then
     bannedRoles[ROLE_SWAPPER] = true
-end
-
--- Mad scientist has the death radar but no basic shop items so it probably shouldn't have the PaP by default
-if ROLE_MADSCIENTIST then
-    bannedRoles[ROLE_MADSCIENTIST] = true
-end
-
--- The zombie gets a buy menu too late in loading and probably shouldn't be encouraged to use guns anyway
-if ROLE_ZOMBIE then
-    bannedRoles[ROLE_ZOMBIE] = true
 end
 
 -- Check that the PaP item hasn't been added already
