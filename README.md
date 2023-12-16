@@ -755,6 +755,15 @@ x2 ammo, new gun shoot sounds!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=337994500>
 
+## Double Barrel [Floor Weapon M9K] (Lmao Bang)
+
+x2 ammo, new gun shoot sounds!\
+\
+*ttt_pap_lmao_bang_m9k* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=128091208>
+
 ## Double Barrel [Old Man Role Weapon] (Lawn Defender)
 
 x4 ammo, full-auto, fire-rate up!\
