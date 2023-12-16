@@ -103,6 +103,8 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 "Recorder Comparisons » Pop, Low, A (H1).wav" (<https://freesound.org/people/InspectorJ/sounds/411639/>) by InspectorJ is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
 
+'Happy Happy Game Show' Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License <http://creativecommons.org/licenses/by/4.0/>
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -1125,6 +1127,7 @@ Players in the explosion radius become frozen for 20 seconds!\
 \
 *pap_cold_spaghetti_radius* - Default: 300 - Distance players are frozen\
 *pap_cold_spaghetti_frozen_secs* - Default: 20 - Seconds players are frozen\
+*pap_cold_spaghetti_alt_music* - Default: 0 - Whether the cold spaghetti plays alternative music\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2377790970>
 
@@ -1386,6 +1389,16 @@ Heals you more at once, and other players around you!\
 *pap_aoe_medkit_heal_mult* - Default: 1.5 - Extra healing mutiplier\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=376441841>
+
+## Minecraft Block (Creative Mode)
+
+Place blocks at any distance!\
+\
+*ttt_pap_creative_mode* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_creative_mode_placement_distance* - Default: 1200 - Increased block placement distance!
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2311866661>
 
 ## Minifier (Shrink Ray)
 
@@ -1840,6 +1853,17 @@ Guess someone's favourite fruit instead!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Slappers (Spinning Slappers)
+
+Slaps send people flying! Has a 30 second cooldown (by default)\
+\
+*ttt_pap_spinning_slappers* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_spinning_slappers_cooldown* - Default: 3 - Seconds cooldown on weapon use\
+*pap_spinning_slappers_strength* - Default: 1000 - Fling strength\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Scanner (Scanner Pinger)
 
 Left-Click to see everyone through walls for 30 seconds,
@@ -2188,13 +2212,24 @@ Extra ammo + slows everyone else down and puts an icy overlay over their screen\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Writing Pad (Announcement Pad)
+
+Displays messages you write to everyone's screen!\
+\
+*ttt_pap_announcement_pad* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_announcement_pad_cooldown* - Default: 10 - Seconds cooldown on displaying messages\
+*pap_announcement_pad_display_length* - Default: 3 - Seconds message is displayed\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Wunderwaffe DG-2 (Wunderwaffe DG-3)
 
 Arcs lightning between nearby players!\
 \
 *ttt_pap_wunderwaffe_dg3* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning
+*pap_wunderwaffe_dg3_arc_range* - Default: 150 - AOE range of arc lightning\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 

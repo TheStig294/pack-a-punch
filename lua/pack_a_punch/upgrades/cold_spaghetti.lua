@@ -13,12 +13,18 @@ UPGRADE.convars = {
     {
         name = "pap_cold_spaghetti_frozen_secs",
         type = "int"
+    },
+    {
+        name = "pap_cold_spaghetti_music",
+        type = "bool"
     }
 }
 
 local frozenSecsCvar = CreateConVar("pap_cold_spaghetti_frozen_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players are frozen", 0, 60)
 
 local radiusCvar = CreateConVar("pap_cold_spaghetti_radius", 300, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance players are frozen", 0, 1000)
+
+local musicCvar = CreateConVar("pap_cold_spaghetti_alt_music", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Whether the cold spaghetti plays alternative music", 0, 1)
 
 UPGRADE.desc = "Players in the explosion radius become frozen\nfor " .. frozenSecsCvar:GetInt() .. " seconds!"
 
@@ -38,6 +44,11 @@ function UPGRADE:Apply(SWEP)
     end)
 
     local PotatoSound = Sound("ttt_pack_a_punch/cold_spaghetti/cold_spaghetti.mp3")
+
+    if musicCvar:GetBool() then
+        PotatoSound = Sound("ttt_pack_a_punch/cold_spaghetti/gameshow.mp3")
+    end
+
     local OldPotatoSound = "hotpotatoloop.wav"
     -- A global function from the hot potato SWEP file
     -- Hijack it to use it like a hook for removing the potato sound when it should be
