@@ -13,6 +13,8 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:DoPunch(owner, onplayerhit)
+        if not UPGRADE:IsPlayer(owner) then return end
+
         -- Don't let the owner keep punching after they've been knocked out
         if owner:GetNWBool("RdmtBoxingKnockedOut", false) then
             owner:StopSound(sound_scream)
