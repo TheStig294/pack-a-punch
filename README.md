@@ -1739,6 +1739,15 @@ Unlimited disguise! Play a taunt after a delay\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2127939503>
 
+## Prop Disguiser [PropHuntGun] (Prop Transformer)
+
+Permanently transforms someone else into a prop!\
+\
+*ttt_pap_weapon_ttt_prop_hunt_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2796353349>
+
 ## Radio (Quad Auto-Radio)
 
 Auto-plays sounds, +3 extra radios!\
