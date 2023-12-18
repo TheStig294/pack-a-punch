@@ -14,6 +14,30 @@ function UPGRADE:Apply(SWEP)
         local victim = TraceResult.Entity
 
         if UPGRADE:IsPlayer(victim) then
+            local timername = victim:SteamID64() .. "TTTPAPPropTransformerTaunts"
+
+            local soundNumbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+
+            table.Shuffle(soundNumbers)
+            local soundIndex = 1
+
+            -- Create timer to force extra taunts
+            timer.Create(timername, 20, 0, function()
+                if IsValid(victim) and IsValid(victim.ttt_prop) and victim:GetNWBool("PD_Disguised") then
+                    local randomSound = "ttt_pack_a_punch/shouting_credit_printer/quote" .. soundNumbers[soundIndex] .. ".mp3"
+                    owner:EmitSound(randomSound)
+                    owner:EmitSound(randomSound)
+                    soundIndex = soundIndex + 1
+
+                    if soundIndex > 11 then
+                        soundIndex = 1
+                        table.Shuffle(soundNumbers)
+                    end
+                else
+                    timer.Remove(timername)
+                end
+            end)
+
             -- Random number nonsense to bypass weapon slots
             victim:Give(UPGRADE.class).Kind = 9206
             local disguiser = victim:GetWeapon(UPGRADE.class)
