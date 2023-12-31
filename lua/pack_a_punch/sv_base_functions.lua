@@ -29,6 +29,32 @@ hook.Add("PlayerSwitchWeapon", "TTTPAPPreventUpgradingSwitch", function(ply, _, 
     end
 end)
 
+-- Choose a random upgrade from available ones to give to the weapon
+-- Else, pick a random generic upgrade if no upgrade is found
+function TTTPAP:SelectUpgrade(SWEP)
+    local upgrades = TTTPAP.upgrades[SWEP:GetClass()]
+    local isGenericUpgrade = false
+
+    if not upgrades then
+        upgrades = TTTPAP.genericUpgrades
+        isGenericUpgrade = true
+    end
+
+    local UPGRADE
+
+    -- Check for an upgrade that has its condition met, and has its convar enabled
+    -- (There is guaranteed to be at least one by the TTTCanOrderEquipment hook)
+    for id, upg in RandomPairs(upgrades) do
+        if not upg:Condition() then continue end
+        if isGenericUpgrade and not GetConVar("ttt_pap_" .. id):GetBool() then continue end
+        if not isGenericUpgrade and not GetConVar("ttt_pap_" .. upg.id):GetBool() then continue end
+        UPGRADE = upg
+        break
+    end
+
+    return UPGRADE
+end
+
 -- Finds an upgrade for the player's held weapon and applies it!
 function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     if not IsValid(ply) or not ply:IsPlayer() then return end
@@ -87,27 +113,7 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
             SWEP = ply:GetWeapon(classname)
         end
 
-        -- Choose a random upgrade from available ones to give to the weapon
-        -- Else, pick a random generic upgrade if no upgrade is found
-        local upgrades = TTTPAP.upgrades[classname]
-        local isGenericUpgrade = false
-
-        if not upgrades then
-            upgrades = TTTPAP.genericUpgrades
-            isGenericUpgrade = true
-        end
-
-        local UPGRADE
-
-        -- Check for an upgrade that has its condition met, and has its convar enabled
-        -- (There is guaranteed to be at least one by the TTTCanOrderEquipment hook)
-        for id, upg in RandomPairs(upgrades) do
-            if not upg:Condition() then continue end
-            if isGenericUpgrade and not GetConVar("ttt_pap_" .. id):GetBool() then continue end
-            if not isGenericUpgrade and not GetConVar("ttt_pap_" .. upg.id):GetBool() then continue end
-            UPGRADE = upg
-            break
-        end
+        local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
 
         if not UPGRADE.noSelectWep then
             ply:SelectWeapon(classname)
@@ -247,4 +253,13 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     net.WriteString(UPGRADE.class or "")
     net.WriteBool(UPGRADE.noDesc or false)
     net.Broadcast()
+end
+
+-- Applies a random upgrade to a loose weapon, not necessarily carried by a player
+function TTTPAP:ApplyRandomUpgrade(SWEP)
+    if not SWEP.PAPUpgrade then
+        local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
+        UPGRADE.noDesc = true
+        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+    end
 end
