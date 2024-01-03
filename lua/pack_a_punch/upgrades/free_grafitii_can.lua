@@ -22,7 +22,8 @@ function UPGRADE:Apply(SWEP)
             end
 
             timer.Simple(0.1, function()
-                ply:Give(self.class)
+                local can = ply:Give(self.class)
+                can.PAPUpgrade = self
                 ply:SelectWeapon(self.class)
                 ply:PrintMessage(HUD_PRINTCENTER, "Someone upgraded a graffiti can!")
                 ply:PrintMessage(HUD_PRINTTALK, "Right-click to change colour!")
@@ -33,6 +34,24 @@ function UPGRADE:Apply(SWEP)
             end)
         end
     end
+
+    timer.Simple(0.1, function()
+        for _, ply in ipairs(player.GetAll()) do
+            local can = ply:GetWeapon(self.class)
+
+            if IsValid(can) then
+                can.PAPUpgrade = self
+
+                if can.VElements then
+                    can.VElements.m.material = TTTPAP.camo
+                end
+
+                if can.WElements then
+                    can.WElements.spr.material = TTTPAP.camo
+                end
+            end
+        end
+    end)
 end
 
 TTTPAP:Register(UPGRADE)
