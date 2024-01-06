@@ -158,6 +158,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             timer.Simple(0.5, function()
+                if not IsValid(npc) then return end
                 npc:SetNWString("PlayerName", name)
                 npc:SetName(name)
                 npc:SelectWeapon("weapon_zm_shotgun")

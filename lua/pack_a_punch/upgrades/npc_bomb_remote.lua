@@ -203,6 +203,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             timer.Simple(0.5, function()
+                if not IsValid(npc) then return end
                 npc:SetNWString("PlayerName", name)
                 npc:SetName(name)
                 npc:SelectWeapon("weapon_zm_shotgun")
@@ -261,7 +262,7 @@ function UPGRADE:Apply(SWEP)
         if CLIENT then return end
         local owner = self:GetOwner()
 
-        if IsValid(self.PAPRevivedNPC) then
+        if not isbool(self.PAPRevivedNPC) and IsValid(self.PAPRevivedNPC) then
             self.PAPRevivedNPC:PAPExplodeNPCBomb()
         elseif not self.PAPHasRevived then
             owner:PrintMessage(HUD_PRINTCENTER, "Left-click a body first!")
