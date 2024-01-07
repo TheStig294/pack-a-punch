@@ -12,7 +12,7 @@ UPGRADE.convars = {
 
 local secsCvar = CreateConVar("pap_instant_handcuffs_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players remain handcuffed", 1, 30)
 
-UPGRADE.desc = "Handcuffs everyone for " .. secsCvar:GetInt() .. " seconds!"
+UPGRADE.desc = "Handcuffs everyone else for " .. secsCvar:GetInt() .. " seconds!"
 
 function UPGRADE:Apply(SWEP)
     if CLIENT then return end
@@ -107,7 +107,9 @@ function UPGRADE:Apply(SWEP)
         trace.filter = owner
 
         for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
-            CuffPlayer(ply, owner)
+            if ply ~= owner then
+                CuffPlayer(ply, owner)
+            end
         end
 
         if IsValid(self) then
