@@ -36,9 +36,9 @@ if not GetConVar("ttt_pap_traitor"):GetBool() then
     bannedRoles[ROLE_TRAITOR] = true
 end
 
--- Would be too powerful
-if ROLE_ASSASSIN then
-    bannedRoles[ROLE_ASSASSIN] = true
+-- Breaks the faker role by spending a credit without being able to get one back
+if ROLE_FAKER then
+    bannedRoles[ROLE_FAKER] = true
 end
 
 -- Is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
@@ -47,7 +47,7 @@ if ROLE_RANDOMAN then
 end
 
 -- For some reason the PaP is becoming buyable for the Jester/Swapper even though they aren't shop roles?
--- SHOP_ROLES[ROLE_JESTER]/SHOP_ROLES[ROLE_SWAPPER] is true
+-- SHOP_ROLES[ROLE_JESTER]/SHOP_ROLES[ROLE_SWAPPER] is true, when they really shouldn't be
 if ROLE_JESTER then
     bannedRoles[ROLE_JESTER] = true
 end
