@@ -36,7 +36,12 @@ if not GetConVar("ttt_pap_traitor"):GetBool() then
     bannedRoles[ROLE_TRAITOR] = true
 end
 
--- Breaks the faker role by spending a credit without being able to get one back
+-- Breaks the Quartermaster by letting them upgrade a weapon rather than dropping a weapon crate on the ground with the pack-a-punch in it
+if ROLE_QUARTERMASTER then
+    bannedRoles[ROLE_QUARTERMASTER] = true
+end
+
+-- Breaks the Faker by spending a credit without being able to get one back
 if ROLE_FAKER then
     bannedRoles[ROLE_FAKER] = true
 end
