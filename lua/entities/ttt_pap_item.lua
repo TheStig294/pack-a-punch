@@ -36,11 +36,6 @@ if not GetConVar("ttt_pap_traitor"):GetBool() then
     bannedRoles[ROLE_TRAITOR] = true
 end
 
--- Breaks the Quartermaster by letting them upgrade a weapon rather than dropping a weapon crate on the ground with the pack-a-punch in it
-if ROLE_QUARTERMASTER then
-    bannedRoles[ROLE_QUARTERMASTER] = true
-end
-
 -- Breaks the Faker by spending a credit without being able to get one back
 if ROLE_FAKER then
     bannedRoles[ROLE_FAKER] = true
@@ -90,7 +85,7 @@ end)
 -- Preventing the Pack-a-Punch from being bought when it shouldn't be
 hook.Add("TTTCanOrderEquipment", "TTTPAPPrePurchase", function(ply, equipment, is_item)
     -- Set the displaying of error messages to players to true
-    if is_item and math.floor(equipment) == EQUIP_PAP then return TTTPAP:CanOrderPAP(ply, true) end
+    if is_item and math.floor(equipment) == EQUIP_PAP and not TTTPAP:CanOrderPAP(ply, true) then return false end
 end)
 
 -- After TTTCanOrderEquipment is called and the weapon is in fact upgradable, find an upgrade for the weapon and apply it!

@@ -139,7 +139,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
 
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] The server likely doesn't have the required mod installed for this weapon's upgrade...\nSee the mod page for details")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
         return false
@@ -152,7 +152,7 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
 
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] The server likely doesn't have the required mod installed for this weapon's upgrade...\nSee the mod page for details")
+            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
         return false
