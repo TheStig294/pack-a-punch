@@ -103,8 +103,6 @@ end)
 function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
     if not IsValid(ply) or not ply:IsPlayer() then return false end
     local SWEP = ply:GetActiveWeapon()
-    local class = SWEP:GetClass()
-    local upgrades = TTTPAP.upgrades[class]
 
     if not IsValid(SWEP) then
         -- Preventing purchase if the currently held weapon is invalid
@@ -114,7 +112,12 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         end
 
         return false
-    elseif SWEP.PAPUpgrade then
+    end
+
+    local class = SWEP:GetClass()
+    local upgrades = TTTPAP.upgrades[class]
+
+    if SWEP.PAPUpgrade then
         -- Preventing purchase if the currently held weapon is already upgraded
         if displayErrorMessage then
             ply:PrintMessage(HUD_PRINTCENTER, "Weapon already upgraded")
