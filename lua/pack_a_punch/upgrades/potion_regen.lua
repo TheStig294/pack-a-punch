@@ -40,7 +40,8 @@ function UPGRADE:Apply(SWEP)
                     return
                 end
 
-                ent:SetHealth(math.min(ent:GetMaxHealth(), ent:Health() + healAmountCvar:GetInt()))
+                local maxHealth = math.max(ent:GetMaxHealth(), ent:Health())
+                ent:SetHealth(math.min(maxHealth, ent:Health() + healAmountCvar:GetInt()))
             end)
 
             self:Remove()
