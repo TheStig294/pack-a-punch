@@ -3,7 +3,6 @@ UPGRADE.id = "no_u"
 UPGRADE.class = "weapon_unoreverse"
 UPGRADE.name = "no u"
 UPGRADE.desc = "Lasts longer"
-UPGRADE.noSelectWep = true
 
 UPGRADE.convars = {
     {
