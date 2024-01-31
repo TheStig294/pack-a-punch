@@ -404,11 +404,11 @@ Infinite Pack-a-Punch presents!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
 
-## Chickenator (KFCenator)
+## Chickenator (Egg Multiplier)
 
-Shoots KFC instead\
+Spawned chickens lay more eggs!\
 \
-*ttt_pap_kfcenator* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_egg_multiplier* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1659437311>
