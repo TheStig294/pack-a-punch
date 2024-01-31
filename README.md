@@ -2203,6 +2203,15 @@ Unlimited ammo!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Weeping Angel (Blinking Angel)
+
+Makes victims blink...\
+\
+*ttt_pap_blinking_angel* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1346794275>
+
 ## Winter's Howl [Standalone] (Winter's Fury)
 
 Extra ammo + slows everyone else down and puts an icy overlay over their screen\
