@@ -154,13 +154,8 @@ function ENT:StartTouch(ent)
 
         ent:TakeDamageInfo(dmg)
         ent:EmitSound("ttt_pack_a_punch/truck_gun/honkhonk.mp3")
-
-        -- If no yogscast playermodel is installed, don't show the trucking tuesday popup because they'll have no idea what's going on lol
-        -- Else have 1/2 a chance to show the popup (only show if the trucking tuesday intro sound was selected as the shoot sound)
-        if self.ShowPopup then
-            net.Start("TTTPAPCarGunVictimPopup")
-            net.Send(ent)
-        end
+        net.Start("TTTPAPCarGunVictimPopup")
+        net.Send(ent)
     end
 end
 

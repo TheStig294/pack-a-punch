@@ -33,23 +33,11 @@ UPGRADE.convars = {
 
 local ammoCvar = CreateConVar("pap_truck_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
 
--- If a yogs playermodel is installed, more yogs-specific references have a chance of happening
--- This changes the shoot sound to the yogs trucking tuesday intro, 
--- Which also causes the trucking tuesday popup to be shown for the victim
-local yogsModels = {"models/bradyjharty/yogscast/lankychu.mdl", "models/bradyjharty/yogscast/breeh.mdl", "models/bradyjharty/yogscast/breeh2.mdl", "models/bradyjharty/yogscast/lewis.mdl", "models/bradyjharty/yogscast/sharky.mdl"}
-
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = ammoCvar:GetInt()
     SWEP.Primary.ClipMax = ammoCvar:GetInt()
-    SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/honkhonk.mp3")
+    SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3")
     SWEP:SetHoldType(SWEP.HoldType)
-
-    for _, model in ipairs(yogsModels) do
-        if util.IsValidModel(model) then
-            SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3")
-            break
-        end
-    end
 
     function SWEP:PrimaryAttack()
         if CLIENT or not self:CanPrimaryAttack() then return end
@@ -94,11 +82,6 @@ function UPGRADE:Apply(SWEP)
                             truck:SetOwner(owner)
                             truck.SWEP = self
                             truck.Target = victim
-
-                            if self.Sound == "ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3" then
-                                truck.ShowPopup = true
-                            end
-
                             truck:Spawn()
                         end)
                     end
