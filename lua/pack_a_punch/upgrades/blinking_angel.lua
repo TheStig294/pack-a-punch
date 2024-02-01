@@ -29,15 +29,14 @@ function UPGRADE:Apply(SWEP)
             local tgt = tr.Entity
 
             if SERVER and tgt:IsPlayer() and tgt:Alive() then
-                sound.Play("vo/npc/male01/behindyou01.wav", tgt:GetPos(), 100, 50, 1)
-                tgt:PrintMessage(HUD_PRINTTALK, "Don't. Blink.")
+                sound.Play("vo/npc/male01/behindyou01.wav", tgt:GetPos())
+                tgt:PrintMessage(HUD_PRINTTALK, "Don't blink")
                 local ent = ents.Create("weepingangel")
                 ent:SetPos(tgt:GetAimVector())
                 ent:Spawn()
                 ent:Activate()
                 ent:SetVictim(tgt)
                 ent:DropToFloor()
-                ent:SetMaterial(TTTPAP.camo)
                 local timername = "TTTPAPBlinkingAngel" .. owner:SteamID64()
 
                 timer.Create(timername, 20, 0, function()
