@@ -37,6 +37,7 @@ function UPGRADE:Apply(SWEP)
                 ent:Activate()
                 ent:SetVictim(tgt)
                 ent:DropToFloor()
+                ent:SetMaterial(TTTPAP.camo)
                 local timername = "TTTPAPBlinkingAngel" .. owner:SteamID64()
 
                 timer.Create(timername, 20, 0, function()
