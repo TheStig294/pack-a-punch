@@ -75,6 +75,8 @@ function UPGRADE:Apply(SWEP)
     end)
 
     hook.Add("DeadRingerUncloak", "TTTPAPGhostRingerTTT2", function(ringer, owner)
+        if not ringer.PAPUpgrade or ringer.PAPUpgrade.id ~= self.id then return end
+
         if self:IsAlive(owner) then
             owner:SetMoveType(MOVETYPE_WALK)
             owner:EmitSound("ttt/spy_uncloak_feigndeath.wav")
