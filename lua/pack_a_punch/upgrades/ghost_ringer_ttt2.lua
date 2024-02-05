@@ -1,6 +1,6 @@
 local UPGRADE = {}
-UPGRADE.id = "ghost_ringer"
-UPGRADE.class = "weapon_ttt_dead_ringer"
+UPGRADE.id = "ghost_ringer_ttt2"
+UPGRADE.class = "weapon_ttt_deadringer"
 UPGRADE.name = "Ghost Ringer"
 UPGRADE.desc = "Become a ghost while active!"
 local upgradeApplied = false
@@ -67,41 +67,34 @@ function UPGRADE:Apply(SWEP)
     end
 
     upgradeApplied = true
-    local PLAYER = FindMetaTable("Player")
-    PLAYER.PAPOldDRfakedeath = PLAYER.DRfakedeath
 
-    function PLAYER:DRfakedeath(dmg)
-        self:PAPOldDRfakedeath(dmg)
-        local wep = self:GetWeapon(UPGRADE.class)
-        if not IsValid(wep) then return end
-        if not wep.PAPUpgrade or wep.PAPUpgrade.id ~= UPGRADE.id then return end
-        self:SetMoveType(MOVETYPE_NOCLIP)
-    end
+    hook.Add("DeadRingerCloak", "TTTPAPGhostRingerTTT2", function(ringer, owner, dmg, rag)
+        if ringer.PAPUpgrade and ringer.PAPUpgrade.id == self.id then
+            owner:SetMoveType(MOVETYPE_NOCLIP)
+        end
+    end)
 
-    PLAYER.PAPOldDRuncloak = PLAYER.DRuncloak
-
-    function PLAYER:DRuncloak()
-        self:PAPOldDRuncloak()
-
-        if UPGRADE:IsAlive(self) then
-            self:SetMoveType(MOVETYPE_WALK)
+    hook.Add("DeadRingerUncloak", "TTTPAPGhostRingerTTT2", function(ringer, owner)
+        if self:IsAlive(owner) then
+            owner:SetMoveType(MOVETYPE_WALK)
+            owner:EmitSound("ttt/spy_uncloak_feigndeath.wav")
 
             -- Give players a moment to get unstuck if they are currently stuck
             timer.Simple(4, function()
-                if UPGRADE:IsAlive(self) and not self:IsInWorld() or not PlayerNotStuck(self) then
-                    local oldHealth = self:Health()
-                    self:Spawn()
-                    self:SetHealth(oldHealth)
-                    self:EmitSound("ttt/spy_uncloak_feigndeath.wav")
+                if self:IsAlive(owner) and not owner:IsInWorld() or not PlayerNotStuck(owner) then
+                    local oldHealth = owner:Health()
+                    owner:Spawn()
+                    owner:SetHealth(oldHealth)
+                    owner:EmitSound("ttt/spy_uncloak_feigndeath.wav")
                     -- Dead ringer doesn't reset properly here because of the player spawn call so we have to manually set it to charging mode
-                    self:SetNWInt("DRStatus", 4)
-                    self:SetNWBool("DRDead", false)
-                    self:SetNWInt("DRCharge", 0)
-                    self:ChatPrint("You were stuck and respawned!")
+                    owner:SetNWInt("DRStatus", 4)
+                    owner:SetNWBool("DRDead", false)
+                    owner:SetNWInt("DRCharge", 0)
+                    owner:ChatPrint("You were stuck and respawned!")
                 end
             end)
         end
-    end
+    end)
 end
 
 function UPGRADE:Reset()

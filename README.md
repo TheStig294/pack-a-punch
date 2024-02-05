@@ -574,6 +574,15 @@ Become a ghost while active!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=810154456>
 
+## Dead Ringer [TTT/2 updated version] (Ghost Ringer)
+
+Become a ghost while active!\
+\
+*ttt_pap_ghost_ringer_ttt2* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3074845055>
+
 ## Deagle (The Head Lifter)
 
 High recoil, high damage!\
