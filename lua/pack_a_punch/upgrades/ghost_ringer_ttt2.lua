@@ -79,7 +79,6 @@ function UPGRADE:Apply(SWEP)
 
         if self:IsAlive(owner) then
             owner:SetMoveType(MOVETYPE_WALK)
-            owner:EmitSound("ttt/spy_uncloak_feigndeath.wav")
 
             -- Give players a moment to get unstuck if they are currently stuck
             timer.Simple(4, function()
