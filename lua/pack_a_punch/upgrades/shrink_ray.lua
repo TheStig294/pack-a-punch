@@ -14,29 +14,49 @@ UPGRADE.convars = {
 
 local scaleCvar = CreateConVar("pap_shrink_ray_scale", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Shrinking scale multiplier", 0.1, 1)
 
+function UPGRADE:UnMinify(ent)
+    if CLIENT then return end
+    ent:EmitSound("ttt_pack_a_punch/microfier/unshrink.ogg")
+    ent:SetModelScale(ent:GetModelScale() / self.ShrinkScale, 1)
+    ent:SetHealth(ent:Health() / ent:GetMaxHealth() * ent:GetMaxHealth() / self.ShrinkScale)
+    ent:SetMaxHealth(ent:GetMaxHealth() / self.ShrinkScale)
+
+    if ent:IsPlayer() then
+        ent:SetStepSize(ent:GetStepSize() / self.ShrinkScale)
+
+        -- Smoothly raises a player's view when unshrunk
+        if ent.PAPOGMinifierHeight then
+            local ID = "TTTMinifierUnshrink" .. ent:SteamID64()
+
+            timer.Create(ID, 0.01, 100, function()
+                local counter = 100 - timer.RepsLeft(ID)
+
+                if counter < 100 - self.ShrinkScale * 100 then
+                    ent:SetViewOffset(Vector(0, 0, ent.PAPOGMinifierHeight[1] / (1 / self.ShrinkScale) + counter * ent.PAPOGMinifierHeight[1] / 100))
+                    ent:SetViewOffsetDucked(Vector(0, 0, ent.PAPOGMinifierHeight[2] / (1 / self.ShrinkScale) + counter * ent.PAPOGMinifierHeight[2] / 100))
+                end
+            end)
+        end
+    else
+        -- Update the entity's physbox if it's not a player so it is not left floating in the air
+        -- Apparently calling ent:Activate() on scaled vehicles can crash the server so lets not do that...
+        timer.Simple(1, function()
+            if IsValid(ent) and not ent:IsVehicle() then
+                ent:Activate()
+            end
+        end)
+    end
+
+    ent.PAPMinified = false
+end
+
 function UPGRADE:Apply(SWEP)
-    SWEP.ShrinkScale = scaleCvar:GetFloat()
+    self.ShrinkScale = scaleCvar:GetFloat()
+    SWEP.ShrinkScale = self.ShrinkScale
     SWEP:SendWeaponAnim(ACT_SLAM_DETONATOR_THROW_DRAW)
 
     function SWEP:Deploy()
         self:SendWeaponAnim(ACT_SLAM_DETONATOR_THROW_DRAW)
-        if not IsFirstTimePredicted() then return end
-        local owner = self:GetOwner()
-
-        hook.Add("PlayerButtonDown", "MinifierActivateFix" .. owner:SteamID64(), function(ply, button)
-            timer.Simple(0.1, function()
-                if IsValid(owner) and owner == ply and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() == self and button == MOUSE_LEFT then
-                    self:PrimaryAttack()
-                    hook.Remove("PlayerButtonDown", "MinifierActivateFix" .. ply:SteamID64())
-                end
-            end)
-        end)
-
-        timer.Simple(3, function()
-            if IsValid(owner) then
-                hook.Remove("PlayerButtonDown", "MinifierActivateFix" .. owner:SteamID64())
-            end
-        end)
 
         return true
     end
@@ -50,12 +70,16 @@ function UPGRADE:Apply(SWEP)
         local ent = TraceResult.Entity
 
         if not IsValid(ent) or not isnumber(ent:GetModelScale()) then
-            owner:PrintMessage(HUD_PRINTTALK, "Invalid object")
+            if CLIENT then
+                owner:PrintMessage(HUD_PRINTTALK, "Invalid object")
+            end
 
             return
         elseif owner:GetPos():DistToSqr(hitPos) > 10000 then
             -- If the distance from the left-clicked entity is greater than 100 source units, don't allow the player to shrink it
-            owner:PrintMessage(HUD_PRINTTALK, "Object too far away")
+            if CLIENT then
+                owner:PrintMessage(HUD_PRINTTALK, "Object too far away")
+            end
 
             return
         end
@@ -107,49 +131,26 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:UnMinify(ent)
-        if CLIENT then return end
-        ent:EmitSound("ttt_pack_a_punch/microfier/unshrink.ogg")
-        ent:SetModelScale(ent:GetModelScale() / self.ShrinkScale, 1)
-        ent:SetHealth(ent:Health() / ent:GetMaxHealth() * ent:GetMaxHealth() / self.ShrinkScale)
-        ent:SetMaxHealth(ent:GetMaxHealth() / self.ShrinkScale)
-
-        if ent:IsPlayer() then
-            ent:SetStepSize(ent:GetStepSize() / self.ShrinkScale)
-
-            -- Smoothly raises a player's view when unshrunk
-            if ent.PAPOGMinifierHeight then
-                local ID = "TTTMinifierUnshrink" .. ent:SteamID64()
-
-                timer.Create(ID, 0.01, 100, function()
-                    local counter = 100 - timer.RepsLeft(ID)
-
-                    if counter < 100 - self.ShrinkScale * 100 then
-                        ent:SetViewOffset(Vector(0, 0, ent.PAPOGMinifierHeight[1] / (1 / self.ShrinkScale) + counter * ent.PAPOGMinifierHeight[1] / 100))
-                        ent:SetViewOffsetDucked(Vector(0, 0, ent.PAPOGMinifierHeight[2] / (1 / self.ShrinkScale) + counter * ent.PAPOGMinifierHeight[2] / 100))
-                    end
-                end)
-            end
-        else
-            -- Update the entity's physbox if it's not a player so it is not left floating in the air
-            -- Apparently calling ent:Activate() on scaled vehicles can crash the server so lets not do that...
-            timer.Simple(1, function()
-                if IsValid(ent) and not ent:IsVehicle() then
-                    ent:Activate()
-                end
-            end)
-        end
-
-        ent.PAPMinified = false
+        UPGRADE:UnMinify(ent)
     end
 end
 
 function UPGRADE:Reset()
     if CLIENT then return end
 
-    for k, v in pairs(player.GetAll()) do
-        v.PAPMinified = false
-        v.PAPOGMinifierHeight = nil
+    for _, ply in pairs(player.GetAll()) do
+        if ply.PAPMinified then
+            self:UnMinify(ply)
+        end
     end
+
+    -- Wait a couple of seconds before clearing player flags as they are still being used by the unshrink animation for a sec after the next round starts
+    timer.Simple(2, function()
+        for _, ply in ipairs(player.GetAll()) do
+            ply.PAPMinified = nil
+            ply.PAPOGMinifierHeight = nil
+        end
+    end)
 end
 
 TTTPAP:Register(UPGRADE)
