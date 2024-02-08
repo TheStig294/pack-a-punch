@@ -163,7 +163,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     if not IsValid(SWEP) then return end
 
     -- Give the player a completely new base weapon instead if one is specified
-    if UPGRADE.newClass and not UPGRADE.skipNewClass then
+    if UPGRADE.newClass and WEPS.GetClass(SWEP) ~= UPGRADE.newClass then
         local owner = SWEP:GetOwner()
 
         if IsValid(owner) then
@@ -185,7 +185,6 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
         end
 
         -- Apply the upgrade!
-        UPGRADE.skipNewClass = true
         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
 
         return

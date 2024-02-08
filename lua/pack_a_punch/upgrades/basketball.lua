@@ -93,6 +93,13 @@ function UPGRADE:Apply(SWEP)
         end
     end)
 
+    -- Fix stupid client error basketball entity makes whenever you throw it from base mod...
+    self:AddHook("Think", function()
+        for _, ply in ipairs(player.GetAll()) do
+            timer.Remove("ballinMultiplier" .. ply:Name())
+        end
+    end)
+
     function SWEP:Equip()
         self:SetClip1(1)
         self.PAPUpgrade = UPGRADE
@@ -183,7 +190,10 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 if self:GetOwner():KeyReleased(IN_ATTACK) then
-                    self:SetNextPrimaryFire(CurTime() + self.Primary.FireDelay)
+                    if self.Primary and self.Primary.FireDelay then
+                        self:SetNextPrimaryFire(CurTime() + self.Primary.FireDelay)
+                    end
+
                     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
                     self:ThrowBall("models/basketball.mdl", false)
                     self:GetOwner():ViewPunch(Angle(2, 0, 0))
@@ -202,7 +212,10 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 if self:GetOwner():KeyReleased(IN_ATTACK2) then
-                    self:SetNextSecondaryFire(CurTime() + self.Primary.FireDelay + 0.3)
+                    if self.Primary and self.Primary.FireDelay then
+                        self:SetNextSecondaryFire(CurTime() + self.Primary.FireDelay + 0.3)
+                    end
+
                     self:ThrowBall("models/basketball.mdl", true)
                     self:GetOwner():ViewPunch(Angle(-5, 0, 0))
                     self.chargeMultiplier = 1
