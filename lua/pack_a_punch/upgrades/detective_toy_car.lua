@@ -61,7 +61,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- Spawns car where the player is looking
-    self:ChangeHook(SWEP, "PrimaryAttack", false, function(self)
+    function SWEP:PrimaryAttack()
         if CLIENT or not IsFirstTimePredicted() then return end
         local owner = self:GetOwner()
         if not IsValid(owner) or not owner:IsPlayer() then return end
@@ -89,7 +89,7 @@ function UPGRADE:Apply(SWEP)
         owner:ChatPrint("Press 'H' to honk the horn!")
         -- Once the car is spawned, remove the weapon, which should in turn remove the car hologram
         self:Remove()
-    end)
+    end
 
     -- Right-click also spawns car
     function SWEP:SecondaryAttack()

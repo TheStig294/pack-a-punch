@@ -90,54 +90,22 @@ function UPGRADE:CleanUpHooks()
     table.Empty(self.Hooks)
 end
 
--- Overrides a weapon's hook, can optionally call the original weapon's hook first
--- These hooks are nonsense and automatically reset back to their original behavior on swapping weapons
--- So we have to fight back using GM:PlayerSwitchWeapon() hooks
-local autoResetHooks = {
-    PrimaryAttack = true,
-    SecondaryAttack = true
-}
-
-local function ChangeHookCall(SWEP, hookName, callOriginalHook, HookFunction)
-    -- First, the case where we first call the weapon's original hook before calling our own
-    if callOriginalHook then
-        -- Save the original hook if not already saved
-        if not SWEP["PAPOld" .. hookName] then
-            SWEP["PAPOld" .. hookName] = SWEP[hookName]
-        end
-
-        -- Now override it
-        SWEP[hookName] = function(self, ...)
-            -- First call the original hook,
-            -- Then call our logic
-            SWEP["PAPOld" .. hookName](self, ...)
-
-            return HookFunction(self, ...)
-        end
-    else
-        -- Otherwise just plonk our logic on top of the weapon hook to replace it completely
-        SWEP[hookName] = function(self, ...) return HookFunction(self, ...) end
-    end
-end
-
-function UPGRADE:ChangeHook(SWEP, hookName, callOriginalHook, HookFunction)
+-- Adds extra functionality to the end of a weapon's hook, calls the original weapon's hook logic first
+function UPGRADE:AddToHook(SWEP, hookName, HookFunction)
     if not IsValid(SWEP) then return end
-    ChangeHookCall(SWEP, hookName, callOriginalHook, HookFunction)
 
-    if autoResetHooks[hookName] then
-        local fixHookName = "TTTPAPAutoResetWeaponHookFix" .. WEPS.GetClass(SWEP) .. hookName
+    -- Save the original hook if not already saved
+    if not SWEP["PAPOld" .. hookName] then
+        SWEP["PAPOld" .. hookName] = SWEP[hookName]
+    end
 
-        hook.Add("PlayerSwitchWeapon", fixHookName, function(ply, oldWep, newWep)
-            if not IsValid(SWEP) then
-                hook.Remove(fixHookName)
+    -- Now override it
+    SWEP[hookName] = function(self, ...)
+        -- First call the original hook,
+        -- Then call our logic
+        SWEP["PAPOld" .. hookName](self, ...)
 
-                return
-            end
-
-            if newWep == SWEP or oldWep == SWEP then
-                ChangeHookCall(SWEP, hookName, callOriginalHook, HookFunction)
-            end
-        end)
+        return HookFunction(self, ...)
     end
 end
 

@@ -29,6 +29,19 @@ hook.Add("PlayerSwitchWeapon", "TTTPAPPreventUpgradingSwitch", function(ply, _, 
     end
 end)
 
+-- The auto-player unstuck mod tries to make players who are stuck not shoot each other, but this conflicts with the pack-a-punch,
+-- It causes a weapon's upgrade to undo itself if it uses the SWEP:PrimaryAttack() hook, using its old functionality on swapping weapons...
+-- The original purpose of this hook was to make it so players who were stuck shot through each other, but removing this isn't the end of the world
+-- (That feature vs. the Pack-a-Punch? Come on the PaP wins)
+-- If they're both installed, remove this functionality to make the PaP work again
+hook.Add("InitPostEntity", "TTTPAPFixPlayerUnstuckModConflict", function()
+    if ConVarExists("sv_player_stuck") then
+        hook.Add("Think", "StigTTTFixes", function()
+            hook.Remove("PlayerSwitchWeapon", "PlayerSwitchWeaponStuck")
+        end)
+    end
+end)
+
 -- Choose a random upgrade from available ones to give to the weapon
 -- Else, pick a random generic upgrade if no upgrade is found
 function TTTPAP:SelectUpgrade(SWEP)

@@ -6,10 +6,7 @@ UPGRADE.desc = "Continually spawns an amogus at the spot you shoot,\nwhenever so
 UPGRADE.ammoMult = 1 / 3
 
 function UPGRADE:Apply(SWEP)
-    SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack
-
-    function SWEP:PrimaryAttack()
-        self:PAPOldPrimaryAttack()
+    self:AddToHook(SWEP, "PrimaryAttack", function(self)
         if CLIENT then return end
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
@@ -26,7 +23,7 @@ function UPGRADE:Apply(SWEP)
         if SERVER then
             self:Remove()
         end
-    end
+    end)
 
     if SERVER then
         self:AddHook("EntityRemoved", function(ent)
