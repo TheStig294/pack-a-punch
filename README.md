@@ -2307,11 +2307,11 @@ These are the backup upgrades that apply to basic weapons if a proper upgrade ha
 
 ## Ammo
 
-x1.5 ammo increase!\
+x2 ammo increase!\
 \
 *ttt_pap_ammo* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_ammo_multiplier* - Default: 1.5 - Ammo multiplier
+*pap_ammo_mult* - Default: 2 - Ammo multiplier
 
 ## Firerate
 
@@ -2319,7 +2319,7 @@ x1.5 firerate increase!\
 \
 *ttt_pap_firerate* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_firerate_multiplier* - Default: 1.5 - Firerate multiplier
+*pap_firerate_mult* - Default: 1.5 - Firerate multiplier
 
 ## All stats up
 
@@ -2327,19 +2327,19 @@ All stats up!\
 \
 *ttt_pap_all_stats_up* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_all_stats_up_firerate* - Default: 1.1 - Firerate multiplier\
-*pap_all_stats_up_damage* - Default: 1.1 - Damage multiplier\
-*pap_all_stats_up_spread* - Default: 1.3 - Spread multiplier\
-*pap_all_stats_up_ammo* - Default: 1.2 - Ammo multiplier\
-*pap_all_stats_up_recoil* - Default: 0.75 - Recoil multiplier
+*pap_all_stats_up_firerate_mult* - Default: 1.3 - Firerate multiplier\
+*pap_all_stats_up_damage_mult* - Default: 1.1 - Damage multiplier\
+*pap_all_stats_up_spread_mult* - Default: 0.5 - Spread multiplier\
+*pap_all_stats_up_ammo_mult* - Default: 1.5 - Ammo multiplier\
+*pap_all_stats_up_recoil_mult* - Default: 0.5 - Recoil multiplier
 
 ## Damage
 
-x1.2 damage increase!\
+x1.3 damage increase!\
 \
 *ttt_pap_damage* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_damage_multiplier* - Default: 1.2 - Damage multiplier
+*pap_damage_mult* - Default: 1.2 - Damage multiplier
 
 ## Recoil
 
@@ -2347,12 +2347,12 @@ x10 less recoil!\
 \
 *ttt_pap_recoil* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_recoil_multiplier* - Default: 0.1 - Recoil multiplier
+*pap_recoil_mult* - Default: 0.1 - Recoil multiplier
 
 ## Accuracy
 
-x1.5 tighter bullet spread!\
+x10 tighter bullet spread!\
 \
 *ttt_pap_spread* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_spread_multiplier* - Default: 1.5 - Spread multiplier
+*pap_spread_mult* - Default: 0.1 - Spread multiplier

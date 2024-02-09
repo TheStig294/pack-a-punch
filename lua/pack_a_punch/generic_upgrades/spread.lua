@@ -3,9 +3,9 @@ UPGRADE.id = "spread"
 UPGRADE.class = nil
 UPGRADE.name = nil
 
-local multCvar = CreateConVar("pap_spread_multiplier", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Spread multiplier", 1, 10)
+local multCvar = CreateConVar("pap_spread_mult", "0.1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Spread multiplier", 1, 10)
 
-UPGRADE.desc = "x" .. math.Round(multCvar:GetFloat(), 1) .. " tighter bullet spread!"
+UPGRADE.desc = "x" .. math.Round(1 / multCvar:GetFloat()) .. " tighter bullet spread!"
 
 UPGRADE.convars = {
     {
