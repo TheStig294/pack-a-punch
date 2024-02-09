@@ -1699,13 +1699,13 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
 ## Potion of Jump (Strength Potion)
 
-Increases your damage!\
+Increases your damage, if used on someone else it lasts longer!\
 \
 *ttt_pap_potion_strength* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_potion_strength_mult* - Default: 1.5 - Damage multiplier\
 *pap_potion_strength_other_player_cost* - Default: 25 - Cost on using on other player\
-*pap_potion_strength_other_player_secs* - Default: 10 - Secs other player dmg buff lasts\
+*pap_potion_strength_other_player_time* - Default: 20 - Secs other player dmg buff lasts\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
@@ -1725,7 +1725,7 @@ Jump much higher, no fall damage!\
 \
 *ttt_pap_potion_leaping* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_potion_leaping_mult* - Default: 5 - Jump multiplier\
+*pap_potion_leaping_jump_mult* - Default: 4 - Jump multiplier\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
