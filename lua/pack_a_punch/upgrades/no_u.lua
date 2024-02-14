@@ -15,7 +15,9 @@ UPGRADE.convars = {
 local lengthMult = CreateConVar("pap_no_u_length_mult", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Length multiplier", 0.1, 5)
 
 function UPGRADE:Apply(SWEP)
-    SWEP.UnoReverseLength = GetConVar("ttt_uno_reverse_length"):GetInt() * lengthMult:GetFloat()
+    if SERVER then
+        SWEP.UnoReverseLength = GetConVar("ttt_uno_reverse_length"):GetInt() * lengthMult:GetFloat()
+    end
 
     if CLIENT then
         SWEP.VElements.v_element.material = TTTPAP.camo
