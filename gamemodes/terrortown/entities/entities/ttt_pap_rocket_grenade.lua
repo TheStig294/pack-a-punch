@@ -118,7 +118,9 @@ function ENT:Explode(tr)
 						end)
 
 						timer.Simple(5, function()
-							ent:SetNWBool("beingLifted", false)
+							if IsValid(ent) then
+								ent:SetNWBool("beingLifted", false)
+							end
 						end)
 					end
 				end
