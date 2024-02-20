@@ -25,35 +25,24 @@ local pap = {
     desc = "pap_desc"
 }
 
--- Prevent roles from getting the PaP in their buy menu that shouldn't
-local bannedRoles = {}
+-- Faker breaks by spending a credit without being able to get one back
+-- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
+-- Jester/Swapper are shop roles because of an old request to let them have buyable items that pre-dates the role weapons system, which hasn't been removed for some reason
+-- Hive Mind's buy menu is supposed to start empty
+local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND}
 
 if not GetConVar("ttt_pap_detective"):GetBool() then
-    bannedRoles[ROLE_DETECTIVE] = true
+    table.insert(bannedRoles, ROLE_DETECTIVE)
 end
 
 if not GetConVar("ttt_pap_traitor"):GetBool() then
-    bannedRoles[ROLE_TRAITOR] = true
+    table.insert(bannedRoles, ROLE_TRAITOR)
 end
 
--- Breaks the Faker by spending a credit without being able to get one back
-if ROLE_FAKER then
-    bannedRoles[ROLE_FAKER] = true
-end
+local bannedRolesDictionary = {}
 
--- Is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
-if ROLE_RANDOMAN then
-    bannedRoles[ROLE_RANDOMAN] = true
-end
-
--- For some reason the PaP is becoming buyable for the Jester/Swapper even though they aren't shop roles?
--- SHOP_ROLES[ROLE_JESTER]/SHOP_ROLES[ROLE_SWAPPER] is true, when they really shouldn't be
-if ROLE_JESTER then
-    bannedRoles[ROLE_JESTER] = true
-end
-
-if ROLE_SWAPPER then
-    bannedRoles[ROLE_SWAPPER] = true
+for _, role in ipairs(bannedRoles) do
+    bannedRolesDictionary[role] = true
 end
 
 -- Check that the PaP item hasn't been added already
@@ -74,7 +63,7 @@ hook.Add("TTTBeginRound", "TTTPAPRegister", function()
         -- Role is not banned
         -- Role doesn't already have the PaP
         -- CR is not installed, or role has a shop
-        if not bannedRoles[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) and (not SHOP_ROLES or SHOP_ROLES[role]) then
+        if not bannedRolesDictionary[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) and (not SHOP_ROLES or SHOP_ROLES[role]) then
             table.insert(equTable, pap)
         end
     end
