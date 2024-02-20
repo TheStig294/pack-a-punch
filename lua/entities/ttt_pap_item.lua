@@ -41,7 +41,8 @@ end
 
 local bannedRolesDictionary = {}
 
-for _, role in ipairs(bannedRoles) do
+-- Not a sequential table, unless all banned roles aren't nil, so we have to use pairs instead of ipairs
+for _, role in pairs(bannedRoles) do
     bannedRolesDictionary[role] = true
 end
 
