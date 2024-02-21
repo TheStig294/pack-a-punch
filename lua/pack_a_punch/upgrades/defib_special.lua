@@ -20,7 +20,7 @@ function UPGRADE:Apply()
         local allowParamedic = canBecomeMedCvar:GetBool()
 
         for role, roleString in pairs(ROLE_STRINGS_RAW) do
-            if INNOCENT_ROLES[role] and not DETECTIVE_ROLES[role] and ConVarExists("ttt_" .. roleString .. "_enabled") and GetConVar("ttt_" .. roleString .. "_enabled"):GetBool() then
+            if INNOCENT_ROLES[role] and not DETECTIVE_ROLES[role] and TTTPAP:CanRoleSpawn(role) then
                 -- Don't allow PaP paramedic device to turn other players into paramedics if the convar is disabled
                 if not allowParamedic and role == ROLE_PARAMEDIC then continue end
                 table.insert(enabledInnocentRoles, role)

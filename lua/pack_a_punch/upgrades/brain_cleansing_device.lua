@@ -20,7 +20,7 @@ function UPGRADE:Apply()
         local allowHypnotist = canBecomeHypCvar:GetBool()
 
         for role, roleString in pairs(ROLE_STRINGS_RAW) do
-            if TRAITOR_ROLES[role] and ConVarExists("ttt_" .. roleString .. "_enabled") and GetConVar("ttt_" .. roleString .. "_enabled"):GetBool() then
+            if TRAITOR_ROLES[role] and TTTPAP:CanRoleSpawn(role) then
                 -- Don't allow PaP hypnotist device to turn other players into hypnotists if the convar is disabled
                 if not allowHypnotist and role == ROLE_HYPNOTIST then continue end
                 table.insert(enabledTraitorRoles, role)
