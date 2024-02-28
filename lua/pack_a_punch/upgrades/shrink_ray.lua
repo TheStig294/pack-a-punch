@@ -144,8 +144,6 @@ function UPGRADE:Reset()
             end
 
             ply:SetStepSize(18)
-            ply:SetHealth(100)
-            ply:SetMaxHealth(100)
         end
 
         ply.PAPMinified = nil
