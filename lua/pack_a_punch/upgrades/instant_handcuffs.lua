@@ -52,6 +52,8 @@ function UPGRADE:Apply(SWEP)
     end
 
     local function CuffPlayer(target, owner)
+        if target:GetNWBool("PossumDisguiseActive") then return end
+
         if target:IsValid() and (target:IsPlayer() or target:IsNPC()) then
             if not IsValid(owner) then return end
             target:SetNWBool("IsCuffed", true)
