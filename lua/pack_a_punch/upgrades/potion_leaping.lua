@@ -1,6 +1,6 @@
 local UPGRADE = {}
 UPGRADE.id = "potion_leaping"
-UPGRADE.class = "weapon_ttt_mc_speedpotion"
+UPGRADE.class = "weapon_ttt_mc_jumppotion"
 UPGRADE.name = "Leaping Potion"
 UPGRADE.desc = "Jump much higher, no fall damage!"
 
@@ -16,7 +16,7 @@ local multCvar = CreateConVar("pap_potion_leaping_jump_mult", "4", {FCVAR_ARCHIV
 function UPGRADE:Apply(SWEP)
     local DestroySound = "minecraft_original/glass2.wav"
 
-    function SWEP:SpeedEnable()
+    function SWEP:SecondaryAttack()
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
 
@@ -37,6 +37,14 @@ function UPGRADE:Apply(SWEP)
         if ent.PAPLeappingPotion and dmg:IsFallDamage() then return true end
     end)
 
+    self:AddHook("PostPlayerDeath", function(ply)
+        if ply.PAPLeapingPotionOGJump then
+            ply:SetJumpPower(ply.PAPLeapingPotionOGJump)
+            ply.PAPLeapingPotionOGJump = nil
+            ply.PAPLeappingPotion = nil
+        end
+    end)
+
     if CLIENT then
         SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
@@ -55,6 +63,7 @@ function UPGRADE:Reset()
         if ply.PAPLeapingPotionOGJump then
             ply:SetJumpPower(ply.PAPLeapingPotionOGJump)
             ply.PAPLeapingPotionOGJump = nil
+            ply.PAPLeappingPotion = nil
         end
     end
 end

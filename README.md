@@ -1677,17 +1677,6 @@ Continually regenerates your health!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
-## Potion of Shield (Invunerability Potion)
-
-Gives you a health shield! Resists 10% of damage (by default), protects from 1-shot deaths!\
-\
-*ttt_pap_potion_shield* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_potion_shield_max* - Default: 100 - Max no. of shield points\
-*pap_potion_shield_resist* - Default: 10 - % damage resistance\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
-
 ## Potion of Invisibility (Night Vision Potion)
 
 Lets you see players though walls!\
@@ -1697,15 +1686,14 @@ Lets you see players though walls!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
-## Potion of Jump (Strength Potion)
+## Potion of Invunerability (Shield Potion)
 
-Increases your damage, if used on someone else it lasts longer!\
+Gives you a health shield! Resists 10% of damage (by default), protects from 1-shot deaths!\
 \
-*ttt_pap_potion_strength* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_potion_shield* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_potion_strength_mult* - Default: 1.5 - Damage multiplier\
-*pap_potion_strength_other_player_cost* - Default: 25 - Cost on using on other player\
-*pap_potion_strength_other_player_time* - Default: 20 - Secs other player dmg buff lasts\
+*pap_potion_shield_max* - Default: 100 - Max no. of shield points\
+*pap_potion_shield_resist* - Default: 10 - % damage resistance\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
@@ -1719,13 +1707,25 @@ Slows a player down permenantly!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
-## Potion of Speed (Leaping Potion)
+## Potion of Rocket (Leaping Potion)
 
 Jump much higher, no fall damage!\
 \
 *ttt_pap_potion_leaping* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_potion_leaping_jump_mult* - Default: 4 - Jump multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
+
+## Potion of Speed (Strength Potion)
+
+Increases your damage, if used on someone else it lasts longer!\
+\
+*ttt_pap_potion_strength* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_potion_strength_mult* - Default: 1.5 - Damage multiplier\
+*pap_potion_strength_other_player_cost* - Default: 25 - Cost on using on other player\
+*pap_potion_strength_other_player_time* - Default: 20 - Secs other player dmg buff lasts\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 

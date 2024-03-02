@@ -34,7 +34,7 @@ function UPGRADE:Apply(SWEP)
             local timername = "TTTPAPRegenPotion" .. ent:SteamID64()
 
             timer.Create("TTTPAPRegenPotion" .. ent:SteamID64(), delayCvar:GetInt(), 0, function()
-                if not UPGRADE:IsAlivePlayer(ent) or GetRoundState() ~= ROUND_ACTIVE then
+                if not UPGRADE:IsAlivePlayer(ent) then
                     timer.Remove(timername)
 
                     return
@@ -67,6 +67,12 @@ function UPGRADE:Apply(SWEP)
                 self.WorldModelEnt:SetMaterial(TTTPAP.camo)
             end
         end
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        timer.Remove("TTTPAPRegenPotion" .. ply:SteamID64())
     end
 end
 

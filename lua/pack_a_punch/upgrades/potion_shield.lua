@@ -22,41 +22,19 @@ UPGRADE.desc = "Gives you a health shield!\nResists " .. dmgResistCvar:GetInt() 
 
 function UPGRADE:Apply(SWEP)
     local DestroySound = "minecraft_original/glass2.wav"
-    local Enabled = false
     local maxShield = maxCvar:GetInt()
 
-    function SWEP:Holster()
-        return true
-    end
-
-    function SWEP:PreDrop()
-        self.BaseClass.PreDrop(self)
-        timer.Remove("use_ammo" .. self:EntIndex())
-
-        if Enabled then
-            self:ImmortalityDisable()
-        end
-    end
-
-    function SWEP:SecondaryAttack()
-        self:ImmortalityEnable()
-    end
-
-    function SWEP:ImmortalityDisable()
-        timer.Remove("use_ammo" .. self:EntIndex())
-        Enabled = false
-    end
-
     function SWEP:ImmortalityEnable()
-        if Enabled then return end
+        if self.PotionEnabled then return end
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         owner:SetColor(Color(0, 255, 255))
         owner:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
         self:TakePrimaryAmmo(1)
-        Enabled = true
+        self.PotionEnabled = true
         local tickRate = 0.02
-        local shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + 1, maxShield)
+        local chargeRate = math.ceil(1 * (maxShield / 100))
+        local shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + chargeRate, maxShield)
         owner:SetNWInt("PAPHealthShield", shieldPoints)
 
         timer.Create("use_ammo" .. self:EntIndex(), tickRate, 0, function()
@@ -64,7 +42,7 @@ function UPGRADE:Apply(SWEP)
                 self:SetClip1(math.min(self:Clip1() - 1, self.MaxAmmo))
             end
 
-            shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + 1, maxShield)
+            shieldPoints = math.min(owner:GetNWInt("PAPHealthShield", 0) + chargeRate, maxShield)
             owner:SetNWInt("PAPHealthShield", shieldPoints)
 
             if self:Clip1() <= 0 then

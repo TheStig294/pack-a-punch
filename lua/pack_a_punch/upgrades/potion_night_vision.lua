@@ -12,14 +12,13 @@ function UPGRADE:Apply(SWEP)
     local HealSound1 = "minecraft_original/invisible_end.wav"
     local HealSound2 = "minecraft_original/invisible_start.wav"
     local DestroySound = "minecraft_original/glass2.wav"
-    local Enabled = false
     local mc_invis_tick_rate = GetConVar("ttt_mc_invis_tick_rate")
 
     function SWEP:InvisibilityEnable()
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
 
-        if SERVER and not Enabled then
+        if SERVER and not self.PotionEnabled then
             net.Start("TTTPAPNightVisionPotion")
             net.WriteBool(true)
             net.Send(owner)
@@ -27,7 +26,7 @@ function UPGRADE:Apply(SWEP)
 
         self:EmitSound(HealSound2)
         self:TakePrimaryAmmo(1)
-        Enabled = true
+        self.PotionEnabled = true
         local tickRate = mc_invis_tick_rate:GetFloat()
         local timername = "use_ammo" .. self:EntIndex()
 
@@ -57,7 +56,7 @@ function UPGRADE:Apply(SWEP)
     function SWEP:InvisibilityDisable()
         -- Only play the sound if we're enabled, but run everything else
         -- so we're VERY SURE this disables
-        if Enabled then
+        if self.PotionEnabled then
             self:EmitSound(HealSound1)
         end
 
@@ -67,7 +66,7 @@ function UPGRADE:Apply(SWEP)
             owner:SetColor(COLOR_WHITE)
             owner:SetMaterial("")
 
-            if SERVER and Enabled then
+            if SERVER and self.PotionEnabled then
                 net.Start("TTTPAPNightVisionPotion")
                 net.WriteBool(false)
                 net.Send(owner)
@@ -75,24 +74,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         timer.Remove("use_ammo" .. self:EntIndex())
-        Enabled = false
-    end
-
-    function SWEP:SecondaryAttack()
-        if Enabled then
-            self:InvisibilityDisable()
-        else
-            self:InvisibilityEnable()
-        end
-    end
-
-    function SWEP:PreDrop()
-        self.BaseClass.PreDrop(self)
-        timer.Remove("use_ammo" .. self:EntIndex())
-
-        if Enabled then
-            self:InvisibilityDisable()
-        end
+        self.PotionEnabled = false
     end
 
     if CLIENT then

@@ -1,6 +1,6 @@
 local UPGRADE = {}
 UPGRADE.id = "potion_strength"
-UPGRADE.class = "weapon_ttt_mc_jumppotion"
+UPGRADE.class = "weapon_ttt_mc_speedpotion"
 UPGRADE.name = "Strength Potion"
 UPGRADE.desc = "Increases your damage, if used on someone else it lasts longer!"
 
@@ -26,17 +26,16 @@ local otherPlayerCostCvar = CreateConVar("pap_potion_strength_other_player_cost"
 local otherPlayerSecsCvar = CreateConVar("pap_potion_strength_other_player_time", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs other player dmg buff lasts", 1, 60)
 
 function UPGRADE:Apply(SWEP)
-    local HealSound1 = "minecraft_original/glass1.wav"
-    local HealSound2 = "minecraft_original/launch1.wav"
+    local HealSound1 = "minecraft_original/speed_end.wav"
+    local HealSound2 = "minecraft_original/speed_start.wav"
     local DenySound = "minecraft_original/wood_click.wav"
     local DestroySound = "minecraft_original/glass2.wav"
-    local Enabled = false
 
     timer.Simple(0.1, function()
         SWEP.MaxAmmo = SWEP:Clip1()
     end)
 
-    function SWEP:StrengthEnable()
+    function SWEP:SpeedEnable()
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         owner.PAPStrengthPotion = true
@@ -55,7 +54,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             if self:Clip1() <= 0 then
-                self:StrengthDisable()
+                self:SpeedDisable()
 
                 if SERVER then
                     self:Remove()
@@ -65,13 +64,13 @@ function UPGRADE:Apply(SWEP)
             end
         end)
 
-        Enabled = true
+        self.PotionEnabled = true
     end
 
-    function SWEP:StrengthDisable()
+    function SWEP:SpeedDisable()
         -- Only play the sound if we're enabled, but run everything else
         -- so we're VERY SURE this disables
-        if Enabled then
+        if self.PotionEnabled then
             self:EmitSound(HealSound1)
         end
 
@@ -82,7 +81,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         timer.Remove("use_ammo" .. self:EntIndex())
-        Enabled = false
+        self.PotionEnabled = false
     end
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
@@ -92,23 +91,6 @@ function UPGRADE:Apply(SWEP)
             dmg:ScaleDamage(multCvar:GetFloat())
         end
     end)
-
-    function SWEP:SecondaryAttack()
-        if Enabled then
-            self:StrengthDisable()
-        else
-            self:StrengthEnable()
-        end
-    end
-
-    function SWEP:PreDrop()
-        self.BaseClass.PreDrop(self)
-        timer.Remove("use_ammo" .. self:EntIndex())
-
-        if Enabled then
-            self:StrengthDisable()
-        end
-    end
 
     function SWEP:PrimaryAttack()
         if CLIENT then return end
@@ -131,9 +113,10 @@ function UPGRADE:Apply(SWEP)
             self:EmitSound(HealSound2)
             ent:EmitSound(HealSound2)
             ent.PAPStrengthPotion = true
+            ent:PrintMessage(HUD_PRINTCENTER, "Strength potion! Damage increased!")
             ent:PrintMessage(HUD_PRINTTALK, "Strength potion! You deal x" .. multCvar:GetFloat() .. " more damage for " .. otherPlayerSecsCvar:GetInt() .. " seconds")
 
-            timer.Simple(otherPlayerSecsCvar:GetInt(), function()
+            timer.Create("TTTPAPStrengthPotionOtherPlayerTimer" .. ent:SteamID64(), otherPlayerSecsCvar:GetInt(), 1, function()
                 if IsValid(ent) then
                     ent.PAPStrengthPotion = false
                     ent:EmitSound(DenySound)
@@ -152,6 +135,11 @@ function UPGRADE:Apply(SWEP)
         end
     end
 
+    self:AddHook("PostPlayerDeath", function(ply)
+        ply.PAPStrengthPotion = nil
+        timer.Remove("TTTPAPStrengthPotionOtherPlayerTimer" .. ply:SteamID64())
+    end)
+
     if CLIENT then
         SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
@@ -162,6 +150,13 @@ function UPGRADE:Apply(SWEP)
                 self.WorldModelEnt:SetMaterial(TTTPAP.camo)
             end
         end
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in ipairs(player.GetAll()) do
+        ply.PAPStrengthPotion = nil
+        timer.Remove("TTTPAPStrengthPotionOtherPlayerTimer" .. ply:SteamID64())
     end
 end
 
