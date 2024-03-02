@@ -110,7 +110,7 @@ function UPGRADE:Apply(SWEP)
                 end
             end
 
-            return true
+            dmg:ScaleDamage(0)
         end
     end)
 
