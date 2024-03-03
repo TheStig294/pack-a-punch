@@ -1401,11 +1401,11 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=376441841>
 
 ## Minecraft Block (Creative Mode)
 
-Place blocks at any distance!\
+Greatly increased block placement distance!\
 \
 *ttt_pap_creative_mode* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_creative_mode_placement_distance* - Default: 1200 - Increased block placement distance!
+*pap_creative_mode_placement_distance* - Default: 2400 - Distance blocks can be placed
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2311866661>
 

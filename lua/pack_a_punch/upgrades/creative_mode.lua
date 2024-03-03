@@ -2,16 +2,16 @@ local UPGRADE = {}
 UPGRADE.id = "creative_mode"
 UPGRADE.class = "minecraft_swep"
 UPGRADE.name = "Creative Mode"
-UPGRADE.desc = "Increased block placement distance!"
+UPGRADE.desc = "Greatly increased block placement distance!"
 
 UPGRADE.convars = {
     {
-        name = "pap_creative_mode_placement_distance",
+        name = "pap_creative_mode_distance",
         type = "int"
     }
 }
 
-local distCvar = CreateConVar("pap_creative_mode_placement_distance", 1200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance blocks can be placed", 1, 5000)
+local distCvar = CreateConVar("pap_creative_mode_distance", 2400, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance blocks can be placed", 1, 5000)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then return end
