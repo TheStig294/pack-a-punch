@@ -60,17 +60,15 @@ function UPGRADE:Apply(SWEP)
             target:EmitSound("npc/metropolice/vo/holdit.wav", 50, 100)
             local time = secsCvar:GetInt()
 
-            if time > 0 then
-                timer.Create(target:Nick() .. "_EndCuffed", time, 1, function()
-                    if target:IsValid() and (target:IsPlayer() or target:IsNPC()) and target:GetNWBool("IsCuffed", false) then
-                        ReleasePlayer(target)
+            timer.Create(target:Nick() .. "_EndCuffed", time, 1, function()
+                if target:IsValid() and (target:IsPlayer() or target:IsNPC()) and target:GetNWBool("IsCuffed", false) then
+                    ReleasePlayer(target)
 
-                        if IsValid(owner) then
-                            owner:PrintMessage(HUD_PRINTCENTER, time .. " seconds are up, everyone has been released.")
-                        end
+                    if IsValid(owner) then
+                        owner:PrintMessage(HUD_PRINTCENTER, time .. " seconds are up, everyone has been released.")
                     end
-                end)
-            end
+                end
+            end)
 
             local sid64 = target:SteamID64()
             playerNonDroppables[sid64] = {}
@@ -101,10 +99,6 @@ function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
-        local trace = {}
-        trace.start = owner:EyePos()
-        trace.endpos = trace.start + owner:GetAimVector() * 95
-        trace.filter = owner
 
         for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
             if ply ~= owner then
