@@ -5,10 +5,6 @@ UPGRADE.name = "Platinum Gun"
 UPGRADE.desc = "Shoot a bad guy: Get to shoot again\nDon't shoot a bad guy: One of them gets an extra life!"
 
 function UPGRADE:Apply(SWEP)
-    if SERVER then
-        util.AddNetworkString("TTTPAPPlatinumGunEquipment")
-    end
-
     local function IsBaddie(ply)
         return (ply.IsTraitorTeam and ply:IsTraitorTeam()) or (ply:GetRole() == ROLE_TRAITOR) or (ply.IsIndependentTeam and ply:IsIndependentTeam()) or (ply.IsMonsterTeam and ply:IsMonsterTeam())
     end
@@ -91,9 +87,7 @@ function UPGRADE:Apply(SWEP)
                 ply:SetCredits(credits)
                 -- Equipment
                 ply.equipment_items = items
-                net.Start("TTTPAPPlatinumGunEquipment")
-                net.WriteUInt(ply.equipment_items, 32)
-                net.Send(ply)
+                ply:SendEquipment()
 
                 -- Weapons
                 for _, wep in ipairs(weps) do
@@ -107,13 +101,6 @@ function UPGRADE:Apply(SWEP)
             end)
         end
     end)
-
-    if CLIENT then
-        net.Receive("TTTPAPPlatinumGunEquipment", function()
-            local items = net.ReadUInt(32)
-            LocalPlayer().equipment_items = items
-        end)
-    end
 end
 
 function UPGRADE:Reset()
