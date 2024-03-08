@@ -107,7 +107,6 @@ function UPGRADE:Apply(SWEP)
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
-            self:Remove()
         end)
     end
 end
