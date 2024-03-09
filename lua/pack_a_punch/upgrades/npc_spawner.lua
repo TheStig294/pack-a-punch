@@ -50,14 +50,21 @@ function UPGRADE:Apply(SWEP)
 
     -- Spawning the NPC
     function SWEP:PrimaryAttack()
-        if CLIENT or self.PAPRevivedNPC then return end
+        if CLIENT or self.PAPRevivedNPCCoolown then return end
         local owner = self:GetOwner()
         local tr = owner:GetEyeTrace()
         local rag = tr.Entity
         -- ".player_ragdoll = true" is a flag set by vanilla TTT on player bodies
         if not IsValid(rag) or not rag.player_ragdoll then return end
-        -- Only allow to revive once
-        self.PAPRevivedNPC = true
+        -- Only allow to revive on a cooldown to prevent many NPCs from spawning when spamming the button
+        self.PAPRevivedNPCCoolown = true
+
+        timer.Simple(2, function()
+            if IsValid(self) then
+                self.PAPRevivedNPCCoolown = false
+            end
+        end)
+
         -- Get the info we need from the ragdoll before removing it
         local ragPly = CORPSE.GetPlayer(rag)
         local name = ragPly:Nick()
@@ -88,21 +95,8 @@ function UPGRADE:Apply(SWEP)
                 npc:SelectWeapon("weapon_zm_shotgun")
             end)
 
-            -- Switching roles of the NPC back and forth so the round can end
-            local timername = "TTTPAPNpcRoleSwitch" .. npc:EntIndex()
-
-            timer.Create(timername, 2, 0, function()
-                if not IsValid(npc) then
-                    timer.Remove(timername)
-
-                    return
-                elseif npc:GetRole() == ROLE_TRAITOR then
-                    npc:SetRole(ROLE_INNOCENT)
-                else
-                    npc:SetRole(ROLE_TRAITOR)
-                end
-            end)
-
+            -- Setting the role of the NPC to Old Man so the round can end
+            npc:SetRole(ROLE_NONE)
             -- Make the revive sound
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
