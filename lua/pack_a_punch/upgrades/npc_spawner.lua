@@ -67,6 +67,13 @@ function UPGRADE:Apply(SWEP)
 
         -- Get the info we need from the ragdoll before removing it
         local ragPly = CORPSE.GetPlayer(rag)
+
+        if ragPly:IsBot() then
+            owner:PrintMessage(HUD_PRINTCENTER, "You can't revive an NPC!")
+
+            return
+        end
+
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
         -- Spawn the npc bot!
@@ -85,7 +92,6 @@ function UPGRADE:Apply(SWEP)
             npc:SetCustomCollisionCheck(true)
             -- Try to make NPC unkillable
             npc:GodEnable()
-            npc.PAPOwner = owner
             npc.PAPNpcName = name
 
             timer.Simple(0.5, function()
@@ -95,14 +101,31 @@ function UPGRADE:Apply(SWEP)
                 npc:SelectWeapon("weapon_zm_shotgun")
             end)
 
-            -- Setting the role of the NPC to Old Man so the round can end
+            -- Setting the role of the NPC to none so the round can end
             npc:SetRole(ROLE_NONE)
+            local timername = "TTTPAPNPCSpawnerForceRoleNone" .. npc:EntIndex()
+
+            timer.Create(timername, 1, 0, function()
+                if IsValid(npc) then
+                    npc:SetRole(ROLE_NONE)
+                else
+                    timer.Remove(timername)
+                end
+            end)
+
             -- Make the revive sound
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
         end)
     end
+
+    -- If an NPC changes roles, make then able to take damage again, as an extra fail-safe in case a randomat or something is continually forcing their role back
+    self:AddHook("TTTPlayerRoleChanged", function(npc, oldRole, newRole)
+        if npc.PAPNpcName and newRole ~= ROLE_NONE then
+            npc:GodDisable()
+        end
+    end)
 end
 
 function UPGRADE:Reset()
