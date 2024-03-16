@@ -67,13 +67,10 @@ function UPGRADE:Apply(SWEP)
 
         -- Get the info we need from the ragdoll before removing it
         local ragPly = CORPSE.GetPlayer(rag)
-
-        if ragPly:IsBot() then
-            owner:PrintMessage(HUD_PRINTCENTER, "You can't revive an NPC!")
-
-            return
-        end
-
+        -- if ragPly:IsBot() then
+        --     owner:PrintMessage(HUD_PRINTCENTER, "You can't revive an NPC!")
+        --     return
+        -- end
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
         -- Spawn the npc bot!
@@ -87,6 +84,7 @@ function UPGRADE:Apply(SWEP)
             local npc = player.GetAll()[#player.GetAll()]
             npc:SpawnForRound(true)
             npc:SetModel(model)
+            npc.PAPNpcModel = model
             npc:Give("weapon_zm_shotgun")
             -- Used for "ShouldCollide" hook
             npc:SetCustomCollisionCheck(true)
@@ -121,9 +119,20 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- If an NPC changes roles, make then able to take damage again, as an extra fail-safe in case a randomat or something is continually forcing their role back
-    self:AddHook("TTTPlayerRoleChanged", function(npc, oldRole, newRole)
-        if npc.PAPNpcName and newRole ~= ROLE_NONE then
-            npc:GodDisable()
+    if SERVER then
+        self:AddHook("TTTPlayerRoleChanged", function(npc, oldRole, newRole)
+            if npc.PAPNpcName and newRole ~= ROLE_NONE then
+                npc:GodDisable()
+            end
+        end)
+    end
+
+    -- Reset NPC's model after they respawn
+    self:AddHook("PlayerSpawn", function(npc)
+        if npc.PAPNpcModel then
+            timer.Simple(0.1, function()
+                npc:SetModel(npc.PAPNpcModel)
+            end)
         end
     end)
 end
