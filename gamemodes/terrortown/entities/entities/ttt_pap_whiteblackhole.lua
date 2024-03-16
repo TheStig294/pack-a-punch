@@ -26,23 +26,12 @@ if SERVER then
 			posdiff:Normalize()
 
 			if ent:IsPlayer() and ent:Alive() and not ent:IsSpec() and ent:GetRole() ~= ROLE_JESTER and ent:GetRole() ~= ROLE_SWAPPER and not (ent.IsJesterTeam and ent:IsJesterTeam()) then
-				if ent:GetRole() == ROLE_TRAITOR or (ent.IsTraitorTeam and ent:IsTraitorTeam()) then
-					ent:TakeDamage(math.random(0, 1), self:GetSpawner())
-				else
-					ent:TakeDamage(math.random(2), self:GetSpawner())
-				end
-
+				ent:TakeDamage(math.random(2), self:GetSpawner())
 				self:IncrRadius(0.2)
 				ent:EmitSound("ambient/energy/zap8.wav")
 				ent:ScreenFade(SCREENFADE.IN, screenFadeColour, 0.1, 0.1)
-
-				if ent:GetRole() == ROLE_TRAITOR or (ent.IsTraitorTeam and ent:IsTraitorTeam()) then
-					local forceT = -posdiff * ((self:GetRadius() * 15 - dist) / 10) * 15
-					ent:SetVelocity(forceT)
-				else
-					local force = -posdiff * ((valve_radius - dist) / 25) * 45
-					ent:SetVelocity(force)
-				end
+				local force = -posdiff * ((valve_radius - dist) / 25) * 45
+				ent:SetVelocity(force)
 			end
 		end
 
