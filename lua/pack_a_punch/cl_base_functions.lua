@@ -82,6 +82,22 @@ hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, _, SWEP)
     end
 end)
 
+-- Extra camo reset
+local vm
+
+hook.Add("TTTPrepareRound", "TTTPAPRemoveCamo", function()
+    timer.Simple(0.1, function()
+        if not IsValid(vm) then
+            vm = LocalPlayer():GetViewModel()
+        end
+
+        if vm:GetMaterial() == TTTPAP.camo then
+            vm:SetMaterial("")
+            appliedCamo = false
+        end
+    end)
+end)
+
 -- Sound
 hook.Add("EntityEmitSound", "TTTPAPApplySound", function(data)
     if not IsValid(data.Entity) or not data.Entity.PAPUpgrade or data.Entity.PAPUpgrade.noSound then return end
