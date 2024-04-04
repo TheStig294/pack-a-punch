@@ -122,6 +122,18 @@ Extra ammo + faster reload!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Admin Menu (Server Console)
+
+Right-click someone to upgrade their weapon!
++50 admin power! (Costs 50 power per upgrade)
+\
+*ttt_pap_server_console* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_server_console_admin_power* - Default 50 - Amount of extra admin power to give the admin\
+*pap_server_console_admin_power_cost* - Default 50 - Power upgrading a weapon costs\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
+
 ## AK47 (OK-47)
 
 While held, basic sources of damage you deal heal instead!\
@@ -404,6 +416,16 @@ Infinite Pack-a-Punch presents!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2739622776>
 
+## Christmas Cracker (Loot Cracker)
+
+Sprays out items on opening!\
+\
+*ttt_pap_loot_cracker* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_loot_cracker_item_count* - Default: 8 - Number of items dropped\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3204528626>
+
 ## Chickenator (Egg Multiplier)
 
 Spawned chickens lay more eggs!\
@@ -431,7 +453,7 @@ Can walk through players and movable objects!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1389756626>
 
-## Club (One-shot Club)
+## Club [Cave Troll Randomat Weapon] (One-shot Club)
 
 1-shot kills!\
 \
@@ -439,6 +461,15 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1389756626>
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
+
+## Club [Yeti Hunt Randomat Weapon] (Yeti Wand)
+
+No projectile cooldown, 1.5x melee damage\
+\
+*ttt_pap_yeti_wand* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3204528626>
 
 ## Clutterbomb (Barrel Bomb)
 
@@ -941,6 +972,15 @@ Freezes nearby players too!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=888948962>
 
+## Ghosting Device (Passive Ghoster)
+
+You automatically see all dead players' messages!\
+\
+*ttt_pap_passive_ghoster* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
+
 ## Glock (Mini-Glock)
 
 Big fire rate, ammo, and fire spread increase\
@@ -1095,6 +1135,15 @@ Heal much faster, x2 capacity\
 \
 \
 Upgrade for: Default TTT weapon
+
+## Health Tracker (Auto Tracker)
+
+Auto-tracks all alive players!\
+\
+*ttt_pap_super_tracker* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
 
 ## Holstered (Self-Pack-a-Punch)
 
@@ -2013,6 +2062,16 @@ Spins around on the spot, watch out!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2590612326>
+
+## Soul Binding Device (Soul Powerer)
+
+The Soulbound gains 3 extra abilities!\
+\
+*ttt_pap_soul_powerer* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_soul_powerer_extra_abilities* - Default: 3 - Number of abilities\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
 
 ## Speedgun (Slowgun)
 
