@@ -85,6 +85,7 @@ function UPGRADE:Apply(SWEP)
 
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
+        ragPly.PAPNpcOwner = true
         -- Spawn the npc bot!
         RunConsoleCommand("bot")
 
@@ -128,10 +129,6 @@ function UPGRADE:Apply(SWEP)
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
-
-            if IsValid(owner) then
-                owner.PAPNpcOwner = true
-            end
         end)
     end
 

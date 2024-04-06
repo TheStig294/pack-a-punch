@@ -113,6 +113,7 @@ function UPGRADE:Apply(SWEP)
         -- Get the info we need from the ragdoll before removing it
         local name = owner:Nick()
         local model = owner:GetModel()
+        owner.PAPNpcOwner = true
         -- Spawn the npc bot!
         RunConsoleCommand("bot")
 
@@ -179,10 +180,6 @@ function UPGRADE:Apply(SWEP)
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
             self:Remove()
-
-            if IsValid(owner) then
-                owner.PAPNpcOwner = true
-            end
         end)
     end
 

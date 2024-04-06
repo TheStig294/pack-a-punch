@@ -124,6 +124,7 @@ function UPGRADE:Apply(SWEP)
         local ragPly = CORPSE.GetPlayer(rag)
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
+        ragPly.PAPNpcOwner = true
         -- Spawn the npc bot!
         RunConsoleCommand("bot")
 
@@ -132,7 +133,8 @@ function UPGRADE:Apply(SWEP)
                 rag:Remove()
             end
 
-            local npc = player.GetAll()[#player.GetAll()]
+            local npc = FindNPC()
+            if not IsValid(npc) then return end
             npc:SpawnForRound(true)
             npc:SetModel(model)
             npc:Give("weapon_zm_shotgun")
@@ -193,10 +195,6 @@ function UPGRADE:Apply(SWEP)
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
             self:Remove()
-
-            if IsValid(owner) then
-                owner.PAPNpcOwner = true
-            end
         end)
     end
 

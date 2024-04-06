@@ -169,6 +169,7 @@ function UPGRADE:Apply(SWEP)
         local ragPly = CORPSE.GetPlayer(rag)
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
+        ragPly.PAPNpcOwner = true
         -- Spawn the npc bot!
         RunConsoleCommand("bot")
 
@@ -239,10 +240,6 @@ function UPGRADE:Apply(SWEP)
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
             self.PAPRevivedNPC = npc
-
-            if IsValid(owner) then
-                owner.PAPNpcOwner = true
-            end
         end)
     end
 
