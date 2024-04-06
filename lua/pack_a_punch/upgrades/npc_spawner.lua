@@ -155,7 +155,7 @@ function UPGRADE:Apply(SWEP)
 
     -- Stops users somehow getting kicked? (Don't know how this is happening, couldn't replicate)
     self:AddHook("TTTNameChangeKick", function(ply)
-        if ply.PAPNpcOwner then return false end
+        if ply.PAPNpcOwner then return true end
     end)
 end
 
