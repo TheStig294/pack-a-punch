@@ -28,10 +28,19 @@ function UPGRADE:Apply(SWEP)
         net.Broadcast()
     end
 
+    local function FindNPC()
+        local bots = player.GetBots()
+        local botCount = #bots
+        if botCount <= 0 then return end
+
+        return bots[botCount]
+    end
+
     if CLIENT then
         net.Receive("TTTPAPNpcSpawner", function()
             local name = net.ReadString()
-            local npc = player.GetAll()[#player.GetAll()]
+            local npc = FindNPC()
+            if not IsValid(npc) then return end
             npc.PAPNpc = true
             npc.PAPNpcName = name
 
@@ -67,10 +76,13 @@ function UPGRADE:Apply(SWEP)
 
         -- Get the info we need from the ragdoll before removing it
         local ragPly = CORPSE.GetPlayer(rag)
-        -- if ragPly:IsBot() then
-        --     owner:PrintMessage(HUD_PRINTCENTER, "You can't revive an NPC!")
-        --     return
-        -- end
+
+        if ragPly:IsBot() then
+            owner:PrintMessage(HUD_PRINTCENTER, "You can't revive an NPC!")
+
+            return
+        end
+
         local name = ragPly:Nick()
         local model = ragPly:GetModel()
         -- Spawn the npc bot!
@@ -81,7 +93,8 @@ function UPGRADE:Apply(SWEP)
                 rag:Remove()
             end
 
-            local npc = player.GetAll()[#player.GetAll()]
+            local npc = FindNPC()
+            if not IsValid(npc) then return end
             npc:SpawnForRound(true)
             npc:SetModel(model)
             npc.PAPNpcModel = model
@@ -115,6 +128,10 @@ function UPGRADE:Apply(SWEP)
             self:EmitSound("ambient/energy/zap7.wav")
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
+
+            if IsValid(owner) then
+                owner.PAPNpcOwner = true
+            end
         end)
     end
 
@@ -135,15 +152,22 @@ function UPGRADE:Apply(SWEP)
             end)
         end
     end)
+
+    -- Stops users somehow getting kicked? (Don't know how this is happening, couldn't replicate)
+    self:AddHook("TTTNameChangeKick", function(ply)
+        if ply.PAPNpcOwner then return false end
+    end)
 end
 
 function UPGRADE:Reset()
     if CLIENT then return end
 
-    for _, bot in ipairs(player.GetAll()) do
-        if bot.PAPNpc then
-            bot:Kick()
+    for _, ply in player.Iterator() do
+        if ply.PAPNpc then
+            ply:Kick()
         end
+
+        ply.PAPNpcOwner = nil
     end
 end
 

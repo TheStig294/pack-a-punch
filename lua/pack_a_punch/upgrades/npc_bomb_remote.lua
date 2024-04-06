@@ -45,7 +45,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- Put an outline over the NPC for all traitor players (alive or dead)
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             if (ply.IsTraitorTeam and ply:IsTraitorTeam()) or ply:GetRole() == ROLE_TRAITOR then
                 local msg = "An NPC bomb has been spawned!"
 
@@ -63,12 +63,21 @@ function UPGRADE:Apply(SWEP)
         net.Broadcast()
     end
 
+    local function FindNPC()
+        local bots = player.GetBots()
+        local botCount = #bots
+        if botCount <= 0 then return end
+
+        return bots[botCount]
+    end
+
     if CLIENT then
         net.Receive("TTTPAPRemoteNpcBombSpawn", function()
             local name = net.ReadString()
             local owner = net.ReadEntity()
             local ply = LocalPlayer()
-            local npc = player.GetAll()[#player.GetAll()]
+            local npc = FindNPC()
+            if not IsValid(npc) then return end
             npc.PAPNpcBomb = true
             npc.PAPNpcBombName = name
 
@@ -78,7 +87,7 @@ function UPGRADE:Apply(SWEP)
                     local npcs = {}
 
                     -- Don't draw a halo around an NPC if they're dead or not valid
-                    for _, bot in ipairs(player.GetAll()) do
+                    for _, bot in player.Iterator() do
                         if bot.PAPNpcBomb and bot:Alive() and not bot:IsSpec() then
                             table.insert(npcs, bot)
                         end
@@ -168,7 +177,8 @@ function UPGRADE:Apply(SWEP)
                 rag:Remove()
             end
 
-            local npc = player.GetAll()[#player.GetAll()]
+            local npc = FindNPC()
+            if not IsValid(npc) then return end
             npc:SpawnForRound(true)
             npc:SetModel(model)
             npc:Give("weapon_zm_shotgun")
@@ -229,6 +239,10 @@ function UPGRADE:Apply(SWEP)
             -- Warn all traitors and draw an outline around the NPC
             self:MarkNPC(npc)
             self.PAPRevivedNPC = npc
+
+            if IsValid(owner) then
+                owner.PAPNpcOwner = true
+            end
         end)
     end
 
@@ -275,15 +289,22 @@ function UPGRADE:Apply(SWEP)
 
         self:Remove()
     end
+
+    -- Stops users somehow getting kicked? (Don't know how this is happening, couldn't replicate)
+    self:AddHook("TTTNameChangeKick", function(ply)
+        if ply.PAPNpcOwner then return false end
+    end)
 end
 
 function UPGRADE:Reset()
     if CLIENT then return end
 
-    for _, bot in ipairs(player.GetAll()) do
+    for _, bot in player.Iterator() do
         if bot.PAPNpcBomb then
             bot:Kick()
         end
+
+        ply.PAPNpcOwner = nil
     end
 end
 
