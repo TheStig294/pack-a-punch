@@ -88,7 +88,10 @@ local vm
 hook.Add("TTTPrepareRound", "TTTPAPRemoveCamo", function()
     timer.Simple(0.1, function()
         if not IsValid(vm) then
-            vm = LocalPlayer():GetViewModel()
+            local client = LocalPlayer()
+            if not IsValid(client) then return end
+            vm = client:GetViewModel()
+            if not IsValid(vm) then return end
         end
 
         if vm:GetMaterial() == TTTPAP.camo then
