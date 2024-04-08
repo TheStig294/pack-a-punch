@@ -37,32 +37,33 @@ function UPGRADE:Apply(SWEP)
     end
 
     if SERVER then
-        local own = SWEP:GetOwner()
-        local ownerShootPos = own:GetShootPos()
+        local owner = SWEP:GetOwner()
+        if not IsValid(owner) then return end
+        local ownerShootPos = owner:GetShootPos()
         -- Place mech in same direction as player is facing
-        local angles = own:GetAngles()
+        local angles = owner:GetAngles()
         angles.z = 0
         local mech = ents.Create("d.va_mech")
         mech:SetAngles(angles)
-        mech:SetPos(own:GetPos())
+        mech:SetPos(owner:GetPos())
         mech:Spawn()
         mech.PAPNerfThisStopDamage = true
 
         -- Start nerf this explosion after a delay, after the callout sound has finished playing
         timer.Simple(2, function()
-            if not IsValid(mech) or not IsValid(own) then return end
+            if not IsValid(mech) or not IsValid(owner) then return end
             mech:SetNWFloat("UltiCharge", 1000)
-            mech.Activator = own
+            mech.Activator = owner
             mech:Self_Destruct()
 
             -- Triggering the explosion a split-second before the mech does it itself, so we can re-block the damage later
             timer.Simple(3.4, function()
-                if not IsValid(mech) or not IsValid(own) then return end
+                if not IsValid(mech) or not IsValid(owner) then return end
                 mech.PAPNerfThisStopDamage = false
                 local dmg = DamageInfo()
                 dmg:SetDamageType(DMG_BLAST)
                 dmg:SetDamage(damageCvar:GetInt())
-                dmg:SetAttacker(own)
+                dmg:SetAttacker(owner)
                 dmg:SetInflictor(mech)
                 -- Now, search for all players that are not behind cover, and damage them!
                 local Trace = {}
@@ -71,11 +72,11 @@ function UPGRADE:Apply(SWEP)
 
                 for _, ent in ipairs(ents.FindInSphere(ownerShootPos, radiusCvar:GetInt())) do
                     -- Skip damaging the owner (if enabled), and the mech itself
-                    if not IsValid(ent) or (ent == own and ownerImmuneCvar:GetInt()) or ent == mech then continue end
+                    if not IsValid(ent) or (ent == owner and ownerImmuneCvar:GetInt()) or ent == mech then continue end
                     -- Skip damaging dead players
                     if ent:IsPlayer() and not self:IsAlive(ent) then continue end
 
-                    Trace.filter = {mech, own, ent}
+                    Trace.filter = {mech, owner, ent}
 
                     Trace.endpos = ent:GetPos()
 
