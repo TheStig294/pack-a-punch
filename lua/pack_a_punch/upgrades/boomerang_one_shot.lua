@@ -9,11 +9,6 @@ function UPGRADE:Apply(SWEP)
     SWEP:GetOwner().PAP1ShotBoomerang = true
     SWEP.Primary.Damage = 10000
 
-    if CLIENT and SWEP.VElements and SWEP.WElements then
-        SWEP.VElements.boomerang.material = TTTPAP.camo
-        SWEP.WElements.boomerang.material = TTTPAP.camo
-    end
-
     function SWEP:PrimaryAttack()
         if self:Clip1() <= 0 then return end
         local owner = self:GetOwner()

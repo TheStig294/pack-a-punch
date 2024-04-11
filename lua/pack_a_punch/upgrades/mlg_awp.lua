@@ -13,8 +13,6 @@ function UPGRADE:Apply(SWEP)
         SWEP.Primary.ClipSize = 4
     end)
 
-    SWEP.WElements.nsAWP.material = TTTPAP.camo
-
     -- Players hear a random MLG-themed sound on killing someone
     self:AddHook("DoPlayerDeath", function(ply, attacker, dmg)
         if not self:IsPlayer(attacker) then return end

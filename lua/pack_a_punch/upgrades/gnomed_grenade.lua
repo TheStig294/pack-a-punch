@@ -6,11 +6,6 @@ UPGRADE.desc = "x2 grenades, victims actually get gnomed"
 UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
-    if CLIENT and SWEP.VElements and SWEP.WElements then
-        SWEP.VElements.gnome_grenade.material = TTTPAP.camo
-        SWEP.WElements.gnome_grenade.material = TTTPAP.camo
-    end
-
     SWEP.Primary.ClipSize = 2
 
     timer.Simple(0.1, function()

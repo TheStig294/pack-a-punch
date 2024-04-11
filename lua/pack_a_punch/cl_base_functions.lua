@@ -63,6 +63,21 @@ net.Receive("TTTPAPApply", function()
         end
     end
 
+    -- Camo (SWEP construction kit weapons)
+    if not UPGRADE.noCamo then
+        if SWEP.VElements and istable(SWEP.VElements) then
+            for _, element in pairs(SWEP.VElements) do
+                element.material = TTTPAP.camo
+            end
+        end
+
+        if SWEP.WElements and istable(SWEP.WElements) then
+            for _, element in pairs(SWEP.WElements) do
+                element.material = TTTPAP.camo
+            end
+        end
+    end
+
     -- Upgraded flag
     SWEP.PAPUpgrade = UPGRADE
 end)

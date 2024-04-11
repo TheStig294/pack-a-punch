@@ -8,11 +8,6 @@ UPGRADE.noCamo = true
 function UPGRADE:Apply(SWEP)
     SWEP:GetOwner().PAPExplosiveBoomerang = true
 
-    if CLIENT and SWEP.VElements and SWEP.WElements then
-        SWEP.VElements.boomerang.material = TTTPAP.camo
-        SWEP.WElements.boomerang.material = TTTPAP.camo
-    end
-
     timer.Simple(0.1, function()
         SWEP:SetClip1(-1)
     end)

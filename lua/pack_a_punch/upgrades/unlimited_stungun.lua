@@ -5,18 +5,6 @@ UPGRADE.name = "Unlimited Stungun"
 UPGRADE.desc = "Unlimited ammo!"
 
 function UPGRADE:Apply(SWEP)
-    if CLIENT then
-        SWEP.VElements["Yellowbox+"].material = TTTPAP.camo
-        SWEP.VElements.Yellowbox.material = TTTPAP.camo
-        SWEP.VElements["Yellowbox+++"].material = TTTPAP.camo
-        SWEP.VElements["Yellowbox++"].material = TTTPAP.camo
-        SWEP.VElements.Blackreceiver.material = TTTPAP.camo
-        SWEP.VElements.counter.material = TTTPAP.camo
-        SWEP.WElements.Yellowbox.material = TTTPAP.camo
-        SWEP.WElements["Yellowbox+"].material = TTTPAP.camo
-        SWEP.WElements.Blackreceiver.material = TTTPAP.camo
-    end
-
     self:AddHook("Think", function()
         for _, ply in pairs(player.GetAll()) do
             local wep = ply:GetActiveWeapon()

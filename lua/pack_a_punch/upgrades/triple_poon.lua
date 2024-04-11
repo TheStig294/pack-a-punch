@@ -14,11 +14,6 @@ function UPGRADE:Apply(SWEP)
         SWEP:SetClip1(3)
     end)
 
-    if CLIENT then
-        SWEP.VElements.harpoon.material = TTTPAP.camo
-        SWEP.WElements.WHarpoon.material = TTTPAP.camo
-    end
-
     if SERVER then
         function SWEP:CreateArrow(aType, owner)
             if not IsValid(owner) then
