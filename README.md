@@ -67,6 +67,11 @@ Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedeta
 <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>\
 Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)
 
+## Spongifier (Spongbobifier)
+
+<https://steamcommunity.com/workshop/filedetails/?id=2421039084>\
+Requires: [SpongeBob SquarePants Playermodel!](https://steamcommunity.com/sharedfiles/filedetails/?id=1915222654)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -2091,6 +2096,16 @@ Spun players get flung away!
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
+
+## Spongifier (Spongebobifier)
+
+Quicker use, turns you into spongebob!\
+\
+*ttt_pap_spongebobifier* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_spongebobifier_time* - Default: 4 - Secs to use spongebobifier\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Staff of Lightning (Kimat's Bite)
 
