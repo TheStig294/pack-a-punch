@@ -3,7 +3,6 @@ UPGRADE.id = "gnomed_grenade"
 UPGRADE.class = "weapon_gnome_grenade"
 UPGRADE.name = "Gnomed Grenade"
 UPGRADE.desc = "x2 grenades, victims actually get gnomed"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = 2

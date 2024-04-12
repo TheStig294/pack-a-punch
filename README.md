@@ -270,7 +270,7 @@ Appears HUGE for everyone else, or when on the ground!\
 *ttt_pap_glock_giant* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_glock_giant_scale* - Default: 10 - Size scale multiplier\
-*pap_glock_giant_use_camo* - Default: 0 - Apply the Pack-a-Punch camo/texture?\
+*pap_glock_giant_uses_camo* - Default: 1 - Apply the Pack-a-Punch camo/texture?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2169931075>
 
@@ -1490,7 +1490,7 @@ Appears HUGE for everyone else, all stats up!\
 *ttt_pap_megagun* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_megagun_scale* - Default: 10 - Size scale multiplier\
-*pap_megagun_use_camo* - Default: 0 - Apply the Pack-a-Punch camo/texture?\
+*pap_megagun_uses_camo* - Default: 1 - Apply the Pack-a-Punch camo/texture?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2452829736>
 

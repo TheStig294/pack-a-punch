@@ -3,7 +3,6 @@ UPGRADE.id = "triple_poon"
 UPGRADE.class = "ttt_m9k_harpoon"
 UPGRADE.name = "Triple Poon"
 UPGRADE.desc = "Throw 3 harpoons at once!"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipSize = 3

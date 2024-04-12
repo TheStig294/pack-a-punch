@@ -3,7 +3,6 @@ UPGRADE.id = "boomerang_one_shot"
 UPGRADE.class = "weapon_ttt_boomerang_randomat"
 UPGRADE.name = "1-Shot Boomerang"
 UPGRADE.desc = "It's a 1-shot if it hits you once!"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     SWEP:GetOwner().PAP1ShotBoomerang = true

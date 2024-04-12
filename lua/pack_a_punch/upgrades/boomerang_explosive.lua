@@ -3,7 +3,6 @@ UPGRADE.id = "boomerang_explosive"
 UPGRADE.class = "weapon_ttt_boomerang"
 UPGRADE.name = "Explosive Boomerang"
 UPGRADE.desc = "Boomerang explodes on touch!"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     SWEP:GetOwner().PAPExplosiveBoomerang = true

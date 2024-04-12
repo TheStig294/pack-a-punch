@@ -23,7 +23,7 @@ UPGRADE.convars = {
 
 local scaleCvar = CreateConVar("pap_megagun_scale", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale multiplier", 1, 20)
 
-local camoCvar = CreateConVar("pap_megagun_use_camo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the Pack-a-Punch camo/texture?", 0, 1)
+local camoCvar = CreateConVar("pap_megagun_uses_camo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the Pack-a-Punch camo/texture?", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     local scale = scaleCvar:GetFloat()

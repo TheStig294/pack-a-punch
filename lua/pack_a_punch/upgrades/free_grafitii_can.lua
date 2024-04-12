@@ -3,7 +3,6 @@ UPGRADE.id = "free_graffiti_can"
 UPGRADE.class = "weapon_spraymhs"
 UPGRADE.name = "Graffiti"
 UPGRADE.desc = "Forcibly gives everyone a graffiti can!"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

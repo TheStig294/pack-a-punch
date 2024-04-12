@@ -3,7 +3,6 @@ UPGRADE.id = "explosive_parasite_cure"
 UPGRADE.class = "weapon_qua_fake_cure"
 UPGRADE.name = "Parasite Cure"
 UPGRADE.desc = "\"Cures\" a player of a parasite,\nby exploding them after 5 seconds!"
-UPGRADE.noCamo = true
 
 function UPGRADE:Apply(SWEP)
     local msg = "That's one way to cure the parasite..."
