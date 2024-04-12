@@ -849,6 +849,16 @@ x2 mouse sensitivity\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
+## Eagleflight Gun (Eagle Flying Gun)
+
+Lets you ragdoll again 2 times!\
+\
+*ttt_pap_eagle_flying_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_eagle_flying_gun_ammo* - Default: 2 - Amount of times you can ragdoll\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1326870555>
+
 ## Exorcism Device (Ghost Buster)
 
 Multiple uses, kills a phantom without them haunting you!\
