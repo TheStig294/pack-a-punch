@@ -1472,6 +1472,16 @@ Heals you more at once, and other players around you!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=376441841>
 
+## Meme Gun (GIF Gun)
+
+x2 ammo, memes are animated GIFs!\
+(Add your own memes by placing them in "materials/ttt_pack_a_punch/gif_gun/" in a .vtf format, with UnlitGeneric and "$nocull 1" set in the .vmt file)\
+\
+*ttt_pap_gif_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966657768>
+
 ## Minecraft Block (Creative Mode)
 
 Greatly increased block placement distance!\
