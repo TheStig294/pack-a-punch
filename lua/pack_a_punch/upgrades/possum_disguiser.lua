@@ -3,7 +3,7 @@ UPGRADE.id = "possum_disguiser"
 UPGRADE.class = "weapon_psm_disguiser"
 UPGRADE.name = "Possum Disguise"
 UPGRADE.desc = "Increased disguiser capacity"
-local possumModel = "models/TSBB/Animals/Possum.mdl"
+local possumModel = "models/tsbb/animals/possum.mdl"
 local possumInstalled = util.IsValidModel(possumModel)
 
 if possumInstalled then
@@ -28,9 +28,21 @@ function UPGRADE:Apply(SWEP)
 
     if possumInstalled then
         self:AddHook("PlayerPostThink", function(ply)
+            local ragdoll = ply.possumRagdoll
+
             -- Set model on disguise
-            if IsValid(ply.possumRagdoll) and ply:HasWeapon(self.class) and ply:GetWeapon(self.class).PAPUpgrade then
-                ply.possumRagdoll:SetModel(possumModel)
+            if IsValid(ragdoll) and ply:HasWeapon(self.class) and ply:GetWeapon(self.class).PAPUpgrade and not IsValid(ragdoll.PAPPossumModel) then
+                ragdoll:SetNoDraw(true)
+                local possum = ents.Create("prop_physics")
+                local pos = ragdoll:GetPos()
+                local ang = ragdoll:GetAngles()
+                possum:SetModel(possumModel)
+                possum:SetParent(ragdoll)
+                possum:SetPos(pos)
+                possum:SetAngles(ang)
+                possum:Spawn()
+                possum:PhysWake()
+                ragdoll.PAPPossumModel = possum
             end
         end)
     end
