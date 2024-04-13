@@ -1293,6 +1293,15 @@ Plays the John Cena intro before exploding!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=105875340>
 
+## John Bomb (You Can't See Me)
+
+Become semi-invisible while holding\
+\
+*ttt_pap_you_cant_see_me* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329729175>
+
 ## King Crimson (Time Skip Fists)
 
 Press 'R' to gain damage resistance and slow down time, but you move at normal speed!\
