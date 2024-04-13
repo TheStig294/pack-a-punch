@@ -144,5 +144,9 @@ function UPGRADE:IsAlivePlayer(ply)
     return self:IsPlayer(ply) and self:IsAlive(ply)
 end
 
+function UPGRADE:IsUpgraded(SWEP)
+    return SWEP.PAPUpgrade and SWEP.PAPUpgrade.id == self.id
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE

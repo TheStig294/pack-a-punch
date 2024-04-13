@@ -23,7 +23,7 @@ function UPGRADE:Apply(SWEP)
         if not self:IsPlayer(inflictor) then return end
         inflictor = inflictor:GetActiveWeapon()
 
-        if IsValid(inflictor) and inflictor:GetClass() == self.class and inflictor.PAPUpgrade and inflictor.PAPUpgrade.id == self.id then
+        if IsValid(inflictor) and inflictor:GetClass() == self.class and self:IsUpgraded(inflictor) then
             ent:SetRole(ROLE_JESTER)
             SendFullStateUpdate()
 

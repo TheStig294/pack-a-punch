@@ -12,7 +12,7 @@ function UPGRADE:Apply(SWEP)
         if not self:IsPlayer(attacker) then return end
         local wep = attacker:GetActiveWeapon()
 
-        if wep.PAPUpgrade and wep.PAPUpgrade.id == self.id then
+        if self:IsUpgraded(wep) then
             local timername = victim:SteamID64() .. "TTTPAPAccensionGunLift"
 
             timer.Create(victim:SteamID64() .. "TTTPAPAccensionGunLift", 0.01, 2000, function()

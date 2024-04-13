@@ -16,7 +16,7 @@ function UPGRADE:Apply(SWEP)
         local jetgun = dmg:GetInflictor()
         if not IsValid(jetgun) or WEPS.GetClass(jetgun) ~= self.class then return end
 
-        if jetgun.PAPUpgrade and jetgun.PAPUpgrade.id == self.id then
+        if self:IsUpgraded(jetgun) then
             local owner = jetgun:GetOwner()
             ply:Spectate(OBS_MODE_CHASE)
             ply:SpectateEntity(jetgun)

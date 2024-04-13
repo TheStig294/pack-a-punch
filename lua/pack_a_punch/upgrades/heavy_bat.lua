@@ -25,7 +25,7 @@ function UPGRADE:Apply(SWEP)
         local inflictor = dmg:GetInflictor()
         if not IsValid(inflictor) or WEPS.GetClass(inflictor) ~= self.class then return end
 
-        if inflictor.PAPUpgrade and inflictor.PAPUpgrade.id == "heavy_bat" then
+        if self:IsUpgraded(inflictor) then
             local owner = inflictor:GetOwner()
 
             if IsValid(owner) then

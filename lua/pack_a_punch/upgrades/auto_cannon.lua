@@ -22,7 +22,7 @@ hook.Add("InitPostEntity", "TTTPAPModifyOrchestralCannon", function()
         local oldUse = zay.f.Artillery_USE
 
         function zay.f.Artillery_USE(Artillery, ply)
-            if Artillery.PAPUpgrade and Artillery.PAPUpgrade.id == UPGRADE.id then
+            if UPGRADE:IsUpgraded(Artillery) then
                 RemoveCannon(Artillery)
             else
                 return oldUse(Artillery, ply)

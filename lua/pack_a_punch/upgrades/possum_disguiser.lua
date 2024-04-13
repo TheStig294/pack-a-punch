@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
             local ragdoll = ply.possumRagdoll
 
             -- Set model on disguise
-            if IsValid(ragdoll) and ply:HasWeapon(self.class) and ply:GetWeapon(self.class).PAPUpgrade and not IsValid(ragdoll.PAPPossumModel) then
+            if IsValid(ragdoll) and not IsValid(ragdoll.PAPPossumModel) and ply:HasWeapon(self.class) and self:IsUpgraded(ply:GetWeapon(self.class)) then
                 ragdoll:SetNoDraw(true)
                 local possum = ents.Create("prop_physics")
                 local pos = ragdoll:GetPos()

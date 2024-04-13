@@ -69,7 +69,7 @@ function UPGRADE:Apply(SWEP)
     upgradeApplied = true
 
     hook.Add("DeadRingerCloak", "TTTPAPGhostRingerTTT2", function(ringer, owner, dmg, rag)
-        if ringer.PAPUpgrade and ringer.PAPUpgrade.id == self.id then
+        if self:IsUpgraded(ringer) then
             owner:SetMoveType(MOVETYPE_NOCLIP)
         end
     end)

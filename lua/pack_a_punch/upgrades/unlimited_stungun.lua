@@ -9,7 +9,7 @@ function UPGRADE:Apply(SWEP)
         for _, ply in pairs(player.GetAll()) do
             local wep = ply:GetActiveWeapon()
 
-            if IsValid(wep) and wep.PAPUpgrade and wep.PAPUpgrade.id == self.id then
+            if IsValid(wep) and self:IsUpgraded(wep) then
                 wep:SetClip1(wep.Primary.ClipSize)
             end
         end

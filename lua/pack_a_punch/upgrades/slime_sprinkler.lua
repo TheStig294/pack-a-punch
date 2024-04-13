@@ -20,7 +20,7 @@ function UPGRADE:Apply(SWEP)
         local attacker = dmg:GetAttacker()
         if not IsValid(attacker) or not attacker:IsPlayer() then return end
         local wep = attacker:GetWeapon(self.class)
-        if inflictor:GetClass() == "obj_sliquifier_proj" and IsValid(wep) and wep.PAPUpgrade and wep.PAPUpgrade.id == self.id then return true end
+        if inflictor:GetClass() == "obj_sliquifier_proj" and IsValid(wep) and self:IsUpgraded(wep) then return true end
     end)
 end
 

@@ -90,7 +90,7 @@ function UPGRADE:Reset()
         for _, ply in ipairs(player.GetAll()) do
             local holstered = ply:GetWeapon("weapon_ttt_unarmed")
 
-            if IsValid(holstered) and holstered.PAPUpgrade and holstered.PAPUpgrade.id == self.id then
+            if IsValid(holstered) and self:IsUpgraded(holstered) then
                 holstered:Remove()
                 ply:Give("weapon_ttt_unarmed")
             end
