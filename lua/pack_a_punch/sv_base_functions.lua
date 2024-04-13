@@ -272,6 +272,15 @@ function TTTPAP:ApplyRandomUpgrade(SWEP)
     if not SWEP.PAPUpgrade then
         local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
         UPGRADE.noDesc = true
-        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+
+        local function Try()
+            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+        end
+
+        local function Catch(err)
+            ErrorNoHalt("WARNING: Pack-a-Punch upgrade '" .. UPGRADE.id .. "' caused an error being applied to '" .. tostring(SWEP) .. "'. Please report to the addon developer with the following error:\n", err, "\n")
+        end
+
+        xpcall(Try, Catch)
     end
 end
