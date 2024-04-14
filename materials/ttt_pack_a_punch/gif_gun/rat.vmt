@@ -1,0 +1,15 @@
+"UnlitGeneric"
+{
+	$baseTexture "ttt_pack_a_punch/gif_gun/rat"
+	"$nocull" "1"
+
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" 			"$basetexture"
+			"animatedTextureFrameNumVar"	"$frame"
+			"animatedTextureFrameRate" 		"15"
+		}
+	}
+}

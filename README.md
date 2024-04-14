@@ -1475,7 +1475,10 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=376441841>
 ## Meme Gun (GIF Gun)
 
 x2 ammo, memes are animated GIFs!\
-(Add your own memes by placing them in "materials/ttt_pack_a_punch/gif_gun/" in a .vtf format, with UnlitGeneric and "$nocull 1" set in the .vmt file)\
+\
+Add your own memes by placing them in "materials/ttt_pack_a_punch/gif_gun/" in a .vtf format, with UnlitGeneric and "$nocull 1" set in the .vmt file\
+Add your own memes sounds by placing them in "sound/ttt_pack_a_punch/gif_gun/" in a .mp3 format, with 44100Hz sample rate (Gmod doesn't work with higher-quality sound files)\
+(Have a look at the ones included with this mod for an example)\
 \
 *ttt_pap_gif_gun* - Default: 1 - Whether this upgrade is enabled
 \

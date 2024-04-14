@@ -2,14 +2,14 @@
 {
 	$baseTexture "ttt_pack_a_punch/gif_gun/catjam"
 	"$nocull" "1"
-	
+
 	"Proxies"
 	{
 		"AnimatedTexture"
 		{
 			"animatedTextureVar" 			"$basetexture"
 			"animatedTextureFrameNumVar"	"$frame"
-			"animatedTextureFrameRate" 		"10"
+			"animatedTextureFrameRate" 		"15"
 		}
 	}
 }
