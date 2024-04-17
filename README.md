@@ -1504,6 +1504,14 @@ Greatly increased block placement distance!\
 *pap_creative_mode_placement_distance* - Default: 2400 - Distance blocks can be placed
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2311866661>
+## Mine Turtle (Train Turtle)
+
+x2 ammo, runs the victim over with a train!\
+\
+*ttt_pap_mine_train* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=643230441>
 
 ## Minifier (Shrink Ray)
 
