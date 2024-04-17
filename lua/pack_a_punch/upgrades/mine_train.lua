@@ -22,6 +22,7 @@ function UPGRADE:Apply(SWEP)
                 mine:SetPlacer(owner)
                 mine:Spawn()
                 mine:SetMaterial(TTTPAP.camo)
+                mine.PAPUpgrade = UPGRADE
                 mine.fingerprints = self.fingerprints
                 local phys = mine:GetPhysicsObject()
 
@@ -72,6 +73,7 @@ function UPGRADE:Apply(SWEP)
                         mine:SetPlacer(owner)
                         mine:Spawn()
                         mine:SetMaterial(TTTPAP.camo)
+                        mine.PAPUpgrade = UPGRADE
                         mine.fingerprints = self.fingerprints
                         local phys = mine:GetPhysicsObject()
 
