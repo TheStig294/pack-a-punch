@@ -1485,6 +1485,16 @@ Add your own memes sounds by placing them in "sound/ttt_pack_a_punch/gif_gun/" i
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966657768>
 
+## Mimic Spawner (Player Mimic Spawner)
+
+Spawns hostile player-mimics! They shoot anyone on sight!\
+\
+*ttt_pap_player_mimic_spawner* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_player_mimic_spawner_mimics_per_player* - Default: 1 - No. of mimics spawned per player
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1092624255>
+
 ## Minecraft Block (Creative Mode)
 
 Greatly increased block placement distance!\
