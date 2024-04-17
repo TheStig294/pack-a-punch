@@ -1,7 +1,7 @@
 local UPGRADE = {}
-UPGRADE.id = "mine_train"
+UPGRADE.id = "train_turtle"
 UPGRADE.class = "weapon_ttt_mine_turtle"
-UPGRADE.name = "Mine Train"
+UPGRADE.name = "Train Turtle"
 UPGRADE.desc = "x2 ammo, runs the victim over with a train!"
 UPGRADE.ammoMult = 2
 

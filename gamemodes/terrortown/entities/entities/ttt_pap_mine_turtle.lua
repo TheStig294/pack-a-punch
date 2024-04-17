@@ -3,7 +3,7 @@ ENT.Type = "anim"
 ENT.Base = "ttt_mine_turtle"
 ENT.HelloSound = Sound("ttt_pack_a_punch/mine_train/i_like_trains.mp3")
 ENT.ExplosionSound = Sound("ttt_pack_a_punch/mine_train/train.mp3")
-ENT.PrintName = "Mine Train"
+ENT.PrintName = "Train Turtle"
 
 function ENT:Explode(checkActive)
     if IsValid(self) and not self.Exploding then
