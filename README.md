@@ -1590,6 +1590,15 @@ Makes old school western gunshot sounds!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
+## One Punch!!! (Quick One Punch!!!)
+
+x2 punch speed, shows the anime intro around you!\
+\
+*ttt_pap_quick_one_punch* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2609859728>
+
 ## Oscar The Cat (Oscar The Rainbow Cat)
 
 Do do do do doooo...\
