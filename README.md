@@ -2251,6 +2251,15 @@ You make higher-pitched sounds!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## The Xmas Gun (The Nyan Cannon)
+
+x2 ammo, shoots Nyan Cats!
+\
+*ttt_pap_nyan_cannon* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329750618>
+
 ## Throwable Crowbar (Throwable Freeman's Club)
 
 x2 swing speed, first throw kills in 1-shot,

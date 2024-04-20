@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "ttt_pack_a_punch/nyan_cannon/trail"
+	"$translucent" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
