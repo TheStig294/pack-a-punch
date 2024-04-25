@@ -86,10 +86,6 @@ Zombie sound effects used in upgraded Custom Roles zombie claws from: <https://w
 "evil laugh-18.wav" and "Evil Laugh 6.wav" (<https://freesound.org/people/Nanakisan/sounds/132817/>
 and <https://freesound.org/people/Nanakisan/sounds/253528/>) by Nanakisan is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
 
-"Openable pokeball" (<https://skfb.ly/ox8tK>) by MCStevebrine12 is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
-
-"Pokeball Sounds Remade.wav" (<https://freesound.org/people/Pablobd/sounds/516687/>) by Pablobd is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/3.0/>)
-
 "Windows Error Remix" by Fabio Mariano used in the popup gun upgrade: <https://www.youtube.com/watch?v=D3-vBBQKOYU>
 
 1812 Overture, Op. 49 by Pyotr Ilyich Tchaikovsky, performed by Skidmore College Orchestra is licensed under Public Domain Mark 1.0 (<https://creativecommons.org/publicdomain/mark/1.0/>)
@@ -715,38 +711,6 @@ Single-use, disarms all C4s on the map!\
 \
 \
 Upgrade for: Default TTT weapon
-
-## Deputy Badge (Pokeball)
-
-Catch a player, and instantly promote and heal them on release!
-The chance to catch them increases if they aren't at full health\
-\
-*ttt_pap_pokeball_marshal* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_pokeball_throw_strength* - Default: 1000 - Throw strength\
-*pap_pokeball_throw_distance* - Default: 25 - Distance ball spawns from throwing player\
-*pap_pokeball_min_catch_chance* - Default: 50 - % chance to catch at full health\
-*pap_pokeball_auto_release_secs* - Default: 20 - Seconds until players auto-release\
-*pap_pokeball_auto_remove_secs* - Default: 6 - Seconds until missed ball disappears\
-*pap_pokeball_allow_self_capture* - Default: 1 - Allow players to capture themselves?\
-\
-Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
-
-## Detective Ball (Pokeball)
-
-Works with non-vanilla roles on catching and releasing a player!
-The chance to catch them increases if they aren't at full health\
-\
-*ttt_pap_pokeball_detective_ball* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_pokeball_throw_strength* - Default: 1000 - Throw strength\
-*pap_pokeball_throw_distance* - Default: 25 - Distance ball spawns from throwing player\
-*pap_pokeball_min_catch_chance* - Default: 50 - % chance to catch at full health\
-*pap_pokeball_auto_release_secs* - Default: 20 - Seconds until players auto-release\
-*pap_pokeball_auto_remove_secs* - Default: 6 - Seconds until missed ball disappears\
-*pap_pokeball_allow_self_capture* - Default: 1 - Allow players to capture themselves?\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1778507380>
 
 ## Detonator (Insurance Detonator)
 
