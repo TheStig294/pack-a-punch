@@ -1413,19 +1413,6 @@ A magneto-stick that exclusively picks up players!\
 \
 Upgrade for: Default TTT weapon
 
-## Mario Mushroom (Mini Mush)
-
-Makes you tiny instead!\
-\
-*ttt_pap_mini_mush* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_mini_mush_scale* - Default: 0.3 - Player scale\
-*pap_mini_mush_health* - Default: 30 - Player health\
-*pap_mini_mush_armor* - Default: 0 - Player armor\
-*pap_mini_mush_duration* - Default: 30 - Seconds duration\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2813468706>
-
 ## Medkit (AOE Medkit)
 
 Heals you more at once, and other players around you!\
