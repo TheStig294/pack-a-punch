@@ -712,6 +712,15 @@ Single-use, disarms all C4s on the map!\
 \
 Upgrade for: Default TTT weapon
 
+## Detective Ball (Guaranteed Ball)
+
+Detonates the player who has your detonator!\
+\
+*ttt_pap_guaranteed_ball* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=628655839>
+
 ## Detonator (Insurance Detonator)
 
 Detonates the player who has your detonator!\
@@ -1412,6 +1421,15 @@ A magneto-stick that exclusively picks up players!\
 *pap_player_magneto_stick_multi_pickup* - Default: 0 - Players can be picked up more than once a round\
 \
 Upgrade for: Default TTT weapon
+
+## Marshal Badge (Promotion Badge)
+
+Auto-promotes the player to detective!\
+\
+*ttt_pap_promotion_badge* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
 ## Medkit (AOE Medkit)
 
