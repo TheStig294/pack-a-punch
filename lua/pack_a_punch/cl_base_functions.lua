@@ -3,7 +3,7 @@
 -- 
 net.Receive("TTTPAPApply", function()
     local SWEP = net.ReadEntity()
-    print(SWEP)
+   
     if not IsValid(SWEP) then return end
     -- Reading data from server
     local delay = net.ReadFloat()
@@ -53,13 +53,10 @@ net.Receive("TTTPAPApply", function()
         SWEP.PrintName = "PAP " .. LANG.TryTranslation(SWEP.PrintName)
     end
 
-    print(UPGRADE.desc, noDesc)
-
     -- Description
     if UPGRADE.desc and not noDesc then
         -- Need to check this is the player actually holding the weapon!
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
-            print(wep, SWEP)
 
             if wep == SWEP then
                 chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)

@@ -326,7 +326,7 @@ function UPGRADE:Apply(SWEP)
 
     SWEP.PrintName = self.name
     SWEP.WorldModel = "models/basketball.mdl"
-    local SWEPKind = SWEP.Kind
+    local basketballKind = SWEP.Kind
 
     timer.Simple(0.1, function()
         if not IsValid(SWEP) then return end
@@ -342,7 +342,7 @@ function UPGRADE:Apply(SWEP)
             for _, wep in ipairs(ply:GetWeapons()) do
                 local classname = WEPS.GetClass(wep)
 
-                if wep.Kind == SWEPKind and classname ~= self.ClassName then
+                if wep.Kind == basketballKind and classname ~= self.ClassName then
                     ply:StripWeapon(classname)
                 end
             end
