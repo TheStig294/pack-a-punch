@@ -13,7 +13,7 @@ UPGRADE.convars = {
 
 function UPGRADE:Apply(SWEP)
     function SWEP:GetGrenadeName()
-        return "ttt_fast_motion_grenade_proj"
+        return "ttt_pap_fast_motion_grenade_proj"
     end
 end
 

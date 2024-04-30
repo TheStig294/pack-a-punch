@@ -1506,7 +1506,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2452829736>
 
 ## Moonball (Basketball)
 
-Left: throw, Right: slam, R: Spin, E: pick up\
+Left-click to pass. Hold right-click, look up and jump to slam!\
 \
 *ttt_pap_basketball* - Default: 1 - Whether this upgrade is enabled
 \

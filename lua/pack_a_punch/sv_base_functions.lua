@@ -185,7 +185,9 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
         end
 
         -- Apply the upgrade!
-        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+        timer.Simple(0.1, function()
+            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+        end)
 
         return
     end
@@ -250,6 +252,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     SWEP.PAPUpgrade = UPGRADE
     -- Client-side changes
     net.Start("TTTPAPApply")
+    print(SWEP)
     net.WriteEntity(SWEP)
     net.WriteFloat(SWEP.Primary.Delay or -1)
     net.WriteFloat(SWEP.Primary.RPM or -1)
