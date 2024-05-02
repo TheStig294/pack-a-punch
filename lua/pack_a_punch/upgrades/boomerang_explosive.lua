@@ -57,11 +57,9 @@ function UPGRADE:Apply(SWEP)
         local class = weapon:GetClass()
 
         if owner.PAPExplosiveBoomerang and class == self.class then
-            timer.Simple(0.1, function()
-                -- Prevent the upgrade description from being displayed every time the weapon is received
-                self.noDesc = true
-                TTTPAP:ApplyUpgrade(weapon, self)
-            end)
+            -- Prevent the upgrade description from being displayed every time the weapon is received
+            self.noDesc = true
+            TTTPAP:ApplyUpgrade(weapon, self)
         end
     end)
 end

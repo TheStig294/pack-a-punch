@@ -160,113 +160,115 @@ end)
 util.AddNetworkString("TTTPAPApply")
 
 function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-    if not IsValid(SWEP) then return end
+    -- Always delay running this function by a split second because giving a weapon and upgrading it on the same frame doesn't work,
+    -- the entity doesn't exist yet on the client
+    timer.Simple(0.1, function()
+        if not IsValid(SWEP) then return end
 
-    -- Give the player a completely new base weapon instead if one is specified
-    if UPGRADE.newClass and WEPS.GetClass(SWEP) ~= UPGRADE.newClass then
-        local owner = SWEP:GetOwner()
+        -- Give the player a completely new base weapon instead if one is specified
+        if UPGRADE.newClass and WEPS.GetClass(SWEP) ~= UPGRADE.newClass then
+            local owner = SWEP:GetOwner()
 
-        if IsValid(owner) then
-            owner:StripWeapon(UPGRADE.class)
-            SWEP = owner:Give(UPGRADE.newClass)
+            if IsValid(owner) then
+                owner:StripWeapon(UPGRADE.class)
+                SWEP = owner:Give(UPGRADE.newClass)
 
-            timer.Simple(0.1, function()
-                if not owner:HasWeapon(UPGRADE.newClass) then return end
+                timer.Simple(0.1, function()
+                    if not owner:HasWeapon(UPGRADE.newClass) then return end
 
-                if not IsValid(SWEP) then
-                    SWEP = owner:GetWeapon(UPGRADE.newClass)
-                end
+                    if not IsValid(SWEP) then
+                        SWEP = owner:GetWeapon(UPGRADE.newClass)
+                    end
 
-                -- If we don't want the player to hold the weapon straight away, block it
-                if not UPGRADE.noSelectWep then
-                    owner:SelectWeapon(UPGRADE.newClass)
-                end
-            end)
+                    -- If we don't want the player to hold the weapon straight away, block it
+                    if not UPGRADE.noSelectWep then
+                        owner:SelectWeapon(UPGRADE.newClass)
+                    end
+                end)
+            end
+
+            -- Apply the upgrade!
+            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
+
+            return
         end
 
-        -- Apply the upgrade!
-        timer.Simple(0.1, function()
-            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-        end)
+        -- Upgrade function (Where all the magic happens...)
+        UPGRADE:Apply(SWEP)
+        table.insert(TTTPAP.activeUpgrades, UPGRADE)
 
-        return
-    end
+        -- Camo
+        if not UPGRADE.noCamo then
+            SWEP:SetMaterial(TTTPAP.camo)
+        end
 
-    -- Upgrade function (Where all the magic happens...)
-    UPGRADE:Apply(SWEP)
-    table.insert(TTTPAP.activeUpgrades, UPGRADE)
+        -- Sound
+        if SWEP.Primary and not UPGRADE.noSound then
+            SWEP.Primary.Sound = TTTPAP.shootSound
+        end
 
-    -- Camo
-    if not UPGRADE.noCamo then
-        SWEP:SetMaterial(TTTPAP.camo)
-    end
+        -- Firerate
+        if isnumber(SWEP.Primary.Delay) then
+            SWEP.Primary.Delay = SWEP.Primary.Delay / UPGRADE.firerateMult
+        elseif isnumber(SWEP.Primary.RPM) then
+            SWEP.Primary.RPM = SWEP.Primary.RPM * UPGRADE.firerateMult
+        end
 
-    -- Sound
-    if SWEP.Primary and not UPGRADE.noSound then
-        SWEP.Primary.Sound = TTTPAP.shootSound
-    end
+        -- Damage
+        if isnumber(SWEP.Primary.Damage) then
+            SWEP.Primary.Damage = SWEP.Primary.Damage * UPGRADE.damageMult
+        end
 
-    -- Firerate
-    if isnumber(SWEP.Primary.Delay) then
-        SWEP.Primary.Delay = SWEP.Primary.Delay / UPGRADE.firerateMult
-    elseif isnumber(SWEP.Primary.RPM) then
-        SWEP.Primary.RPM = SWEP.Primary.RPM * UPGRADE.firerateMult
-    end
+        -- Spread
+        if isnumber(SWEP.Primary.Cone) then
+            SWEP.Primary.Cone = SWEP.Primary.Cone * UPGRADE.spreadMult
+        elseif isnumber(SWEP.Primary.Spread) then
+            SWEP.Primary.Spread = SWEP.Primary.Spread * UPGRADE.spreadMult
+        end
 
-    -- Damage
-    if isnumber(SWEP.Primary.Damage) then
-        SWEP.Primary.Damage = SWEP.Primary.Damage * UPGRADE.damageMult
-    end
+        -- Ammo
+        if isnumber(SWEP.Primary.ClipSize) then
+            local oldClipSize = SWEP.Primary.ClipSize
+            local oldClip = UPGRADE.oldClip or SWEP:Clip1()
+            SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
+            SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
+            -- Set ammo relative to leftover ammo
+            SWEP:SetClip1(oldClip / oldClipSize * SWEP.Primary.ClipSize)
+        end
 
-    -- Spread
-    if isnumber(SWEP.Primary.Cone) then
-        SWEP.Primary.Cone = SWEP.Primary.Cone * UPGRADE.spreadMult
-    elseif isnumber(SWEP.Primary.Spread) then
-        SWEP.Primary.Spread = SWEP.Primary.Spread * UPGRADE.spreadMult
-    end
+        -- Recoil
+        if isnumber(SWEP.Primary.Recoil) then
+            SWEP.Primary.Recoil = SWEP.Primary.Recoil * UPGRADE.recoilMult
+        elseif isnumber(SWEP.Primary.StaticRecoilFactor) then
+            SWEP.Primary.StaticRecoilFactor = SWEP.Primary.StaticRecoilFactor * UPGRADE.recoilMult
+        end
 
-    -- Ammo
-    if isnumber(SWEP.Primary.ClipSize) then
-        local oldClipSize = SWEP.Primary.ClipSize
-        local oldClip = UPGRADE.oldClip or SWEP:Clip1()
-        SWEP.Primary.ClipSize = SWEP.Primary.ClipSize * UPGRADE.ammoMult
-        SWEP.Primary.ClipMax = SWEP.Primary.ClipSize
-        -- Set ammo relative to leftover ammo
-        SWEP:SetClip1(oldClip / oldClipSize * SWEP.Primary.ClipSize)
-    end
+        -- Automatic
+        if isbool(SWEP.Primary.Automatic) and isbool(UPGRADE.automatic) then
+            SWEP.Primary.Automatic = UPGRADE.automatic
+        end
 
-    -- Recoil
-    if isnumber(SWEP.Primary.Recoil) then
-        SWEP.Primary.Recoil = SWEP.Primary.Recoil * UPGRADE.recoilMult
-    elseif isnumber(SWEP.Primary.StaticRecoilFactor) then
-        SWEP.Primary.StaticRecoilFactor = SWEP.Primary.StaticRecoilFactor * UPGRADE.recoilMult
-    end
-
-    -- Automatic
-    if isbool(SWEP.Primary.Automatic) and isbool(UPGRADE.automatic) then
-        SWEP.Primary.Automatic = UPGRADE.automatic
-    end
-
-    -- Add upgrade table to the weapon entity itself for easy reference
-    -- Used for Pack-a-Punch camo, sound and some upgrades themselves for detecting if a weapon is Pack-a-Punched
-    SWEP.PAPUpgrade = UPGRADE
-    -- Client-side changes
-    net.Start("TTTPAPApply")
-    net.WriteEntity(SWEP)
-    net.WriteFloat(SWEP.Primary.Delay or -1)
-    net.WriteFloat(SWEP.Primary.RPM or -1)
-    net.WriteFloat(SWEP.Primary.Damage or -1)
-    net.WriteFloat(SWEP.Primary.Cone or -1)
-    net.WriteFloat(SWEP.Primary.Spread or -1)
-    net.WriteFloat(SWEP.Primary.ClipSize or -1)
-    net.WriteFloat(SWEP.Primary.Recoil or -1)
-    net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
-    net.WriteBool(SWEP.Primary.Automatic or false)
-    net.WriteString(UPGRADE.id)
-    -- Generic upgrades do not have a weapon class defined
-    net.WriteString(UPGRADE.class or "")
-    net.WriteBool(UPGRADE.noDesc or false)
-    net.Broadcast()
+        -- Add upgrade table to the weapon entity itself for easy reference
+        -- Used for Pack-a-Punch camo, sound and some upgrades themselves for detecting if a weapon is Pack-a-Punched
+        SWEP.PAPUpgrade = UPGRADE
+        -- Client-side changes
+        net.Start("TTTPAPApply")
+        net.WriteEntity(SWEP)
+        net.WriteFloat(SWEP.Primary.Delay or -1)
+        net.WriteFloat(SWEP.Primary.RPM or -1)
+        net.WriteFloat(SWEP.Primary.Damage or -1)
+        net.WriteFloat(SWEP.Primary.Cone or -1)
+        net.WriteFloat(SWEP.Primary.Spread or -1)
+        net.WriteFloat(SWEP.Primary.ClipSize or -1)
+        net.WriteFloat(SWEP.Primary.Recoil or -1)
+        net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
+        net.WriteBool(SWEP.Primary.Automatic or false)
+        net.WriteString(UPGRADE.id)
+        -- Generic upgrades do not have a weapon class defined
+        net.WriteString(UPGRADE.class or "")
+        net.WriteBool(UPGRADE.noDesc or false)
+        net.Broadcast()
+    end)
 end
 
 -- Applies a random upgrade to a loose weapon, not necessarily carried by a player

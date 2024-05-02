@@ -168,11 +168,9 @@ function UPGRADE:Apply(SWEP)
                 wep:SetClip1(data.clip1)
                 wep:SetClip2(data.clip2)
 
-                timer.Simple(0.1, function()
-                    if data.upgrade and IsValid(wep) then
-                        TTTPAP:ApplyUpgrade(wep, data.upgrade)
-                    end
-                end)
+                if data.upgrade and IsValid(wep) then
+                    TTTPAP:ApplyUpgrade(wep, data.upgrade)
+                end
             end
         end
 
