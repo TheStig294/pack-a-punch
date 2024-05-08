@@ -22,11 +22,11 @@ UPGRADE.convars = {
 
 local frozenSecsCvar = CreateConVar("pap_cold_spaghetti_frozen_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players are frozen", 0, 60)
 
-local radiusCvar = CreateConVar("pap_cold_spaghetti_radius", 300, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance players are frozen", 0, 1000)
+local radiusCvar = CreateConVar("pap_cold_spaghetti_frozen_radius", 600, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance players are frozen", 0, 1000)
 
 local musicCvar = CreateConVar("pap_cold_spaghetti_alt_music", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Whether the cold spaghetti plays alternative music", 0, 1)
 
-UPGRADE.desc = "Players in the explosion radius become frozen\nfor " .. frozenSecsCvar:GetInt() .. " seconds!"
+UPGRADE.desc = "Freezes players instead of exploding\nfor " .. frozenSecsCvar:GetInt() .. " seconds. Doesn't affect you, effect radius greatly increased!"
 
 function UPGRADE:Apply(SWEP)
     -- Initially setting spaghetti model
@@ -35,11 +35,18 @@ function UPGRADE:Apply(SWEP)
     SWEP.WorldModel = spaghettiModel
     SWEP.UseHands = false
 
-    timer.Simple(0.1, function()
-        local owner = SWEP:GetOwner()
+    -- If this is not being passed to a player, turn on showing the upgrade description again for the new potato-upgrader player
+    if not IsValid(SWEP.PAPOwner) then
+        self.noDesc = false
+    end
 
-        if SERVER and IsValid(owner) then
-            owner:SelectWeapon(self.class)
+    local PAPOwner
+
+    timer.Simple(0.1, function()
+        PAPOwner = SWEP.PAPOwner or SWEP:GetOwner()
+
+        if SERVER and IsValid(PAPOwner) then
+            PAPOwner:SelectWeapon(self.class)
         end
     end)
 
@@ -67,9 +74,6 @@ function UPGRADE:Apply(SWEP)
     function SWEP:Detonate(ply)
         for _, p in ipairs(ents.FindInSphere(self:GetPos(), radiusCvar:GetInt())) do
             if UPGRADE:IsAlivePlayer(p) then
-                p:Freeze(true)
-                p:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
-                p:ChatPrint("Frozen for " .. frozenSecsCvar:GetInt() .. " seconds!")
                 p.PAPColdSpaghettiBlockExplosion = true
 
                 timer.Simple(1, function()
@@ -78,15 +82,24 @@ function UPGRADE:Apply(SWEP)
                     end
                 end)
 
-                timer.Simple(frozenSecsCvar:GetInt(), function()
-                    if IsValid(p) then
-                        if p:IsFrozen() then
-                            p:ChatPrint("You are unfrozen!")
-                        end
+                if not IsValid(PAPOwner) or p ~= PAPOwner then
+                    p:Freeze(true)
+                    p:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                    local msg = "Frozen for " .. frozenSecsCvar:GetInt() .. " seconds!"
+                    p:PrintMessage(HUD_PRINTCENTER, msg)
+                    p:PrintMessage(HUD_PRINTTALK, msg)
 
-                        p:Freeze(false)
-                    end
-                end)
+                    timer.Simple(frozenSecsCvar:GetInt(), function()
+                        if IsValid(p) then
+                            if p:IsFrozen() then
+                                p:PrintMessage(HUD_PRINTCENTER, "You are unfrozen!")
+                                p:PrintMessage(HUD_PRINTTALK, "You are unfrozen!")
+                            end
+
+                            p:Freeze(false)
+                        end
+                    end)
+                end
             end
         end
 
@@ -157,6 +170,8 @@ function UPGRADE:Apply(SWEP)
                 holstered:Remove()
             end)
 
+            potato.PAPOwner = PAPOwner
+            UPGRADE.noDesc = true
             TTTPAP:ApplyUpgrade(potato, UPGRADE)
         end
     end

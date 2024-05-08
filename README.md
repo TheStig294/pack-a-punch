@@ -1167,11 +1167,11 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1894982220>
 
 ## Hot Potato (Cold Spaghetti)
 
-Players in the explosion radius become frozen for 20 seconds!\
+Freezes players instead of exploding for 20 seconds. Doesn't affect you, effect radius greatly increased!
 \
 *ttt_pap_cold_spaghetti* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_cold_spaghetti_radius* - Default: 300 - Distance players are frozen\
+*pap_cold_spaghetti_frozen_radius* - Default: 600 - Distance players are frozen\
 *pap_cold_spaghetti_frozen_secs* - Default: 20 - Seconds players are frozen\
 *pap_cold_spaghetti_alt_music* - Default: 0 - Whether the cold spaghetti plays alternative music\
 \

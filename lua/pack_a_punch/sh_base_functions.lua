@@ -93,6 +93,7 @@ hook.Add("TTTPrepareRound", "TTTPAPResetAll", function()
         for _, UPGRADE in pairs(TTTPAP.activeUpgrades) do
             UPGRADE:Reset()
             UPGRADE:CleanUpHooks()
+            UPGRADE.noDesc = nil
         end
 
         TTTPAP.activeUpgrades = {}
