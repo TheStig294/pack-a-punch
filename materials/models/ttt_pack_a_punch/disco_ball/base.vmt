@@ -1,0 +1,24 @@
+"VertexLitGeneric" // (Shader) VertexLitGeneric is a model shader, as named, the model will be lit "per vertex" either dynamically in game, or baked into the model when using a static prop in Hammer. 
+{
+// Any parameters beginning with "//" will be ignored by the material. This is useful for deprecating something you may want to use later on, or revert back to, as well as for making comments like this one for organization and learning.
+
+// Base Parameters
+
+	"$basetexture" 			"models/ttt_pack_a_punch/disco_ball/base"		// (Texture) Determines which texture is used for your meshes surface. 
+	"$color2"				"[.8 .8 .8]"				// (RGB Matrix) Determines tinting of your texture. Smaller numbers in slot 1 mean less red, in slot 2, less green, slot 3, less blue, and vice versa.
+
+	"$selfillum"			"0"				// (Boolean) Determines if your mesh glows in the dark. By default, will use your basetextures alpha channel for per texel lighting. Cannot be used with $translucent without workarounds, see Valve Developer Wiki.
+	"$translucent"			"0"				// (Boolean) Determines if your mesh is transparent. By default uses your base textures alpha channel for per texel transparency. Cannot be used with $selfillum without workarounds, see Valve Developer Wiki.
+	"$halflambert"			"1"				// (Boolean) Wraps lighting further around mesh from point of lighting to prevent definition loss and provides softer shadows. Enabled automatically if using phong shading. See Valve Developer Wiki for example.
+
+
+	"$model" 				"1"				// (Boolean) Neccessary for some parameters to function, and tells Hammer not to display this for map brush textures.
+
+// Environment Map Reflections, adds reflections to the mesh using the envmap texture. Can cause shine issues in dark areas. For less shiny objects, it is recommended you remove this section and only use Phong Shading.
+
+	"$envmap"			"env_cubemap"			// (Texture) Determines the texture the envmap uses for reflections. Env_cubemap means it uses a maps cubemaps for accurate reflections of the surroundings.
+	"$envmaptint"			"[.1 .1 .1]"			// (RGB Matrix) Determines the intensity of each corresponding color channel for the reflections. Higher in slot 1 means more red reflections, 2 in green, 3 in blue. Equal values in all changes overall reflectivity.
+	"$normalmapalphaenvmapmask"	"1"				// (Boolean) Uses the normal maps alpha channel to determine reflectivity.
+	"$envmapfresnel"			".5"				// (Float) Adds a fresnel effect to the envmap. Also uses $phongfresnelranges to determine reflectance.
+
+}
