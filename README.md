@@ -51,6 +51,11 @@ Requires: [Possum](https://steamcommunity.com/sharedfiles/filedetails/?id=134338
 Requires: [Left Shark playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=391383735)\
 or: [Yogscast Sharky Player Model](https://steamcommunity.com/sharedfiles/filedetails/?id=2755239782)
 
+## Sharkulon Summoner
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3242992182>\
+Requires: [Shark Trap](https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000)
+
 ## Comrade Bomb
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1908426838>\
@@ -2002,6 +2007,17 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000>
+
+## Sharkulon (Sharktrapulon)
+
+Drops shark traps instead!\
+\
+*ttt_pap_sharktrapulon* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_sharktrapulon_trap_spawn_delay* - Default: 5 - Secs between spawning shark traps\
+*pap_sharktrapulon_trap_despawn_delay* - Default: 5 - Secs between despawning shark traps\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3242992182>
 
 ## Shock Trap (Surprise Trap)
 
