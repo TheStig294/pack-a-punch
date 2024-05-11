@@ -36,6 +36,10 @@ function UPGRADE:Apply(SWEP)
         sharkulon.npc.move:SetMaterial(TTTPAP.camo)
         sharkulon.npc:SetMaterial(TTTPAP.camo)
         sharkulon.npc:SetSaveValue("spawnflags", 256)
+        -- Quadruple the health because the sharkulon is coded to stay in front of the player when its turret is disabled
+        local newHealth = sharkulon.npc.move:Health() * 4
+        sharkulon.npc.move:SetHealth(newHealth)
+        sharkulon.npc.move:SetMaxHealth(newHealth)
         -- Spawn shark traps underneath it while it is alive
         local timername = "PAPSharktrapulon" .. sharkulon:EntIndex()
 
