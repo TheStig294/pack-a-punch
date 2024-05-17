@@ -1,8 +1,8 @@
 local UPGRADE = {}
-UPGRADE.id = "groovitron_glove_random"
+UPGRADE.id = "groovitron_random"
 UPGRADE.class = "weapon_ttt_dancedead"
-UPGRADE.name = "Groovitron Glove"
+UPGRADE.name = "Groovitron"
 UPGRADE.desc = "Makes players dance in an AOE!"
-UPGRADE.newClass = "ttt_pap_groovitron_glove"
+UPGRADE.newClass = "ttt_pap_groovitron"
 UPGRADE.noCamo = true
 -- TTTPAP:Register(UPGRADE)

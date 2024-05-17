@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-    SWEP.PrintName = "Groovitron Glove"
+    SWEP.PrintName = "Groovitron"
     SWEP.Slot = 3
     SWEP.Icon = "vgui/ttt/icon_nades"
 end
@@ -27,7 +27,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:GetGrenadeName()
-    return "ttt_pap_groovitron_glove_proj"
+    return "ttt_pap_groovitron_proj"
 end
 
 if CLIENT then

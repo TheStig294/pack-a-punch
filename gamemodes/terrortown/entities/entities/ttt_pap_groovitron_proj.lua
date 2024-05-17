@@ -53,7 +53,7 @@ function ENT:PhysicsCollide()
 	local initialPos = self:GetPos()
 	local finalPos = self:GetPos()
 	finalPos.z = finalPos.z + 120
-	local timername = "TTTPAPGroovitronGloveRiseDiscoBall" .. self:EntIndex()
+	local timername = "TTTPAPGroovitronRiseDiscoBall" .. self:EntIndex()
 
 	timer.Create(timername, 0.01, 100, function()
 		if not IsValid(self) then
