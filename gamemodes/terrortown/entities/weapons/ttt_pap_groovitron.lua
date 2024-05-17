@@ -17,7 +17,8 @@ SWEP.Kind = WEAPON_NADE
 SWEP.AutoSpawnable = false
 SWEP.AllowDrop = true
 SWEP.NoSights = true
-SWEP.detonate_timer = 3
+-- Unused, just here to make TTT grenade base happy
+SWEP.detonate_timer = 10
 SWEP.UseHands = false
 
 function SWEP:Initialize()
