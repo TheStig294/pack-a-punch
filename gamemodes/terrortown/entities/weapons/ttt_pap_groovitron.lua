@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
     SWEP.PrintName = "Groovitron"
-    SWEP.Slot = 3
+    SWEP.Slot = 6
     SWEP.Icon = "vgui/ttt/icon_nades"
 end
 
@@ -13,16 +13,19 @@ SWEP.ViewModelFlip = false
 SWEP.ViewModelFOV = 72
 SWEP.ViewModel = Model("models/ttt_pack_a_punch/disco_ball/disco_ball.mdl")
 SWEP.WorldModel = Model("models/ttt_pack_a_punch/disco_ball/disco_ball.mdl")
-SWEP.Kind = WEAPON_NADE
+SWEP.Kind = WEAPON_EQUIP
 SWEP.AutoSpawnable = false
 SWEP.AllowDrop = true
 SWEP.NoSights = true
 -- Unused, just here to make TTT grenade base happy
 SWEP.detonate_timer = 10
 SWEP.UseHands = false
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
 
 function SWEP:Initialize()
     self:SetModelScale(10, 0.00001)
+    self:SetClip1(-1)
 
     return self.BaseClass.Initialize(self)
 end

@@ -575,29 +575,32 @@ Testing delay time doubles with each use\
 \
 Upgrade for: Default TTT weapon
 
-## Dance Gun [Dance till you're dead] (Accension Gun)
+## Dance Gun [Dance till you're dead] (Groovitron)
 
-x2 ammo, players ascend into the sky as they die...\
+Makes players dance in an AOE!\
+If you don't kill them first, they will be freed\
 \
-*ttt_pap_accension_gun_dance_dead* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_groovitron_dance_dead* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1433651939>
 
-## Dance Gun [Random Music] (Accension Gun)
+## Dance Gun [Random Music] (Groovitron)
 
-x2 ammo, players ascend into the sky as they die...\
+Makes players dance in an AOE!\
+If you don't kill them first, they will be freed\
 \
-*ttt_pap_accension_gun_random* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_groovitron_random* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2236051565>
 
-## Dance Gun [Thriller Gun] (Accension Gun)
+## Dance Gun [Thriller Gun] (Groovitron)
 
-x2 ammo, players ascend into the sky as they die...\
+Makes players dance in an AOE!\
+If you don't kill them first, they will be freed\
 \
-*ttt_pap_accension_gun_thriller* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_groovitron_thriller* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=794651430>
