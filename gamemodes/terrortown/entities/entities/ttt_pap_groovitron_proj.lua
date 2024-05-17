@@ -54,6 +54,8 @@ function ENT:PhysicsCollide()
 	-- Set the disco ball to face upright and make a "tink" sound
 	self:SetAngles(Angle(0, 0, 0))
 	self:EmitSound("Flashbang.Bounce")
+	self.MusicName = "ttt_pack_a_punch/groovitron/" .. math.random(3) .. ".mp3"
+	self:EmitSound(self.MusicName)
 
 	-- Work-around to stop the console yelling at us for changing how the entity collides with things, within a hook called by the entity colliding with something
 	-- (Kinda like calling a damage function in a take damage hook, but we're disabling the physics altogether here, so PhysicsCollide can't be called again and cause an infinite loop, so we're fine)
@@ -181,4 +183,9 @@ function ENT:PhysicsCollide()
 			self:Remove()
 		end
 	end)
+end
+
+-- If the disco ball is removed at all, stop the music
+function ENT:OnRemove()
+	self:StopSound(self.MusicName)
 end
