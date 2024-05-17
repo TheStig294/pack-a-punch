@@ -34,6 +34,13 @@ function ENT:Initialize()
 		ply:SetNWBool("TTTPAPGroovitronThirdPerson", false)
 	end)
 
+	-- Remove thirdperson hooks at round end
+	hook.Add("TTTPrepareRound", "TTTPAPGroovitronReset", function()
+		hook.Remove("CalcView", "TTTPAPGroovitronThirdPerson")
+		hook.Remove("PostPlayerDeath", "TTTPAPGroovitronResetThirdPerson")
+		hook.Remove("TTTPrepareRound", "TTTPAPGroovitronReset")
+	end)
+
 	return self.BaseClass.Initialize(self)
 end
 
@@ -174,10 +181,4 @@ function ENT:PhysicsCollide()
 			self:Remove()
 		end
 	end)
-end
-
--- Remove thirdperson hooks
-function ENT:OnRemove()
-	hook.Remove("CalcView", "TTTPAPGroovitronThirdPerson")
-	hook.Remove("PostPlayerDeath", "TTTPAPGroovitronResetThirdPerson")
 end
