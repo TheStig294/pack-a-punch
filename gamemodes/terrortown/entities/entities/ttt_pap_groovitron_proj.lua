@@ -30,6 +30,7 @@ function ENT:Initialize()
 	end)
 
 	hook.Add("PostPlayerDeath", "TTTPAPGroovitronResetThirdPerson", function(ply)
+		ply:Freeze(false)
 		ply:SetNWBool("TTTPAPGroovitronThirdPerson", false)
 	end)
 
