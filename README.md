@@ -111,6 +111,10 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 'Happy Happy Game Show' Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License <http://creativecommons.org/licenses/by/4.0/>
 
+"Disco Ball" (<https://skfb.ly/NyAH>) by araghon007 is licensed under Creative Commons Attribution <http://creativecommons.org/licenses/by/4.0/>
+
+"Stringed Disco", "Disco Medusae", and "Ether Disco" by Kevin MacLeod (<https://incompetech.com>) Licensed under Creative Commons: By Attribution 4.0 License <http://creativecommons.org/licenses/by/4.0/>
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
