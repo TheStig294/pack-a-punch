@@ -5,14 +5,33 @@ ENT.Model = Model("models/ttt_pack_a_punch/disco_ball/disco_ball.mdl")
 
 ENT.DurationCvar = CreateConVar("pap_groovitron_duration", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds the groovitron lasts", 1, 30)
 
-ENT.RadiusCvar = CreateConVar("pap_groovitron_radius", 500, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of area of effect", 1, 2000)
+ENT.RadiusCvar = CreateConVar("pap_groovitron_radius", 300, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of area of effect", 1, 2000)
 
 function ENT:Initialize()
 	self:EmitSound("weapons/slam/throw.wav", SNDLVL_100dB)
 	self:SetModel(self.Model)
 	-- The model has the wrong scale so we just fix it here, units in blender is a pain...
 	self:SetModelScale(10, 0.00001)
-	self.Collided = false
+
+	-- Hooks used for forcing players into thirdperson view
+	hook.Add("CalcView", "TTTPAPGroovitronThirdPerson", function(ply, pos, angles, fov, znear, zfar)
+		if not ply:GetNWBool("TTTPAPGroovitronThirdPerson") then return end
+
+		local view = {
+			origin = pos - (angles:Forward() * 100),
+			angles = angles,
+			fov = fov,
+			drawviewer = true,
+			znear = znear,
+			zfar = zfar
+		}
+
+		return view
+	end)
+
+	hook.Add("PostPlayerDeath", "TTTPAPGroovitronResetThirdPerson", function(ply)
+		ply:SetNWBool("TTTPAPGroovitronThirdPerson", false)
+	end)
 
 	return self.BaseClass.Initialize(self)
 end
@@ -37,7 +56,7 @@ function ENT:PhysicsCollide()
 
 	-- Create some different coloured spotlights because, y'know, it's a disco ball
 	local initialPos = self:GetPos()
-	self.SpotlightEntities = {}
+	local spotlightEntities = {}
 
 	-- Angle, colour
 	local spotlightValues = {
@@ -57,7 +76,7 @@ function ENT:PhysicsCollide()
 		spotlight:Fire("LightOn")
 		spotlight:Fire("Start")
 		spotlight:Fire("Color", lightValues[2])
-		table.insert(self.SpotlightEntities, spotlight)
+		table.insert(spotlightEntities, spotlight)
 	end
 
 	-- Make the disco ball rise up from where it landed
@@ -76,7 +95,7 @@ function ENT:PhysicsCollide()
 		local pos = LerpVector(animationProgressPercent, initialPos, finalPos)
 		self:SetPos(pos)
 
-		for _, spotlight in ipairs(self.SpotlightEntities) do
+		for _, spotlight in ipairs(spotlightEntities) do
 			if IsValid(spotlight) then
 				spotlight:SetPos(pos)
 			end
@@ -98,18 +117,66 @@ function ENT:PhysicsCollide()
 		self:SetAngles(angles)
 	end)
 
-	-- Remove the disco ball once time is up (Even if it hasn't finished rising up yet)
-	timer.Simple(self.DurationCvar:GetInt(), function()
-		if not IsValid(self) then return end
+	-- Make the disco ball force everyone nearby to dance
+	local danceTimer = "TTTPAPGroovitronDance" .. self:EntIndex()
+	local dancingPlayers = {}
 
-		for _, spotlight in ipairs(self.SpotlightEntities) do
+	timer.Create(danceTimer, 1, 0, function()
+		-- If the disco ball has been removed, then free all dancing players
+		if not IsValid(self) then
+			timer.Remove(danceTimer)
+
+			for ply, _ in pairs(dancingPlayers) do
+				if IsValid(ply) then
+					ply:Freeze(false)
+					ply:SetNWBool("TTTPAPGroovitronThirdPerson", false)
+					ply:DoAnimationEvent(ACT_RESET, 0)
+				end
+			end
+
+			return
+		end
+
+		-- Search for nearby players (Skip the thrower!)
+		for _, ply in ipairs(ents.FindInSphere(self:GetPos(), self.RadiusCvar:GetInt())) do
+			if not IsValid(ply) or not ply:IsPlayer() or ply == self:GetThrower() or not ply:Alive() or ply:IsSpec() then continue end
+
+			-- Freeze the player and set them to thirdperson
+			if not ply:IsFrozen() then
+				ply:Freeze(true)
+				ply:SetNWBool("TTTPAPGroovitronThirdPerson", true)
+				dancingPlayers[ply] = true
+			end
+
+			-- Randomly set a dance animation to play
+			if math.random() < 0.5 then
+				ply:DoAnimationEvent(ACT_GMOD_GESTURE_TAUNT_ZOMBIE, 1641)
+			else
+				ply:DoAnimationEvent(ACT_GMOD_TAUNT_DANCE, 1642)
+			end
+		end
+	end)
+
+	-- Remove the disco ball once time is up, and replace it with a harmless explosion
+	timer.Simple(self.DurationCvar:GetInt(), function()
+		for _, spotlight in ipairs(spotlightEntities) do
 			if IsValid(spotlight) then
 				spotlight:Remove()
 			end
 		end
 
 		if IsValid(self) then
+			local data = EffectData()
+			data:SetOrigin(self:GetPos())
+			util.Effect("HelicopterMegaBomb", data)
+			self:EmitSound("BaseExplosionEffect.Sound")
 			self:Remove()
 		end
 	end)
+end
+
+-- Remove thirdperson hooks
+function ENT:OnRemove()
+	hook.Remove("CalcView", "TTTPAPGroovitronThirdPerson")
+	hook.Remove("PostPlayerDeath", "TTTPAPGroovitronResetThirdPerson")
 end
