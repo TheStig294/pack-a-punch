@@ -7,8 +7,6 @@ ENT.DurationCvar = CreateConVar("pap_groovitron_duration", 10, {FCVAR_ARCHIVE, F
 
 ENT.RadiusCvar = CreateConVar("pap_groovitron_radius", 500, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of area of effect", 1, 2000)
 
-AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
-
 function ENT:Initialize()
 	self:EmitSound("weapons/slam/throw.wav", SNDLVL_100dB)
 	self:SetModel(self.Model)
