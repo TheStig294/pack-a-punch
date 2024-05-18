@@ -87,11 +87,18 @@ function ENT:Explode(tr)
 			Bee:SetModelScale(5, 0.0001)
 			Bee:Activate()
 			Bee:SetMaterial(TTTPAP.camo)
+			-- Prevent the bees from being able to be picked up with a magneto stick,
+			-- Since there's nothing you can do about it if the player is a jester killing you with it...
+			-- (And in practice the stun + large invincible bee hitbox prevents you from shooting a player doing this anyway)
+			-- 
+			-- This is just a property the magneto stick looks for in SWEP:AllowPickup()
+			Bee.CanPickup = false
 			headBee:SetNWEntity("Thrower", self:GetThrower())
 			headBee:SetNoDraw(true)
 			headBee:SetHealth(1000)
 			headBee:SetModelScale(5, 0.0001)
 			headBee:Activate()
+			headBee.CanPickup = false
 			headBee.PAPBfbnade = true
 		end
 
