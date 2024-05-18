@@ -18,8 +18,8 @@ function UPGRADE:Apply(SWEP)
     local screenColour = Color(0, 238, 255, 20)
     local freezeColour = Color(0, 255, 255)
 
-    local function FreezeTarget(att, path, dmginfo)
-        local ent = path.Entity
+    local function FreezeTarget(attacker, tr, dmginfo)
+        local ent = tr.Entity
         if not IsValid(ent) then return end
 
         if SERVER then
@@ -27,6 +27,8 @@ function UPGRADE:Apply(SWEP)
             if not ent:IsPlayer() or (not GAMEMODE:AllowPVP()) then return end
 
             for _, ply in ipairs(self:GetAlivePlayers()) do
+                -- Don't let players freeze themselves!
+                if ply == attacker then continue end
                 -- If 100 range
                 -- 100 * 100 = 10000
                 local range = rangeCvar:GetInt() * rangeCvar:GetInt()
