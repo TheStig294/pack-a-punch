@@ -2425,13 +2425,12 @@ Spawns fast zombies instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2614793622>
 
-## Zombification Device (Laughing Zombificator)
+## Zombification Device (Re-Zombification Device)
 
-Make evil laughs, takes less time to use!\
+You can revive zombies!\
 \
-*ttt_pap_laughing_zombificator* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_rezombificator* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_laughing_zombificator_time* - Default: 2 - Seconds to use\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
