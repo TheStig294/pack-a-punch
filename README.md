@@ -1589,11 +1589,11 @@ Do do do do doooo...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
 
-## Paper Plane (Double Plane)
+## Paper Plane (Nyan Plane)
 
-Spawns 2 planes that travel much faster\
+Moves faster, is now a Nyan Cat!\
 \
-*ttt_pap_double_plane* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_nyan_plane* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2150978792>
