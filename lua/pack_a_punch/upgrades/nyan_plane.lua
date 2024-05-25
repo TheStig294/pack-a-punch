@@ -16,22 +16,11 @@ local speedMultCvar = CreateConVar("pap_nyan_plane_speed_mult", "1.2", {FCVAR_AR
 
 function UPGRADE:Apply(SWEP)
     local targetJester = GetConVar("ttt_paper_plane_target_jester")
-    local speedCvar
-    local traitorTeamCvar
-    local innocentTeamCvar
-    local monsterTeamCvar
-
-    if SERVER then
-        speedCvar = GetConVar("ttt_snailplane_speed", 350)
-        traitorTeamCvar = GetConVar("ttt_snailplane_target_fellow_traitors", 0)
-        innocentTeamCvar = GetConVar("ttt_snailplane_target_fellow_innocents", 0)
-        monsterTeamCvar = GetConVar("ttt_snailplane_target_fellow_monsters", 0)
-    end
 
     local function CanTargetOwnTeam(thrower)
-        local targetTraitors = traitorTeamCvar:GetBool()
-        local targetInnocents = innocentTeamCvar:GetBool()
-        local targetMonsters = monsterTeamCvar:GetBool()
+        local targetTraitors = cvars.Bool("ttt_snailplane_target_fellow_traitors")
+        local targetInnocents = cvars.Bool("ttt_snailplane_target_fellow_innocents")
+        local targetMonsters = cvars.Bool("ttt_snailplane_target_fellow_monsters")
 
         if TTT2 then
             if thrower:GetTeam() == TEAM_TRAITOR and targetTraitors then return true end
@@ -150,7 +139,7 @@ function UPGRADE:Apply(SWEP)
                                 local phys = self:GetPhysicsObject()
                                 -- Default speed multiplier: -200
                                 -- Speed is increased by pap_nyan_plane_speed_mult convar
-                                phys:ApplyForceCenter((self:GetPos() - closestPlayer:GetShootPos()) * -(speedCvar:GetInt() * speedMultCvar:GetFloat()))
+                                phys:ApplyForceCenter((self:GetPos() - closestPlayer:GetShootPos()) * -(speedMultCvar:GetFloat() * cvars.Number("ttt_snailplane_speed", 200)))
                                 phys:SetAngles((self:GetPos() - closestPlayer:GetShootPos()):Angle())
                             end
                             -- No warning music
