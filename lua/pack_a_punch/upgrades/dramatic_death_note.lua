@@ -9,7 +9,8 @@ local upgradeDescriptions = {
     ignite = "x5 fire damage, starts fires after they die",
     heartattack = "Plays the vine boom",
     fall = "Plays a cartoon fling noise",
-    explode = "Extra large explosion and starts some fires!"
+    explode = "Extra large explosion and starts some fires!",
+    dissolve = "Leaves no trace where they died, no weapons dropped"
 }
 
 function UPGRADE:Apply(SWEP)
@@ -138,6 +139,18 @@ function UPGRADE:Apply(SWEP)
                     end)
                 end
             end
+        end)
+    end)
+
+    self:AddHook("dn_module_dissolve", function(owner, victim)
+        if not owner.PAPDramaticDeathNote then return end
+        victim:StripWeapons()
+        victim:EmitSound("ttt_pack_a_punch/dramatic_death_note/gone_reduced_to_atoms.mp3")
+        victim:EmitSound("ttt_pack_a_punch/dramatic_death_note/gone_reduced_to_atoms.mp3")
+
+        timer.Simple(0, function()
+            owner:ChatPrint("PAP Upgrade: " .. upgradeDescriptions.dissolve)
+            victim:ChatPrint("PAP Upgrade: " .. upgradeDescriptions.dissolve)
         end)
     end)
 end

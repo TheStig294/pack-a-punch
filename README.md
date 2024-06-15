@@ -660,8 +660,15 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1473581448>
 
 ## Death Note (Dramatic Death Note)
 
-Deaths are more... dramatic?\
-\
+Each death type has a new effect!
+
+- Pre-mature burial: Victim sinks way further into the ground, plays the lego yoda death noise
+- Ignite: x5 fire damage, starts fires after they die
+- Heart attack: Plays the vine boom
+- Fall: Plays a cartoon fling noise
+- Explode: Extra large explosion and starts some fires!
+- Dissolve: Leaves no trace where they died, no weapons dropped
+
 *ttt_pap_dramatic_death_note* - Default: 1 - Whether this upgrade is enabled
 \
 \
