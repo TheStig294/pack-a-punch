@@ -2242,7 +2242,7 @@ Upgrade for: Default TTT weapon
 
 ## The Baby Maker (The Fractalizer)
 
-Immune to your own shots + extra ammo\
+Immune to becoming a baby + extra ammo\
 You make higher-pitched sounds!\
 \
 *ttt_pap_the_fractalizer* - Default: 1 - Whether this upgrade is enabled
