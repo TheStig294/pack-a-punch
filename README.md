@@ -2195,6 +2195,15 @@ Converts *anything* into a bomb station!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Stungun (Flying Stungun)
+
+More ammo, infinite range, instant recharge, much more taser power!\
+\
+*ttt_pap_flying_stungun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=785294711>
+
 ## Suicide Bomb (John Bomb)
 
 Plays the John Cena intro before exploding!\
