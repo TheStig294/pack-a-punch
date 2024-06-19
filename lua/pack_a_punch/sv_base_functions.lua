@@ -275,6 +275,7 @@ end
 function TTTPAP:ApplyRandomUpgrade(SWEP)
     if not SWEP.PAPUpgrade then
         local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
+        if UPGRADE == nil then return end
         UPGRADE.noDesc = true
 
         local function Try()
