@@ -2,98 +2,71 @@ local UPGRADE = {}
 UPGRADE.id = "zeus_cannon"
 UPGRADE.class = "tfa_thundergun"
 UPGRADE.name = "Zeus Cannon"
-UPGRADE.desc = "Extra ammo and sound effects!"
-UPGRADE.ammoMult = 2
+UPGRADE.desc = "Hold left-click to charge 1 massive blast!"
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
     SWEP:OnPaP()
+    SWEP.PAPCharge = 0
 
-    function SWEP:PAPPlayThunderSound()
-        if SERVER and IsFirstTimePredicted() then
-            local owner = self:GetOwner()
-
-            if IsValid(owner) then
-                owner:EmitSound("ttt_pack_a_punch/thunder/thunder" .. math.random(5) .. ".mp3")
-            elseif IsValid(self) then
-                self:EmitSound("ttt_pack_a_punch/thunder/thunder" .. math.random(5) .. ".mp3")
-            end
-        end
-    end
-
-    SWEP:PAPPlayThunderSound()
-    local timername = "TTTPAPThunderLoopSound" .. SWEP:EntIndex()
-
-    timer.Create(timername, 10, 0, function()
-        if not IsValid(SWEP) then
-            timer.Remove(timername)
-
-            return
-        end
-
-        SWEP:PAPPlayThunderSound()
+    timer.Simple(0.1, function()
+        SWEP.Primary.ClipSize = 200
+        SWEP.Primary.ClipMax = 200
+        SWEP.Primary_TFA.ClipSize = 200
+        SWEP.Primary_TFA.MaxAmmo = 200
+        SWEP:SetClip1(0)
     end)
 
-    if not SWEP.ThunderPrimarySoundApplied then
-        SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack
+    SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack
 
-        function SWEP:PrimaryAttack()
-            self:PAPOldPrimaryAttack()
+    function SWEP:PrimaryAttack()
+    end
 
-            if self:Clip1() > 0 then
-                self:PAPPlayThunderSound()
-            else
-                if self.PAPThunderReloadSoundCooldown then return end
-                self.PAPThunderReloadSoundCooldown = true
-                self:PAPPlayThunderSound()
+    self:AddToHook(SWEP, "Think", function()
+        if SWEP.PAPUsed then return end
+        local owner = SWEP:GetOwner()
+        if not IsValid(owner) then return end
 
-                timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 5, 1, function()
-                    if IsValid(self) then
-                        self.PAPThunderReloadSoundCooldown = false
-                    end
-                end)
+        if owner:KeyDown(IN_ATTACK) then
+            if not SWEP.PAPCharging then
+                for i = 1, 4 do
+                    SWEP:EmitSound("ttt_pack_a_punch/fart_cannon/windup.mp3", 150)
+                end
+
+                SWEP.PAPCharging = true
+            end
+
+            SWEP.PAPCharge = SWEP.PAPCharge + 1
+            SWEP:SetClip1(SWEP.PAPCharge)
+
+            if SWEP.PAPCharge >= SWEP.Primary.ClipSize then
+                SWEP:PAPOldPrimaryAttack()
+
+                for i = 1, 4 do
+                    SWEP:EmitSound("ttt_pack_a_punch/fart_cannon/fart.mp3", 150)
+                end
+
+                SWEP:SetClip1(0)
+                SWEP.PAPUsed = true
+            end
+        elseif SWEP.PAPCharge > 0 then
+            SWEP.PAPCharge = SWEP.PAPCharge - 1
+            SWEP:SetClip1(SWEP.PAPCharge)
+
+            if SWEP.PAPCharge == 0 then
+                SWEP.PAPCharging = false
             end
         end
-    end
+    end)
 
-    function SWEP:Deploy()
-        self:PAPPlayThunderSound()
+    -- Make the upgraded thundergun shot always 1-shot kill, hook from the wonder weapons TTT conversion mod (Always nice to be able to add your own hooks for upgrades...)
+    self:AddHook("TTTThundergunDamage", function(dmg)
+        local thundergun = dmg:GetInflictor()
 
-        return self.BaseClass.Deploy(self)
-    end
-
-    function SWEP:Holster()
-        self:PAPPlayThunderSound()
-
-        return true
-    end
-
-    function SWEP:Equip()
-        self:PAPPlayThunderSound()
-    end
-
-    function SWEP:OnRemove()
-        self:PAPPlayThunderSound()
-    end
-
-    SWEP.PAPOldReload = SWEP.Reload
-
-    function SWEP:Reload()
-        self:PAPOldReload()
-        if self.PAPThunderReloadSoundCooldown then return end
-        self.PAPThunderReloadSoundCooldown = true
-        self:PAPPlayThunderSound()
-
-        timer.Create("TTTPAPThunderReloadCooldown" .. self:EntIndex(), 5, 1, function()
-            if IsValid(self) then
-                self.PAPThunderReloadSoundCooldown = false
-            end
-        end)
-    end
-
-    function SWEP:PreDrop()
-        self:PAPPlayThunderSound()
-    end
+        if self:IsUpgraded(thundergun) then
+            dmg:SetDamage(10000)
+        end
+    end)
 end
 
 TTTPAP:Register(UPGRADE)
