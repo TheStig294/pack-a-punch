@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "zeus_cannon"
 UPGRADE.class = "tfa_thundergun"
 UPGRADE.name = "Zeus Cannon"
-UPGRADE.desc = "Hold left-click to charge 1 massive blast!"
+UPGRADE.desc = "Hold left-click to charge 1 instant-kill blast!"
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
@@ -44,6 +44,10 @@ function UPGRADE:Apply(SWEP)
 
                 for i = 1, 4 do
                     SWEP:EmitSound("ttt_pack_a_punch/fart_cannon/fart.mp3", 150)
+                end
+
+                if SERVER then
+                    util.ScreenShake(owner:GetPos(), 50, 40, 2, 1000, true)
                 end
 
                 SWEP:SetClip1(0)

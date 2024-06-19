@@ -2290,7 +2290,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
 ## Thundergun (Zeus Cannon)
 
-Hold left-click to charge 1 massive blast!\
+Hold left-click to charge 1 instant-kill blast!\
 \
 *ttt_pap_zeus_cannon* - Default: 1 - Whether this upgrade is enabled
 \
