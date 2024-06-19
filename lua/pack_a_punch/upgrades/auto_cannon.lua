@@ -94,7 +94,7 @@ function UPGRADE:Apply(SWEP)
             end)
 
             -- Then after the music kicks in, the cannon fires in time with it, while also moving right before each shot
-            local shootDelays = {15, 18, 20.8, 23.7, 26.5, 29.3, 32.2, 35.2}
+            local shootDelays = {5.65, 8.65, 11.45, 14.35, 17.15, 19.95, 22.85, 25.85}
 
             for _, delay in ipairs(shootDelays) do
                 -- Moving the cannon right
@@ -119,7 +119,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             -- Removes the cannon automatically after it is done
-            timer.Simple(38, function()
+            timer.Simple(28.65, function()
                 if IsValid(cannon) then
                     RemoveCannon(cannon)
                 end
