@@ -24,18 +24,20 @@ function ENT:Explode()
 end
 
 if CLIENT then
+	local function EndBlindness(client)
+		hook.Remove("PreDrawHalos", "TTTPAPBlindingGrenade")
+		timer.Remove("TTTPAPBlindingGrenadeEnd")
+		hook.Remove("Think", "TTTPAPBlindingGrenade")
+		hook.Remove("TTTPrepareRound", "TTTPAPBlindingGrenade")
+		client:ScreenFade(SCREENFADE.PURGE, COLOR_BLACK, 0, 0)
+		client:ScreenFade(SCREENFADE.IN, COLOR_BLACK, 3, 0)
+	end
+
 	net.Receive("TTTPAPBlindingGrenade", function()
 		local client = LocalPlayer()
-		client:ScreenFade(SCREENFADE.STAYOUT, COLOR_BLACK, 0, 0)
-
-		hook.Add("Think", "TTTPAPBlindingGrenade", function()
-			if not client:Alive() or client:IsSpec() then
-				hook.Remove("Think", "TTTPAPBlindingGrenade")
-				hook.Remove("PreDrawHalos", "TTTPAPBlindingGrenade")
-				hook.Remove("TTTPrepareRound", "TTTPAPBlindingGrenade")
-				client:ScreenFade(SCREENFADE.PURGE, COLOR_BLACK, 0, 0)
-			end
-		end)
+		local durationCvar = GetConVar("pap_blinding_grenade_seconds_duration")
+		client:ScreenFade(SCREENFADE.OUT, COLOR_BLACK, 0.5, 10000)
+		chat.AddText("Upgraded flashbang! Your vision will return in " .. durationCvar:GetInt() .. " seconds!")
 
 		hook.Add("PreDrawHalos", "TTTPAPBlindingGrenade", function()
 			local plys = {}
@@ -49,11 +51,18 @@ if CLIENT then
 			halo.Add(plys, COLOR_WHITE, 1, 1, 1, true, true)
 		end)
 
+		timer.Create("TTTPAPBlindingGrenadeEnd", durationCvar:GetInt(), 1, function()
+			EndBlindness(client)
+		end)
+
+		hook.Add("Think", "TTTPAPBlindingGrenade", function()
+			if not client:Alive() or client:IsSpec() then
+				EndBlindness(client)
+			end
+		end)
+
 		hook.Add("TTTPrepareRound", "TTTPAPBlindingGrenade", function()
-			hook.Remove("Think", "TTTPAPBlindingGrenade")
-			hook.Remove("PreDrawHalos", "TTTPAPBlindingGrenade")
-			hook.Remove("TTTPrepareRound", "TTTPAPBlindingGrenade")
-			client:ScreenFade(SCREENFADE.PURGE, COLOR_BLACK, 0, 0)
+			EndBlindness(client)
 		end)
 	end)
 end

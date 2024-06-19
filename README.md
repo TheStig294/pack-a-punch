@@ -924,10 +924,11 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
 ## Flashbang Grenade (Blinding Grenade)
 
-Permenantly blinds victims, but they can see player outlines
+Temporarily blinds victims, but they can see player outlines
 \
 *ttt_pap_blinding_grenade* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_blinding_grenade_seconds_duration* - Default: 20 - Seconds the blindness lasts\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067970407>
 
