@@ -1187,7 +1187,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1894982220>
 
 ## Hot Potato (Cold Spaghetti)
 
-Freezes players instead of exploding for 20 seconds. Doesn't affect you, effect radius greatly increased!
+Temporarily freezes players in addition to exploding, doesn't affect you!
 \
 *ttt_pap_cold_spaghetti* - Default: 1 - Whether this upgrade is enabled
 \

@@ -26,7 +26,7 @@ local radiusCvar = CreateConVar("pap_cold_spaghetti_frozen_radius", 600, {FCVAR_
 
 local musicCvar = CreateConVar("pap_cold_spaghetti_alt_music", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Whether the cold spaghetti plays alternative music", 0, 1)
 
-UPGRADE.desc = "Freezes players instead of exploding\nfor " .. frozenSecsCvar:GetInt() .. " seconds. Doesn't affect you, effect radius greatly increased!"
+UPGRADE.desc = "Temporarily freezes players in addition to exploding,\ndoesn't affect you!"
 
 function UPGRADE:Apply(SWEP)
     -- Initially setting spaghetti model
@@ -70,40 +70,45 @@ function UPGRADE:Apply(SWEP)
     end
 
     SWEP.PAPOldDetonate = SWEP.Detonate
+    local screenColour = Color(0, 238, 255, 20)
+    local freezeColour = Color(0, 255, 255)
 
-    function SWEP:Detonate(ply)
-        for _, p in ipairs(ents.FindInSphere(self:GetPos(), radiusCvar:GetInt())) do
-            if UPGRADE:IsAlivePlayer(p) then
-                p.PAPColdSpaghettiBlockExplosion = true
+    function SWEP:Detonate(p)
+        for _, ply in ipairs(ents.FindInSphere(self:GetPos(), radiusCvar:GetInt())) do
+            if UPGRADE:IsAlivePlayer(ply) then
+                -- Make the original owner of the cold spaghetti immune to the explosion
+                if IsValid(PAPOwner) and ply == PAPOwner then
+                    ply.PAPColdSpaghettiBlockExplosion = true
 
-                timer.Simple(1, function()
-                    if IsValid(p) then
-                        p.PAPColdSpaghettiBlockExplosion = false
-                    end
-                end)
-
-                if not IsValid(PAPOwner) or p ~= PAPOwner then
-                    p:Freeze(true)
-                    p:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
-                    local msg = "Frozen for " .. frozenSecsCvar:GetInt() .. " seconds!"
-                    p:PrintMessage(HUD_PRINTCENTER, msg)
-                    p:PrintMessage(HUD_PRINTTALK, msg)
-
-                    timer.Simple(frozenSecsCvar:GetInt(), function()
-                        if IsValid(p) then
-                            if p:IsFrozen() then
-                                p:PrintMessage(HUD_PRINTCENTER, "You are unfrozen!")
-                                p:PrintMessage(HUD_PRINTTALK, "You are unfrozen!")
-                            end
-
-                            p:Freeze(false)
+                    timer.Simple(1, function()
+                        if IsValid(ply) then
+                            ply.PAPColdSpaghettiBlockExplosion = false
                         end
+                    end)
+                else
+                    -- Freeze all other players, after a delay to detect if a player has died from the potato, so don't show them the "You are frozen!" message
+                    timer.Simple(0.1, function()
+                        if not UPGRADE:IsAlive(ply) then return end
+                        local freezeDuration = frozenSecsCvar:GetInt()
+                        ply:Freeze(true)
+                        ply:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                        ply:ScreenFade(SCREENFADE.OUT, screenColour, 1, freezeDuration - 1)
+                        ply:ChatPrint("Frozen for " .. freezeDuration .. " seconds!")
+                        local oldPlayerColour = ply:GetColor()
+                        ply:SetColor(freezeColour)
+
+                        timer.Simple(freezeDuration + 0.1, function()
+                            if IsValid(ply) then
+                                ply:Freeze(false)
+                                ply:SetColor(oldPlayerColour)
+                            end
+                        end)
                     end)
                 end
             end
         end
 
-        return self:PAPOldDetonate(ply)
+        return self:PAPOldDetonate(p)
     end
 
     self:AddHook("EntityTakeDamage", function(ent, dmg)
