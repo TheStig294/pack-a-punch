@@ -10,10 +10,10 @@ function UPGRADE:Apply(SWEP)
     SWEP.PAPCharge = 0
 
     timer.Simple(0.1, function()
-        SWEP.Primary.ClipSize = 200
-        SWEP.Primary.ClipMax = 200
-        SWEP.Primary_TFA.ClipSize = 200
-        SWEP.Primary_TFA.MaxAmmo = 200
+        SWEP.Primary.ClipSize = 100
+        SWEP.Primary.ClipMax = 100
+        SWEP.Primary_TFA.ClipSize = 100
+        SWEP.Primary_TFA.MaxAmmo = 100
         SWEP:SetClip1(0)
     end)
 
@@ -22,8 +22,13 @@ function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
     end
 
+    -- So charge up time is not tied to framerate... unless your framerate is less than 10 frames per second, in which case you have bigger problems lol
+    local chargeIncrement = 4
+    local secondsIncrement = 0.1
+    SWEP.PAPNextThink = CurTime()
+
     self:AddToHook(SWEP, "Think", function()
-        if SWEP.PAPUsed then return end
+        if SWEP.PAPUsed or SWEP.PAPNextThink > CurTime() then return end
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
 
@@ -36,7 +41,7 @@ function UPGRADE:Apply(SWEP)
                 SWEP.PAPCharging = true
             end
 
-            SWEP.PAPCharge = SWEP.PAPCharge + 1
+            SWEP.PAPCharge = SWEP.PAPCharge + chargeIncrement
             SWEP:SetClip1(SWEP.PAPCharge)
 
             if SWEP.PAPCharge >= SWEP.Primary.ClipSize then
@@ -54,13 +59,15 @@ function UPGRADE:Apply(SWEP)
                 SWEP.PAPUsed = true
             end
         elseif SWEP.PAPCharge > 0 then
-            SWEP.PAPCharge = SWEP.PAPCharge - 1
+            SWEP.PAPCharge = SWEP.PAPCharge - chargeIncrement
             SWEP:SetClip1(SWEP.PAPCharge)
 
             if SWEP.PAPCharge == 0 then
                 SWEP.PAPCharging = false
             end
         end
+
+        SWEP.PAPNextThink = CurTime() + secondsIncrement
     end)
 
     -- Make the upgraded thundergun shot always 1-shot kill, hook from the wonder weapons TTT conversion mod (Always nice to be able to add your own hooks for upgrades...)
