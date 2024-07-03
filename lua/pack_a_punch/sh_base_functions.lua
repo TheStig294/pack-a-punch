@@ -11,12 +11,15 @@ TTTPAP.shootSound = Sound("ttt_pack_a_punch/shoot.mp3")
 TTTPAP.upgrade_meta = {} -- Set by sh_upgrade_metatable.lua
 
 -- Create convar to disable trying to apply generic upgrades on weapons without one
-CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
+local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
+
+CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Display an icon on the bottom left of shop icons if a weapon is upgradeable", 0, 1)
 
 local PAPConvars = {
     ttt_pap_apply_generic_upgrades = true,
     ttt_pap_detective = true,
-    ttt_pap_traitor = true
+    ttt_pap_traitor = true,
+    ttt_pap_upgradeable_indicator = true
 }
 
 -- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:
@@ -100,37 +103,56 @@ hook.Add("TTTPrepareRound", "TTTPAPResetAll", function()
     end
 end)
 
--- Preventing the Pack-a-Punch from being bought when it shouldn't be
-function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
-    if not IsValid(ply) or not ply:IsPlayer() then return false end
-    local SWEP = ply:GetActiveWeapon()
+-- Checks if the passed weapon classname, weapon entity, or weapon a passed player is holding, can be upgraded
+function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
+    if not ent then return false end
+    local SWEP
+    local class
 
-    if not IsValid(SWEP) then
-        -- Preventing purchase if the currently held weapon is invalid
-        if displayErrorMessage then
-            ply:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Invalid weapon, try again")
-        end
-
+    -- Passed entity is normally a player, but can use this function to check if a weapon can be upgraded directly
+    -- Only display error messages if the passed entity is a player
+    if isstring(ent) then
+        class = ent
+        displayErrorMessage = false
+    elseif ent:IsValid() and ent:IsPlayer() then
+        SWEP = ent:GetActiveWeapon()
+    elseif ent:IsValid() and ent:IsWeapon() then
+        SWEP = ent
+        displayErrorMessage = false
+    else
         return false
     end
 
-    local class = SWEP:GetClass()
+    -- If we weren't passed a classname of a weapon, then we have a SWEP at this point, that needs to be converted into a classname
+    if not class then
+        if not IsValid(SWEP) then
+            -- Preventing purchase if the currently held weapon is invalid
+            if displayErrorMessage then
+                ent:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
+                ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Invalid weapon, try again")
+            end
+
+            return false
+        else
+            class = WEPS.GetClass(SWEP)
+        end
+    end
+
     local upgrades = TTTPAP.upgrades[class]
 
-    if SWEP.PAPUpgrade then
+    if SWEP and SWEP.PAPUpgrade then
         -- Preventing purchase if the currently held weapon is already upgraded
         if displayErrorMessage then
-            ply:PrintMessage(HUD_PRINTCENTER, "Weapon already upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] That weapon is already upgraded")
+            ent:PrintMessage(HUD_PRINTCENTER, "Weapon already upgraded")
+            ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] That weapon is already upgraded")
         end
 
         return false
-    elseif not upgrades and (not SWEP.AutoSpawnable or SWEP.Kind == WEAPON_NADE or not GetConVar("ttt_pap_apply_generic_upgrades"):GetBool()) then
+    elseif not upgrades and (not SWEP or not SWEP.AutoSpawnable or SWEP.Kind == WEAPON_NADE or not genericUpgradesCvar:GetBool()) then
         -- Preventing purchase if held weapon is either not a floor weapon, is a grenade, or generic upgrades are turned off, and the weapon has no PaP upgrade
         if displayErrorMessage then
-            ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
+            ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
+            ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
         end
 
         return false
@@ -142,8 +164,8 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         end
 
         if displayErrorMessage then
-            ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
+            ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
+            ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
         return false
@@ -155,8 +177,8 @@ function TTTPAP:CanOrderPAP(ply, displayErrorMessage)
         end
 
         if displayErrorMessage then
-            ply:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
-            ply:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
+            ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
+            ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
         return false

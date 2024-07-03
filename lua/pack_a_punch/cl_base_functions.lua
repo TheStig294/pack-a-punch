@@ -3,7 +3,6 @@
 -- 
 net.Receive("TTTPAPApply", function()
     local SWEP = net.ReadEntity()
-   
     if not IsValid(SWEP) then return end
     -- Reading data from server
     local delay = net.ReadFloat()
@@ -57,7 +56,6 @@ net.Receive("TTTPAPApply", function()
     if UPGRADE.desc and not noDesc then
         -- Need to check this is the player actually holding the weapon!
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
-
             if wep == SWEP then
                 chat.AddText("PAP UPGRADE: " .. UPGRADE.desc)
                 break
@@ -138,5 +136,68 @@ net.Receive("TTTPAPApplySound", function()
 
     if SWEP.Primary then
         SWEP.Primary.Sound = TTTPAP.shootSound
+    end
+end)
+
+-- 
+-- Adding icons to the buy menu to show if a weapon is upgradeable or not
+-- 
+local iconToClass = {}
+
+local function GetClassFromIcon(icon)
+    if table.IsEmpty(iconToClass) then
+        for _, wep in ipairs(weapons.GetList()) do
+            if wep.Icon then
+                iconToClass[wep.Icon] = WEPS.GetClass(wep)
+            end
+        end
+    end
+
+    return iconToClass[icon]
+end
+
+hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
+    if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
+    -- First we have to travel down the panel hierarchy of the buy menu
+    local buyMenu
+
+    for _, tab in ipairs(dsheet:GetItems()) do
+        if tab.Name == "Order Equipment" then
+            buyMenu = tab.Panel
+            break
+        end
+    end
+
+    if not buyMenu then return end
+    -- From here, things get unavoidably arbitrary
+    -- Hopefully Panel:GetChildren() always returns these child panels the same way every time since they don't have any sort of ID
+    local itemsScrollPanel = buyMenu:GetChildren()[2]
+    if not itemsScrollPanel then return end
+    -- Same thing here... But this is the scroll panel so the contents panel should always be the first one here...
+    local itemIconPanels = itemsScrollPanel:GetChildren()[1]
+    if not itemIconPanels then return end
+
+    -- Now we've finally made it, start looping through the buy menu icons and start adding our own on top
+    for _, buyMenuIconPanel in ipairs(itemIconPanels:GetChildren()) do
+        -- First check if the item is not a passive item and is upgradable
+        local buyMenuIcon = buyMenuIconPanel:GetIcon()
+        local class = GetClassFromIcon(buyMenuIcon)
+        if not class or not TTTPAP:CanOrderPAP(class) then continue end
+        -- Then create the icon
+        local icon = vgui.Create("DImage")
+        icon:SetImage("vgui/ttt/icon_upgradeable_16.png")
+
+        -- This is how other overlayed icons are done in vanilla TTT, so we do the same here
+        -- This normally used for the slot icon and custom item icon
+        -- Hopefully TTT2 also has a "LayeredIcon" vgui element but you know how TTT2 goes... We'll probably have to do something else...
+        icon.PerformLayout = function(s)
+            s:AlignBottom(4)
+            s:AlignLeft(2)
+            s:SetSize(16, 16)
+        end
+
+        icon:SetTooltip("Upgradable")
+        buyMenuIconPanel:AddLayer(icon)
+        buyMenuIconPanel:EnableMousePassthrough(icon)
     end
 end)

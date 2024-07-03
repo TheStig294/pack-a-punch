@@ -420,6 +420,27 @@ local function CreateOptionsMenu()
         end
     end
 
+    -- Convar checkbox for enabling/disabling upgradeable indicator icons in the buy menu
+    local indicatorCvar = GetConVar("ttt_pap_upgradeable_indicator")
+    local indicatorCheck = nonScrollList:Add("DCheckBoxLabel")
+    indicatorCheck:SetText(indicatorCvar:GetHelpText())
+    indicatorCheck:SetChecked(indicatorCvar:GetBool())
+    indicatorCheck:SetIndent(10)
+    indicatorCheck:SizeToContents()
+
+    function indicatorCheck:OnChange()
+        net.Start("TTTPAPChangeConvar")
+        net.WriteString(indicatorCvar:GetName())
+
+        if indicatorCheck:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
+        net.SendToServer()
+    end
+
     -- Search bar
     local searchBar = nonScrollList:Add("DTextEntry")
     searchBar:SetSize(570, 20)
