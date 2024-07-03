@@ -52,7 +52,13 @@ function ENT:Explode(tr)
 
         util.Effect("Explosion", effect, true, true)
         util.BlastDamage(self, self:GetThrower(), pos, self:GetRadius(), self:GetDmg())
-        StartFires(pos, tr, 30, 1000, false, self:GetThrower())
+
+        if TTT2 then
+            gameEffects.StartFires(pos, tr, 30, 1000, false, self:GetThrower(), 500, false, 128, 2)
+        else
+            StartFires(pos, tr, 30, 1000, false, self:GetThrower())
+        end
+
         self:SetDetonateExact(0)
         self:Remove()
     else
