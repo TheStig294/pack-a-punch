@@ -1,17 +1,17 @@
 local UPGRADE = {}
-UPGRADE.id = "role_choosing_defib"
-UPGRADE.class = "weapon_med_defib"
+UPGRADE.id = "role_choosing_defib_clear"
+UPGRADE.class = "weapon_clearrandomat_defib"
 UPGRADE.name = "Role Choosing Defib"
 UPGRADE.desc = "You can select the innocent role a player becomes!\n(Right-click)"
 
 UPGRADE.convars = {
     {
-        name = "pap_role_choosing_defib_can_become_paramedic",
+        name = "pap_role_choosing_defib_clear_can_become_paramedic",
         type = "bool"
     }
 }
 
-local canBecomeMedCvar = CreateConVar("pap_role_choosing_defib_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
+local canBecomeMedCvar = CreateConVar("pap_role_choosing_defib_clear_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
 function UPGRADE:Apply(SWEP)
     -- Returns the list of all enabled roles

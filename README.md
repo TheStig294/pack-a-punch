@@ -692,33 +692,33 @@ Always guaranteed to work!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=801433502>
 
-## Defibrillator [Clear! Randomat Weapon] (Special Innocent Defib)
+## Defibrillator [Clear! Randomat Weapon] (Role Choosing Defib)
 
-Turns innocents into non-vanilla innocents!\
+You can select the innocent role a player becomes! (Right-click)\
 \
-*ttt_pap_defib_special_clear* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_role_choosing_defib_clear* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_defib_special_clear_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
+*pap_role_choosing_defib_clear_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
-## Defibrillator [Paramedic Role Weapon] (Special Innocent Defib)
+## Defibrillator [Paramedic Role Weapon] (Role Choosing Defib)
 
-Turns innocents into non-vanilla innocents!\
+You can select the innocent role a player becomes! (Right-click)\
 \
-*ttt_pap_defib_special* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_role_choosing_defib* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_defib_special_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
+*pap_role_choosing_defib_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
-## Defibrillator [Patient Confidentiality Randomat Weapon] (Special Innocent Defib)
+## Defibrillator [Patient Confidentiality Randomat Weapon] (Role Choosing Defib)
 
-Turns innocents into non-vanilla innocents!\
+You can select the innocent role a player becomes! (Right-click)\
 \
-*ttt_pap_defib_special_patientconf* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_role_choosing_defib_patientconf* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_defib_special_patientconf_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
+*pap_role_choosing_defib_patientconf_can_become_paramedic* - Default: 1 - Allow revived players to become paramedics\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2978533262>
 
