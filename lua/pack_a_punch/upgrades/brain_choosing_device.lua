@@ -68,6 +68,11 @@ function UPGRADE:Apply(SWEP)
             end
 
             timer.Simple(0.1, function()
+                -- If they chose the Soulbound, they need to be dead for that to work, as the Soulbound is a dead-player role
+                if ROLE_SOULBOUND and role == ROLE_SOULBOUND then
+                    tgt:Kill()
+                end
+
                 tgt:SetRole(role)
                 SendFullStateUpdate()
             end)
