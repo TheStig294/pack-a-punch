@@ -364,13 +364,13 @@ It's a 1-shot if it hits you once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
-## Brain Washing Device (Brain Cleansing Device)
+## Brain Washing Device (Brain Choosing Device)
 
-Turns players into non-vanilla traitors!\
+You can select the traitor role a player becomes! (Right-click)\
 \
-*ttt_pap_brain_cleansing_device* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_brain_choosing_device* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_brain_cleansing_device_can_become_hypnotist* - Default: 1 - Allow revived players to become hypnotists\
+*pap_brain_choosing_device_can_become_hypnotist* - Default: 1 - Allow revived players to become hypnotists\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
