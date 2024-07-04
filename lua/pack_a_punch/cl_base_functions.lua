@@ -158,9 +158,22 @@ end
 
 local iconToUpgradeable = {}
 
-hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
-    if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
-    -- First we have to travel down the panel hierarchy of the buy menu
+-- The way the buy menu panels are laid out depends on what version of TTT you are using
+local panelHierarchies = {
+    CR = {2, 1},
+    Vanilla = {1, 1}
+}
+
+-- Travels down the panel hierarchy of the buy menu, and returns a table of all buy menu icons
+local function GetItemIconPanels(dsheet)
+    local panelHierachy
+
+    if CR_VERSION then
+        panelHierachy = panelHierarchies["CR"]
+    else
+        panelHierachy = panelHierarchies["Vanilla"]
+    end
+
     local buyMenu
 
     for _, tab in ipairs(dsheet:GetItems()) do
@@ -170,20 +183,37 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
         end
     end
 
+    print("Buy Menu:", buyMenu)
+    PrintTable(buyMenu:GetChildren())
     if not buyMenu then return end
     -- From here, things get unavoidably arbitrary
     -- Hopefully Panel:GetChildren() always returns these child panels the same way every time since they don't have any sort of ID
-    local itemsScrollPanel = buyMenu:GetChildren()[2]
+    local itemsScrollPanel = buyMenu:GetChildren()[panelHierachy[1]]
+    print("Items Scroll Panel:", itemsScrollPanel)
+    PrintTable(itemsScrollPanel:GetChildren())
     if not itemsScrollPanel then return end
     -- Same thing here... But this is the scroll panel so the contents panel should always be the first one here...
-    local itemIconsPanel = itemsScrollPanel:GetChildren()[1]
+    local itemIconsPanel = itemsScrollPanel:GetChildren()[panelHierachy[2]]
+    print("ItemIconsPanel:", itemIconsPanel)
+    PrintTable(itemsScrollPanel:GetChildren())
     if not itemIconsPanel then return end
     local itemIcons = itemIconsPanel:GetChildren()
+
+    return itemIcons
+end
+
+hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
+    if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
+    local itemIcons = GetItemIconPanels(dsheet)
+    print("Item Icons:", itemIcons)
+    -- PrintTable("Item Icons:", itemIcons)
     -- Now we've finally made it, start looping through the buy menu icons and start counting which weapons are upgradeable or not
     local upgradeableCount = 0
     local notUpgradeableCount = 0
 
     for _, iconPanel in ipairs(itemIcons) do
+        print(iconPanel)
+        if not iconPanel.GetIcon then return end
         local icon = iconPanel:GetIcon()
         local class = GetClassFromIcon(icon)
         -- Skip passive items, or items we couldn't find
