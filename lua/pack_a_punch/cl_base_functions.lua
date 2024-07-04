@@ -142,36 +142,15 @@ end)
 -- 
 -- Adding icons to the buy menu to show if a weapon is upgradeable or not
 -- 
-local iconToClass = {}
-
-local function GetClassFromIcon(icon)
-    if table.IsEmpty(iconToClass) then
-        for _, wep in ipairs(weapons.GetList()) do
-            if wep.Icon then
-                iconToClass[wep.Icon] = WEPS.GetClass(wep)
-            end
-        end
-    end
-
-    return iconToClass[icon]
-end
-
-local iconToUpgradeable = {}
-
--- The way the buy menu panels are laid out depends on what version of TTT you are using
-local panelHierarchies = {
-    CR = {2, 1},
-    Vanilla = {1, 1}
-}
-
 -- Travels down the panel hierarchy of the buy menu, and returns a table of all buy menu icons
 local function GetItemIconPanels(dsheet)
     local panelHierachy
 
+    -- The way the buy menu panels are laid out depends on what version of TTT you are using
     if CR_VERSION then
-        panelHierachy = panelHierarchies["CR"]
+        panelHierachy = {2, 1}
     else
-        panelHierachy = panelHierarchies["Vanilla"]
+        panelHierachy = {1, 1}
     end
 
     local buyMenu
@@ -202,20 +181,50 @@ local function GetItemIconPanels(dsheet)
     return itemIcons
 end
 
+local iconToClass = {}
+
+local function GetClassFromIcon(icon)
+    if table.IsEmpty(iconToClass) then
+        for _, wep in ipairs(weapons.GetList()) do
+            if wep.Icon then
+                iconToClass[wep.Icon] = WEPS.GetClass(wep)
+            end
+        end
+    end
+
+    return iconToClass[icon]
+end
+
+local iconToUpgradeable = {}
+
 hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
     local itemIcons = GetItemIconPanels(dsheet)
     print("Item Icons:", itemIcons)
-    -- PrintTable("Item Icons:", itemIcons)
     -- Now we've finally made it, start looping through the buy menu icons and start counting which weapons are upgradeable or not
     local upgradeableCount = 0
     local notUpgradeableCount = 0
 
     for _, iconPanel in ipairs(itemIcons) do
-        print(iconPanel)
+        print("Icon panel:", iconPanel)
+        print("GetIcon():", iconPanel:GetIcon())
+        print("self.Icon:", iconPanel.Icon)
+        print("self.Icon:GetMaterial():", iconPanel.Icon:GetMaterial())
+        print("self.Icon:GetMaterial():GetName():", iconPanel.Icon:GetMaterial():GetName())
         if not iconPanel.GetIcon then return end
-        local icon = iconPanel:GetIcon()
+        local icon
+
+        -- TTT2 just loves to be difficult doesn't it?
+        -- (TTT2 breaks the GetIcon() function, it always returns nil...)
+        if TTT2 then
+            icon = iconPanel.Icon:GetMaterial():GetName()
+        else
+            icon = iconPanel:GetIcon()
+        end
+
+        print("Icon:", icon)
         local class = GetClassFromIcon(icon)
+        print("Icon class;", class)
         -- Skip passive items, or items we couldn't find
         if not class then continue end
 
@@ -229,8 +238,11 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
         end
     end
 
+    -- PrintTable(iconToClass)
+    -- PrintTable(iconToUpgradeable)
     -- Then create the icons, either showing upgradeable, or not upgradeable, whichever adds less icons
     for _, iconPanel in ipairs(itemIcons) do
+        -- print(iconPanel)
         local upgradeable = iconToUpgradeable[iconPanel:GetIcon()]
         local icon
 
@@ -258,6 +270,7 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
             s:SetSize(16, 16)
         end
 
+        print(icon)
         iconPanel:AddLayer(icon)
         iconPanel:EnableMousePassthrough(icon)
     end
