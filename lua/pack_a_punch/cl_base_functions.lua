@@ -156,6 +156,8 @@ local function GetClassFromIcon(icon)
     return iconToClass[icon]
 end
 
+local iconToUpgradeable = {}
+
 hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
     -- First we have to travel down the panel hierarchy of the buy menu
@@ -174,30 +176,59 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     local itemsScrollPanel = buyMenu:GetChildren()[2]
     if not itemsScrollPanel then return end
     -- Same thing here... But this is the scroll panel so the contents panel should always be the first one here...
-    local itemIconPanels = itemsScrollPanel:GetChildren()[1]
-    if not itemIconPanels then return end
+    local itemIconsPanel = itemsScrollPanel:GetChildren()[1]
+    if not itemIconsPanel then return end
+    local itemIcons = itemIconsPanel:GetChildren()
+    -- Now we've finally made it, start looping through the buy menu icons and start counting which weapons are upgradeable or not
+    local upgradeableCount = 0
+    local notUpgradeableCount = 0
 
-    -- Now we've finally made it, start looping through the buy menu icons and start adding our own on top
-    for _, buyMenuIconPanel in ipairs(itemIconPanels:GetChildren()) do
-        -- First check if the item is not a passive item and is upgradable
-        local buyMenuIcon = buyMenuIconPanel:GetIcon()
-        local class = GetClassFromIcon(buyMenuIcon)
-        if not class or not TTTPAP:CanOrderPAP(class) then continue end
-        -- Then create the icon
-        local icon = vgui.Create("DImage")
-        icon:SetImage("vgui/ttt/icon_upgradeable_16.png")
+    for _, iconPanel in ipairs(itemIcons) do
+        local icon = iconPanel:GetIcon()
+        local class = GetClassFromIcon(icon)
+        -- Skip passive items, or items we couldn't find
+        if not class then continue end
+
+        -- Count how many items are upgradeable vs. not
+        if TTTPAP:CanOrderPAP(class) then
+            upgradeableCount = upgradeableCount + 1
+            iconToUpgradeable[icon] = true
+        else
+            notUpgradeableCount = notUpgradeableCount + 1
+            iconToUpgradeable[icon] = false
+        end
+    end
+
+    -- Then create the icons, either showing upgradeable, or not upgradeable, whichever adds less icons
+    for _, iconPanel in ipairs(itemIcons) do
+        local upgradeable = iconToUpgradeable[iconPanel:GetIcon()]
+        local icon
+
+        if upgradeable and upgradeableCount <= notUpgradeableCount then
+            icon = vgui.Create("DImage")
+            icon:SetImage("vgui/ttt/icon_upgradeable_16.png")
+            icon:SetTooltip("Upgradable")
+        elseif upgradeable == false and (upgradeableCount > notUpgradeableCount or upgradeableCount == 0) then
+            icon = vgui.Create("DImage")
+            icon:SetImage("vgui/ttt/icon_not_upgradeable_16.png")
+            icon:SetTooltip("Not Upgradable")
+        else
+            continue
+        end
+
+        -- Set the icon to be faded if the buy menu icon is faded (e.g. weapon is already bought)
+        icon:SetImageColor(iconPanel.Icon:GetImageColor())
 
         -- This is how other overlayed icons are done in vanilla TTT, so we do the same here
         -- This normally used for the slot icon and custom item icon
         -- Hopefully TTT2 also has a "LayeredIcon" vgui element but you know how TTT2 goes... We'll probably have to do something else...
         icon.PerformLayout = function(s)
             s:AlignBottom(4)
-            s:AlignLeft(2)
+            s:CenterHorizontal()
             s:SetSize(16, 16)
         end
 
-        icon:SetTooltip("Upgradable")
-        buyMenuIconPanel:AddLayer(icon)
-        buyMenuIconPanel:EnableMousePassthrough(icon)
+        iconPanel:AddLayer(icon)
+        iconPanel:EnableMousePassthrough(icon)
     end
 end)
