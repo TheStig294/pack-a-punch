@@ -18,7 +18,9 @@ Alternatively, if you know what you're doing, add the below convars to your serv
 \
 *ttt_pap_detective* - Default: 1 - Detectives can buy PaP (Requires map change)\
 \
-*ttt_pap_traitor* - Default: 1 - Traitors can buy PaP (Requires map change)
+*ttt_pap_traitor* - Default: 1 - Traitors can buy PaP (Requires map change)\
+\
+*ttt_pap_upgradeable_indicator* - Default: 1 - *Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not
 
 # Upgrades that need other mods to work
 
