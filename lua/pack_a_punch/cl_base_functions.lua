@@ -255,7 +255,7 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
 
         if upgradeable and not moreUpgradeableThanNot then
             icon = vgui.Create("DImage")
-            icon:SetImage("vgui/ttt/icon_upgradeable_16.png")
+            icon:SetImage("vgui/ttt/icon_pap_16.png")
             icon:SetTooltip("Upgradable")
         elseif upgradeable == false and (moreUpgradeableThanNot or upgradeableCount == 0) then
             icon = vgui.Create("DImage")
