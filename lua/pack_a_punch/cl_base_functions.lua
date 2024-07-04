@@ -147,6 +147,10 @@ local function GetItemIconPanels(dsheet)
     local panelHierachy
 
     -- The way the buy menu panels are laid out depends on what version of TTT you are using
+    -- In Custom Roles, the search bar is in the way, on the main dsheet on the left hand side
+    -- In the regular Better Equipment Menu UI, and TTT2, the search bar is on the right hand side, a different panel to the main dsheet
+    -- First index is the scroll panel child, the second index is the "Equipment Items" child, its children are all of the buy menu icons
+    -- A table of the children of that panel is returned (The buy menu icons)
     if CR_VERSION then
         panelHierachy = {2, 1}
     else
@@ -162,23 +166,21 @@ local function GetItemIconPanels(dsheet)
         end
     end
 
-    print("Buy Menu:", buyMenu)
-    PrintTable(buyMenu:GetChildren())
     if not buyMenu then return end
+    buyMenu = buyMenu:GetChildren()
+
     -- From here, things get unavoidably arbitrary
     -- Hopefully Panel:GetChildren() always returns these child panels the same way every time since they don't have any sort of ID
-    local itemsScrollPanel = buyMenu:GetChildren()[panelHierachy[1]]
-    print("Items Scroll Panel:", itemsScrollPanel)
-    PrintTable(itemsScrollPanel:GetChildren())
-    if not itemsScrollPanel then return end
-    -- Same thing here... But this is the scroll panel so the contents panel should always be the first one here...
-    local itemIconsPanel = itemsScrollPanel:GetChildren()[panelHierachy[2]]
-    print("ItemIconsPanel:", itemIconsPanel)
-    PrintTable(itemsScrollPanel:GetChildren())
-    if not itemIconsPanel then return end
-    local itemIcons = itemIconsPanel:GetChildren()
+    -- Being super careful here to check for nil or empty table values at each step,
+    -- since Gmod store skins or future updates for the buy menu could render it unusable otherwise
+    for _, childIndex in ipairs(panelHierachy) do
+        if not buyMenu or table.IsEmpty(buyMenu) then return end
+        buyMenu = buyMenu[childIndex]
+        if not buyMenu then return end
+        buyMenu = buyMenu:GetChildren()
+    end
 
-    return itemIcons
+    return buyMenu
 end
 
 local iconToClass = {}
@@ -186,8 +188,14 @@ local iconToClass = {}
 local function GetClassFromIcon(icon)
     if table.IsEmpty(iconToClass) then
         for _, wep in ipairs(weapons.GetList()) do
-            if wep.Icon then
-                iconToClass[wep.Icon] = WEPS.GetClass(wep)
+            local wepIcon = wep.Icon
+
+            if wepIcon then
+                if TTT2 then
+                    wepIcon = string.StripExtension(wepIcon)
+                end
+
+                iconToClass[wepIcon] = WEPS.GetClass(wep)
             end
         end
     end
@@ -200,17 +208,12 @@ local iconToUpgradeable = {}
 hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
     local itemIcons = GetItemIconPanels(dsheet)
-    print("Item Icons:", itemIcons)
+    if not itemIcons or table.IsEmpty(itemIcons) then return end
     -- Now we've finally made it, start looping through the buy menu icons and start counting which weapons are upgradeable or not
     local upgradeableCount = 0
     local notUpgradeableCount = 0
 
     for _, iconPanel in ipairs(itemIcons) do
-        print("Icon panel:", iconPanel)
-        print("GetIcon():", iconPanel:GetIcon())
-        print("self.Icon:", iconPanel.Icon)
-        print("self.Icon:GetMaterial():", iconPanel.Icon:GetMaterial())
-        print("self.Icon:GetMaterial():GetName():", iconPanel.Icon:GetMaterial():GetName())
         if not iconPanel.GetIcon then return end
         local icon
 
@@ -222,9 +225,7 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
             icon = iconPanel:GetIcon()
         end
 
-        print("Icon:", icon)
         local class = GetClassFromIcon(icon)
-        print("Icon class;", class)
         -- Skip passive items, or items we couldn't find
         if not class then continue end
 
@@ -238,19 +239,25 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
         end
     end
 
-    -- PrintTable(iconToClass)
-    -- PrintTable(iconToUpgradeable)
+    local moreUpgradeableThanNot = upgradeableCount > notUpgradeableCount
+
     -- Then create the icons, either showing upgradeable, or not upgradeable, whichever adds less icons
     for _, iconPanel in ipairs(itemIcons) do
-        -- print(iconPanel)
-        local upgradeable = iconToUpgradeable[iconPanel:GetIcon()]
+        local upgradeable
+
+        if TTT2 then
+            upgradeable = iconToUpgradeable[iconPanel.Icon:GetMaterial():GetName()]
+        else
+            upgradeable = iconToUpgradeable[iconPanel:GetIcon()]
+        end
+
         local icon
 
-        if upgradeable and upgradeableCount <= notUpgradeableCount then
+        if upgradeable and not moreUpgradeableThanNot then
             icon = vgui.Create("DImage")
             icon:SetImage("vgui/ttt/icon_upgradeable_16.png")
             icon:SetTooltip("Upgradable")
-        elseif upgradeable == false and (upgradeableCount > notUpgradeableCount or upgradeableCount == 0) then
+        elseif upgradeable == false and (moreUpgradeableThanNot or upgradeableCount == 0) then
             icon = vgui.Create("DImage")
             icon:SetImage("vgui/ttt/icon_not_upgradeable_16.png")
             icon:SetTooltip("Not Upgradable")
@@ -270,7 +277,6 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
             s:SetSize(16, 16)
         end
 
-        print(icon)
         iconPanel:AddLayer(icon)
         iconPanel:EnableMousePassthrough(icon)
     end
