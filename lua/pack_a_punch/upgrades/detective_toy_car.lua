@@ -20,7 +20,7 @@ local damageMultCvar = CreateConVar("pap_detective_toy_car_damage_mult", 2.5, {F
 
 local placeRangeCvar = CreateConVar("pap_detective_toy_car_place_range", 200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Maximum placement distance", 10, 10000)
 
-local carModel = "models/simfphys_vehicle1/cozycoupe.mdl"
+local carModel = Model("models/simfphys_vehicle1/cozycoupe.mdl")
 
 function UPGRADE:Condition()
     return util.IsValidModel(carModel)
