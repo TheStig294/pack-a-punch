@@ -13,7 +13,7 @@ TTTPAP.upgrade_meta = {} -- Set by sh_upgrade_metatable.lua
 -- Create convar to disable trying to apply generic upgrades on weapons without one
 local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade (Normally a stats upgrade)", 0, 1)
 
-CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Display an icon on shop icons showing if a weapon is upgradeable or not", 0, 1)
+CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Display an icon over buy menu icons showing if a weapon is upgradeable or not", 0, 1)
 
 local PAPConvars = {
     ttt_pap_apply_generic_upgrades = true,
