@@ -2,9 +2,24 @@ local UPGRADE = {}
 UPGRADE.id = "the_traitor_force"
 UPGRADE.class = "weapon_ttt_traitor_lightsaber"
 UPGRADE.name = "The Traitor Force"
-UPGRADE.desc = "Pick up players and objects using the force!"
+UPGRADE.desc = "Pick up things using the force!\nPlayers take much more ammo to pick up"
 
 function UPGRADE:Apply(SWEP)
+    local lightsaber_hit_help
+    local lightsaber_reload_help
+    local lightsaber_mode_help
+
+    if TTT2 then
+        lightsaber_hit_help = "Hit with the lightsaber"
+        lightsaber_reload_help = "Switch the force power"
+
+        lightsaber_mode_help = {"Block incoming shots and send them back", "Unleash force lightning", "Push your enemies away from you", "Pull your enemies towards you"}
+    else
+        lightsaber_reload_help = "RELOAD to switch the force power"
+
+        lightsaber_mode_help = {"MOUSE2 to block incoming shots and send them back", "MOUSE2 to unleash force lightning", "MOUSE2 to push your enemies away from you", "MOUSE2 to force pull your enemies towards you"}
+    end
+
     timer.Simple(0.1, function()
         SWEP.darkMode = 4
     end)
@@ -49,7 +64,7 @@ function UPGRADE:Apply(SWEP)
     self:AddToHook(SWEP, "SecondaryAttack", function()
         if SWEP.darkMode == 4 then
             local owner = SWEP:GetOwner()
-            if not IsValid(owner) or SWEP:Clip1() < 10 then return end
+            if not IsValid(owner) or SWEP:Clip1() < 30 then return end
 
             if not owner.LagCompensation then
                 owner:LagCompensation(true)
@@ -59,7 +74,20 @@ function UPGRADE:Apply(SWEP)
 
             if not IsValid(SWEP.InitialTarget) then
                 if not IsValid(target) then return end
+
+                -- Make players much more expensive to pick up as it is very easy to kill with this weapon
+                if target:IsPlayer() then
+                    if SWEP:Clip1() < 100 then
+                        return
+                    else
+                        SWEP:TakePrimaryAmmo(100)
+                    end
+                end
+
+                -- Wake up the entity's physics so objects aren't left floating in the air
+                target:PhysWake()
                 SWEP.InitialTarget = target
+                SWEP.InitialDistance = owner:GetPos():Distance(target:GetPos())
             end
 
             SWEP.IsHoldingRightClick = true
@@ -67,10 +95,11 @@ function UPGRADE:Apply(SWEP)
             timer.Create("TTTPAPTheTraitorForceRightClick" .. SWEP:EntIndex(), 1, 1, function()
                 if IsValid(SWEP) then
                     SWEP.IsHoldingRightClick = false
+                    SWEP.InitialTarget = nil
                 end
             end)
 
-            SWEP:TakePrimaryAmmo(10)
+            SWEP:TakePrimaryAmmo(30)
             SWEP:SendWeaponAnim(ACT_RANGE_ATTACK2)
             SWEP:EmitSound("phantom/force/speed.wav")
             SWEP:SetNextSecondaryFire(CurTime() + 1)
@@ -85,14 +114,24 @@ function UPGRADE:Apply(SWEP)
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
 
-        if SWEP.darkMode == 4 and self.IsHoldingRightClick then
+        if SWEP.darkMode == 4 and SWEP.IsHoldingRightClick then
             if not owner.LagCompensation then
                 owner:LagCompensation(true)
             end
 
-            local ownerPos = owner:GetShootPos()
-            local targetPos = target:GetPos()
-            local distance = ownerPos:Distance2D(targetPos)
+            local target = SWEP.InitialTarget
+            local distance = SWEP.InitialDistance
+            local tr = owner:GetEyeTrace()
+
+            -- Looking at the target
+            if IsValid(tr.Entity) and tr.Entity == target then
+                target:SetPos(target:GetPos())
+                -- Looking anywhere else while having a valid initial target
+                -- Also check to ensure the object isn't getting pushed outside the map
+            elseif SERVER and IsValid(target) and distance and target:IsInWorld() then
+                local forward = owner:GetForward() * distance
+                target:SetPos(owner:GetShootPos() + forward)
+            end
 
             if owner.LagCompensation then
                 owner:LagCompensation(false)
