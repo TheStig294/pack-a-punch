@@ -86,6 +86,12 @@ function UPGRADE:Apply(SWEP)
                 -- Make players much more expensive to pick up as it is very easy to kill with this weapon
                 if target:IsPlayer() then
                     if SWEP:Clip1() < 100 then
+                        if CLIENT and not SWEP.ShownAmmoMessage then
+                            SWEP:EmitSound("tools/ifm/ifm_denyundo.wav")
+                            owner:ChatPrint("Players require 100 ammo to be picked up!")
+                            SWEP.ShownAmmoMessage = true
+                        end
+
                         return
                     else
                         SWEP:TakePrimaryAmmo(100)
@@ -122,11 +128,15 @@ function UPGRADE:Apply(SWEP)
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
 
-        if SERVER and SWEP.darkMode == 4 and SWEP.IsHoldingRightClick then
-            if not owner.LagCompensation then
-                owner:LagCompensation(true)
-            end
+        if not owner.LagCompensation then
+            owner:LagCompensation(true)
+        end
 
+        local ent = owner:GetEyeTrace().Entity
+
+        owner.TTTPAPTheDarkSideEnt = {ent}
+
+        if SERVER and SWEP.darkMode == 4 and SWEP.IsHoldingRightClick then
             local target = SWEP.InitialTarget
             local distance = SWEP.InitialDistance
             local tr = owner:GetEyeTrace()
@@ -146,15 +156,26 @@ function UPGRADE:Apply(SWEP)
                     target:SetPos(finalPos)
                 end
             end
-
-            if owner.LagCompensation then
-                owner:LagCompensation(false)
-            end
-            -- Should do the highlighing of the currently looked at player here + some text
         elseif SWEP.darkMode == 4 and not self.IsHoldingRightClick then
             SWEP.InitialTarget = nil
         end
+
+        if owner.LagCompensation then
+            owner:LagCompensation(false)
+        end
     end)
+
+    if CLIENT then
+        self:AddHook("PreDrawHalos", function()
+            local ply = LocalPlayer()
+            if not ply.TTTPAPTheDarkSideEnt then return end
+            local wep = ply:GetActiveWeapon()
+
+            if IsValid(wep) and self:IsUpgraded(wep) then
+                halo.Add(ply.TTTPAPTheDarkSideEnt, COLOR_WHITE, 1, 1, 3, true, false)
+            end
+        end)
+    end
 
     -- Adding the HUD icon for the new mode
     if not TTT2 then
