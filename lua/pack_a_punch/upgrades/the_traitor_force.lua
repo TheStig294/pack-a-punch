@@ -13,15 +13,19 @@ function UPGRADE:Apply(SWEP)
         lightsaber_hit_help = "Hit with the lightsaber"
         lightsaber_reload_help = "Switch the force power"
 
-        lightsaber_mode_help = {"Block incoming shots and send them back", "Unleash force lightning", "Push your enemies away from you", "Pull your enemies towards you"}
+        lightsaber_mode_help = {"Block incoming shots and send them back", "Unleash force lightning", "Push your enemies away from you", "Pull your enemies towards you", "Carry objects around"}
     else
         lightsaber_reload_help = "RELOAD to switch the force power"
 
-        lightsaber_mode_help = {"MOUSE2 to block incoming shots and send them back", "MOUSE2 to unleash force lightning", "MOUSE2 to push your enemies away from you", "MOUSE2 to force pull your enemies towards you"}
+        lightsaber_mode_help = {"MOUSE2 to block incoming shots and send them back", "MOUSE2 to unleash force lightning", "MOUSE2 to push your enemies away from you", "MOUSE2 to force pull your enemies towards you", "MOUSE2 to start carrying an object"}
     end
 
     timer.Simple(0.1, function()
         SWEP.darkMode = 4
+
+        if CLIENT then
+            SWEP:AddHUDHelp(lightsaber_mode_help[SWEP.darkMode + 1], lightsaber_reload_help, false)
+        end
     end)
 
     -- Making it so there is an extra mode slot: darkMode = 4
@@ -47,7 +51,7 @@ function UPGRADE:Apply(SWEP)
                 self:AddTTT2HUDHelp(lightsaber_hit_help, lightsaber_mode_help[self.darkMode + 1])
                 self:AddHUDHelpLine(lightsaber_reload_help, Key("+reload", "R"))
             else
-                self:AddHUDHelp(lightsaber_mode_help[1], lightsaber_reload_help, false)
+                self:AddHUDHelp(lightsaber_mode_help[self.darkMode + 1], lightsaber_reload_help, false)
             end
         end
 
@@ -114,7 +118,7 @@ function UPGRADE:Apply(SWEP)
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
 
-        if SWEP.darkMode == 4 and SWEP.IsHoldingRightClick then
+        if SERVER and SWEP.darkMode == 4 and SWEP.IsHoldingRightClick then
             if not owner.LagCompensation then
                 owner:LagCompensation(true)
             end
