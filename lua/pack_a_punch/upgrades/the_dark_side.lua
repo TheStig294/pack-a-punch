@@ -127,14 +127,20 @@ function UPGRADE:Apply(SWEP)
             local distance = SWEP.InitialDistance
             local tr = owner:GetEyeTrace()
 
-            -- Looking at the target
-            if IsValid(tr.Entity) and tr.Entity == target then
-                target:SetPos(target:GetPos())
-                -- Looking anywhere else while having a valid initial target
-                -- Also check to ensure the object isn't getting pushed outside the map
-            elseif SERVER and IsValid(target) and distance and target:IsInWorld() then
-                local forward = owner:GetForward() * distance
-                target:SetPos(owner:GetShootPos() + forward)
+            -- Not looking at the target
+            -- Looking anywhere else while having a valid initial target
+            -- Also check to ensure the object isn't getting pushed outside the map
+            if (not IsValid(tr.Entity) or tr.Entity ~= target) and IsValid(target) and distance and target:IsInWorld() then
+                local forwardVector = owner:GetForward() * distance
+                local finalPos = owner:GetShootPos() + forwardVector
+
+                if target:IsPlayer() then
+                    local pushVector = finalPos - target:GetPos()
+                    target:SetGroundEntity(NULL)
+                    target:SetVelocity(pushVector)
+                else
+                    target:SetPos(finalPos)
+                end
             end
 
             if owner.LagCompensation then
