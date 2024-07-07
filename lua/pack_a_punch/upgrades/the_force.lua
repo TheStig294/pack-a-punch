@@ -1,7 +1,7 @@
 local UPGRADE = {}
-UPGRADE.id = "the_traitor_force"
-UPGRADE.class = "weapon_ttt_traitor_lightsaber"
-UPGRADE.name = "The Traitor Force"
+UPGRADE.id = "the_force"
+UPGRADE.class = "weapon_ttt_detective_lightsaber"
+UPGRADE.name = "The Force"
 UPGRADE.desc = "Pick up things using the force!\nPlayers take much more ammo to pick up"
 
 function UPGRADE:Apply(SWEP)
@@ -45,6 +45,10 @@ function UPGRADE:Apply(SWEP)
 
         -- Only thing changed is changing the max number of modes from 4 to 5 here
         self.darkMode = (self.darkMode + 1) % 5
+
+        if self.darkMode == 1 then
+            self.darkMode = 2
+        end
 
         if CLIENT then
             if TTT2 then
@@ -96,7 +100,7 @@ function UPGRADE:Apply(SWEP)
 
             SWEP.IsHoldingRightClick = true
 
-            timer.Create("TTTPAPTheTraitorForceRightClick" .. SWEP:EntIndex(), 1, 1, function()
+            timer.Create("TTTPAPTheForceRightClick" .. SWEP:EntIndex(), 1, 1, function()
                 if IsValid(SWEP) then
                     SWEP.IsHoldingRightClick = false
                     SWEP.InitialTarget = nil

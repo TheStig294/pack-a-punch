@@ -1248,6 +1248,15 @@ Larger explosion, fire lasts a very long time!\
 \
 Upgrade for: Default TTT weapon
 
+## Jedi Lightsaber (The Force)
+
+Pick up things using the force! Players take much more ammo to pick up\
+\
+*ttt_pap_the_force* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=635911320>
+
 ## Jetgun (Player Trapper)
 
 Sucks in players and kills after 30 seconds. Avoids triggering many on death effects!\
@@ -1392,6 +1401,15 @@ Sets off a big explosion, you are immune! Doesn't affect people behind cover\
 *pap_nerf_this_owner_immune* - Default: 1 - Owner is immune to explosion?\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
+
+## Lightsaber (The Dark Side)
+
+Pick up things using the force! Players take much more ammo to pick up\
+\
+*ttt_pap_the_dark_side* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=635911320>
 
 ## M16 (Skullcrusher)
 
