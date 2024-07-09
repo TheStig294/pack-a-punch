@@ -59,12 +59,17 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
+    -- Adding hard-coded fix for loosing shield while having PHD flopper, don't know how to do a proper generic fix for cases like that...
+    local function ShouldBeImmune(ply, dmg)
+        return ply:GetNWBool("PHDActive") and (dmg:IsFallDamage() or dmg:IsExplosionDamage())
+    end
+
     -- Handling damage
     self:AddHook("EntityTakeDamage", function(ply, dmg)
         if not self:IsPlayer(ply) then return end
         local shield = ply:GetNWInt("PAPHealthShield", 0)
 
-        if shield > 0 then
+        if shield > 0 and not ShouldBeImmune(ply, dmg) then
             local attacker = dmg:GetAttacker()
             local damage = dmg:GetDamage() * dmgResist
             ply:SetNWInt("PAPHealthShield", math.floor(shield - damage))

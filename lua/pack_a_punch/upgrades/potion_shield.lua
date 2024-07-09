@@ -23,6 +23,7 @@ UPGRADE.desc = "Gives you a health shield!\nResists " .. dmgResistCvar:GetInt() 
 function UPGRADE:Apply(SWEP)
     local DestroySound = "minecraft_original/glass2.wav"
     local maxShield = maxCvar:GetInt()
+    local dmgResist = 1 - dmgResistCvar:GetInt() / 100
 
     function SWEP:ImmortalityEnable()
         if self.PotionEnabled then return end
@@ -84,14 +85,17 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
-    -- Handling damage
-    local dmgResist = 1 - dmgResistCvar:GetInt() / 100
+    -- Adding hard-coded fix for loosing shield while having PHD flopper, don't know how to do a proper generic fix for cases like that...
+    local function ShouldBeImmune(ply, dmg)
+        return ply:GetNWBool("PHDActive") and (dmg:IsFallDamage() or dmg:IsExplosionDamage())
+    end
 
+    -- Handling damage
     self:AddHook("EntityTakeDamage", function(ply, dmg)
         if not self:IsPlayer(ply) then return end
         local shield = ply:GetNWInt("PAPHealthShield", 0)
 
-        if shield > 0 then
+        if shield > 0 and not ShouldBeImmune(ply, dmg) then
             local attacker = dmg:GetAttacker()
             local damage = dmg:GetDamage() * dmgResist
             ply:SetNWInt("PAPHealthShield", math.floor(shield - damage))
