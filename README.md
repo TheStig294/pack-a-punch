@@ -207,10 +207,11 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1839121623>
 
 ## Artillery Cannon (Auto Cannon)
 
-Auto-shoots, pressing 'E' removes the cannon!\
+Auto-shoots, more damage, pressing 'E' removes the cannon!\
 \
 *ttt_pap_auto_cannon* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_auto_cannon_damage* - Default: 1000 - Damage of the auto cannon's shells\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2087368173>
 

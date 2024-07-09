@@ -2,7 +2,17 @@ local UPGRADE = {}
 UPGRADE.id = "auto_cannon"
 UPGRADE.class = "weapon_ttt_artillery"
 UPGRADE.name = "Auto Cannon"
-UPGRADE.desc = "Auto-shoots, pressing 'E' removes the cannon!"
+UPGRADE.desc = "Auto-shoots, more damage, pressing 'E' removes the cannon!"
+
+UPGRADE.convars = {
+    {
+        name = "pap_auto_cannon_damage",
+        type = "int"
+    }
+}
+
+local damageCvar = CreateConVar("pap_auto_cannon_damage", 1000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage of the auto cannon's shells", 1, 1000)
+
 -- As per usual, sound is abnormally quiet, so it is played over itself to be louder
 local musicVolume = 4
 
@@ -28,6 +38,48 @@ hook.Add("InitPostEntity", "TTTPAPModifyOrchestralCannon", function()
                 return oldUse(Artillery, ply)
             end
         end
+
+        local ENT = scripted_ents.GetStored("zay_shell")
+
+        -- This is all copied from Zay's artillery cannon code, we're overriding this function just so the damage the cannon deals passes an inflictor
+        -- so we can properly detect and change the upgraded cannon's damage
+        function ENT:PhysicsCollide(data, phys)
+            if self.zay_Collided == true then return end
+
+            timer.Simple(0, function()
+                if not IsValid(self) then return end
+                self:SetNoDraw(true)
+                local a_phys = self:GetPhysicsObject()
+
+                if IsValid(a_phys) then
+                    a_phys:Wake()
+                    a_phys:EnableMotion(false)
+                end
+            end)
+
+            zay.f.CreateNetEffect("shell_explosion", self:GetPos())
+
+            for k, v in pairs(ents.FindInSphere(self:GetPos(), GetConVar("ttt_artillery_range"):GetFloat())) do
+                if IsValid(v) then
+                    local d = DamageInfo()
+                    d:SetDamage(GetConVar("ttt_artillery_damage"):GetFloat())
+                    d:SetAttacker(self:GetPhysicsAttacker())
+                    -- All this just so the cannon shell's damage actually passes an inflictor...
+                    d:SetInflictor(self)
+                    d:SetDamageType(DMG_BLAST)
+                    v:TakeDamageInfo(d)
+                end
+            end
+
+            local deltime = FrameTime() * 2
+
+            if not game.SinglePlayer() then
+                deltime = FrameTime() * 6
+            end
+
+            SafeRemoveEntityDelayed(self, deltime)
+            self.zay_Collided = true
+        end
     end
 end)
 
@@ -38,6 +90,16 @@ function UPGRADE:Apply(SWEP)
     if SERVER and IsValid(owner) then
         owner:PrintMessage(HUD_PRINTCENTER, "Pressing 'E' REMOVES the cannon!")
     end
+
+    -- Making the upgraded cannon's shells deal more damage
+    self:AddHook("EntityTakeDamage", function(ent, dmg)
+        local attacker = dmg:GetAttacker()
+        local inflictor = dmg:GetInflictor()
+
+        if IsValid(attacker) and IsValid(attacker.PAPAutoCannon) and IsValid(inflictor) and inflictor:GetClass() == "zay_shell" then
+            dmg:SetDamage(damageCvar:GetInt())
+        end
+    end)
 
     function SWEP:PrimaryAttack()
         self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -67,6 +129,7 @@ function UPGRADE:Apply(SWEP)
             cannon.UnlimitedAmmo = true
             cannon.Owner = ply
             cannon.ShowedWarningMessage = false
+            ply.PAPAutoCannon = cannon
 
             -- Cannon removes itself on pressing 'E' on it
             cannon.Use = function(activator)
