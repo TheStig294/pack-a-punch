@@ -66,15 +66,12 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 if not tooClose then
-                    -- local sharkTrap = ents.Create("ttt_shark_trap")
                     self:DecoyDrop(pos)
 
-                    -- sharkTrap:SetPos(pos + Vector(0, 0, 5))
                     -- Don't remove player spawn points
                     if not infoEnt then
                         ent:Remove()
                     end
-                    -- sharkTrap:Spawn()
                 end
             end
         end

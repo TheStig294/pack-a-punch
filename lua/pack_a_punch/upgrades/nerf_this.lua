@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "nerf_this"
 UPGRADE.class = "c_dvaredux_nope"
 UPGRADE.name = "Nerf This!"
-UPGRADE.desc = "Sets off a big explosion, you are immune!\nDoesn't affect people behind cover"
+UPGRADE.desc = "Sets off a big explosion next time you fire!\nYou are immune, doesn't affect people behind cover"
 
 UPGRADE.convars = {
     {
@@ -25,75 +25,75 @@ local damageCvar = CreateConVar("pap_nerf_this_damage", 10000, {FCVAR_ARCHIVE, F
 
 local ownerImmuneCvar = CreateConVar("pap_nerf_this_owner_immune", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Owner is immune to explosion?", 0, 1)
 
+function UPGRADE:Condition()
+    return scripted_ents.Get("d.va_mech") ~= nil
+end
+
 function UPGRADE:Apply(SWEP)
-    -- Something I keep forgetting... This function is already networked to all players...
-    -- So for things that happen on-upgrade there is no need to create a new network string, everyone will run this code on the client
-    if CLIENT then
-        surface.PlaySound("ttt_pack_a_punch/nerf_this/nerf_this.mp3")
-
-        timer.Simple(2, function()
-            surface.PlaySound("skill/ultimate2.mp3")
-        end)
-    end
-
     if SERVER then
-        local owner = SWEP:GetOwner()
-        if not IsValid(owner) then return end
-        local ownerShootPos = owner:GetShootPos()
-        -- Place mech in same direction as player is facing
-        local angles = owner:GetAngles()
-        angles.z = 0
-        local mech = ents.Create("d.va_mech")
-        mech:SetAngles(angles)
-        mech:SetPos(owner:GetPos())
-        mech:Spawn()
-        mech.PAPNerfThisStopDamage = true
+        self:AddToHook(SWEP, "PrimaryAttack", function()
+            local owner = SWEP:GetOwner()
+            if not IsValid(owner) or SWEP.TTTPAPSpawnedDvaMech then return end
+            SWEP.TTTPAPSpawnedDvaMech = true
+            local ownerShootPos = owner:GetShootPos()
+            -- Place mech in same direction as player is facing
+            local angles = owner:GetAngles()
+            angles.z = 0
+            local mech = ents.Create("d.va_mech")
+            mech:SetAngles(angles)
+            mech:SetPos(owner:GetPos())
+            mech:Spawn()
+            mech.PAPNerfThisStopDamage = true
+            -- Broadcast the charge up sound here because we need to check if the gun has a valid owner or not before playing it
+            BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/nerf_this/nerf_this.mp3\")")
 
-        -- Start nerf this explosion after a delay, after the callout sound has finished playing
-        timer.Simple(2, function()
-            if not IsValid(mech) or not IsValid(owner) then return end
-            mech:SetNWFloat("UltiCharge", 1000)
-            mech.Activator = owner
-            mech:Self_Destruct()
-
-            -- Triggering the explosion a split-second before the mech does it itself, so we can re-block the damage later
-            timer.Simple(3.4, function()
+            -- Start nerf this explosion after a delay, after the callout sound has finished playing
+            timer.Simple(2, function()
                 if not IsValid(mech) or not IsValid(owner) then return end
-                mech.PAPNerfThisStopDamage = false
-                local dmg = DamageInfo()
-                dmg:SetDamageType(DMG_BLAST)
-                dmg:SetDamage(damageCvar:GetInt())
-                dmg:SetAttacker(owner)
-                dmg:SetInflictor(mech)
-                -- Now, search for all players that are not behind cover, and damage them!
-                local Trace = {}
-                Trace.start = ownerShootPos
-                Trace.mask = MASK_PLAYERSOLID
+                mech:SetNWFloat("UltiCharge", 1000)
+                mech.Activator = owner
+                mech:Self_Destruct()
+                BroadcastLua("surface.PlaySound(\"skill/ultimate2.mp3\")")
 
-                for _, ent in ipairs(ents.FindInSphere(ownerShootPos, radiusCvar:GetInt())) do
-                    -- Skip damaging the owner (if enabled), and the mech itself
-                    if not IsValid(ent) or (ent == owner and ownerImmuneCvar:GetInt()) or ent == mech then continue end
-                    -- Skip damaging dead players
-                    if ent:IsPlayer() and not self:IsAlive(ent) then continue end
+                -- Triggering the explosion a split-second before the mech does it itself, so we can re-block the damage later
+                timer.Simple(3.4, function()
+                    if not IsValid(mech) or not IsValid(owner) then return end
+                    mech.PAPNerfThisStopDamage = false
+                    local dmg = DamageInfo()
+                    dmg:SetDamageType(DMG_BLAST)
+                    dmg:SetDamage(damageCvar:GetInt())
+                    dmg:SetAttacker(owner)
+                    dmg:SetInflictor(mech)
+                    -- Now, search for all players that are not behind cover, and damage them!
+                    local Trace = {}
+                    Trace.start = ownerShootPos
+                    Trace.mask = MASK_PLAYERSOLID
 
-                    Trace.filter = {mech, owner, ent}
+                    for _, ent in ipairs(ents.FindInSphere(ownerShootPos, radiusCvar:GetInt())) do
+                        -- Skip damaging the owner (if enabled), and the mech itself
+                        if not IsValid(ent) or (ent == owner and ownerImmuneCvar:GetInt()) or ent == mech then continue end
+                        -- Skip damaging dead players
+                        if ent:IsPlayer() and not self:IsAlive(ent) then continue end
 
-                    Trace.endpos = ent:GetPos()
+                        Trace.filter = {mech, owner, ent}
 
-                    -- Compare shoot position for players to take crouching, etc. into account
-                    if ent:IsPlayer() then
-                        Trace.endpos = ent:GetShootPos()
+                        Trace.endpos = ent:GetPos()
+
+                        -- Compare shoot position for players to take crouching, etc. into account
+                        if ent:IsPlayer() then
+                            Trace.endpos = ent:GetShootPos()
+                        end
+
+                        local TraceResult = util.TraceLine(Trace)
+
+                        -- Only if the trace returns nothing blocking the space between the mech owner's shoot position and the victim, does the damage get applied
+                        if not TraceResult.Hit then
+                            ent:TakeDamageInfo(dmg)
+                        end
                     end
 
-                    local TraceResult = util.TraceLine(Trace)
-
-                    -- Only if the trace returns nothing blocking the space between the mech owner's shoot position and the victim, does the damage get applied
-                    if not TraceResult.Hit then
-                        ent:TakeDamageInfo(dmg)
-                    end
-                end
-
-                mech.PAPNerfThisStopDamage = true
+                    mech.PAPNerfThisStopDamage = true
+                end)
             end)
         end)
     end
