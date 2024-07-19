@@ -1619,6 +1619,15 @@ x2 punch speed, shows the anime intro around you!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2609859728>
 
+## Orbital Bass Cannon (Orbital Bass Cannon)
+
+x2 ammo, tracks directly shot players, slams the victim with bass, as in the fish...\
+\
+*ttt_pap_orbital_bass_cannon* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=252189849>
+
 ## Oscar The Cat (Oscar The Rainbow Cat)
 
 Do do do do doooo...\
