@@ -79,6 +79,11 @@ Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfil
 <https://steamcommunity.com/workshop/filedetails/?id=2421039084>\
 Requires: [SpongeBob SquarePants Playermodel!](https://steamcommunity.com/sharedfiles/filedetails/?id=1915222654)
 
+## Spartan Laser (The Spartan)
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=1836493806>\
+Requires: [Master Chief Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=125456150)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -2177,6 +2182,18 @@ The Soulbound gains 3 extra abilities!\
 *pap_soul_powerer_extra_abilities* - Default: 3 - Number of abilities\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
+
+## Spartan Laser (The Spartan)
+
+Gives you a regenerating shield, which protects from 1-shot deaths!
+Also gives you a master chief playermodel, if installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=125456150>\
+\
+*ttt_pap_the_spartan* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_the_spartan_shield_amount* - Default: 20 - No. of shield points\
+*pap_the_spartan_shield_cooldown* - Default: 5 - Seconds before shield recharges\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3025469916>
 
 ## Speedgun (Slowgun)
 
