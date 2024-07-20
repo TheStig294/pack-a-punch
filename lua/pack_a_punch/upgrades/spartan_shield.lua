@@ -1,27 +1,27 @@
 local UPGRADE = {}
-UPGRADE.id = "the_spartan_shield"
+UPGRADE.id = "spartan_shield"
 UPGRADE.class = "weapon_slazer_new"
-UPGRADE.name = "The Spartan Shield"
+UPGRADE.name = "Spartan Shield"
 UPGRADE.desc = "Gives you a regenerating shield,\nwhich protects from 1-shot deaths!"
 
 UPGRADE.convars = {
     {
-        name = "pap_the_spartan_shield_amount",
+        name = "pap_spartan_shield_amount",
         type = "int"
     },
     {
-        name = "pap_the_spartan_shield_cooldown",
+        name = "pap_spartan_shield_cooldown",
         type = "int"
     }
 }
 
-local shieldCvar = CreateConVar("pap_the_spartan_shield_amount", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 100)
+local shieldCvar = CreateConVar("pap_spartan_shield_amount", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 100)
 
-local cooldownCvar = CreateConVar("pap_the_spartan_shield_cooldown", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds before shield recharges", 1, 30)
+local cooldownCvar = CreateConVar("pap_spartan_shield_cooldown", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds before shield recharges", 1, 30)
 
 local function ResetShield(ply)
     ply:SetNWInt("PAPHealthShield", 0)
-    ply.PAPTheSpartanShield = false
+    ply.PAPSpartanShield = false
 
     if SERVER and ply.PAPOldPlayermodel then
         UPGRADE:SetModel(ply, ply.PAPOldPlayermodel)
@@ -33,17 +33,17 @@ function UPGRADE:Apply(SWEP)
 
     -- Here's the difference between this and the other shield upgrades, it regenerates!
     local function RegenerateShield(ply)
-        ply:EmitSound("ttt_pack_a_punch/the_spartan/shield.mp3")
+        ply:EmitSound("ttt_pack_a_punch/spartan_shield/shield.mp3")
         local chargeRate = math.ceil(1 * (maxShield / 100))
         local shieldPoints = math.min(ply:GetNWInt("PAPHealthShield", 0) + chargeRate, maxShield)
         ply:SetNWInt("PAPHealthShield", shieldPoints)
-        local timerName = "TTTPAPTheSpartanShieldRegenBegin" .. ply:SteamID64()
+        local timerName = "TTTPAPSpartanShieldRegenBegin" .. ply:SteamID64()
 
         timer.Create(timerName, 0.08, 0, function()
-            if not IsValid(ply) or shieldPoints == maxShield or not ply.PAPTheSpartanShield then
+            if not IsValid(ply) or shieldPoints == maxShield or not ply.PAPSpartanShield then
                 timer.Remove(timerName)
 
-                if not ply.PAPTheSpartanShield then
+                if not ply.PAPSpartanShield then
                     ResetShield(ply)
                 end
 
@@ -69,7 +69,7 @@ function UPGRADE:Apply(SWEP)
             end
         end
 
-        owner.PAPTheSpartanShield = true
+        owner.PAPSpartanShield = true
         RegenerateShield(owner)
     end
 
@@ -78,7 +78,7 @@ function UPGRADE:Apply(SWEP)
     function SWEP:OwnerChanged()
         -- Only 1 player can have the shield at a time, dropping the weapon removes the shield
         for _, ply in player.Iterator() do
-            if ply.PAPTheSpartanShield then
+            if ply.PAPSpartanShield then
                 ResetShield(ply)
             end
         end
@@ -152,12 +152,12 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- The shield regen timer is reset each time the player takes damage, via this timer being re-created
-        if ply.PAPTheSpartanShield then
+        if ply.PAPSpartanShield then
             -- Stop their currently regenerating shield from regenerating
-            timer.Remove("TTTPAPTheSpartanShieldRegenBegin" .. ply:SteamID64())
+            timer.Remove("TTTPAPSpartanShieldRegenBegin" .. ply:SteamID64())
 
-            timer.Create("TTTPAPTheSpartanShieldRegen" .. ply:SteamID64(), cooldownCvar:GetInt(), 1, function()
-                if IsValid(ply) and ply.PAPTheSpartanShield then
+            timer.Create("TTTPAPSpartanShieldRegen" .. ply:SteamID64(), cooldownCvar:GetInt(), 1, function()
+                if IsValid(ply) and ply.PAPSpartanShield then
                     RegenerateShield(ply)
                 end
             end)
