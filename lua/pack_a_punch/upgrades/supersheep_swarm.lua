@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "supersheep_swarm"
 UPGRADE.class = "weapon_ttt_supersheep"
 UPGRADE.name = "Supersheep Swarm"
-UPGRADE.desc = "Sends out a swarm of supersheep,\nwith a much bigger explosion!"
+UPGRADE.desc = "Sends out a swarm of supersheep,\nwith a much bigger explosion (+ a bonus sheep!)"
 
 function UPGRADE:Apply(SWEP)
     function SWEP:PlaceSupersheep(ply)

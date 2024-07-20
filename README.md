@@ -2273,7 +2273,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
 ## Supersheep (Supersheep Swarm)
 
-Sends out a swarm of supersheep, with a much bigger explosion!
+Sends out a swarm of supersheep, with a much bigger explosion (+ a bonus sheep!)
 \
 *ttt_pap_supersheep_swarm* - Default: 1 - Whether this upgrade is enabled
 \
