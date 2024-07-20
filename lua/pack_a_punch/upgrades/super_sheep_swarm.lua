@@ -8,6 +8,8 @@ function UPGRADE:Apply(SWEP)
     SWEP.PAPOldPlaceSupersheep = SWEP.PlaceSupersheep
 
     function SWEP:PlaceSupersheep(ply)
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
         local parent = self:PAPOldPlaceSupersheep(ply)
         -- Mark the supersheep as upgraded and give it the PaP camo
         parent.PAPSuperSheepSwarm = true
@@ -23,7 +25,6 @@ function UPGRADE:Apply(SWEP)
                 child:SetPos(childPos)
                 child:SetAngles(parent:GetAngles())
                 child:SetModelScale(0.5)
-                child:SetMaterial(TTTPAP.camo)
                 child:SetParent(parent)
                 child:Spawn()
                 local sequence = child:LookupSequence(ACT_VM_PRIMARYATTACK)
@@ -38,22 +39,46 @@ function UPGRADE:Apply(SWEP)
         function parent:Explode()
             self:PAPOldExplode()
 
-            if self:GetNWBool("exploded") then
-                for _, child in ipairs(self:GetChildren()) do
-                    child:SetNoDraw(true)
+            for _, child in ipairs(self:GetChildren()) do
+                child:SetNoDraw(true)
+            end
+
+            if SERVER then
+                for _, ent in ipairs(ents.FindInSphere(self:GetPos(), 200)) do
+                    -- Don't damage other supersheep, as this causes an infinite loop and crash...
+                    -- Only apply extra damage to players
+                    if not UPGRADE:IsPlayer(ent) then continue end
+                    local dmg = DamageInfo()
+                    dmg:SetDamageType(DMG_BLAST)
+                    dmg:SetDamage(1000)
+                    dmg:SetAttacker(owner)
+                    dmg:SetInflictor(self)
+                    ent:TakeDamageInfo(dmg)
                 end
             end
 
-            for _, ent in ipairs(ents.FindInSphere(self:GetPos(), 200)) do
-                -- Don't damage other supersheep, as this causes an infinite loop and crash...
-                if ent.PAPSuperSheepSwarm then continue end
-                local dmg = DamageInfo()
-                dmg:SetDamageType(DMG_BLAST)
-                dmg:SetDamage(1000)
-                dmg:SetAttacker(self.Owner)
-                dmg:SetInflictor(self)
-                ent:TakeDamageInfo(dmg)
+            -- Make some explosion effects and sound for the child sheep exploding
+            for i = 1, 5 do
+                local randomPos = self:GetPos() + VectorRand(-50, 50)
+
+                timer.Simple(math.random(), function()
+                    local data = EffectData()
+                    data:SetOrigin(randomPos)
+                    util.Effect("HelicopterMegaBomb", data)
+                    sound.Play("BaseExplosionEffect.Sound", randomPos, 180, math.random(50, 150), math.random())
+                end)
             end
+
+            timer.Simple(2, function()
+                if IsValid(owner) then
+                    owner:SetNWBool("supersheep_removed", true)
+                    owner:StripWeapon("weapon_ttt_supersheep")
+                end
+
+                if IsValid(self) then
+                    self:Remove()
+                end
+            end)
         end
         -- This function expects the supersheep entity to be returned
 
