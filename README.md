@@ -2271,6 +2271,15 @@ Plays the John Cena intro before exploding!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
+## Supersheep (Supersheep Swarm)
+
+Sends out a swarm of supersheep, with a much bigger explosion!
+\
+*ttt_pap_supersheep_swarm* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1310924738>
+
 ## SurpriseSoldiers (Instant Army)
 
 Spawns all 10 surprise soldier NPCs at once!\
