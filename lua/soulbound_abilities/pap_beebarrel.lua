@@ -105,8 +105,6 @@ if SERVER then
     function ABILITY:Cleanup(soulbound)
         soulbound:SetNWInt("TTTSoulboundPap_beebarrelUses", 0)
         soulbound:SetNWFloat("TTTSoulboundPap_beebarrelNextUse", 0)
-
-        return OLD_ABILITY:Cleanup(soulbound)
     end
 
     local enabled = GetConVar("ttt_soulbound_pap_beebarrel_enabled")
