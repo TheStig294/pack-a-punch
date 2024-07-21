@@ -102,10 +102,10 @@ function UPGRADE:AddToHook(SWEP, hookName, HookFunction)
     -- Now override it
     SWEP[hookName] = function(self, ...)
         -- First call the original hook,
-        -- Then call our logic
+        -- Then call our logic, passing "self" to our logic is redundant
         SWEP["PAPOld" .. hookName](self, ...)
 
-        return HookFunction(self, ...)
+        return HookFunction(...)
     end
 end
 

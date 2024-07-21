@@ -6,9 +6,9 @@ UPGRADE.desc = "Continually spawns an amogus at the spot you shoot,\nwhenever so
 UPGRADE.ammoMult = 1 / 3
 
 function UPGRADE:Apply(SWEP)
-    self:AddToHook(SWEP, "PrimaryAttack", function(self)
+    self:AddToHook(SWEP, "PrimaryAttack", function()
         if CLIENT then return end
-        local owner = self:GetOwner()
+        local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
         local tr = owner:GetEyeTrace()
         local tracedata = {}
@@ -21,7 +21,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         if SERVER then
-            self:Remove()
+            SWEP:Remove()
         end
     end)
 
