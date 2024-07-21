@@ -1,5 +1,5 @@
 -- These abilities were created by by Nick, Spazz, and Mal for the Soulbound role
--- 
+-- https://github.com/Custom-Roles-for-TTT/TTT-Jingle-Jam-Roles-2023/tree/main/lua/soulbound_abilities
 -- This is all their code except for the changes I made to upgrade the abilities
 local ABILITY = {}
 ABILITY.Name = "Place Upgraded Bee Barrel"
