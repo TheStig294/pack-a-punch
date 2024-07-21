@@ -17,22 +17,17 @@ hook.Add("PostGamemodeLoaded", "TTTPAPSoulPowererPrepareAbilities", function()
 
     -- Take a copy of the soulbound abilities to restore once we're done
     SOULBOUND.PAPOldAbilities = table.Copy(SOULBOUND.Abilities)
-    print("Old abilities:")
-    PrintTable(SOULBOUND)
 end)
 
 function UPGRADE:Apply(SWEP)
     SOULBOUND.Abilities = table.Copy(SOULBOUND.PAPAbilities)
-    PrintTable(SOULBOUND)
 
     self:AddToHook(SWEP, "OnSuccess", function(ply, body)
-        print(ply, body)
         ply:SetNWBool("TTTPAPSoulPowerer", true)
     end)
 end
 
 function UPGRADE:Reset()
-    PrintTable(SOULBOUND)
     -- Hopefully restore the Soulbound abilities to what they were
     -- (I've had problems with this in the past with the French randomat restoring old role names to English,
     -- but this is way less complicated than that so it will hopefully *just work*)

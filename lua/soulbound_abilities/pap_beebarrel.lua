@@ -30,6 +30,8 @@ table.insert(ROLE_CONVARS[ROLE_SOULBOUND], {
 
 if SERVER then
     local function Pap_beebarrelDamage(target, dmginfo)
+        -- Spawned bees are invincible
+        if target.TTTPAPSoulboundBee then return true end
         if target:GetClass() ~= "prop_physics" then return end
         if dmginfo:GetDamage() < 1 then return end
         local model = target:GetModel()
@@ -49,40 +51,27 @@ if SERVER then
                 bee:SetModel("models/lucian/props/stupid_bee.mdl")
                 bee:SetPos(spos)
                 bee:SetParent(headBee)
+                bee:SetModelScale(5, 0.0001)
+                bee:Activate()
                 bee:SetMaterial(TTTPAP.camo)
+                bee.TTTPAPSoulboundBee = true
                 headBee:SetNoDraw(true)
+                headBee:SetModelScale(5, 0.0001)
+                headBee:Activate()
+                headBee.TTTPAPSoulboundBee = true
             end
 
-            headBee:SetHealth(10)
+            headBee:SetHealth(100000)
         end)
     end
 
     function ABILITY:Bought(soulbound)
-        print("Upgraded Bought")
-
-        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
-            local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
-            OLD_ABILITY:Bought(soulbound)
-            print("Old Bought")
-
-            return
-        end
-
         soulbound:SetNWInt("TTTSoulboundPap_beebarrelUses", pap_beebarrel_uses:GetInt())
         soulbound:SetNWFloat("TTTSoulboundPap_beebarrelNextUse", CurTime())
         hook.Add("EntityTakeDamage", "TTTSoulboundPap_beebarrelDamage", Pap_beebarrelDamage)
     end
 
     function ABILITY:Condition(soulbound, target)
-        print("Upgraded Condition")
-
-        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
-            print("Old Condition")
-            local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
-
-            return OLD_ABILITY:Condition(soulbound)
-        end
-
         if not soulbound:IsInWorld() then return false end
         if pap_beebarrel_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundPap_beebarrelUses", 0) <= 0 then return false end
         if CurTime() < soulbound:GetNWFloat("TTTSoulboundPap_beebarrelNextUse") then return false end
@@ -91,15 +80,6 @@ if SERVER then
     end
 
     function ABILITY:Use(soulbound, target)
-        print("Upgraded Use")
-
-        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
-            print("Old Use")
-            local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
-
-            return OLD_ABILITY:Use(soulbound)
-        end
-
         local plyPos = soulbound:GetPos()
         local hitPos = soulbound:GetEyeTrace().HitPos
         local vec = hitPos - plyPos
@@ -123,15 +103,8 @@ if SERVER then
     end
 
     function ABILITY:Cleanup(soulbound)
-        print("Upgraded Cleanup")
-        local oldAbilityID = string.sub(ABILITY.Id, 5)
-        print("Old ability ID:", oldAbilityID)
-        PrintTable(SOULBOUND)
-        local OLD_ABILITY = SOULBOUND.PAPOldAbilities[oldAbilityID]
-        print(OLD_ABILITY)
-        print(OLD_ABILITY.Cleanup)
-        -- soulbound:SetNWInt("TTTSoulboundPap_beebarrelUses", 0)
-        -- soulbound:SetNWFloat("TTTSoulboundPap_beebarrelNextUse", 0)
+        soulbound:SetNWInt("TTTSoulboundPap_beebarrelUses", 0)
+        soulbound:SetNWFloat("TTTSoulboundPap_beebarrelNextUse", 0)
 
         return OLD_ABILITY:Cleanup(soulbound)
     end
@@ -154,14 +127,6 @@ if CLIENT then
     }
 
     function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
-        -- print("Upgraded DrawHUD")
-        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
-            print("Old DrawHUD")
-            local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
-
-            return OLD_ABILITY:DrawHUD(soulbound)
-        end
-
         local max_uses = pap_beebarrel_uses:GetInt()
         local uses = soulbound:GetNWInt("TTTSoulboundPap_beebarrelUses", 0)
         local margin = 6
