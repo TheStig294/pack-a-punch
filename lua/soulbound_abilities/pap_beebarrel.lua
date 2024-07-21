@@ -60,7 +60,7 @@ if SERVER then
     function ABILITY:Bought(soulbound)
         print("Upgraded Bought")
 
-        if not soulbound.PAPSoulPowerer then
+        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
             local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
             OLD_ABILITY:Bought(soulbound)
             print("Old Bought")
@@ -76,7 +76,7 @@ if SERVER then
     function ABILITY:Condition(soulbound, target)
         print("Upgraded Condition")
 
-        if not soulbound.PAPSoulPowerer then
+        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
             print("Old Condition")
             local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
 
@@ -93,7 +93,7 @@ if SERVER then
     function ABILITY:Use(soulbound, target)
         print("Upgraded Use")
 
-        if not soulbound.PAPSoulPowerer then
+        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
             print("Old Use")
             local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
 
@@ -124,7 +124,12 @@ if SERVER then
 
     function ABILITY:Cleanup(soulbound)
         print("Upgraded Cleanup")
-        local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
+        local oldAbilityID = string.sub(ABILITY.Id, 5)
+        print("Old ability ID:", oldAbilityID)
+        PrintTable(SOULBOUND)
+        local OLD_ABILITY = SOULBOUND.PAPOldAbilities[oldAbilityID]
+        print(OLD_ABILITY)
+        print(OLD_ABILITY.Cleanup)
         -- soulbound:SetNWInt("TTTSoulboundPap_beebarrelUses", 0)
         -- soulbound:SetNWFloat("TTTSoulboundPap_beebarrelNextUse", 0)
 
@@ -149,9 +154,8 @@ if CLIENT then
     }
 
     function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
-        print("Upgraded DrawHUD")
-
-        if not soulbound.PAPSoulPowerer then
+        -- print("Upgraded DrawHUD")
+        if not soulbound:GetNWBool("TTTPAPSoulPowerer") then
             print("Old DrawHUD")
             local OLD_ABILITY = SOULBOUND.PAPOldAbilities[string.sub(ABILITY.Id, 5)]
 
