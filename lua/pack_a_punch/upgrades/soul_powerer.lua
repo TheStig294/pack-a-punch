@@ -120,7 +120,7 @@ function UPGRADE:Apply(SWEP)
         soulbound:SetNWInt("TTTSoulboundBeeBarrelUses", beebarrel_uses:GetInt())
         soulbound:SetNWFloat("TTTSoulboundBeeBarrelNextUse", CurTime())
 
-        hook.Add("EntityTakeDamage", "TTTSoulboundBeeBarrelDamage", function(target, dmginfo)
+        UPGRADE:AddHook("EntityTakeDamage", function(target, dmginfo)
             -- Spawned bees are invincible
             if target.TTTPAPSoulboundBee then return true end
             if target:GetClass() ~= "prop_physics" then return end
@@ -157,7 +157,7 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 headBee:SetHealth(100000)
-            end)
+            end, "TTTSoulboundBeeBarrelDamage")
         end)
     end
 
