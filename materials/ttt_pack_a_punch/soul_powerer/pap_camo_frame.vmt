@@ -4,18 +4,12 @@
 	"$translucent" "1"
 	
 	"Proxies"
-{
-"AnimatedTexture"
-{
-"animatedTextureVar" "$basetexture"
-"animatedTextureFrameNumVar" "$frame"
-"animatedTextureFrameRate" "20.0"
-}
-// "TextureScroll"
-// 		{
-// 			"texturescrollvar"	"$basetexturetransform"
-// 			"texturescrollrate"	"0.1"
-// 			"texturescrollangle"	"0"
-// 		}
-// }
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "20.0"
+		}
+	}
 }
