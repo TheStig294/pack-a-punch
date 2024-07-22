@@ -227,7 +227,6 @@ function UPGRADE:Apply(SWEP)
         ent:Activate()
         ent:SetMaterial(TTTPAP.camo)
         ent.PAPSoulboundZombieBox = true
-        -- ent:SetHealth(100)
         local uses = soulbound:GetNWInt("TTTSoulboundBoxUses", 0)
         uses = math.max(uses - 1, 0)
         soulbound:SetNWInt("TTTSoulboundBoxUses", uses)
