@@ -185,6 +185,56 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["beebarrel"] = ABILITY
+    -- 
+    -- Box
+    -- 
+    ABILITY = SOULBOUND.Abilities["box"]
+    ABILITY.Name = "Place zombie box"
+    ABILITY.Description = "Place a big box with a zombie inside"
+    local box_cooldown = GetConVar("ttt_soulbound_box_cooldown")
+    local box_uses = GetConVar("ttt_soulbound_box_uses")
+
+    function ABILITY:Bought(soulbound)
+        soulbound:SetNWInt("TTTSoulboundBoxUses", box_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundBoxNextUse", CurTime())
+
+        UPGRADE:AddHook("PropBreak", function(attacker, prop)
+            if prop.PAPSoulboundZombieBox then
+                local zombie = ents.Create("npc_zombie")
+                zombie:SetPos(prop:GetPos())
+                zombie:Spawn()
+            end
+        end, "TTTPAPSoulboundZombieBox")
+    end
+
+    function ABILITY:Use(soulbound, target)
+        local plyPos = soulbound:GetPos()
+        local hitPos = soulbound:GetEyeTrace().HitPos
+        local vec = hitPos - plyPos
+        local fwd = Vector(0, 0, 0)
+
+        if target then
+            fwd = soulbound:GetForward() * 64
+            vec = Vector(0, 0, -1)
+        end
+
+        local spawnPos = hitPos - (vec:GetNormalized() * 40) + fwd
+        local ent = ents.Create("prop_physics")
+        ent:SetModel("models/props_junk/wood_crate001a.mdl")
+        ent:SetPos(spawnPos)
+        ent:Spawn()
+        ent:SetModelScale(2)
+        ent:Activate()
+        ent:SetMaterial(TTTPAP.camo)
+        ent.PAPSoulboundZombieBox = true
+        -- ent:SetHealth(100)
+        local uses = soulbound:GetNWInt("TTTSoulboundBoxUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundBoxUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundBoxNextUse", CurTime() + box_cooldown:GetFloat())
+    end
+
+    SOULBOUND.Abilities["box"] = ABILITY
 end
 
 function UPGRADE:Reset()
