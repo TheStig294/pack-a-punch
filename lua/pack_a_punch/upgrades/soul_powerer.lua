@@ -4,6 +4,21 @@ UPGRADE.class = "weapon_ttt_smg_soulbinding"
 UPGRADE.name = "Soul Powerer"
 UPGRADE.desc = "All Soulbound abilities are upgraded!"
 
+UPGRADE.convars = {
+    {
+        name = "pap_soul_powerer_clown_transform_uses",
+        type = "int"
+    },
+    {
+        name = "pap_soul_powerer_clown_transform_delay",
+        type = "int"
+    },
+}
+
+local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
+
+local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of uses of clown transform", 2, 60)
+
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
     if not SOULBOUND.PAPOldAbilities then
@@ -191,8 +206,8 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["box"]
     ABILITY.Name = "Place zombie box"
     ABILITY.Description = "Place a big box with a zombie inside"
-    local box_cooldown = GetConVar("ttt_soulbound_box_cooldown")
     local box_uses = GetConVar("ttt_soulbound_box_uses")
+    local box_cooldown = GetConVar("ttt_soulbound_box_cooldown")
 
     function ABILITY:Bought(soulbound)
         soulbound:SetNWInt("TTTSoulboundBoxUses", box_uses:GetInt())
@@ -234,6 +249,146 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["box"] = ABILITY
+    -- 
+    -- Confetti
+    -- 
+    ABILITY = SOULBOUND.Abilities["confetti"]
+    ABILITY.Name = "Clown transform"
+    ABILITY.Description = "Transform a non-traitor player into an active clown (with a " .. clown_transform_delay:GetInt() .. " second delay)"
+
+    function ABILITY:Bought(soulbound)
+        soulbound:SetNWInt("TTTSoulboundConfettiUses", clown_transform_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundConfettiNextUse", CurTime())
+    end
+
+    function ABILITY:Condition(soulbound, target)
+        if target:IsTraitorTeam() then
+            soulbound:ChatPrint("Cannot transform traitors")
+
+            return false
+        end
+
+        if not soulbound:IsInWorld() then return false end
+        if clown_transform_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundConfettiUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundConfettiNextUse") then return false end
+
+        return true
+    end
+
+    local ActivateClown
+
+    if SERVER then
+        local clown_activation_credits = GetConVar("ttt_clown_activation_credits")
+        local clown_use_traps_when_active = GetConVar("ttt_clown_use_traps_when_active")
+        local clown_heal_on_activate = GetConVar("ttt_clown_heal_on_activate")
+        local clown_heal_bonus = GetConVar("ttt_clown_heal_bonus")
+
+        function ActivateClown(clown)
+            SetClownTeam(true)
+            clown:QueueMessage(MSG_PRINTBOTH, "KILL THEM ALL!")
+            clown:AddCredits(clown_activation_credits:GetInt())
+
+            if clown_heal_on_activate:GetBool() then
+                local heal_bonus = clown_heal_bonus:GetInt()
+                local health = clown:GetMaxHealth() + heal_bonus
+                clown:SetHealth(health)
+
+                if heal_bonus > 0 then
+                    clown:PrintMessage(HUD_PRINTTALK, "You have been fully healed (with a bonus)!")
+                else
+                    clown:PrintMessage(HUD_PRINTTALK, "You have been fully healed!")
+                end
+            end
+
+            net.Start("TTT_ClownActivate")
+            net.WritePlayer(clown)
+            net.Broadcast()
+
+            -- Give the clown their shop items if purchase was delayed
+            if clown.bought and GetConVar("ttt_clown_shop_delay"):GetBool() then
+                clown:GiveDelayedShopItems()
+            end
+
+            -- Enable traitor buttons for them, if that's enabled
+            TRAITOR_BUTTON_ROLES[ROLE_CLOWN] = clown_use_traps_when_active:GetBool()
+        end
+    end
+
+    function ABILITY:Use(soulbound, target)
+        soulbound:QueueMessage(MSG_PRINTCENTER, target:Nick() .. " will transform in " .. clown_transform_delay:GetInt() .. " seconds!")
+        local timerName = "TTTPAPSoulboundClownTransform" .. target:SteamID64()
+
+        timer.Create(timerName, 1, clown_transform_delay:GetInt(), function()
+            if not IsValid(target) or GetRoundState() ~= ROUND_ACTIVE then
+                timer.Remove(timerName)
+
+                return
+            end
+
+            local countdown = timer.RepsLeft(timerName)
+
+            if countdown > 0 then
+                target:PrintMessage(HUD_PRINTCENTER, "A Soulbound used their power to transform you into a Clown in: " .. countdown)
+            else
+                target:SetRole(ROLE_CLOWN)
+
+                if SERVER then
+                    SendFullStateUpdate()
+                    ActivateClown(target)
+                end
+            end
+        end)
+
+        local uses = soulbound:GetNWInt("TTTSoulboundConfettiUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundConfettiUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundConfettiNextUse", CurTime() + clown_transform_delay:GetInt())
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = clown_transform_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundConfettiUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text = "Press '" .. key .. "' to transform player into clown"
+            local next_use = soulbound:GetNWFloat("TTTSoulboundConfettiNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["confetti"] = ABILITY
 end
 
 function UPGRADE:Reset()
