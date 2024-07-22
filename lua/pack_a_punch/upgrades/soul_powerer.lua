@@ -17,7 +17,7 @@ UPGRADE.convars = {
 
 local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
 
-local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of uses of clown transform", 2, 60)
+local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of clown transform", 2, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
