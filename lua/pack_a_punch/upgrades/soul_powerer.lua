@@ -11,13 +11,110 @@ function UPGRADE:Apply(SWEP)
         SOULBOUND.PAPOldAbilities = table.Copy(SOULBOUND.Abilities)
     end
 
+    -- Add PaP border to icons
+    if CLIENT then
+        -- Travels down the panel hierarchy of the buy menu, and returns a table of all buy menu icons
+        local function GetItemIconPanels()
+            local DFrame
+
+            -- Look for the title name of the Soulbound buy menu, will break if the language placeholder name is changed...
+            for _, child in ipairs(vgui.GetWorldPanel():GetChildren()) do
+                if child.GetTitle and child:GetTitle() == LANG.GetTranslation("sbd_abilities_title") then
+                    DFrame = child
+                    break
+                end
+            end
+
+            if not DFrame then return end
+
+            -- First is the base panel parented to the DFrame, second is the scroll panel, third is the "EquipSelect" custom gui element from base TTT,
+            -- containing all buy menu icons as "LayeredIcon" vgui elements
+            -- A table of those "LayeredIcon"(s) is returned (The buy menu icons)
+            local panelHierachy = {5, 2, 1}
+
+            local buyMenu = DFrame:GetChildren()
+
+            -- From here, things get unavoidably arbitrary
+            -- Hopefully Panel:GetChildren() always returns these child panels the same way every time since they don't have any sort of ID
+            -- Being super careful here to check for nil or empty table values at each step,
+            -- since Gmod store skins or future updates for the buy menu could render it unusable otherwise
+            for _, childIndex in ipairs(panelHierachy) do
+                if not buyMenu or table.IsEmpty(buyMenu) then return end
+                buyMenu = buyMenu[childIndex]
+                if not buyMenu then return end
+                buyMenu = buyMenu:GetChildren()
+            end
+
+            return buyMenu
+        end
+
+        local iconsWithUpgrades = {
+            ["vgui/ttt/roles/sbd/abilities/icon_beebarrel.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_box.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_confetti.png"] = true,
+            ["vgui/ttt/icon_beacon"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_discombob.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_dropweapon.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_explosivebarrel.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_body.png"] = true,
+            ["vgui/ttt/icon_c4"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_gunshots.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_headcrab.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_heal.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_incendiary.png"] = true,
+            ["vgui/ttt/ttt_pack_a_punch.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_poisonheadcrab.png"] = true,
+            ["vgui/ttt/icon_polter"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_possession.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_reveal.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_smoke.png"] = true,
+            ["vgui/ttt/roles/sbd/abilities/icon_swapinventory.png"] = true
+        }
+
+        self:AddHook("OnContextMenuOpen", function()
+            -- This code is copied from the soulbound buy menu opening hook to ensure we're only looking for the soulbound buy menu when we should be
+            if GetRoundState() ~= ROUND_ACTIVE then return end
+
+            if not client then
+                client = LocalPlayer()
+            end
+
+            if not client:IsSoulbound() then return end
+
+            timer.Simple(0.1, function()
+                local itemIcons = GetItemIconPanels()
+                if not itemIcons or table.IsEmpty(itemIcons) then return end
+
+                for _, iconPanel in ipairs(itemIcons) do
+                    if not iconsWithUpgrades[iconPanel:GetIcon()] then continue end
+                    local icon = vgui.Create("DImage")
+                    icon:SetImage("ttt_pack_a_punch/soul_powerer/pap_camo_frame")
+                    icon:SetTooltip("Upgraded")
+                    -- Set the icon to be faded if the buy menu icon is faded (e.g. weapon is already bought)
+                    icon:SetImageColor(iconPanel.Icon:GetImageColor())
+
+                    -- This is how other overlayed icons are done in vanilla TTT, so we do the same here
+                    -- This normally used for the slot icon and custom item icon
+                    icon.PerformLayout = function(s)
+                        s:SetSize(64, 64)
+                    end
+
+                    iconPanel:AddLayer(icon)
+                    iconPanel:EnableMousePassthrough(icon)
+                end
+            end)
+        end)
+    end
+
     -- 
     -- Bee barrel
     -- 
     local ABILITY = SOULBOUND.Abilities["beebarrel"]
     ABILITY.Name = "Place Upgraded Bee Barrel"
     ABILITY.Description = "Place an upgraded bee barrel that will release invincible big bees when it explodes"
-    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/beebarrel"
+    local beebarrel_uses = GetConVar("ttt_soulbound_beebarrel_uses")
+    local beebarrel_bees = GetConVar("ttt_soulbound_beebarrel_bees")
+    local beebarrel_cooldown = GetConVar("ttt_soulbound_beebarrel_cooldown")
 
     function ABILITY:Bought(soulbound)
         soulbound:SetNWInt("TTTSoulboundBeeBarrelUses", beebarrel_uses:GetInt())
