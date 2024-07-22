@@ -111,7 +111,7 @@ function UPGRADE:Apply(SWEP)
     -- 
     local ABILITY = SOULBOUND.Abilities["beebarrel"]
     ABILITY.Name = "Place Upgraded Bee Barrel"
-    ABILITY.Description = "Place an upgraded bee barrel that will release invincible big bees when it explodes"
+    ABILITY.Description = "Place an upgraded bee barrel that will release big invincible bees when it explodes!"
     local beebarrel_uses = GetConVar("ttt_soulbound_beebarrel_uses")
     local beebarrel_bees = GetConVar("ttt_soulbound_beebarrel_bees")
     local beebarrel_cooldown = GetConVar("ttt_soulbound_beebarrel_cooldown")
