@@ -1768,6 +1768,17 @@ See weapons and players through walls!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
 
+## Pickle Rick Gun (Big Pickle Gun)
+
+Increases size and health instead!\
+\
+*ttt_pap_big_pickle_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_big_pickle_gun_size* - Default: 2 - Size multiplier\
+*pap_big_pickle_gun_health* - Default: 350 - Health you are set to
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3044651560>
+
 ## Pistol (Standard Issue)
 
 Slower, high damage & accuracy shots\
