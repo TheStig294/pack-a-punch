@@ -403,7 +403,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2886774933>
 
 ## Car Gun (Truck Gun)
 
-Now shoots a truck! (With a much larger hitbox)\
+Now shoots a truck, you can't miss!\
 \
 *ttt_pap_truck_gun* - Default: 1 - Whether this upgrade is enabled
 \
@@ -2573,4 +2573,3 @@ x10 tighter bullet spread!\
 *ttt_pap_spread* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_spread_mult* - Default: 0.1 - Spread multiplier
-

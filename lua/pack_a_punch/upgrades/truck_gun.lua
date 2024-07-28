@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "truck_gun"
 UPGRADE.class = "weapon_ttt_car_gun"
 UPGRADE.name = "Truck Gun"
-UPGRADE.desc = "Now shoots a truck! (With a much larger hitbox)"
+UPGRADE.desc = "Now shoots a truck, you can't miss!"
 
 UPGRADE.convars = {
     {
@@ -44,7 +44,6 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         owner:EmitSound("weapons/pistol/pistol_fire2.wav")
-        owner:EmitSound(self.Sound)
         self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
         local cone = self.Primary.Cone
         local bullet = {}
@@ -65,6 +64,7 @@ function UPGRADE:Apply(SWEP)
 
                 if IsValid(victim) then
                     victim:EmitSound(self.Sound)
+                    owner:EmitSound(self.Sound)
 
                     if SERVER and victim:IsPlayer() then
                         local victimAim = owner:GetAimVector()
@@ -73,6 +73,11 @@ function UPGRADE:Apply(SWEP)
                         victimAim.z = -victimAim.z
                         victimAim = victimAim:Angle()
                         victim:SetEyeAngles(victimAim)
+                        self:TakePrimaryAmmo(1)
+
+                        if self:Clip1() <= 0 then
+                            self:Remove()
+                        end
 
                         timer.Simple(0, function()
                             victim:Lock()
@@ -90,14 +95,6 @@ function UPGRADE:Apply(SWEP)
         end
 
         owner:FireBullets(bullet)
-
-        if SERVER then
-            self:TakePrimaryAmmo(1)
-
-            if self:Clip1() <= 0 then
-                self:Remove()
-            end
-        end
     end
 end
 
