@@ -119,9 +119,12 @@ function UPGRADE:Apply(SWEP)
     end)
 
     if CLIENT then
+        local playedSound = false
+
         -- Adds a blur effect around the edges of the screen
         net.Receive("TTTPAPTimeSkipKCScreenEffects", function()
             local starsMat = Material("effects/kcr_stars")
+            playedSound = false
 
             hook.Add("RenderScreenspaceEffects", "TTTPAPTimeSkipKCScreenEffects", function()
                 DrawToyTown(4, ScrH() / 1.75)
@@ -133,7 +136,11 @@ function UPGRADE:Apply(SWEP)
 
         net.Receive("TTTPAPTimeSkipKCScreenEffectsRemove", function()
             hook.Remove("RenderScreenspaceEffects", "TTTPAPTimeSkipKCScreenEffects")
-            surface.PlaySound("weapons/crimson_new/crimson3.wav")
+
+            if not playedSound then
+                surface.PlaySound("weapons/crimson_new/crimson3.wav")
+                playedSound = true
+            end
         end)
 
         function SWEP:PostDrawViewModel(vm, wep, ply)
