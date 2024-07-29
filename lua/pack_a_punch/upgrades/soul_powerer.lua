@@ -6,6 +6,10 @@ UPGRADE.desc = "All Soulbound abilities are upgraded!"
 
 UPGRADE.convars = {
     {
+        name = "pap_soul_powerer_bee_barrel_bees",
+        type = "int"
+    },
+    {
         name = "pap_soul_powerer_clown_transform_uses",
         type = "int"
     },
@@ -14,6 +18,8 @@ UPGRADE.convars = {
         type = "int"
     },
 }
+
+local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by the bee barrel", 1, 10)
 
 local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
 
@@ -128,7 +134,6 @@ function UPGRADE:Apply(SWEP)
     ABILITY.Name = "Place Upgraded Bee Barrel"
     ABILITY.Description = "Place an upgraded bee barrel that will release big invincible bees when it explodes!"
     local beebarrel_uses = GetConVar("ttt_soulbound_beebarrel_uses")
-    local beebarrel_bees = GetConVar("ttt_soulbound_beebarrel_bees")
     local beebarrel_cooldown = GetConVar("ttt_soulbound_beebarrel_cooldown")
 
     function ABILITY:Bought(soulbound)
@@ -145,7 +150,7 @@ function UPGRADE:Apply(SWEP)
             local pos = target:GetPos()
             local isUpgradedBarrel = target:GetMaterial() == TTTPAP.camo
 
-            timer.Create("TTTSoulboundBeeBarrelSpawn", 0.1, beebarrel_bees:GetInt(), function()
+            timer.Create("TTTSoulboundBeeBarrelSpawn", 0.1, bee_barrel_bees:GetInt(), function()
                 local spos = pos + Vector(math.random(-50, 50), math.random(-50, 50), math.random(0, 100))
                 local headBee = ents.Create("npc_manhack")
                 headBee:SetPos(spos)
@@ -254,7 +259,7 @@ function UPGRADE:Apply(SWEP)
     -- 
     ABILITY = SOULBOUND.Abilities["confetti"]
     ABILITY.Name = "Clown transform"
-    ABILITY.Description = "Transform a non-traitor player into an active clown (with a " .. clown_transform_delay:GetInt() .. " second delay)"
+    ABILITY.Description = "Transform a non-traitor player into a clown, then force-activate them after " .. clown_transform_delay:GetInt() .. " seconds"
 
     function ABILITY:Bought(soulbound)
         soulbound:SetNWInt("TTTSoulboundConfettiUses", clown_transform_uses:GetInt())
@@ -262,6 +267,12 @@ function UPGRADE:Apply(SWEP)
     end
 
     function ABILITY:Condition(soulbound, target)
+        if not IsValid(target) or not target:IsPlayer() or not target:Alive() or target:IsSpec() then
+            soulbound:QueueMessage(MSG_PRINTCENTER, "Spectate a player first!", 3)
+
+            return false
+        end
+
         if target:IsTraitorTeam() then
             soulbound:ChatPrint("Cannot transform traitors")
 
@@ -315,8 +326,9 @@ function UPGRADE:Apply(SWEP)
     end
 
     function ABILITY:Use(soulbound, target)
-        soulbound:QueueMessage(MSG_PRINTCENTER, target:Nick() .. " will transform in " .. clown_transform_delay:GetInt() .. " seconds!")
+        soulbound:QueueMessage(MSG_PRINTCENTER, target:Nick() .. " will activate in " .. clown_transform_delay:GetInt() .. " seconds!")
         local timerName = "TTTPAPSoulboundClownTransform" .. target:SteamID64()
+        target:SetRole(ROLE_CLOWN)
 
         timer.Create(timerName, 1, clown_transform_delay:GetInt(), function()
             if not IsValid(target) or GetRoundState() ~= ROUND_ACTIVE then
@@ -328,8 +340,9 @@ function UPGRADE:Apply(SWEP)
             local countdown = timer.RepsLeft(timerName)
 
             if countdown > 0 then
-                target:PrintMessage(HUD_PRINTCENTER, "A Soulbound used their power to transform you into a Clown in: " .. countdown)
-            else
+                target:PrintMessage(HUD_PRINTCENTER, "A Soulbound used their power to transform you into a Clown! Activating in: " .. countdown)
+                -- Don't activate the player if they are dead or already activated
+            elseif target:Alive() and not target:IsSpec() and not (target:IsClown() and target:IsRoleActive()) then
                 target:SetRole(ROLE_CLOWN)
 
                 if SERVER then
