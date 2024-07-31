@@ -209,7 +209,7 @@ function UPGRADE:Apply(SWEP)
     -- Box
     -- 
     ABILITY = SOULBOUND.Abilities["box"]
-    ABILITY.Name = "Place zombie box"
+    ABILITY.Name = "Place Zombie Box"
     ABILITY.Description = "Place a big box with a zombie inside"
     local box_uses = GetConVar("ttt_soulbound_box_uses")
     local box_cooldown = GetConVar("ttt_soulbound_box_cooldown")
@@ -258,7 +258,7 @@ function UPGRADE:Apply(SWEP)
     -- Confetti
     -- 
     ABILITY = SOULBOUND.Abilities["confetti"]
-    ABILITY.Name = "Clown transform"
+    ABILITY.Name = "Clown Transform"
     ABILITY.Description = "Transform a non-traitor player into a clown, then force-activate them after " .. clown_transform_delay:GetInt() .. " seconds"
 
     function ABILITY:Bought(soulbound)
@@ -402,6 +402,81 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["confetti"] = ABILITY
+    -- 
+    -- Decoy
+    -- 
+    ABILITY = SOULBOUND.Abilities["decoy"]
+    ABILITY.Name = "Place Decoys"
+    ABILITY.Description = "Place down a bunch of decoys around the map"
+    local decoy_uses = GetConVar("ttt_soulbound_decoy_uses")
+
+    function ABILITY:Bought(soulbound)
+        ABILITY.PAPOldUses = ABILITY.PAPOldUses or decoy_uses:GetInt()
+        decoy_uses:SetInt(1)
+        soulbound:SetNWInt("TTTSoulboundDecoyUses", decoy_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundDecoyNextUse", CurTime())
+    end
+
+    function ABILITY:Use(soulbound, target)
+        soulbound:EmitSound("Weapon_SLAM.SatchelThrow")
+        local playerPositions = {}
+
+        for _, ply in ipairs(player.GetAll()) do
+            if UPGRADE:IsAlive(ply) then
+                table.insert(playerPositions, ply:GetPos())
+            end
+        end
+
+        for _, ent in ipairs(ents.GetAll()) do
+            local classname = ent:GetClass()
+            local pos = ent:GetPos()
+            local infoEnt = string.StartWith(classname, "info_")
+
+            -- Using the positions of weapon, ammo and player spawns
+            if (string.StartWith(classname, "weapon_") or string.StartWith(classname, "item_") or infoEnt) and not IsValid(ent:GetParent()) and math.random() < 0.2 then
+                local tooClose = false
+
+                for _, plyPos in ipairs(playerPositions) do
+                    -- 100 * 100 = 10,000, so any positions closer than 100 source units to a player are too close to be placed
+                    if math.DistanceSqr(pos.x, pos.y, plyPos.x, plyPos.y) < 10000 then
+                        tooClose = true
+                        break
+                    end
+                end
+
+                if not tooClose then
+                    local decoy = ents.Create("ttt_decoy")
+
+                    if IsValid(decoy) then
+                        decoy:SetPos(pos + Vector(0, 0, 5))
+                        decoy:SetOwner(ply)
+                        decoy:Spawn()
+                        decoy:SetMaterial(TTTPAP.camo)
+                        local ang = decoy:GetAngles()
+                        ang:RotateAroundAxis(ang:Right(), 90)
+                        decoy:SetAngles(ang)
+                        decoy:PhysWake()
+                    end
+
+                    -- Don't remove player spawn points
+                    if not infoEnt then
+                        ent:Remove()
+                    end
+                end
+            end
+        end
+
+        local uses = soulbound:GetNWInt("TTTSoulboundDecoyUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundDecoyUses", uses)
+    end
+
+    function ABILITY:Cleanup(soulbound)
+        decoy_uses:SetInt(ABILITY.PAPOldUses or 5)
+        soulbound:SetNWInt("TTTSoulboundDecoyUses", 0)
+    end
+
+    SOULBOUND.Abilities["decoy"] = ABILITY
 end
 
 function UPGRADE:Reset()
