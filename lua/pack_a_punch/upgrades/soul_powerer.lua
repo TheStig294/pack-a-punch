@@ -629,6 +629,74 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["dropweapon"] = ABILITY
+    -- 
+    -- Explosive Barrel
+    -- 
+    ABILITY = SOULBOUND.Abilities["explosivebarrel"]
+    ABILITY.Name = "Place Explosive Barrels"
+    ABILITY.Description = "Place several explosive barrels"
+    local explosivebarrel_uses = GetConVar("ttt_soulbound_explosivebarrel_uses")
+    local explosivebarrel_cooldown = GetConVar("ttt_soulbound_explosivebarrel_cooldown")
+
+    function ABILITY:Use(soulbound, target)
+        local plyPos = soulbound:GetPos()
+        local hitPos = soulbound:GetEyeTrace().HitPos
+        local vec = hitPos - plyPos
+        local spawnPos = hitPos - (vec:GetNormalized() * 15)
+        local ent = ents.Create("ttt_pap_barrel_bomb_proj")
+        ent:SetPos(spawnPos)
+        ent:Spawn()
+        ent:Explode(util.QuickTrace(spawnPos, Vector(0, 0, -1)))
+        local uses = soulbound:GetNWInt("TTTSoulboundExplosiveBarrelUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundExplosiveBarrelUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundExplosiveBarrelNextUse", CurTime() + explosivebarrel_cooldown:GetFloat())
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = explosivebarrel_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundExplosiveBarrelUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text = "Press '" .. key .. "' to place explosive barrels"
+            local next_use = soulbound:GetNWFloat("TTTSoulboundExplosiveBarrelNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["explosivebarrel"] = ABILITY
 end
 
 function UPGRADE:Reset()
