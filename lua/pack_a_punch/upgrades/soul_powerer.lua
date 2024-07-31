@@ -477,6 +477,57 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["decoy"] = ABILITY
+    -- 
+    -- Discombob
+    -- 
+    ABILITY = SOULBOUND.Abilities["discombob"]
+    ABILITY.Description = "Throw an upgraded discombobulator"
+    local discombob_fuse_time = GetConVar("ttt_soulbound_discombob_fuse_time")
+    local discombob_cooldown = GetConVar("ttt_soulbound_discombob_cooldown")
+
+    function ABILITY:Use(soulbound, target)
+        local ang = soulbound:EyeAngles()
+        local src = soulbound:GetPos() + (soulbound:Crouching() and soulbound:GetViewOffsetDucked() or soulbound:GetViewOffset()) + (ang:Forward() * 8) + (ang:Right() * 10)
+        local pos = soulbound:GetEyeTraceNoCursor().HitPos
+        local tang = (pos - src):Angle() -- A target angle to actually throw the grenade to the crosshair instead of fowards
+
+        -- Makes the grenade go upwards
+        if tang.p < 90 then
+            tang.p = -10 + tang.p * ((90 + 10) / 90)
+        else
+            tang.p = 360 - tang.p
+            tang.p = -10 + tang.p * -((90 + 10) / 90)
+        end
+
+        tang.p = math.Clamp(tang.p, -90, 90) -- Makes the grenade not go backwards :/
+        local vel = math.min(800, (90 - tang.p) * 6)
+        local thr = tang:Forward() * vel + soulbound:GetVelocity()
+        local gren = ents.Create("ttt_pap_bristol_pusher_nade")
+        if not IsValid(gren) then return end
+        gren:SetPos(src)
+        gren:SetAngles(Angle(0, 0, 0))
+        gren:SetOwner(soulbound)
+        gren:SetThrower(soulbound)
+        gren:SetGravity(0.4)
+        gren:SetFriction(0.2)
+        gren:SetElasticity(0.45)
+        gren:Spawn()
+        gren:PhysWake()
+        local phys = gren:GetPhysicsObject()
+
+        if IsValid(phys) then
+            phys:SetVelocity(thr)
+            phys:AddAngleVelocity(Vector(600, math.random(-1200, 1200)), 0)
+        end
+
+        gren:SetDetonateExact(CurTime() + discombob_fuse_time:GetFloat())
+        local uses = soulbound:GetNWInt("TTTSoulboundDiscombobUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundDiscombobUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundDiscombobNextUse", CurTime() + discombob_cooldown:GetFloat())
+    end
+
+    SOULBOUND.Abilities["discombob"] = ABILITY
 end
 
 function UPGRADE:Reset()
