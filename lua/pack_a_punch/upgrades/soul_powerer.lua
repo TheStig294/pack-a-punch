@@ -449,7 +449,7 @@ function UPGRADE:Apply(SWEP)
 
                     if IsValid(decoy) then
                         decoy:SetPos(pos + Vector(0, 0, 5))
-                        decoy:SetOwner(ply)
+                        decoy:SetOwner(soulbound)
                         decoy:Spawn()
                         decoy:SetMaterial(TTTPAP.camo)
                         local ang = decoy:GetAngles()
@@ -696,7 +696,77 @@ function UPGRADE:Apply(SWEP)
         end
     end
 
-    SOULBOUND.Abilities["explosivebarrel"] = ABILITY
+    -- 
+    -- Fake Body
+    -- 
+    ABILITY = SOULBOUND.Abilities["fakebody"]
+    ABILITY.Name = "Place Explosive Fake Body"
+    ABILITY.Description = "Place a fake dead body that looks like you. Explodes when searched"
+    local fakebody_cooldown = GetConVar("ttt_soulbound_fakebody_cooldown")
+
+    local deathsounds = {Sound("player/death1.wav"), Sound("player/death2.wav"), Sound("player/death3.wav"), Sound("player/death4.wav"), Sound("player/death5.wav"), Sound("player/death6.wav"), Sound("vo/npc/male01/pain07.wav"), Sound("vo/npc/male01/pain08.wav"), Sound("vo/npc/male01/pain09.wav"), Sound("vo/npc/male01/pain04.wav"), Sound("vo/npc/Barney/ba_pain06.wav"), Sound("vo/npc/Barney/ba_pain07.wav"), Sound("vo/npc/Barney/ba_pain09.wav"), Sound("vo/npc/Barney/ba_ohshit03.wav"), Sound("vo/npc/Barney/ba_no01.wav"), Sound("vo/npc/male01/no02.wav"), Sound("hostage/hpain/hpain1.wav"), Sound("hostage/hpain/hpain2.wav"), Sound("hostage/hpain/hpain3.wav"), Sound("hostage/hpain/hpain4.wav"), Sound("hostage/hpain/hpain5.wav"), Sound("hostage/hpain/hpain6.wav")}
+
+    function ABILITY:Use(soulbound, target)
+        local plyPos = soulbound:GetPos()
+        local hitPos = soulbound:GetEyeTrace().HitPos
+        local vec = hitPos - plyPos
+        local fwd = Vector(0, 0, 0)
+
+        if target then
+            fwd = soulbound:GetForward() * 48
+            vec = Vector(0, 0, -1)
+        end
+
+        local spawnPos = hitPos - (vec:GetNormalized() * 40) + fwd
+        local ragdoll = ents.Create("prop_ragdoll")
+        ragdoll:SetPos(spawnPos)
+        ragdoll:SetModel(soulbound:GetModel())
+        ragdoll:SetSkin(soulbound:GetSkin())
+
+        for _, value in pairs(soulbound:GetBodyGroups()) do
+            ragdoll:SetBodygroup(value.id, soulbound:GetBodygroup(value.id))
+        end
+
+        ragdoll:SetAngles(soulbound:GetAngles())
+        ragdoll:SetColor(soulbound:GetColor())
+        ragdoll:Spawn()
+        ragdoll:Activate()
+        ragdoll.TTTPAPOwner = soulbound
+
+        timer.Create("FakeRagdoll" .. tostring(CurTime()), 0.5, 5, function()
+            local jitter = VectorRand() * 30
+            jitter.z = 20
+            util.PaintDown(ragdoll:GetPos() + jitter, "Blood", ragdoll)
+        end)
+
+        -- Trick the game into thinking this is a real dead body but dont provide an ID so defibs dont work
+        CORPSE.SetPlayerNick(ragdoll, soulbound)
+        ragdoll.player_ragdoll = true
+        ragdoll:SetNWBool("TTTSoulboundIsPAPFakeRagdoll", true)
+        sound.Play(deathsounds[math.random(#deathsounds)], spawnPos, 90, 100)
+        local uses = soulbound:GetNWInt("TTTSoulboundFakeBodyUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundFakeBodyUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundFakeBodyNextUse", CurTime() + fakebody_cooldown:GetFloat())
+    end
+
+    self:AddHook("TTTCanSearchCorpse", function(ply, corpse, is_covert, is_long_range, was_traitor)
+        if corpse:GetNWBool("TTTSoulboundIsPAPFakeRagdoll", false) then
+            local explode = ents.Create("env_explosion")
+            explode:SetPos(corpse:GetPos())
+            explode:SetOwner(corpse.TTTPAPOwner)
+            explode:Spawn()
+            explode:SetKeyValue("iMagnitude", "200")
+            explode:SetKeyValue("iRadiusOverride", "256")
+            explode:Fire("Explode", 0, 0)
+            explode:EmitSound("weapon_AWP.Single", 400, 400)
+            corpse:Remove()
+
+            return false
+        end
+    end)
+
+    SOULBOUND.Abilities["fakebody"] = ABILITY
 end
 
 function UPGRADE:Reset()
