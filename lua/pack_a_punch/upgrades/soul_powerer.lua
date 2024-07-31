@@ -528,6 +528,107 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["discombob"] = ABILITY
+    -- 
+    -- Drop Weapon
+    -- 
+    ABILITY = SOULBOUND.Abilities["dropweapon"]
+    ABILITY.Name = "Drop All Weapons"
+    ABILITY.Description = "Force the player you are spectating to drop all of their weapons"
+    local dropweapon_cooldown = GetConVar("ttt_soulbound_dropweapon_cooldown")
+    local dropweapon_uses = GetConVar("ttt_soulbound_dropweapon_uses")
+
+    function ABILITY:Use(soulbound, target)
+        local activeWep = target:GetActiveWeapon()
+        local skipFOVReset = not IsValid(activeWep)
+        local droppedAWeapon = false
+
+        for _, wep in ipairs(target:GetWeapons()) do
+            if IsValid(wep) and wep.AllowDrop then
+                target:DropWeapon(wep)
+                droppedAWeapon = true
+
+                if not skipFOVReset and wep == activeWep then
+                    target:SetFOV(0, 0.2)
+                    skipFOVReset = true
+                end
+            end
+        end
+
+        if droppedAWeapon then
+            local uses = soulbound:GetNWInt("TTTSoulboundDropWeaponUses", 0)
+            uses = math.max(uses - 1, 0)
+            soulbound:SetNWInt("TTTSoulboundDropWeaponUses", uses)
+            soulbound:SetNWFloat("TTTSoulboundDropWeaponNextUse", CurTime() + dropweapon_cooldown:GetFloat())
+        end
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = dropweapon_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundDropWeaponUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text
+            local next_use = soulbound:GetNWFloat("TTTSoulboundDropWeaponNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            else
+                local target = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+
+                if not target or not IsPlayer(target) then
+                    ready = false
+                    text = "Spectate a player"
+                else
+                    local droppableWeapon = false
+
+                    for _, wep in ipairs(target:GetWeapons()) do
+                        if IsValid(wep) and wep.AllowDrop then
+                            droppableWeapon = true
+                            break
+                        end
+                    end
+
+                    if droppableWeapon then
+                        text = "Press '" .. key .. "' to make " .. target:Nick() .. " drop their weapons"
+                    else
+                        ready = false
+                        text = target:Nick() .. "'s held weapons can't be dropped"
+                    end
+                end
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["dropweapon"] = ABILITY
 end
 
 function UPGRADE:Reset()
