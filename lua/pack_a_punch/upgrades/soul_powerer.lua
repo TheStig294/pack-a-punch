@@ -767,6 +767,90 @@ function UPGRADE:Apply(SWEP)
     end)
 
     SOULBOUND.Abilities["fakebody"] = ABILITY
+    -- 
+    -- C4
+    -- 
+    ABILITY = SOULBOUND.Abilities["fakec4"]
+    ABILITY.Name = "Place C4"
+    local fakec4_fuse = GetConVar("ttt_soulbound_fakec4_fuse")
+    local fakec4_uses = GetConVar("ttt_soulbound_fakec4_uses")
+    local fakec4_cooldown = GetConVar("ttt_soulbound_fakec4_cooldown")
+    ABILITY.Description = "Place a C4 that explodes after " .. fakec4_fuse:GetInt() .. " seconds"
+
+    function ABILITY:Use(soulbound, target)
+        local plyPos = soulbound:GetPos()
+        local hitPos = soulbound:GetEyeTrace().HitPos
+        local vec = hitPos - plyPos
+        local fwd = Vector(0, 0, 0)
+
+        if target then
+            fwd = soulbound:GetForward() * 48
+            vec = Vector(0, 0, -1)
+        end
+
+        local spawnPos = hitPos - (vec:GetNormalized() * 15) + fwd
+        local ent = ents.Create("ttt_c4")
+        ent:SetPos(spawnPos)
+        ent:Spawn()
+        ent:PhysWake()
+
+        -- Wait a moment before arming so the bomb isnt floating in the air
+        timer.Simple(3, function()
+            if IsValid(ent) then
+                ent:Arm(soulbound, fakec4_fuse:GetInt())
+            end
+        end)
+
+        local uses = soulbound:GetNWInt("TTTSoulboundFakeC4Uses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundFakeC4Uses", uses)
+        soulbound:SetNWFloat("TTTSoulboundFakeC4NextUse", CurTime() + fakec4_cooldown:GetFloat())
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = fakec4_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundFakeC4Uses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text = "Press '" .. key .. "' to place C4, explodes after " .. fakec4_fuse:GetInt() .. " seconds"
+            local next_use = soulbound:GetNWFloat("TTTSoulboundFakeC4NextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["fakec4"] = ABILITY
 end
 
 function UPGRADE:Reset()
