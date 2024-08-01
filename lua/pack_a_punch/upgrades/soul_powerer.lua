@@ -851,6 +851,110 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["fakec4"] = ABILITY
+    -- 
+    -- Gunshots
+    -- 
+    ABILITY = SOULBOUND.Abilities["gunshots"]
+    ABILITY.Name = "Force Shoot"
+    ABILITY.Description = "Force the player you are spectating to shoot"
+    local gunshots_uses = GetConVar("ttt_soulbound_gunshots_uses")
+    local gunshots_cooldown = GetConVar("ttt_soulbound_gunshots_cooldown")
+
+    function ABILITY:Condition(soulbound, target)
+        if dropweapon_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundGunshotsUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundGunshotsNextUse") then return false end
+        if not target or not IsPlayer(target) then return false end
+        local wep = target:GetActiveWeapon()
+        if not IsValid(wep) or not wep.CanPrimaryAttack or not wep:CanPrimaryAttack() then return false end
+
+        return true
+    end
+
+    function ABILITY:Use(soulbound, target)
+        local wep = target:GetActiveWeapon()
+
+        if IsValid(wep) and wep.CanPrimaryAttack and wep:CanPrimaryAttack() then
+            target:SetNWBool("TTTPAPSoulboundGunshots", true)
+
+            timer.Simple(gunshots_cooldown:GetInt(), function()
+                if IsValid(target) then
+                    target:SetNWBool("TTTPAPSoulboundGunshots", false)
+                end
+            end)
+        end
+
+        local uses = soulbound:GetNWInt("TTTSoulboundGunshotsUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundGunshotsUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundGunshotsNextUse", CurTime() + gunshots_cooldown:GetFloat())
+    end
+
+    self:AddHook("StartCommand", function(ply, ucmd)
+        if ply:GetNWBool("TTTPAPSoulboundGunshots") then
+            ucmd:SetButtons(ucmd:GetButtons() + IN_ATTACK)
+        end
+    end)
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = gunshots_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundGunshotsUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text
+            local next_use = soulbound:GetNWFloat("TTTSoulboundGunshotsNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            else
+                local target = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+
+                if not target or not IsPlayer(target) then
+                    ready = false
+                    text = "Spectate a player"
+                else
+                    local wep = target:GetActiveWeapon()
+
+                    if IsValid(wep) and wep.CanPrimaryAttack and wep:CanPrimaryAttack() then
+                        text = "Press '" .. key .. "' to make " .. target:Nick() .. " shoot"
+                    else
+                        ready = false
+                        text = target:Nick() .. "'s held weapon can't be forced to shoot"
+                    end
+                end
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["gunshots"] = ABILITY
 end
 
 function UPGRADE:Reset()
