@@ -861,7 +861,7 @@ function UPGRADE:Apply(SWEP)
     local gunshots_cooldown = GetConVar("ttt_soulbound_gunshots_cooldown")
 
     function ABILITY:Condition(soulbound, target)
-        if dropweapon_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundGunshotsUses", 0) <= 0 then return false end
+        if gunshots_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundGunshotsUses", 0) <= 0 then return false end
         if CurTime() < soulbound:GetNWFloat("TTTSoulboundGunshotsNextUse") then return false end
         if not target or not IsPlayer(target) then return false end
         local wep = target:GetActiveWeapon()
