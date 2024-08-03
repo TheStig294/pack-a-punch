@@ -1141,7 +1141,7 @@ Spawns 1 big crab launcher! Launcher deals direct damage, spawns many poison hea
 *pap_big_crab_launcher_damage* - Default: 30 - Damage direct launcher hit deals\
 *pap_big_crab_launcher_damage_radius* - Default: 150 - AOE range of direct launcher damage\
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1820904987>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=911182038>
 
 ## Healing Maxwell (Maxwell The Rainbow Cat)
 

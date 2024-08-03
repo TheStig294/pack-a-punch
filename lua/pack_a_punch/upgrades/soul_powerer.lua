@@ -17,6 +17,10 @@ UPGRADE.convars = {
         name = "pap_soul_powerer_clown_transform_delay",
         type = "int"
     },
+    {
+        name = "pap_soul_powerer_headcrab_launcher_uses",
+        type = "int"
+    },
 }
 
 local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by the bee barrel", 1, 10)
@@ -24,6 +28,8 @@ local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {F
 local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
 
 local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of clown transform", 2, 60)
+
+local headcrab_launcher_uses = CreateConVar("pap_soul_powerer_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of summon headcrab launcher", 1, 5)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
@@ -955,6 +961,146 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["gunshots"] = ABILITY
+    -- 
+    -- Headcrab
+    -- 
+    ABILITY = SOULBOUND.Abilities["headcrab"]
+    ABILITY.Name = "Summon Headcrabs"
+    ABILITY.Description = "*ONLY WORKS OUTSIDE*\nSummon a headcrab launcher from the sky that slams into the ground, contaning 8 regular headcrabs"
+    local headcrab_cooldown = GetConVar("ttt_soulbound_headcrab_cooldown")
+
+    function ABILITY:Bought(soulbound)
+        soulbound:SetNWInt("TTTSoulboundHeadcrabUses", headcrab_launcher_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundHeadcrabNextUse", CurTime())
+    end
+
+    -- This function is from the headcrab launcher weapon: https://steamcommunity.com/sharedfiles/filedetails/?id=911182038
+    function ABILITY:CheckForSky(tr)
+        local YawIncrement = 20
+        local PitchIncrement = 10
+        local aBaseAngle = tr.HitNormal:Angle()
+        local aBasePos = tr.HitPos
+        local bScanning = true
+        local iPitch = 10
+        local iYaw = -180
+        local iLoopLimit = 0
+        local iProcessedTotal = 0
+        local tValidHits = {}
+
+        while bScanning and iLoopLimit < 500 do
+            iYaw = iYaw + YawIncrement
+            iProcessedTotal = iProcessedTotal + 1
+
+            if iYaw >= 180 then
+                iYaw = -180
+                iPitch = iPitch - PitchIncrement
+            end
+
+            local tLoop = util.QuickTrace(aBasePos, (aBaseAngle + Angle(iPitch, iYaw, 0)):Forward() * 40000)
+
+            if tLoop.HitSky then
+                table.insert(tValidHits, tLoop)
+            end
+
+            if iPitch <= -80 then
+                bScanning = false
+            end
+
+            iLoopLimit = iLoopLimit + 1
+        end
+
+        return tValidHits, aBasePos
+    end
+
+    function ABILITY:Condition(soulbound, target)
+        if not soulbound:IsInWorld() then return false end
+        if headcrab_launcher_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundHeadcrabUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundHeadcrabNextUse") then return false end
+        local tValidHits = self:CheckForSky(soulbound:GetEyeTrace())
+
+        if #tValidHits > 0 then
+            return true
+        else
+            soulbound:SendLua("surface.PlaySound(\"WallHealth.Deny\")")
+            soulbound:ChatPrint("Can't summon, try outside")
+
+            return false
+        end
+    end
+
+    function ABILITY:Use(soulbound, target)
+        local tValidHits, aBasePos = self:CheckForSky(soulbound:GetEyeTrace())
+        local iHits = #tValidHits
+        local iRand = math.random(3, iHits)
+        local tRand = tValidHits[iRand]
+        local rocket = ents.Create("env_headcrabcanister")
+        rocket:SetPos(aBasePos)
+        rocket:SetAngles((tRand.HitPos - tRand.StartPos):Angle())
+        -- These numbers are from "big crab launcher" upgrade, the default damage convar values for that upgrade
+        -- Direct damage from being hit by the headcrab launcher should never kill someone at full health
+        -- Type 1 = fast headcrabs, ones from fast zombies
+        rocket:SetKeyValue("HeadcrabType", 1)
+        rocket:SetKeyValue("HeadcrabCount", 8)
+        rocket:SetKeyValue("FlightSpeed", 2000)
+        rocket:SetKeyValue("FlightTime", 2.5)
+        rocket:SetKeyValue("Damage", 30)
+        rocket:SetKeyValue("DamageRadius", 150)
+        rocket:SetKeyValue("SmokeLifetime", 3)
+        rocket:SetKeyValue("StartingHeight", 1000)
+        rocket:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+        rocket:SetKeyValue("spawnflags", 8192)
+        rocket:Spawn()
+        rocket:Input("FireCanister", soulbound, soulbound)
+        local uses = soulbound:GetNWInt("TTTSoulboundHeadcrabUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundHeadcrabUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundHeadcrabNextUse", CurTime() + headcrab_cooldown:GetFloat())
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = headcrab_launcher_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundHeadcrabUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text = "Press '" .. key .. "' to summon a headcrab launcher"
+            local next_use = soulbound:GetNWFloat("TTTSoulboundHeadcrabNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["headcrab"] = ABILITY
 end
 
 function UPGRADE:Reset()
