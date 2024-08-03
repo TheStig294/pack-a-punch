@@ -21,6 +21,14 @@ UPGRADE.convars = {
         name = "pap_soul_powerer_headcrab_launcher_uses",
         type = "int"
     },
+    {
+        name = "pap_soul_powerer_heal_uses",
+        type = "int"
+    },
+    {
+        name = "pap_soul_powerer_heal_cooldown",
+        type = "int"
+    },
 }
 
 local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by the bee barrel", 1, 10)
@@ -30,6 +38,10 @@ local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses
 local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of clown transform", 2, 60)
 
 local headcrab_launcher_uses = CreateConVar("pap_soul_powerer_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of summon headcrab launcher", 1, 5)
+
+local heal_uses = CreateConVar("pap_soul_powerer_heal_uses", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of heal ability", 1, 10)
+
+local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
@@ -1101,6 +1113,94 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["headcrab"] = ABILITY
+    -- 
+    -- Heal
+    -- 
+    ABILITY = SOULBOUND.Abilities["heal"]
+    ABILITY.Name = "Heal Instantly"
+    ABILITY.Description = "Instanly heal the player you are spectating to full health"
+
+    function ABILITY:Bought(soulbound)
+        soulbound:SetNWInt("TTTSoulboundHealUses", heal_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundHealNextUse", CurTime())
+    end
+
+    function ABILITY:Condition(soulbound, target)
+        if heal_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundHealUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundHealNextUse") then return false end
+        if not target or not IsPlayer(target) then return false end
+        if target:Health() >= target:GetMaxHealth() then return false end
+
+        return true
+    end
+
+    function ABILITY:Use(soulbound, target)
+        target:SetHealth(math.max(target:Health(), target:GetMaxHealth()))
+        target:EmitSound("items/medshot4.wav")
+        local uses = soulbound:GetNWInt("TTTSoulboundHealUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundHealUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundHealNextUse", CurTime() + heal_cooldown:GetFloat())
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = heal_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundHealUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text
+            local next_use = soulbound:GetNWFloat("TTTSoulboundHealNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            else
+                local target = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+
+                if not target or not IsPlayer(target) then
+                    ready = false
+                    text = "Spectate a player"
+                else
+                    if target:Health() >= target:GetMaxHealth() then
+                        ready = false
+                        text = target:Nick() .. " is at full health or more"
+                    else
+                        text = "Press '" .. key .. "' to heal " .. target:Nick()
+                    end
+                end
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["heal"] = ABILITY
 end
 
 function UPGRADE:Reset()
