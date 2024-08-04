@@ -1252,6 +1252,127 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["incendiary"] = ABILITY
+    -- 
+    -- Pack-a-Punch
+    -- 
+    ABILITY = SOULBOUND.Abilities["packapunch"]
+    ABILITY.Name = "Pack-a-Punch All Weps"
+    ABILITY.Description = "Try to upgrade all of the weapons of the player you are spectating"
+    local packapunch_uses = GetConVar("ttt_soulbound_packapunch_uses")
+    local packapunch_cooldown = GetConVar("ttt_soulbound_packapunch_cooldown")
+
+    function ABILITY:Condition(soulbound, target)
+        if packapunch_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundPackAPunchUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundPackAPunchNextUse") then return false end
+        if not target or not IsPlayer(target) then return false end
+
+        -- Check at least 1 weapon can be upgraded
+        for _, wep in ipairs(target:GetWeapons()) do
+            if TTTPAP:CanOrderPAP(wep) and WEPS.GetClass(wep) ~= "weapon_ttt_unarmed" then return true end
+        end
+
+        soulbound:SendLua("surface.PlaySound(\"WallHealth.Deny\")")
+        soulbound:ChatPrint("None of their weapons can be upgraded")
+
+        return false
+    end
+
+    function ABILITY:Use(soulbound, target)
+        TTTPAP:OrderPAP(target)
+        target:QueueMessage(MSG_PRINTBOTH, "A Soulbound is trying to upgrade ALL of your weapons!")
+
+        for _, wep in ipairs(target:GetWeapons()) do
+            -- Check for a valid weapon, is not already upgraded, and not the "holstered" weapon
+            if IsValid(wep) and WEPS.GetClass(wep) ~= "weapon_ttt_unarmed" then
+                TTTPAP:ApplyRandomUpgrade(wep)
+            end
+        end
+
+        local uses = soulbound:GetNWInt("TTTSoulboundPackAPunchUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundPackAPunchUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundPackAPunchNextUse", CurTime() + packapunch_cooldown:GetFloat())
+    end
+
+    if CLIENT then
+        -- Adding chat messages to display what each upgrade does to the target player
+        self:AddHook("PlayerSwitchWeapon", function(ply, oldSWEP, newSWEP)
+            if IsValid(newSWEP) and newSWEP.PAPUpgrade and newSWEP.PAPUpgrade.desc then
+                if not IsValid(newSWEP.LastPlayerSwitchedTo) or newSWEP.LastPlayerSwitchedTo ~= ply then
+                    ply:ChatPrint("PAP UPGRADE: " .. newSWEP.PAPUpgrade.desc)
+                end
+
+                newSWEP.LastPlayerSwitchedTo = ply
+            end
+        end)
+
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = packapunch_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundPackAPunchUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text
+            local next_use = soulbound:GetNWFloat("TTTSoulboundPackAPunchNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            else
+                local target = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+
+                if not target or not IsPlayer(target) then
+                    ready = false
+                    text = "Spectate a player"
+                else
+                    -- Check at least 1 weapon can be upgraded
+                    local canUpgrade = false
+
+                    for _, wep in ipairs(target:GetWeapons()) do
+                        if TTTPAP:CanOrderPAP(wep) and WEPS.GetClass(wep) ~= "weapon_ttt_unarmed" then
+                            canUpgrade = true
+                            break
+                        end
+                    end
+
+                    if not canUpgrade then
+                        ready = false
+                        text = "None of " .. target:Nick() .. "'s weapons can be upgraded"
+                    else
+                        text = "Press '" .. key .. "' to try to upgrade ALL of " .. target:Nick() .. "'s weapons"
+                    end
+                end
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["packapunch"] = ABILITY
 end
 
 function UPGRADE:Reset()
