@@ -1517,6 +1517,71 @@ function UPGRADE:Apply(SWEP)
             return ready
         end
     end
+
+    SOULBOUND.Abilities["poisonheadcrab"] = ABILITY
+    -- 
+    -- Poltergeist
+    -- 
+    ABILITY = SOULBOUND.Abilities["poltergeist"]
+    ABILITY.Name = "Perma-Poltergeist"
+    ABILITY.Description = "Shoot a poltergeist that stays on the prop forever"
+    local poltergeist_cooldown = GetConVar("ttt_soulbound_poltergeist_cooldown")
+
+    function ABILITY:Use(soulbound, target)
+        local tr = soulbound:GetEyeTrace()
+        local ang = soulbound:GetAimVector():Angle()
+        ang:RotateAroundAxis(ang:Right(), 90)
+        local ent = ents.Create("ttt_physhammer")
+        ent:SetPos(tr.HitPos)
+        ent:SetAngles(ang)
+        ent:Spawn()
+        ent:SetOwner(soulbound)
+        local stuckEnt = tr.Entity
+        local stuck = ent:StickTo(stuckEnt)
+
+        if not stuck then
+            ent:Remove()
+
+            return
+        end
+
+        ent.TTTPAPSoulboundPoltergeistStuckEnt = stuckEnt
+        ent:SetMaterial(TTTPAP.camo)
+        local uses = soulbound:GetNWInt("TTTSoulboundPoltergeistUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundPoltergeistUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundPoltergeistNextUse", CurTime() + poltergeist_cooldown:GetFloat())
+    end
+
+    if SERVER then
+        self:AddHook("EntityRemoved", function(ent)
+            if IsValid(ent) and IsValid(ent.TTTPAPSoulboundPoltergeistStuckEnt) then
+                local newEnt = ents.Create("ttt_physhammer")
+                newEnt:SetPos(ent:GetPos())
+                newEnt:SetAngles(ent:GetAngles())
+                newEnt:Spawn()
+                local owner = ent:GetOwner()
+
+                if IsValid(owner) then
+                    newEnt:SetOwner(owner)
+                end
+
+                local stuckEnt = ent.TTTPAPSoulboundPoltergeistStuckEnt
+                local stuck = newEnt:StickTo(stuckEnt)
+
+                if not stuck then
+                    newEnt:Remove()
+
+                    return
+                end
+
+                newEnt.TTTPAPSoulboundPoltergeistStuckEnt = stuckEnt
+                newEnt:SetMaterial(TTTPAP.camo)
+            end
+        end)
+    end
+
+    SOULBOUND.Abilities["poltergeist"] = ABILITY
 end
 
 function UPGRADE:Reset()
