@@ -1582,6 +1582,66 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["poltergeist"] = ABILITY
+    -- 
+    -- Possession
+    -- 
+    ABILITY = SOULBOUND.Abilities["possession"]
+    ABILITY.Name = "Ultra Ghosting Possession"
+    ABILITY.Description = "Stronger prop possession, messages you type in chat appear above props you possess"
+
+    function ABILITY:Passive(soulbound, target)
+        soulbound.propspec.punches = 1
+        soulbound:SetNWFloat("specpunches", 1)
+        soulbound:GetNWInt("bonuspunches", 0)
+        soulbound.TTTPAPSoulboundPossession = true
+    end
+
+    if SERVER then
+        self:AddHook("PlayerSay", function(sender, text, teamchat)
+            -- ent:SetNWString() has a limit of up to 199 characters
+            if sender.TTTPAPSoulboundPossession and string.len(text) < 200 then
+                sender:SetNWString("TTTPAPSoulboundPossession", text)
+                local timerName = "TTTPAPSoulboundPossession" .. sender:SteamID64()
+
+                -- Check the soulbound is still possessing something
+                timer.Create(timerName, 0.1, 0, function()
+                    if not IsValid(sender) or not sender.propspec or not IsValid(sender.propspec.ent) then
+                        sender:SetNWString("TTTPAPSoulboundPossession", "")
+                        timer.Remove(timerName)
+                    end
+                end)
+            end
+        end)
+    end
+
+    if CLIENT then
+        self:AddHook("PostDrawTranslucentRenderables", function()
+            for _, ply in player.Iterator() do
+                local message = ply:GetNWString("TTTPAPSoulboundPossession", "")
+
+                if message ~= "" then
+                    local norm = ply:GetShootPos() - LocalPlayer():GetShootPos()
+                    local ang = norm:Angle()
+                    cam.Start3D2D(ply:GetShootPos() + Vector(0, 0, 9), Angle(0, ang.y - 90, 90), .25)
+                    surface.SetDrawColor(Color(0, 0, 0, 150))
+                    surface.SetFont("TargetID")
+                    local w, h = surface.GetTextSize(message)
+                    local x, y = -w / 2, -h / 2
+                    surface.DrawRect(x - 7, y, w + 7, h + 6)
+                    draw.SimpleText(message, "TargetID", -4, 4, Color(255, 40, 40), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                    cam.End3D2D()
+                end
+            end
+        end)
+    end
+
+    function ABILITY:Cleanup(soulbound)
+        hook.Remove("KeyPress", "Soulbound_Possession_KeyPress_" .. soulbound:SteamID64())
+        soulbound.TTTPAPSoulboundPossession = nil
+        soulbound:SetNWString("TTTPAPSoulboundPossession", nil)
+    end
+
+    SOULBOUND.Abilities["possession"] = ABILITY
 end
 
 function UPGRADE:Reset()
