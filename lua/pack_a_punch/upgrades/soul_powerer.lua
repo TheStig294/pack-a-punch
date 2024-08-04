@@ -41,7 +41,7 @@ local headcrab_launcher_uses = CreateConVar("pap_soul_powerer_headcrab_launcher_
 
 local heal_uses = CreateConVar("pap_soul_powerer_heal_uses", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of heal ability", 1, 10)
 
-local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
+local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
@@ -1201,6 +1201,57 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["heal"] = ABILITY
+    -- 
+    -- Incendiary
+    -- 
+    ABILITY = SOULBOUND.Abilities["incendiary"]
+    ABILITY.Description = "Throw a big incendiary grenade, the fire lasts a very long time"
+    local incendiary_fuse_time = GetConVar("ttt_soulbound_incendiary_fuse_time")
+    local incendiary_cooldown = GetConVar("ttt_soulbound_incendiary_cooldown")
+
+    function ABILITY:Use(soulbound, target)
+        local ang = soulbound:EyeAngles()
+        local src = soulbound:GetPos() + (soulbound:Crouching() and soulbound:GetViewOffsetDucked() or soulbound:GetViewOffset()) + (ang:Forward() * 8) + (ang:Right() * 10)
+        local pos = soulbound:GetEyeTraceNoCursor().HitPos
+        local tang = (pos - src):Angle() -- A target angle to actually throw the grenade to the crosshair instead of fowards
+
+        -- Makes the grenade go upwards
+        if tang.p < 90 then
+            tang.p = -10 + tang.p * ((90 + 10) / 90)
+        else
+            tang.p = 360 - tang.p
+            tang.p = -10 + tang.p * -((90 + 10) / 90)
+        end
+
+        tang.p = math.Clamp(tang.p, -90, 90) -- Makes the grenade not go backwards :/
+        local vel = math.min(800, (90 - tang.p) * 6)
+        local thr = tang:Forward() * vel + soulbound:GetVelocity()
+        local gren = ents.Create("ttt_pap_forever_fire_nade")
+        if not IsValid(gren) then return end
+        gren:SetPos(src)
+        gren:SetAngles(Angle(0, 0, 0))
+        gren:SetOwner(soulbound)
+        gren:SetThrower(soulbound)
+        gren:SetGravity(0.4)
+        gren:SetFriction(0.2)
+        gren:SetElasticity(0.45)
+        gren:Spawn()
+        gren:PhysWake()
+        local phys = gren:GetPhysicsObject()
+
+        if IsValid(phys) then
+            phys:SetVelocity(thr)
+            phys:AddAngleVelocity(Vector(600, math.random(-1200, 1200)), 0)
+        end
+
+        gren:SetDetonateExact(CurTime() + incendiary_fuse_time:GetFloat())
+        local uses = soulbound:GetNWInt("TTTSoulboundIncendiaryUses", 0)
+        uses = math.max(uses - 1, 0)
+        soulbound:SetNWInt("TTTSoulboundIncendiaryUses", uses)
+        soulbound:SetNWFloat("TTTSoulboundIncendiaryNextUse", CurTime() + incendiary_cooldown:GetFloat())
+    end
+
+    SOULBOUND.Abilities["incendiary"] = ABILITY
 end
 
 function UPGRADE:Reset()
