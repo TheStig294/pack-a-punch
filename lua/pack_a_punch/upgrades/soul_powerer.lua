@@ -1620,15 +1620,15 @@ function UPGRADE:Apply(SWEP)
                 local message = ply:GetNWString("TTTPAPSoulboundPossession", "")
 
                 if message ~= "" then
-                    local norm = ply:GetShootPos() - LocalPlayer():GetShootPos()
+                    local norm = ply:GetPos() - LocalPlayer():GetPos()
                     local ang = norm:Angle()
-                    cam.Start3D2D(ply:GetShootPos() + Vector(0, 0, 9), Angle(0, ang.y - 90, 90), .25)
+                    cam.Start3D2D(ply:GetPos() + Vector(0, 0, 50), Angle(0, ang.y - 90, 90), 0.5)
                     surface.SetDrawColor(Color(0, 0, 0, 150))
                     surface.SetFont("TargetID")
                     local w, h = surface.GetTextSize(message)
                     local x, y = -w / 2, -h / 2
                     surface.DrawRect(x - 7, y, w + 7, h + 6)
-                    draw.SimpleText(message, "TargetID", -4, 4, Color(255, 40, 40), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                    draw.SimpleText(message, "TargetID", -4, 4, COLOR_YELLOW, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                     cam.End3D2D()
                 end
             end
