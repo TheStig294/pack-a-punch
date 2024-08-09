@@ -1672,7 +1672,7 @@ function UPGRADE:Apply(SWEP)
     -- 
     ABILITY = SOULBOUND.Abilities["reveal"]
     ABILITY.Name = "Revealing Camera"
-    ABILITY.Description = "Reveal the location of the player you are spectating,\nand show a mini-camera of their perspecitve on the top left of their screen to your fellow traitors"
+    ABILITY.Description = "Reveal the location of the player you are spectating,\nand show a mini-camera of their perspective on the top left of their screen to your fellow traitors"
 
     if SERVER then
         self:AddHook("PlayerPostThink", function(soulbound)
