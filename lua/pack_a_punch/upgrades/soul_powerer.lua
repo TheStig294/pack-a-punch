@@ -1675,7 +1675,14 @@ function UPGRADE:Apply(SWEP)
     end
 
     if CLIENT then
+        local client
+
         self:AddHook("HUDPaint", function()
+            if not client then
+                client = LocalPlayer()
+            end
+
+            if not client:IsTraitorTeam() or not client:Alive() or client:IsSpec() then return end
             local target
 
             for _, ply in player.Iterator() do
