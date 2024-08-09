@@ -59,7 +59,7 @@ local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "30", {FCVA
 
 local poison_headcrab_launcher_uses = CreateConVar("pap_soul_powerer_poison_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn poison headcrab launcher", 1, 5)
 
-local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of swap position", 1, 10)
+local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of swap position", 1, 10)
 
 local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of swap position", 1, 60)
 
@@ -127,7 +127,15 @@ function UPGRADE:Apply(SWEP)
             ["vgui/ttt/roles/sbd/abilities/icon_possession.png"] = true,
             ["vgui/ttt/roles/sbd/abilities/icon_reveal.png"] = true,
             ["vgui/ttt/roles/sbd/abilities/icon_smoke.png"] = true,
-            ["vgui/ttt/roles/sbd/abilities/icon_swapinventory.png"] = true
+            ["vgui/ttt/roles/sbd/abilities/icon_swapinventory.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/clown_transform.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/explosive_fake_body.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/place_zombie_box.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/revealing_camera.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/spawn_headcrabs.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/spawn_poison_headcrabs.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/swap_position.png"] = true,
+            ["ttt_pack_a_punch/soul_powerer/ultra_ghosting_posession.png"] = true
         }
 
         local client
@@ -251,6 +259,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["box"]
     ABILITY.Name = "Place Zombie Box"
     ABILITY.Description = "Place a big box with a zombie inside"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/place_zombie_box.png"
     local box_uses = GetConVar("ttt_soulbound_box_uses")
     local box_cooldown = GetConVar("ttt_soulbound_box_cooldown")
 
@@ -300,6 +309,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["confetti"]
     ABILITY.Name = "Clown Transform"
     ABILITY.Description = "Transform a non-traitor player into a clown, then force-activate them after " .. clown_transform_delay:GetInt() .. " seconds"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/clown_transform.png"
 
     function ABILITY:Bought(soulbound)
         soulbound:SetNWInt("TTTSoulboundConfettiUses", clown_transform_uses:GetInt())
@@ -742,6 +752,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["fakebody"]
     ABILITY.Name = "Place Explosive Fake Body"
     ABILITY.Description = "Place a fake dead body that looks like you. Explodes when searched"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/explosive_fake_body.png"
     local fakebody_cooldown = GetConVar("ttt_soulbound_fakebody_cooldown")
 
     local deathsounds = {Sound("player/death1.wav"), Sound("player/death2.wav"), Sound("player/death3.wav"), Sound("player/death4.wav"), Sound("player/death5.wav"), Sound("player/death6.wav"), Sound("vo/npc/male01/pain07.wav"), Sound("vo/npc/male01/pain08.wav"), Sound("vo/npc/male01/pain09.wav"), Sound("vo/npc/male01/pain04.wav"), Sound("vo/npc/Barney/ba_pain06.wav"), Sound("vo/npc/Barney/ba_pain07.wav"), Sound("vo/npc/Barney/ba_pain09.wav"), Sound("vo/npc/Barney/ba_ohshit03.wav"), Sound("vo/npc/Barney/ba_no01.wav"), Sound("vo/npc/male01/no02.wav"), Sound("hostage/hpain/hpain1.wav"), Sound("hostage/hpain/hpain2.wav"), Sound("hostage/hpain/hpain3.wav"), Sound("hostage/hpain/hpain4.wav"), Sound("hostage/hpain/hpain5.wav"), Sound("hostage/hpain/hpain6.wav")}
@@ -1001,6 +1012,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["headcrab"]
     ABILITY.Name = "Spawn Headcrabs"
     ABILITY.Description = "*ONLY WORKS OUTSIDE*\nSpawn a headcrab launcher from the sky that slams into the ground, contaning 8 regular headcrabs"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/spawn_headcrabs.png"
     local headcrab_cooldown = GetConVar("ttt_soulbound_headcrab_cooldown")
 
     function ABILITY:Bought(soulbound)
@@ -1401,6 +1413,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["poisonheadcrab"]
     ABILITY.Name = "Spawn Poison Headcrabs"
     ABILITY.Description = "*ONLY WORKS OUTSIDE*\nSpawn a poison headcrab launcher from the sky that slams into the ground, contaning 4 poison headcrabs"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/spawn_poison_headcrabs.png"
     local poisonheadcrab_cooldown = GetConVar("ttt_soulbound_poisonheadcrab_cooldown")
 
     function ABILITY:Bought(soulbound)
@@ -1604,6 +1617,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["possession"]
     ABILITY.Name = "Ultra Ghosting Possession"
     ABILITY.Description = "Stronger prop possession,\nmessages you type in chat appear above props you possess!"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/ultra_ghosting_posession.png"
 
     function ABILITY:Passive(soulbound, target)
         soulbound.propspec.punches = 1
@@ -1673,6 +1687,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["reveal"]
     ABILITY.Name = "Revealing Camera"
     ABILITY.Description = "Reveal the location of the player you are spectating,\nand show a mini-camera of their perspective on the top left of their screen to your fellow traitors"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/revealing_camera.png"
 
     if SERVER then
         self:AddHook("PlayerPostThink", function(soulbound)
@@ -1779,6 +1794,7 @@ function UPGRADE:Apply(SWEP)
     ABILITY = SOULBOUND.Abilities["swapinventory"]
     ABILITY.Name = "Swap Position"
     ABILITY.Description = "Swap the position of two different players"
+    ABILITY.Icon = "ttt_pack_a_punch/soul_powerer/swap_position.png"
 
     function ABILITY:Bought(soulbound)
         soulbound:SetNWInt("TTTSoulboundSwapInventoryUses", swap_position_uses:GetInt())
