@@ -116,6 +116,8 @@ function UPGRADE:Apply(SWEP)
             ["vgui/ttt/roles/sbd/abilities/icon_swapinventory.png"] = true
         }
 
+        local client
+
         self:AddHook("OnContextMenuOpen", function()
             -- This code is copied from the soulbound buy menu opening hook to ensure we're only looking for the soulbound buy menu when we should be
             if GetRoundState() ~= ROUND_ACTIVE then return end
@@ -1601,6 +1603,7 @@ function UPGRADE:Apply(SWEP)
             -- ent:SetNWString() has a limit of up to 199 characters
             if sender.TTTPAPSoulboundPossession and string.len(text) < 200 then
                 sender:SetNWString("TTTPAPSoulboundPossession", text)
+                sender:SetNWEntity("TTTPAPSoulboundPossessionProp", sender.propspec.ent)
                 local timerName = "TTTPAPSoulboundPossession" .. sender:SteamID64()
 
                 -- Check the soulbound is still possessing something
@@ -1615,14 +1618,21 @@ function UPGRADE:Apply(SWEP)
     end
 
     if CLIENT then
+        local client
+
         self:AddHook("PostDrawTranslucentRenderables", function()
+            if not client then
+                client = LocalPlayer()
+            end
+
             for _, ply in player.Iterator() do
                 local message = ply:GetNWString("TTTPAPSoulboundPossession", "")
+                local prop = ply:GetNWEntity("TTTPAPSoulboundPossessionProp")
 
-                if message ~= "" then
-                    local norm = ply:GetPos() - LocalPlayer():GetPos()
+                if message ~= "" and IsValid(prop) then
+                    local norm = ply:GetPos() - client:GetPos()
                     local ang = norm:Angle()
-                    cam.Start3D2D(ply:GetPos() + Vector(0, 0, 50), Angle(0, ang.y - 90, 90), 0.5)
+                    cam.Start3D2D(prop:GetPos() + Vector(0, 0, 50), Angle(0, ang.y - 90, 90), 0.5)
                     surface.SetDrawColor(Color(0, 0, 0, 150))
                     surface.SetFont("TargetID")
                     local w, h = surface.GetTextSize(message)
