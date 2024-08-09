@@ -1684,9 +1684,11 @@ function UPGRADE:Apply(SWEP)
 
             if not client:IsTraitorTeam() or not client:Alive() or client:IsSpec() then return end
             local target
+            local soulbound
 
             for _, ply in player.Iterator() do
                 target = ply:GetNWEntity("TTTPAPSoulboundRevealTarget")
+                soulbound = ply
                 if IsValid(target) then break end
             end
 
@@ -1700,8 +1702,9 @@ function UPGRADE:Apply(SWEP)
             CamData.w = ScrW() / 3
             CamData.h = ScrH() / 3
             render.RenderView(CamData)
+            -- RSB code ends here
+            draw.WordBox(8, 0, 0, target:Nick() .. " cam, from Soulbound: " .. soulbound:Nick(), "TargetID", Color(0, 0, 0, 180), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         end)
-        -- RSB code ends here
     end
 
     SOULBOUND.Abilities["reveal"] = ABILITY
