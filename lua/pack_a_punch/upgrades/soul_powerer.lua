@@ -1653,6 +1653,51 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["possession"] = ABILITY
+    -- 
+    -- Reveal
+    -- 
+    ABILITY = SOULBOUND.Abilities["reveal"]
+    ABILITY.Name = "Revealing Camera"
+    ABILITY.Description = "Reveal the location of the player you are spectating,\nand show a mini-camera of their perspecitve on the top left of their screen to your fellow traitors"
+
+    if SERVER then
+        self:AddHook("PlayerPostThink", function(soulbound)
+            if not soulbound:IsSoulbound() then return end
+            if not soulbound:GetNWBool("TTTSoulboundRevealBought", false) then return end
+            local target = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+            if not IsPlayer(target) or not target:Alive() or target:IsSpec() or target:IsTraitorTeam() then return end
+            local oldTarget = soulbound:GetNWEntity("TTTPAPSoulboundRevealTarget")
+
+            if not IsValid(oldTarget) or oldTarget ~= target then
+                soulbound:SetNWEntity("TTTPAPSoulboundRevealTarget", target)
+            end
+        end)
+    end
+
+    if CLIENT then
+        self:AddHook("HUDPaint", function()
+            local target
+
+            for _, ply in player.Iterator() do
+                target = ply:GetNWEntity("TTTPAPSoulboundRevealTarget")
+                if IsValid(target) then break end
+            end
+
+            if not IsValid(target) then return end
+            -- From the Remote Sticky Bomb's camera: https://steamcommunity.com/sharedfiles/filedetails/?id=550005969
+            local CamData = {}
+            CamData.angles = Angle(0, target:EyeAngles().yaw, 0)
+            CamData.origin = target:GetPos() + Vector(0, 0, 100)
+            CamData.x = 0
+            CamData.y = 0
+            CamData.w = ScrW() / 3
+            CamData.h = ScrH() / 3
+            render.RenderView(CamData)
+        end)
+        -- RSB code ends here
+    end
+
+    SOULBOUND.Abilities["reveal"] = ABILITY
 end
 
 function UPGRADE:Reset()
