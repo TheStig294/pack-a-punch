@@ -27,12 +27,22 @@ UPGRADE.convars = {
     },
     {
         name = "pap_soul_powerer_heal_cooldown",
+        type = "float",
+        decimals = 1
+    },
+    {
+        name = "pap_soul_powerer_poison_headcrab_launcher_uses",
         type = "int"
     },
     {
-        name = "pap_soul_powerer_poisonheadcrab_launcher_uses",
+        name = "pap_soul_powerer_swap_position_uses",
         type = "int"
     },
+    {
+        name = "pap_soul_powerer_swap_position_cooldown",
+        type = "float",
+        decimals = 1
+    }
 }
 
 local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by the bee barrel", 1, 10)
@@ -47,7 +57,11 @@ local heal_uses = CreateConVar("pap_soul_powerer_heal_uses", "2", {FCVAR_ARCHIVE
 
 local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
 
-local poisonheadcrab_launcher_uses = CreateConVar("pap_soul_powerer_poisonheadcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn poison headcrab launcher", 1, 5)
+local poison_headcrab_launcher_uses = CreateConVar("pap_soul_powerer_poison_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn poison headcrab launcher", 1, 5)
+
+local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn position", 1, 10)
+
+local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of spawn position", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
@@ -1390,7 +1404,7 @@ function UPGRADE:Apply(SWEP)
     local poisonheadcrab_cooldown = GetConVar("ttt_soulbound_poisonheadcrab_cooldown")
 
     function ABILITY:Bought(soulbound)
-        soulbound:SetNWInt("TTTSoulboundPoisonHeadcrabUses", poisonheadcrab_launcher_uses:GetInt())
+        soulbound:SetNWInt("TTTSoulboundPoisonHeadcrabUses", poison_headcrab_launcher_uses:GetInt())
         soulbound:SetNWFloat("TTTSoulboundPoisonHeadcrabNextUse", CurTime())
     end
 
@@ -1434,7 +1448,7 @@ function UPGRADE:Apply(SWEP)
 
     function ABILITY:Condition(soulbound, target)
         if not soulbound:IsInWorld() then return false end
-        if poisonheadcrab_launcher_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundPoisonHeadcrabUses", 0) <= 0 then return false end
+        if poison_headcrab_launcher_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundPoisonHeadcrabUses", 0) <= 0 then return false end
         if CurTime() < soulbound:GetNWFloat("TTTSoulboundPoisonHeadcrabNextUse") then return false end
         local tValidHits = self:CheckForSky(soulbound:GetEyeTrace())
 
@@ -1485,7 +1499,7 @@ function UPGRADE:Apply(SWEP)
         }
 
         function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
-            local max_uses = poisonheadcrab_launcher_uses:GetInt()
+            local max_uses = poison_headcrab_launcher_uses:GetInt()
             local uses = soulbound:GetNWInt("TTTSoulboundPoisonHeadcrabUses", 0)
             local margin = 6
             local ammo_height = 28
@@ -1711,8 +1725,8 @@ function UPGRADE:Apply(SWEP)
     -- 
     -- Smoke
     -- 
-    ABILITY.Name = "Instant Smoke Grenade"
     ABILITY = SOULBOUND.Abilities["smoke"]
+    ABILITY.Name = "Instant Smoke Grenade"
     ABILITY.Description = "Throw an upgraded smoke grenade, which makes a massive cloud of smoke"
     local smoke_cooldown = GetConVar("ttt_soulbound_smoke_cooldown")
 
@@ -1759,6 +1773,117 @@ function UPGRADE:Apply(SWEP)
     end
 
     SOULBOUND.Abilities["smoke"] = ABILITY
+    -- 
+    -- Swap Inventory
+    -- 
+    ABILITY = SOULBOUND.Abilities["swapinventory"]
+    ABILITY.Name = "Swap Position"
+    ABILITY.Description = "Swap the position of two different players"
+
+    function ABILITY:Bought(soulbound)
+        soulbound:SetNWInt("TTTSoulboundSwapInventoryUses", swap_position_uses:GetInt())
+        soulbound:SetNWFloat("TTTSoulboundSwapInventoryNextUse", CurTime())
+        soulbound:SetNWString("TTTSoulboundSwapInventoryTarget", "")
+    end
+
+    function ABILITY:Condition(soulbound, target)
+        if swap_position_uses:GetInt() > 0 and soulbound:GetNWInt("TTTSoulboundSwapInventoryUses", 0) <= 0 then return false end
+        if CurTime() < soulbound:GetNWFloat("TTTSoulboundSwapInventoryNextUse") then return false end
+        if not target or not IsPlayer(target) then return false end
+
+        return true
+    end
+
+    function ABILITY:Use(soulbound, target1)
+        local t1sid64 = target1:SteamID64()
+        local t2sid64 = soulbound:GetNWString("TTTSoulboundSwapInventoryTarget", "")
+
+        if #t2sid64 == 0 then
+            soulbound:SetNWString("TTTSoulboundSwapInventoryTarget", t1sid64)
+        elseif t1sid64 ~= t2sid64 then
+            local target2 = player.GetBySteamID64(t2sid64)
+
+            if not target2 or not IsPlayer(target2) or not target2:Alive() or target2:IsSpec() then
+                soulbound:SetNWString("TTTSoulboundSwapInventoryTarget", t1sid64)
+            else
+                local t1pos = target1:GetPos()
+                target1:SetPos(target2:GetPos())
+                target2:SetPos(t1pos)
+                soulbound:SpectateEntity(target2)
+                local uses = soulbound:GetNWInt("TTTSoulboundSwapInventoryUses", 0)
+                uses = math.max(uses - 1, 0)
+                soulbound:SetNWInt("TTTSoulboundSwapInventoryUses", uses)
+                soulbound:SetNWFloat("TTTSoulboundSwapInventoryNextUse", CurTime() + swap_position_cooldown:GetFloat())
+                soulbound:SetNWString("TTTSoulboundSwapInventoryTarget", "")
+            end
+        end
+    end
+
+    if CLIENT then
+        local ammo_colors = {
+            border = COLOR_WHITE,
+            background = Color(100, 60, 0, 222),
+            fill = Color(205, 155, 0, 255)
+        }
+
+        function ABILITY:DrawHUD(soulbound, x, y, width, height, key)
+            local max_uses = swap_position_uses:GetInt()
+            local uses = soulbound:GetNWInt("TTTSoulboundSwapInventoryUses", 0)
+            local margin = 6
+            local ammo_height = 28
+
+            if max_uses == 0 then
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, 1)
+                CRHUD:ShadowedText("Unlimited Uses", "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                CRHUD:PaintBar(8, x + margin, y + margin, width - (margin * 2), ammo_height, ammo_colors, uses / max_uses)
+                CRHUD:ShadowedText(tostring(uses) .. "/" .. tostring(max_uses), "HealthAmmo", x + (margin * 2), y + margin + (ammo_height / 2), COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
+
+            local ready = true
+            local text
+            local next_use = soulbound:GetNWFloat("TTTSoulboundSwapInventoryNextUse")
+            local cur_time = CurTime()
+
+            if max_uses > 0 and uses <= 0 then
+                ready = false
+                text = "Out of uses"
+            elseif cur_time < next_use then
+                ready = false
+                local s = next_use - cur_time
+                local ms = (s - math.floor(s)) * 100
+                s = math.floor(s)
+                text = "On cooldown for " .. string.format("%02i.%02i", s, ms) .. " seconds"
+            else
+                local target1 = soulbound:GetObserverMode() ~= OBS_MODE_ROAMING and soulbound:GetObserverTarget() or nil
+                local t2sid64 = soulbound:GetNWString("TTTSoulboundSwapInventoryTarget", "")
+
+                if not target1 or not IsPlayer(target1) then
+                    ready = false
+                    text = "Spectate a player"
+                elseif #t2sid64 == 0 then
+                    text = "Press '" .. key .. "' to choose " .. target1:Nick() .. " as your first target"
+                else
+                    local target2 = player.GetBySteamID64(t2sid64)
+
+                    if not target2 or not IsPlayer(target2) or not target2:Alive() or target2:IsSpec() then
+                        text = "Press '" .. key .. "' to choose " .. target1:Nick() .. " as your first target"
+                    elseif target1 == target2 then
+                        ready = false
+                        text = "Spectate another player"
+                    else
+                        text = "Press '" .. key .. "' to swap " .. target1:Nick() .. " and " .. target2:Nick()
+                    end
+                end
+            end
+
+            draw.SimpleText(text, "TabLarge", x + margin, y + height - margin, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+            return ready
+        end
+    end
+
+    SOULBOUND.Abilities["swapinventory"] = ABILITY
 end
 
 function UPGRADE:Reset()
