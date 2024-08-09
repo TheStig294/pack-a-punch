@@ -1630,9 +1630,10 @@ function UPGRADE:Apply(SWEP)
                 local prop = ply:GetNWEntity("TTTPAPSoulboundPossessionProp")
 
                 if message ~= "" and IsValid(prop) then
+                    local _, boundTop = prop:GetModelRenderBounds()
                     local norm = ply:GetPos() - client:GetPos()
                     local ang = norm:Angle()
-                    cam.Start3D2D(prop:GetPos() + Vector(0, 0, 50), Angle(0, ang.y - 90, 90), 0.5)
+                    cam.Start3D2D(prop:GetPos() + Vector(0, 0, boundTop.z + 10), Angle(0, ang.y - 90, 90), 0.5)
                     surface.SetDrawColor(Color(0, 0, 0, 150))
                     surface.SetFont("TargetID")
                     local w, h = surface.GetTextSize(message)
