@@ -122,6 +122,8 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 "Stringed Disco", "Disco Medusae", and "Ether Disco" by Kevin MacLeod (<https://incompetech.com>) Licensed under Creative Commons: By Attribution 4.0 License <http://creativecommons.org/licenses/by/4.0/>
 
+Some icons from: <https://game-icons.net>, such as some of the upgraded soulbound ability icons
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -2184,13 +2186,21 @@ Spins around on the spot, watch out!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2590612326>
 
-## Soul Binding Device (Soul Powerer)
+## Soulbinding Device (Soul Powerer)
 
-The Soulbound gains 3 extra abilities!\
+All Soulbound abilities are upgraded!\
 \
 *ttt_pap_soul_powerer* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_soul_powerer_extra_abilities* - Default: 3 - Number of abilities\
+*pap_soul_powerer_bee_barrel_bees* - Default: 2 - Bees spawned by bee barrel ability\
+*pap_soul_powerer_clown_transform_uses* - Default: 1 - Uses of clown transform, 0 = infinite\
+*pap_soul_powerer_clown_transform_delay* - Default: 10 - Secs delay of clown transform\
+*pap_soul_powerer_headcrab_launcher_uses* - Default: 1 - Uses of spawn headcrab launcher\
+*pap_soul_powerer_heal_uses* - Default: 2 - Uses of heal ability\
+*pap_soul_powerer_heal_cooldown* - Default: 30 - Secs cooldown of heal ability\
+*pap_soul_powerer_poison_headcrab_launcher_uses* - Default: 1 - Uses of spawn poison headcrab launcher\
+*pap_soul_powerer_swap_position_uses* - Default: 2 - Uses of swap position\
+*pap_soul_powerer_swap_position_cooldown* - Default: 20 - Secs cooldown of swap position\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
 
