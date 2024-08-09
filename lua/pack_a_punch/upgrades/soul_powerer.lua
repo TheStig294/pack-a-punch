@@ -61,7 +61,7 @@ local poison_headcrab_launcher_uses = CreateConVar("pap_soul_powerer_poison_head
 
 local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of swap position", 1, 10)
 
-local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of swap position", 1, 60)
+local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of swap position", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality
@@ -1603,7 +1603,7 @@ function UPGRADE:Apply(SWEP)
     -- 
     ABILITY = SOULBOUND.Abilities["possession"]
     ABILITY.Name = "Ultra Ghosting Possession"
-    ABILITY.Description = "Stronger prop possession, messages you type in chat appear above props you possess"
+    ABILITY.Description = "Stronger prop possession,\nmessages you type in chat appear above props you possess!"
 
     function ABILITY:Passive(soulbound, target)
         soulbound.propspec.punches = 1
