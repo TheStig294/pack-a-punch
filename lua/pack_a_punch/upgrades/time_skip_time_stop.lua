@@ -112,8 +112,12 @@ function UPGRADE:Apply(SWEP)
     end)
 
     if CLIENT then
+        local playedSound = false
+
         -- Adds a blur effect around the edges of the screen
         net.Receive("TTTPAPTimeSkipTSScreenEffects", function()
+            playedSound = false
+
             hook.Add("RenderScreenspaceEffects", "TTTPAPTimeSkipTSScreenEffects", function()
                 DrawToyTown(4, ScrH() / 1.75)
             end)
@@ -121,7 +125,11 @@ function UPGRADE:Apply(SWEP)
 
         net.Receive("TTTPAPTimeSkipTSScreenEffectsRemove", function()
             hook.Remove("RenderScreenspaceEffects", "TTTPAPTimeSkipTSScreenEffects")
-            surface.PlaySound("the_world_time_start.mp3")
+
+            if not playedSound then
+                playedSound = true
+                surface.PlaySound("the_world_time_start.mp3")
+            end
         end)
     end
 end
