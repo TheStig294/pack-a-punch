@@ -1646,7 +1646,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
 
 ## Paper Plane (Nyan Plane)
 
-Moves faster, is now a Nyan Cat!\
+Throws 2 planes at once, is now a Nyan Cat!\
 \
 *ttt_pap_nyan_plane* - Default: 1 - Whether this upgrade is enabled
 \

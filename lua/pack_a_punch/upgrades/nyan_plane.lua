@@ -2,41 +2,9 @@ local UPGRADE = {}
 UPGRADE.id = "nyan_plane"
 UPGRADE.class = "weapon_ttt_paper_plane"
 UPGRADE.name = "Nyan Plane"
-UPGRADE.desc = "Moves faster, is now a Nyan Cat!"
-
-UPGRADE.convars = {
-    {
-        name = "pap_nyan_plane_speed_mult",
-        type = "float",
-        decimals = "2"
-    }
-}
-
-local speedMultCvar = CreateConVar("pap_nyan_plane_speed_mult", "1.2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed multiplier", 0.1, 2)
+UPGRADE.desc = "Throws 2 planes at once, is now a Nyan Cat!"
 
 function UPGRADE:Apply(SWEP)
-    local targetJester = GetConVar("ttt_paper_plane_target_jester")
-
-    local function CanTargetOwnTeam(thrower)
-        local targetTraitors = cvars.Bool("ttt_snailplane_target_fellow_traitors")
-        local targetInnocents = cvars.Bool("ttt_snailplane_target_fellow_innocents")
-        local targetMonsters = cvars.Bool("ttt_snailplane_target_fellow_monsters")
-
-        if TTT2 then
-            if thrower:GetTeam() == TEAM_TRAITOR and targetTraitors then return true end
-            if thrower:GetTeam() == TEAM_INNOCENT and targetInnocents then return true end
-        elseif CR_VERSION then
-            if thrower:IsTraitorTeam() and targetTraitors then return true end
-            if thrower:IsInnocentTeam() and targetInnocents then return true end
-            if thrower:IsMonsterTeam() and targetMonsters then return true end
-        else
-            if thrower:IsTraitor() and targetTraitors then return true end
-            if not thrower:IsTraitor() and targetInnocents then return true end
-        end
-
-        return false
-    end
-
     function SWEP:CreatePaperWing()
         if SERVER then
             local owner = self:GetOwner()
@@ -97,58 +65,6 @@ function UPGRADE:Apply(SWEP)
                     end
                 end)
 
-                -- This whole hook has to be copied to make the plane move faster while still being compatible with servers with just the base paper plane mod
-                -- and not the snail plane mod
-                function plane:SearchPlayer()
-                    if SERVER then
-                        local pos = self:GetPos()
-                        local sphere = ents.FindInSphere(pos, 5000)
-                        local playersInSphere = {}
-                        local thrower = self:GetThrower()
-
-                        for key, v in pairs(sphere) do
-                            if v:IsPlayer() and v:Alive() and not v:IsSpec() and v ~= thrower then
-                                if TTT2 then
-                                    if v:GetTeam() ~= thrower:GetTeam() or CanTargetOwnTeam(thrower) then
-                                        table.insert(playersInSphere, v)
-                                    end
-                                elseif CR_VERSION then
-                                    if (not v:IsSameTeam(thrower) or CanTargetOwnTeam(thrower)) and not (not targetJester:GetBool() and v:IsJesterTeam()) then
-                                        table.insert(playersInSphere, v)
-                                    end
-                                else
-                                    if v:IsTraitor() ~= thrower:IsTraitor() or CanTargetOwnTeam(thrower) then
-                                        table.insert(playersInSphere, v)
-                                    end
-                                end
-                            end
-                        end
-
-                        local closestPlayer = self:GetClosestPlayer(self, playersInSphere)
-
-                        if closestPlayer ~= nil then
-                            local tracedata = {}
-                            tracedata.start = closestPlayer:GetShootPos()
-                            tracedata.endpos = self:GetPos()
-
-                            tracedata.filter = {self, closestPlayer}
-
-                            local tr = util.TraceLine(tracedata)
-
-                            if tr.HitPos == tracedata.endpos then
-                                local phys = self:GetPhysicsObject()
-                                -- Default speed multiplier: -200
-                                -- Speed is increased by pap_nyan_plane_speed_mult convar
-                                phys:ApplyForceCenter((self:GetPos() - closestPlayer:GetShootPos()) * -(speedMultCvar:GetFloat() * cvars.Number("ttt_snailplane_speed", 200)))
-                                phys:SetAngles((self:GetPos() - closestPlayer:GetShootPos()):Angle())
-                            end
-                            -- No warning music
-                        end
-
-                        table.Empty(playersInSphere)
-                    end
-                end
-
                 if TTT2 then
                     plane.userdata = {
                         team = owner:GetTeam()
@@ -170,6 +86,11 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 self.ENT = plane
+            end
+
+            if IsValid(self) and not self.PAPNyanPlane2ndPlane then
+                self.PAPNyanPlane2ndPlane = true
+                self:CreatePaperWing()
             end
         end
     end
