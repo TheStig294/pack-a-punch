@@ -212,6 +212,14 @@ Ammo recharges over time\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1839121623>
 
+## Anthrax Pack (0G Bottle Sprayer)
+
+Traitors are immune, x2 bottles, bottles and crate aren't affected by gravity\
+\
+*ttt_pap_0g_bottle_sprayer* - Default: 1 - Whether this upgrade is enabled
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3199399234>
+
 ## Artillery Cannon (Auto Cannon)
 
 Auto-shoots, more damage, pressing 'E' removes the cannon!\
