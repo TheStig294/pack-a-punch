@@ -2,7 +2,23 @@ local UPGRADE = {}
 UPGRADE.id = "bigulon"
 UPGRADE.class = "weapon_dr2_remote"
 UPGRADE.name = "Bigulon"
-UPGRADE.desc = "Fires manhacks instead of missiles"
+
+UPGRADE.convar = {
+    {
+        name = "pap_bigulon_manhack_damage",
+        type = "int"
+    },
+    {
+        name = "pap_bigulon_manhack_decay_time",
+        type = "int"
+    }
+}
+
+local damageCvar = CreateConVar("pap_bigulon_manhack_damage", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage manhacks deal on touch", 1, 100)
+
+local decayTimeCvar = CreateConVar("pap_bigulon_manhack_decay_time", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds manhacks last until dying", 1, 120)
+
+UPGRADE.desc = "Fires high-damage manhacks instead of missiles.\nManhacks die after " .. decayTimeCvar:GetInt() .. " seconds."
 
 function UPGRADE:Apply(SWEP)
     function SWEP:SetGunThink(drone)
@@ -12,7 +28,7 @@ function UPGRADE:Apply(SWEP)
             local user = drone:GetDriver()
 
             if not drone:IsDroneDestroyed() and drone:HasFuel() and user:IsValid() then
-                local viewdir = Angle(user:EyeAngles().p < -20 and -20 or user:EyeAngles().p, user:EyeAngles().y, 0) --bookmark
+                local viewdir = Angle(user:EyeAngles().p < -20 and -20 or user:EyeAngles().p, user:EyeAngles().y, 0)
 
                 if not user:GetNWBool("dronejaschamovement", false) then
                     viewdir = viewdir + drone:GetAngles()
@@ -31,6 +47,7 @@ function UPGRADE:Apply(SWEP)
                         manhack:EmitSound("ttt_pack_a_punch/beepulon/beepulon" .. math.random(1, 4) .. ".mp3")
                         manhack:SetMaxHealth(1)
                         manhack:SetHealth(1)
+                        manhack.PrintName = "Beepulon"
                         local phys = manhack:GetPhysicsObject()
 
                         if phys:IsValid() then
@@ -39,6 +56,12 @@ function UPGRADE:Apply(SWEP)
 
                         manhack:SetMaterial(TTTPAP.camo)
                         manhack.TTTPAPBigulon = true
+
+                        timer.Simple(decayTimeCvar:GetInt(), function()
+                            if IsValid(manhack) then
+                                manhack:Fire("break")
+                            end
+                        end)
                     end
 
                     drone:SetAmmo(drone.Ammo - 1)
@@ -52,13 +75,23 @@ function UPGRADE:Apply(SWEP)
     end
 
     -- Fired manhacks deal increased damage and make beepulon noises
+    local soundCooldown = false
+
     self:AddHook("EntityTakeDamage", function(ent, dmg)
         local inflictor = dmg:GetInflictor()
 
         if IsValid(inflictor) and inflictor.TTTPAPBigulon then
-            dmg:SetDamage(20)
+            dmg:SetDamage(damageCvar:GetInt())
             dmg:SetAttacker(inflictor.originalplayer or inflictor)
-            inflictor:EmitSound("ttt_pack_a_punch/beepulon/beepulon" .. math.random(1, 4) .. ".mp3")
+
+            if not soundCooldown then
+                inflictor:EmitSound("ttt_pack_a_punch/beepulon/beepulon" .. math.random(1, 4) .. ".mp3")
+                soundCooldown = true
+
+                timer.Simple(2, function()
+                    soundCooldown = false
+                end)
+            end
         end
     end)
 
@@ -74,16 +107,16 @@ function UPGRADE:Apply(SWEP)
             local vThrowPos = owner:EyePos() + owner:GetRight() * 8
             drone:SetPos(self:CheckSpace(vThrowPos) or (vThrowPos + owner:GetForward() * 30))
             drone:Spawn()
-            drone.PAPOwner = owner
             local phys = drone:GetPhysicsObject()
             phys:SetVelocity(owner:GetAimVector() * 60 + Vector(0, 0, 200))
             drone:SetAngles(drone:GetAngles() + Angle(0, -90, 0))
             self:SetNWEntity("target", drone)
             self:SetGunThink(drone)
+            drone.PrintName = "Bigulon"
             local timerName = "TTTPAPBigulonSounds" .. drone:EntIndex()
 
             timer.Create(timerName, 20, 0, function()
-                if not IsValid(drone) then
+                if not IsValid(drone) or drone:IsDroneDestroyed() then
                     timer.Remove(timerName)
 
                     return

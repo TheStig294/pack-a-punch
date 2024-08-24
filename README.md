@@ -864,6 +864,17 @@ Duel-wield grenade launcher!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=639762141>
 
+## Drone Controller (Bigulon)
+
+Fires high-damage manhacks instead of missiles. Manhacks die after 20 seconds.\
+\
+*ttt_pap_bigulon* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_bigulon_manhack_damage* - Default: 20 - Damage manhacks deal on touch\
+*pap_bigulon_manhack_decay_time* - Default: 20 - Seconds manhacks last until dying\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3066505251>
+
 ## Dubstep Gun (Royalty Free Gun)
 
 New music, more damage, goes through most explosion immunities!\
