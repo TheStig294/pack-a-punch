@@ -1,10 +1,12 @@
+local speedCvar = CreateConVar("pap_banana_bus_speed", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed the bus travels (units/tick)", 0.1, 5)
+
 if SERVER then
 	AddCSLuaFile()
 end
 
 ENT.Base = "base_anim"
 ENT.Type = "anim"
-ENT.PrintName = "Bus"
+ENT.PrintName = "Banana Bus"
 ENT.Pos = Vector(0, 0, 0)
 ENT.ClosestPlayerDist = nil
 ENT.ClosestPlayer = nil
@@ -12,58 +14,24 @@ ENT.DistancePerTick = 2
 ENT.SecondsPerTick = 0.01
 
 function ENT:PlayBananaBusSound()
-	self:EmitSound("ttt_pack_a_punch/banana_bus/banana_bus.mp3")
-	self:EmitSound("ttt_pack_a_punch/banana_bus/banana_bus.mp3")
+	for i = 1, 2 do
+		self:EmitSound("ttt_pack_a_punch/banana_bus/banana_bus.mp3")
+	end
 end
 
--- Set the prop to a bus
+-- Set the prop to a bus, apply the PaP camo, and add a yellow trail
 function ENT:Initialize()
-	if SERVER then
-		self:SetTrigger(true)
-	end
-
+	self.DistancePerTick = speedCvar:GetFloat()
 	self:SetModel("models/ttt_pack_a_punch/bus/bus.mdl")
 	self:SetMaterial(TTTPAP.camo)
-	self:PhysicsInit(SOLID_VPHYSICS)
+	self:PhysicsInit(SOLID_NONE)
 	self:SetMoveType(MOVETYPE_NOCLIP)
-	self:SetSolid(SOLID_VPHYSICS)
+	self:SetSolid(SOLID_NONE)
 	self:PlayBananaBusSound()
-	local phys = self:GetPhysicsObject()
-
-	if IsValid(phys) then
-		phys:Wake()
-		phys:SetMass(1)
-		phys:IsGravityEnabled(false)
-	end
 
 	if SERVER then
-		util.SpriteTrail(self, 0, Color(255, 225, 53), false, 15, 1, 4, 1, "trails/plasma")
+		util.SpriteTrail(self, 0, Color(255, 225, 53), false, 30, 1, 4, 2, "trails/plasma")
 	end
-end
-
-function ENT:KillEnt(ent)
-	local dmg = DamageInfo()
-	dmg:SetDamage(10000)
-	dmg:SetDamageType(DMG_GENERIC)
-	dmg:SetInflictor(self)
-	dmg:SetAttacker(self.PAPOwner or self)
-	ent:TakeDamageInfo(dmg)
-	self:PlayBananaBusSound()
-end
-
--- Kill anything that touches it
-function ENT:StartTouch(ent)
-	if not IsValid(ent) then return end
-	if ent:IsPlayer() and (not ent:Alive() or ent:IsSpec()) then return end
-	self:KillEnt(ent)
-	if ent:IsNPC() or ent:IsPlayer() then return end
-
-	-- Let props that break have a chance to break
-	timer.Simple(0.1, function()
-		if IsValid(ent) then
-			ent:Remove()
-		end
-	end)
 end
 
 function ENT:Think()
@@ -83,11 +51,18 @@ function ENT:Think()
 		end
 	end
 
+	-- Don't chase anything if there is no closest player, or they are dead
 	if SERVER and IsValid(self.ClosestPlayer) and self.ClosestPlayer:Alive() and not self.ClosestPlayer:IsSpec() then
 		-- 30 * 30 = 900 source units
 		if self.ClosestPlayerDist < 900 then
 			-- Kill close enough players
-			self:KillEnt(self.ClosestPlayer)
+			local dmg = DamageInfo()
+			dmg:SetDamage(10000)
+			dmg:SetDamageType(DMG_GENERIC)
+			dmg:SetInflictor(self)
+			dmg:SetAttacker(self.PAPOwner or self)
+			self.ClosestPlayer:TakeDamageInfo(dmg)
+			self:PlayBananaBusSound()
 		else
 			-- Else chase players down
 			self:PointAtEntity(self.ClosestPlayer)

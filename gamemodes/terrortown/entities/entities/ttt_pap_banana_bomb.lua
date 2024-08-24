@@ -8,34 +8,24 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
+	if CLIENT then return end
 
 	timer.Simple(4, function()
 		if IsValid(self) then
-			self:SpawnBananas()
+			local pos = self:GetPos()
+			local explosionEffect = EffectData()
+			explosionEffect:SetStart(pos)
+			explosionEffect:SetOrigin(pos)
+			explosionEffect:SetScale(1)
+			util.Effect("Explosion", explosionEffect)
+			util.BlastDamage(self, self.PAPOwner or self, self:GetPos(), 230, 90)
+			local bananaBus = ents.Create("ttt_pap_banana_bus")
+			bananaBus:SetPos(self:GetPos())
+			bananaBus:Spawn()
+			bananaBus.PAPOwner = self.PAPOwner
+			self:Remove()
 		end
 	end)
-end
-
-function ENT:SpawnBananas()
-	if CLIENT then return end
-
-	for i = 1, 14 do
-		local banana = ents.Create("ttt_pap_banana")
-
-		if IsValid(banana) then
-			banana:SetPos(self:GetPos() + Vector(0, 0, 10) + VectorRand() * 5)
-			banana:SetAngles(Angle(math.Rand(0, 360), math.Rand(0, 360), math.Rand(0, 360)))
-			banana:Spawn()
-			banana:Activate()
-			banana.PAPOwner = self.PAPOwner
-		end
-	end
-
-	local bananaBus = ents.Create("ttt_pap_banana_bus")
-	bananaBus:SetPos(self:GetPos())
-	bananaBus:Spawn()
-	bananaBus.PAPOwner = self.PAPOwner
-	self:Remove()
 end
 
 function ENT:PhysicsCollide(data, phys)

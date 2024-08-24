@@ -2,7 +2,15 @@ local UPGRADE = {}
 UPGRADE.id = "banana_bus"
 UPGRADE.class = "weapon_banana"
 UPGRADE.name = "Banana Bus"
-UPGRADE.desc = "Spawns a deadly bus where it explodes,\ndriving around killing any player it touches"
+UPGRADE.desc = "Spawns a deadly bus where it explodes,\ndriving through walls, killing any player it touches"
+
+UPGRADE.convars = {
+    {
+        name = "pap_banana_bus_speed",
+        type = "float",
+        decimals = 1
+    }
+}
 
 function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
@@ -28,6 +36,9 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:SecondaryAttack()
+    end
+
+    function SWEP:DrawHUD()
     end
 end
 
