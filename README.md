@@ -248,6 +248,15 @@ Makes French shouting sounds on killing a player\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2876412670>
 
+## Banana Bomb (Banana Bus)
+
+Spawns a deadly bus where it explodes,\ndriving around killing any player it touches\
+\
+*ttt_pap_banana_bus* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=654570222>
+
 ## Barnacle (Invincible Barnacle)
 
 Cannot be killed!
