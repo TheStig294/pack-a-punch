@@ -124,6 +124,10 @@ Fart Sound Effect by UNIVERSFIELD from Pixabay <https://pixabay.com//?utm_source
 
 Some icons from: <https://game-icons.net>, such as some of the upgraded soulbound ability icons
 
+"SCHOOL BUS - low poly model" <https://skfb.ly/ooUKE>
+by Jasmin Daniel
+licensed under Creative Commons Attribution <http://creativecommons.org/licenses/by/4.0/>
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
