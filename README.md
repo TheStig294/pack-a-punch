@@ -84,6 +84,11 @@ Requires: [SpongeBob SquarePants Playermodel!](https://steamcommunity.com/shared
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1836493806>\
 Requires: [Master Chief Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=125456150)
 
+## Ender Pearl (Eye Of Ender)
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3173929747>\
+Requires: [Enderman Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2116202907)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -902,6 +907,17 @@ Lets you ragdoll again 2 times!\
 *pap_eagle_flying_gun_ammo* - Default: 2 - Amount of times you can ragdoll\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1326870555>
+
+## Ender Pearl (Eye Of Ender)
+
+Infinite uses, teleport instantly, turns you into an enderman!\
+Also gives you an enderman playermodel, if installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=2116202907>\
+\
+*ttt_pap_eye_of_ender* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_eye_of_ender_cooldown* - Default: 5 - Seconds cooldown for teleporting\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3173929747>
 
 ## Exorcism Device (Ghost Buster)
 
