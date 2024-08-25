@@ -22,8 +22,11 @@ function UPGRADE:Apply(SWEP)
         ply.TTTPAPEyeOfEnder = true
         local currentModel = ply:GetModel()
 
-        if endermanModelInstalled and currentModel ~= endermanModel then
-            ply.TTTPAPEyeOfEnderOGModel = currentModel
+        if endermanModelInstalled then
+            if currentModel ~= endermanModel then
+                ply.TTTPAPEyeOfEnderOGModel = currentModel
+            end
+
             self:SetModel(ply, endermanModel)
         end
     end
@@ -53,7 +56,9 @@ function UPGRADE:Apply(SWEP)
 
         SWEP:SetClip1(SWEP.Primary.ClipSize)
         -- If the enderman model is installed, set the owner to it!
-        SetPlayerAsEnderman(SWEP:GetOwner())
+        local owner = SWEP:GetOwner()
+        SetPlayerAsEnderman(owner)
+        SWEP.PAPOwner = owner
     end)
 
     function SWEP:PrimaryAttack()
@@ -99,15 +104,23 @@ function UPGRADE:Apply(SWEP)
 
     -- If the weapon changes hands, set the new owner as an enderman, and reset the old owner
     function SWEP:Equip()
-        SetPlayerAsEnderman(self:GetOwner())
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
+        self.PAPOwner = owner
+        SetPlayerAsEnderman(owner)
     end
 
     function SWEP:OnRemove()
-        UnsetPlayerAsEnderman(self:GetOwner())
+        UnsetPlayerAsEnderman(self.PAPOwner)
     end
 
+    -- Add a timer here so the death sound can play properly
     function SWEP:PreDrop()
-        UnsetPlayerAsEnderman(self:GetOwner())
+        local owner = self.PAPOwner
+
+        timer.Simple(0.1, function()
+            UnsetPlayerAsEnderman(owner)
+        end)
     end
 
     -- Adds particle effects and idle sounds for any enderman player that play randomly
@@ -128,18 +141,40 @@ function UPGRADE:Apply(SWEP)
                 end
             end
         end)
+
+        -- Players take damage while in water
+        timer.Create("TTTPAPEyeOfEnderWaterDamage", 1, 0, function()
+            for _, ply in player.Iterator() do
+                if ply.TTTPAPEyeOfEnder and ply:WaterLevel() ~= 0 then
+                    local dmg = DamageInfo()
+                    dmg:SetDamageType(DMG_DROWN)
+                    dmg:SetDamage(10)
+                    dmg:SetAttacker(ply)
+                    dmg:SetInflictor(ply:GetWeapon(self.class) or ply)
+                    ply:TakeDamageInfo(dmg)
+                end
+            end
+        end)
     end
 
-    -- Player makes enderman sounds
+    -- Players makes enderman sounds on hurt and death
     self:AddHook("PlayerHurt", function(ply)
         if ply.TTTPAPEyeOfEnder and self:IsAlive(ply) then
             ply:EmitSound("ttt_pack_a_punch/eye_of_ender/hurt" .. math.random(1, 4) .. ".mp3")
+            local oldMat = ply:GetMaterial()
+            ply:SetMaterial("ttt_pack_a_punch/eye_of_ender/red")
+
+            timer.Simple(0.5, function()
+                ply:SetMaterial(oldMat or "")
+            end)
         end
     end)
 
-    self:AddHook("PostPlayerDeath", function(ply)
+    self:AddHook("PlayerDeathSound", function(ply)
         if ply.TTTPAPEyeOfEnder then
             ply:EmitSound("ttt_pack_a_punch/eye_of_ender/death.mp3")
+
+            return true
         end
     end)
 end
@@ -156,6 +191,7 @@ function UPGRADE:Reset()
     if SERVER then
         timer.Remove("TTTPAPEyeOfEnderIdleEffects")
         timer.Remove("TTTPAPEyeOfEnderIdleSounds")
+        timer.Remove("TTTPAPEyeOfEnderWaterDamage")
     end
 end
 
