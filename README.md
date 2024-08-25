@@ -910,7 +910,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1326870555>
 
 ## Ender Pearl (Eye Of Ender)
 
-Infinite uses, teleport instantly, turns you into an enderman!\
+Teleport through thin walls, infinite uses, turns you into an enderman!
 Also gives you an enderman playermodel, if installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=2116202907>\
 \
 *ttt_pap_eye_of_ender* - Default: 1 - Whether this upgrade is enabled
