@@ -2,6 +2,7 @@ local speedCvar = CreateConVar("pap_banana_bus_speed", "1.5", {FCVAR_ARCHIVE, FC
 
 if SERVER then
 	AddCSLuaFile()
+	util.AddNetworkString("TTTPAPBananaBusOutline")
 end
 
 ENT.Base = "base_anim"
@@ -32,6 +33,39 @@ function ENT:Initialize()
 	if SERVER then
 		util.SpriteTrail(self, 0, Color(255, 225, 53), false, 30, 1, 4, 2, "trails/plasma")
 	end
+
+	timer.Simple(2, function()
+		if not IsValid(self) then return end
+
+		-- Adding an outline around the bus for the thrower
+		if SERVER and IsValid(self.PAPOwner) then
+			net.Start("TTTPAPBananaBusOutline")
+			net.WriteEntity(self)
+			net.Send(self.PAPOwner)
+		end
+	end)
+end
+
+if CLIENT then
+	local haloEntities = {}
+
+	net.Receive("TTTPAPBananaBusOutline", function()
+		local bus = net.ReadEntity()
+
+		if table.IsEmpty(haloEntities) then
+			hook.Add("PreDrawHalos", "TTTPAPBananaBusOutline", function()
+				halo.Add(haloEntities, COLOR_WHITE, 1, 1, 2, true, true)
+			end)
+
+			hook.Add("TTTPrepareRound", "TTTPAPBananaBusOutlineReset", function()
+				table.Empty(haloEntities)
+				hook.Remove("PreDrawHalos", "TTTPAPBananaBusOutline")
+				hook.Remove("TTTPrepareRound", "TTTPAPBananaBusOutlineReset")
+			end)
+		end
+
+		table.insert(haloEntities, bus)
+	end)
 end
 
 function ENT:Think()

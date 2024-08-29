@@ -20,9 +20,9 @@ function ENT:Initialize()
 			util.Effect("Explosion", explosionEffect)
 			util.BlastDamage(self, self.PAPOwner or self, self:GetPos(), 230, 90)
 			local bananaBus = ents.Create("ttt_pap_banana_bus")
+			bananaBus.PAPOwner = self.PAPOwner
 			bananaBus:SetPos(self:GetPos())
 			bananaBus:Spawn()
-			bananaBus.PAPOwner = self.PAPOwner
 			self:Remove()
 		end
 	end)

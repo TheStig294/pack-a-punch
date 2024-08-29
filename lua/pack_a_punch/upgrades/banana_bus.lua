@@ -17,15 +17,15 @@ function UPGRADE:Apply(SWEP)
         if CLIENT then return end
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
-        local crate = ents.Create("ttt_pap_banana_bomb")
-        if not IsValid(crate) then return end
+        local bananaBunch = ents.Create("ttt_pap_banana_bomb")
+        if not IsValid(bananaBunch) then return end
         local aimVector = owner:GetAimVector()
-        crate:SetPos(owner:GetShootPos() + aimVector * 30)
-        crate:Spawn()
-        crate:Activate()
-        crate.PAPOwner = owner
+        bananaBunch:SetPos(owner:GetShootPos() + aimVector * 30)
+        bananaBunch.PAPOwner = owner
+        bananaBunch:Spawn()
+        bananaBunch:Activate()
         self:SendWeaponAnim(ACT_VM_THROW)
-        local phys = crate:GetPhysicsObject()
+        local phys = bananaBunch:GetPhysicsObject()
 
         if IsValid(phys) then
             phys:ApplyForceCenter(owner:GetAimVector() * math.Rand(500, 800) * phys:GetMass() * 2)
