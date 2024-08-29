@@ -55,7 +55,7 @@ function UPGRADE:Apply(SWEP)
             pos.z = pos.z - 20
             local sharkTrap = ents.Create("ttt_pap_left_shark_trap")
             -- The upgraded shark trap needs an Owner property set to determine the attacker
-            sharkTrap.Owner = owner
+            sharkTrap:SetPlacer(owner)
             sharkTrap:SetMaterial(TTTPAP.camo)
             sharkTrap:SetPos(pos)
             sharkTrap:Spawn()

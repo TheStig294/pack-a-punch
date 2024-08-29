@@ -37,8 +37,8 @@ function UPGRADE:Apply(SWEP)
                 local ang = tr.HitNormal:Angle()
                 ang:RotateAroundAxis(ang:Right(), -90)
                 ent:SetAngles(ang)
+                ent:SetPlacer(owner)
                 ent:Spawn()
-                ent.Owner = owner
                 ent.fingerprints = self.fingerprints
                 self:TakePrimaryAmmo(1)
                 self:SetNextPrimaryFire(CurTime() + 0.5)
