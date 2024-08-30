@@ -13,6 +13,7 @@ function ENT:Touch(toucher)
     local attacker = self:GetPlacer()
 
     timer.Simple(1.6, function()
+        if not IsValid(toucher) then return end
         toucher:StopSound("shark_trap.mp3")
         toucher:EmitSound("ttt_pack_a_punch/left_shark_trap/blegh.mp3", 100, 100, 1)
         local effectData = EffectData()
