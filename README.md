@@ -2124,6 +2124,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 ## Shark Idol (Sharxcalibur)
 
 More damage, more range, more sword than shark!\
+(Thanks Spaaz for making this upgrade! <https://steamcommunity.com/profiles/76561198027913001>)\
 \
 *ttt_pap_sharxcalibur* - Default: 1 - Whether this upgrade is enabled
 \
