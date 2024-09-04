@@ -2121,6 +2121,15 @@ Makes you completely invisible\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428350426>
 
+## Shark Idol (Sharxcalibur)
+
+More damage, more range, more sword than shark!\
+\
+*ttt_pap_sharxcalibur* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3148164092>
+
 ## Shark Trap (Left Shark Trap)
 
 2 traps, changes the shark's model!\
