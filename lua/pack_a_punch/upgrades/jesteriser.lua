@@ -5,7 +5,7 @@ UPGRADE.name = "Jesteriser"
 UPGRADE.desc = "x2 ammo, turns players you shoot into jesters!"
 UPGRADE.ammoMult = 2
 
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return ROLE_JESTER ~= nil
 end
 

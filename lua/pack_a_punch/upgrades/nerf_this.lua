@@ -25,7 +25,7 @@ local damageCvar = CreateConVar("pap_nerf_this_damage", 10000, {FCVAR_ARCHIVE, F
 
 local ownerImmuneCvar = CreateConVar("pap_nerf_this_owner_immune", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Owner is immune to explosion?", 0, 1)
 
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return scripted_ents.Get("d.va_mech") ~= nil
 end
 

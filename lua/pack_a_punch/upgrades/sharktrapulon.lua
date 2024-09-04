@@ -20,7 +20,7 @@ local trapSpawnDelayCvar = CreateConVar("pap_sharktrapulon_trap_spawn_delay", 3,
 local trapDespawnDelayCvar = CreateConVar("pap_sharktrapulon_trap_despawn_delay", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs between despawning shark traps", 1, 60)
 
 -- If the shark trap isn't installed then this upgrade doesn't work
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return scripted_ents.Get("ttt_shark_trap") ~= nil
 end
 

@@ -10,7 +10,7 @@ local fishModels = {Model("models/props/cs_militia/fishriver01.mdl"), Model("mod
 
 -- There needs to be at least one valid fish model installed for this upgrade to work
 -- These models are from CS:S which should be installed since TTT requires it
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     for _, model in ipairs(fishModels) do
         if util.IsValidModel(model) then return true end
     end

@@ -6,7 +6,7 @@ UPGRADE.desc = "Left-click to pass.\nHold right-click, look up and jump to slam!
 UPGRADE.noCamo = true
 UPGRADE.newClass = "weapon_ballin"
 
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return weapons.Get("weapon_ballin") ~= nil
 end
 

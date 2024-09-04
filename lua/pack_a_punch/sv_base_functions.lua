@@ -58,7 +58,7 @@ function TTTPAP:SelectUpgrade(SWEP)
     -- Check for an upgrade that has its condition met, and has its convar enabled
     -- (There is guaranteed to be at least one by the TTTCanOrderEquipment hook)
     for id, upg in RandomPairs(upgrades) do
-        if not upg:Condition() then continue end
+        if not upg:Condition(SWEP) then continue end
         if isGenericUpgrade and not GetConVar("ttt_pap_" .. id):GetBool() then continue end
         if not isGenericUpgrade and not GetConVar("ttt_pap_" .. upg.id):GetBool() then continue end
         UPGRADE = upg

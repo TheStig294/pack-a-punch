@@ -35,7 +35,7 @@ UPGRADE.noSound = nil -- Prevents the PAP shoot sound from being applied
 UPGRADE.noDesc = nil -- Prevents the chat description from being displayed on upgrading
 
 -- If false, prevents the upgrade from being applied. Mainly used for checking if the upgrade's required mods are installed on the server
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return true
 end
 

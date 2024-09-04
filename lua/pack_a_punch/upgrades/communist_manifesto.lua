@@ -14,7 +14,7 @@ UPGRADE.convars = {
 
 local convertSecsConvar = CreateConVar("pap_communist_manifesto_convert_secs", 8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds to convert a player", 0, 30)
 
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return weapons.Get("weapon_com_manifesto") ~= nil
 end
 

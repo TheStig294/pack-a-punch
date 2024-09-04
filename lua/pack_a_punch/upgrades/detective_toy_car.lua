@@ -22,7 +22,7 @@ local placeRangeCvar = CreateConVar("pap_detective_toy_car_place_range", 200, {F
 
 local carModel = Model("models/simfphys_vehicle1/cozycoupe.mdl")
 
-function UPGRADE:Condition()
+function UPGRADE:Condition(SWEP)
     return util.IsValidModel(carModel)
 end
 
