@@ -1794,7 +1794,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
 
 ## Perk Staminup [Passive Item] (Staminmax)
 
-Double walk speed\
+Double speed boost!\
 \
 *ttt_pap_perk_staminmax_passive* - Default: 1 - Whether this upgrade is enabled
 \
