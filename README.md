@@ -1839,6 +1839,15 @@ Slower, high damage & accuracy shots\
 \
 Upgrade for: Default TTT weapon
 
+## Plague Dart Gun (Zombie Plague Gun)
+
+Victims to the plague respawn and change to your side!\
+\
+*ttt_pap_zombie_plague_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
 ## Player Swap Gun (Damage Swap Gun)
 
 You only swap after taking damage\
