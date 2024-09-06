@@ -1885,6 +1885,15 @@ Temporarily blocks the victim's screen with lots of popups\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2126493892>
 
+## Portal Gun (Portal Placer)
+
+Temporarily blocks the victim's screen with lots of popups\
+\
+*ttt_pap_portal_placer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2315732527>
+
 ## Possum Disguiser (Possum Disguise)
 
 Increased disguiser capacity\
