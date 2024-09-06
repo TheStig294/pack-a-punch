@@ -2108,6 +2108,15 @@ Guess someone's favourite fruit instead!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Rotation Gun (Rotating Gun)
+
+Stronger spin, players keep rotating for a few seconds!\
+\
+*ttt_pap_rotating_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=639376504>
+
 ## Slappers (Spinning Slappers)
 
 Slaps send people flying! Has a 30 second cooldown (by default)\
