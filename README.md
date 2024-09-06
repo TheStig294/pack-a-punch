@@ -1153,6 +1153,15 @@ No cooldown, but be careful not to use it too much...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1618719637>
 
+## Guitar Gun [Lightning AR1] (Rock Guitar)
+
+Infinite ammo, time to rock!\
+\
+*ttt_pap_goofy_goober_guitar* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3275954501>
+
 ## H.U.G.E-249 (H.U.G.E. 9001)
 
 Minimal recoil, higher fire-rate!\
