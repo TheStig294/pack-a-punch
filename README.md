@@ -1157,7 +1157,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1618719637>
 
 Infinite ammo, time to rock!\
 \
-*ttt_pap_goofy_goober_guitar* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_rock_guitar* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3275954501>
