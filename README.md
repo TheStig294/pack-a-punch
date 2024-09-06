@@ -1887,7 +1887,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2126493892>
 
 ## Portal Gun (Portal Placer)
 
-Temporarily blocks the victim's screen with lots of popups\
+Places portals mid-air!\
 \
 *ttt_pap_portal_placer* - Default: 1 - Whether this upgrade is enabled
 \
