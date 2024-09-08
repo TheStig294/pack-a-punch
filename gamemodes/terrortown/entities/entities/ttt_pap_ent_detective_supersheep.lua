@@ -12,6 +12,16 @@ ENT.MarkedPlayers = {}
 function ENT:PhysicsCollide(data, phys)
 end
 
+function ENT:OnTakeDamage(damage)
+	if damage:GetDamage() <= 0 then return end
+	self:SetHealth(self:Health() - damage:GetDamage())
+
+	if (self:Health() <= 0) and SERVER then
+		self:EmitSound("ttt_supersheep/sheep_sound.wav")
+		self:Remove()
+	end
+end
+
 function ENT:Think()
 	local owner = self.Owner
 
@@ -55,6 +65,7 @@ function ENT:Think()
 			self.ClosestPlayer:TakeDamageInfo(dmg)
 			owner:EmitSound("weapons/crossbow/hitbod1.wav")
 			self.ClosestPlayer:EmitSound("weapons/crossbow/hitbod1.wav")
+			self:EmitSound("ttt_supersheep/sheep_sound.wav")
 			self.ClosestPlayer:ChatPrint(owner:Nick() .. "'s upgraded observer sheep is now tracking your location through walls!")
 			-- Mark close enough players and damage them a bit
 			self.MarkedPlayers[self.ClosestPlayer] = true

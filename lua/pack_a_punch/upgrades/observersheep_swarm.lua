@@ -16,6 +16,7 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(owner) or self.PAPUsed then return end
         self.PAPUsed = true
         owner.PAPObserverSheepSwarm = true
+        self:EmitSound("ttt_supersheep/sheep_sound.wav")
         -- For some very annoying reason copying the base code was the only way I could avoid an occasional crash
         -- I have no idea what was causing it... It seemed to not like self:AddToHook() and similar ways of avoiding code-copying ¯\_(ツ)_/¯
         if CLIENT then return end
