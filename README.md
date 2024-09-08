@@ -2539,13 +2539,12 @@ Increased stun power, 1.5x ammo\
 \
 Upgrade for: Default TTT weapon
 
-## UNO Reverse (no u)
+## UNO Reverse (UNO Skip)
 
-Lasts longer\
+Blocks non-player damage while held, you swap weapons with your next attacker!\
 \
-*ttt_pap_no_u* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_uno_skip* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_no_u_length_mult* - Default: 2 - Length multiplier\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329721936>
 
