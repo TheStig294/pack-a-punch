@@ -1666,6 +1666,15 @@ Auto-spawns random NPCs!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1541355785>
 
+## Observer Sheep (Observer Sheep Swarm)
+
+Sends out a swarm of observer sheep, which permanently marks players hit with an outline (+ a bonus sheep!)
+\
+*ttt_pap_observersheep_swarm* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1310924738>
+
 ## One-Shot Pistol (Pew Pew Pistol)
 
 Makes old school western gunshot sounds!\
