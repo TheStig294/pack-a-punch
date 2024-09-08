@@ -2479,6 +2479,18 @@ Hold left-click to charge 1 instant-kill blast!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
+## Time Manipulator (Spacetime Manipulator)
+
+Unlimited ammo and no cooldown! But be careful not to use it too much... (Reset on drop or reload)
+\
+*ttt_pap_spacetime_manipulator* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_spacetime_manipulator_overuse_count* - Default: 15 - No. of uses until 'overuse' triggers\
+*pap_spacetime_manipulator_overuse_min* - Default: 0.2 - Min random overuse time scale\
+*pap_spacetime_manipulator_overuse_max* - Default: 2.2 - Max random overuse time scale\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1318271171>
+
 ## Time Stop (Time Skip)
 
 Slows down time for everyone but you!
