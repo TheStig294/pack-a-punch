@@ -2709,3 +2709,6 @@ x10 tighter bullet spread!\
 *ttt_pap_spread* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_spread_mult* - Default: 0.1 - Spread multiplier
+
+## Steam Workshop Link
+https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644
