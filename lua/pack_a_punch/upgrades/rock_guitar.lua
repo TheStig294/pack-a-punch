@@ -5,7 +5,6 @@ UPGRADE.name = "Rock Guitar"
 UPGRADE.desc = "Infinite ammo, time to rock!"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.Sound = "ttt_pack_a_punch/shoot.mp3"
     if CLIENT then return end
     local own = SWEP:GetOwner()
 

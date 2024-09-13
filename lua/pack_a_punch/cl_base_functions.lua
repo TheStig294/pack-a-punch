@@ -78,6 +78,11 @@ net.Receive("TTTPAPApply", function()
         end
     end
 
+    -- Sound
+    if SWEP.Primary and not UPGRADE.noSound then
+        SWEP.Primary.Sound = TTTPAP.shootSound
+    end
+
     -- Upgraded flag
     SWEP.PAPUpgrade = UPGRADE
 end)
