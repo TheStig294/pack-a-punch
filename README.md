@@ -2117,11 +2117,11 @@ Guess someone's favourite fruit instead!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
-## Rotation Gun (Rotating Gun)
+## Rotation Gun (Auto-Rotate Gun)
 
-Stronger spin, players keep rotating for a few seconds!\
+Players auto-rotate for a sec!\
 \
-*ttt_pap_rotating_gun* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_auto_rotate_gun* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=639376504>
@@ -2711,4 +2711,5 @@ x10 tighter bullet spread!\
 *pap_spread_mult* - Default: 0.1 - Spread multiplier
 
 ## Steam Workshop Link
-https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
