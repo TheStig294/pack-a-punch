@@ -2644,6 +2644,16 @@ Spawns fast zombies instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2614793622>
 
+## Zombie Pumpkin (Zombie Spammer)
+
+Spawns extra zombies around the map!\
+\
+*ttt_pap_zombie_spammer* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_zombie_spammer_spawn_count* - Default: 15 - Radius of AOE shot\
+\
+Upgrade for: <>
+
 ## Zombification Device (Re-Zombification Device)
 
 You can revive zombies!\
