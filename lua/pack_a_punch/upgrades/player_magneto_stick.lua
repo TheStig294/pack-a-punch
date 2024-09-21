@@ -190,7 +190,10 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(ent) then return end
 
         if ent.PaPMagnetostickPickedUpBefore and not GetConVar("pap_player_magneto_stick_multi_pickup"):GetBool() then
-            self:GetOwner():PrintMessage(HUD_PRINTCENTER, "This player has been picked up before!")
+            if SERVER and not self.PaPShownPickedUpBeforeMessage then
+                self:GetOwner():PrintMessage(HUD_PRINTTALK, "This player has been picked up before!")
+                self.PaPShownPickedUpBeforeMessage = true
+            end
 
             return
         end
@@ -198,7 +201,10 @@ function UPGRADE:Apply(SWEP)
         ent.PaPMagnetostickPickedUpBefore = true
 
         if ent.PaPMagnetostickCooldown then
-            self:GetOwner():PrintMessage(HUD_PRINTCENTER, "This player was picked up too recently!")
+            if SERVER and not self.PaPShownCooldownMessage then
+                self:GetOwner():PrintMessage(HUD_PRINTTALK, "This player was picked up too recently!")
+                self.PaPShownCooldownMessage = true
+            end
 
             return
         else
