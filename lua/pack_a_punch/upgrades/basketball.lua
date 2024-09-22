@@ -263,7 +263,6 @@ if engine.ActiveGamemode() == "terrortown" then
 
                     if traceResult.Hit then
                         local hitEntity = traceResult.Entity
-                        print(hitEntity:GetModel())
 
                         if hitEntity ~= owner and not hitEntity:GetNWBool("isBasketBall") then
                             owner:SetMoveType(MOVETYPE_NONE)
