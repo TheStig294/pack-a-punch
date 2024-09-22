@@ -17,7 +17,7 @@ function UPGRADE:Apply(SWEP)
 
         -- Don't let the owner keep punching after they've been knocked out
         if owner:GetNWBool("RdmtBoxingKnockedOut", false) then
-            owner:StopSound(sound_scream)
+            owner:StopSound("scream.mp3")
 
             return
         end
