@@ -10,16 +10,16 @@ local defaultCommandCosts = {
     playsound = 10,
     gimp = 10,
     csay = 15,
-    whip = 20,
+    whip = 4, -- 20 power for 5 seconds
     teleport = 30,
     upgrade = 40,
     armor = 50,
     credit = 60,
     hp = 70,
     maul = 80,
-    noclip = 90,
-    cloak = 90,
-    god = 90,
+    noclip = 9, -- 90 power for 10 seconds
+    cloak = 9,
+    god = 9,
     voteban = 90, -- not real, don't panic
     force = 100
 }
@@ -324,7 +324,7 @@ function UPGRADE:Apply(SWEP)
                 reason = net.ReadString()
             end
 
-            local cost = admin_punish_cost:GetInt() * time
+            local cost = commandCvars[command]:GetInt() * time
             local power = admin:GetNWInt("TTTAdminPower")
             if power < cost then return end
             -- Check executing player is an admin, and the target is a player
@@ -345,9 +345,9 @@ function UPGRADE:Apply(SWEP)
 
                 if isstring(errorMsg) then
                     admin:PrintMessage(HUD_PRINTTALK, errorMsg .. ". Your admin power was not used.")
-                end
 
-                return
+                    return
+                end
             end
 
             -- Otherwise, command away!
