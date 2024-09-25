@@ -66,6 +66,10 @@ function UPGRADE:Apply(SWEP)
         return command == "whip" or command == "teleport" or command == "upgrade" or command == "force"
     end
 
+    local function SilentChatMessage(command)
+        return command == "mute"
+    end
+
     function SWEP:PrimaryAttack()
         if not IsFirstTimePredicted() then return end
         self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -360,14 +364,62 @@ function UPGRADE:Apply(SWEP)
 
                 -- Each admin command chat message is a pair of an enumerator telling what kind of message text it is, and the message itself as a string
                 -- (defined in lua/customroles/admin.lua from the JJ 2023 Roles Pack)
+                if SilentChatMessage(command) then
+                    net.WriteUInt(ADMIN_MESSAGE_TEXT, 2)
+                    net.WriteString("(SILENT) ")
+                end
+
                 for _, message in ipairs(chatMessages) do
                     net.WriteUInt(message[1], 2)
                     net.WriteString(message[2])
                 end
 
-                net.Broadcast()
+                if SilentChatMessage(command) then
+                    net.Send(admin)
+                else
+                    net.Broadcast()
+                end
             end
         end)
+
+        -- 
+        -- mute
+        -- 
+        local replacementMessages = {
+            "trap at door", "traitor trap get back", "bloxwich", "get behind a wall", "go back", "throwing bomb get back", "that didn't work oops", "gonna die and possess", "what did you do?", string.upper, string.reverse, function(text, sender)
+                for _, ply in player.Iterator() do
+                    if UPGRADE:IsAlive(ply) and ply ~= sender then return ply:Nick() end
+                end
+            end
+        }
+
+        commandFunctions.mute = function(admin, target)
+            target.PAPServerConsoleMute = true
+
+            UPGRADE:AddHook("PlayerSay", function(sender, text, teamChat)
+                if sender.PAPServerConsoleMute then
+                    local newMsg = replacementMessages[math.random(#replacementMessages)]
+
+                    if isfunction(newMsg) then
+                        newMsg = newMsg(text, sender)
+                    end
+
+                    return newMsg
+                end
+            end)
+
+            -- You need to pass a player's ply:SteamID64() in order to display a player's name in chat properly,
+            -- I guess a ply:Nick() will work too, just without fancy colouring
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " muted "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
+        end
+
+        commandFunctions.mute_condition = function(admin, target)
+            if target.PAPServerConsoleMute then return target:Nick() .. " is already muted!" end
+        end
 
         -- 
         -- playsound
@@ -378,22 +430,11 @@ function UPGRADE:Apply(SWEP)
             -- 
             target:EmitSound("ui/achievement_earned.wav", 0, math.random(75, 125))
 
-            -- You need to pass a player's ply:SteamID64() in order to display a player's name in chat properly,
-            -- I guess a ply:Nick() will work too, just without fancy colouring
             return {
                 {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
                 {ADMIN_MESSAGE_TEXT, " played a sound on "},
                 {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
             }
-        end
-
-        -- 
-        -- mute
-        -- 
-        commandFunctions.mute = function(admin, target) end
-
-        commandFunctions.mute_condition = function(admin, target)
-            if target.PAPServerConsoleMute then return target:Nick() .. " is already muted!" end
         end
     end
 end
