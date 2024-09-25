@@ -7,8 +7,8 @@ UPGRADE.convars = {}
 
 -- Fancy dynamic convar creation because I can't be bothered to do it manually
 local defaultCommandCosts = {
-    gimp = 10,
     playsound = 10,
+    gimp = 10,
     csay = 15,
     whip = 20,
     teleport = 30,
@@ -61,10 +61,6 @@ function UPGRADE:Apply(SWEP)
     local table = table
     local PlayerIterator = player.Iterator
     local TableInsert = table.insert
-
-    local function CantTargetSelf(command)
-        return
-    end
 
     local function ShouldCloseAfterSelfUse(command)
         return command == "whip" or command == "teleport" or command == "upgrade" or command == "force"
@@ -137,8 +133,8 @@ function UPGRADE:Apply(SWEP)
             dparams:SetPaintBackground(false)
 
             local descriptions = {
-                ["gimp"] = "Forces the target to say silly things on trying to chat.",
                 ["playsound"] = "Plays a sound for the target.",
+                ["gimp"] = "Forces the target to say silly things on trying to chat.",
                 ["csay"] = "Sends a message to everyone in the middle of the screen.",
                 ["whip"] = "Slaps the target multiple times in a row.",
                 ["teleport"] = "Teleports the target to where they are looking.",
@@ -169,13 +165,11 @@ function UPGRADE:Apply(SWEP)
                 dtarget:SetHideHeaders(true)
                 dtarget:SetMultiSelect(false)
                 dtarget:AddColumn("Players")
-                local ownerSid64 = self:GetOwner():SteamID64()
 
                 for _, p in PlayerIterator() do
                     -- Skip players who are true spectators, not just dead players
                     if p:IsSpec() and p:GetRole() == ROLE_NONE then continue end
                     local sid64 = p:SteamID64()
-                    if sid64 == ownerSid64 and CantTargetSelf(command) then continue end
                     dtarget:AddLine(p:Nick(), sid64)
                 end
 
@@ -205,7 +199,8 @@ function UPGRADE:Apply(SWEP)
                     if power < cost then
                         self:GetOwner():PrintMessage(HUD_PRINTTALK, "You do not have enough admin power to use this command!")
                     else
-                        net.Start("TTT_Admin" .. command:gsub("^%l", string.upper) .. "Command")
+                        net.Start("TTTPAPServerConsoleExecuteCommand")
+                        net.WriteString(command)
                         local sid64 = dtarget:GetSelected()[1]:GetValue(2)
                         net.WriteUInt64(sid64)
 
@@ -304,6 +299,93 @@ function UPGRADE:Apply(SWEP)
                     hook.Remove("Think", "Admin_Think_" .. self:EntIndex())
                 end
             end)
+        end
+    end
+
+    -- 
+    -- Now creating the new admin commands...
+    -- 
+    if SERVER then
+        -- I re-wrote this part from the way Nick did it, so everything is all dynamic
+        -- from here this is actually mostly my own code, hooray!
+        util.AddNetworkString("TTTPAPServerConsoleExecuteCommand")
+        local commandFunctions = {}
+
+        net.Receive("TTTPAPServerConsoleExecuteCommand", function(_, admin)
+            local command = net.ReadString()
+            local CommandFunction = commandFunctions[command]
+            local target = player.GetBySteamID64(net.ReadUInt64())
+            local time = 1
+            local reason
+
+            if IsTimedCommand(command) then
+                time = net.ReadUInt(8)
+            elseif command == "voteban" then
+                reason = net.ReadString()
+            end
+
+            local cost = admin_punish_cost:GetInt() * time
+            local power = admin:GetNWInt("TTTAdminPower")
+            if power < cost then return end
+            -- Check executing player is an admin, and the target is a player
+            if not IsPlayer(admin) or not admin:IsActiveAdmin() or not IsPlayer(target) then return end
+
+            -- Check the target is not dead
+            if not target:IsActive() then
+                admin:PrintMessage(HUD_PRINTTALK, target:Nick() .. " is dead. Your admin power was not used.")
+
+                return
+            end
+
+            -- Check the command's condition function if it has one
+            local ConditionFunction = commandFunctions[command .. "_condition"]
+
+            if ConditionFunction then
+                local errorMsg = ConditionFunction(admin, target, time, reason)
+
+                if isstring(errorMsg) then
+                    admin:PrintMessage(HUD_PRINTTALK, errorMsg .. ". Your admin power was not used.")
+                end
+
+                return
+            end
+
+            -- Otherwise, command away!
+            local chatMessageArgs = CommandFunction(admin, target, time, reason)
+
+            if chatMessageArgs then
+                admin:SetNWInt("TTTAdminPower", power - cost)
+                local messageCount = #chatMessageArgs / 2
+                net.Start("TTT_AdminMessage")
+                net.WriteUInt(messageCount, 4)
+
+                -- Each admin command chat message is a pair of an enumerator telling what kind of message text it is, and the message itself as a string
+                -- (defined in lua/customroles/admin.lua from the JJ 2023 Roles Pack)
+                for i = 1, messageCount do
+                    net.WriteUInt(chatMessageArgs[i], 2)
+                    net.WriteString(chatMessageArgs[i + 1])
+                end
+
+                net.Broadcast()
+            end
+        end)
+
+        commandFunctions.playsound = function(admin, target)
+            -- 
+            -- ############### TODO: FIND SOME SOUNDS #################### (This is just a test)
+            -- 
+            target:EmitSound("ui/achievement_earned.wav", 0, math.random(75, 125))
+
+            -- You need to pass a player's ply:SteamID64() in order to display a player's name in chat properly,
+            -- I guess a ply:Nick() will work too, just without fancy colouring
+            return {ADMIN_MESSAGE_PLAYER, admin:SteamID64(), ADMIN_MESSAGE_TEXT, " played a sound on ", ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+        end
+
+        -- 
+        -- ############### TODO: DELETE ME #################### (This is just a test)
+        -- 
+        commandFunctions.playsound_condition = function(admin, target)
+            if target:IsInnocentTeam() then return target:Nick() .. " is too innocent to have a sound played on them.." end
         end
     end
 end
