@@ -7,19 +7,19 @@ UPGRADE.convars = {}
 
 -- Fancy dynamic convar creation because I can't be bothered to do it manually
 local defaultCommandCosts = {
+    mute = 10,
     playsound = 10,
-    gimp = 10,
     csay = 15,
     whip = 4, -- 20 power for 5 seconds
     teleport = 30,
     upgrade = 40,
+    noclip = 9, -- 45 power for 5 seconds
+    cloak = 9,
+    god = 9,
     armor = 50,
     credit = 60,
     hp = 70,
     maul = 80,
-    noclip = 9, -- 90 power for 10 seconds
-    cloak = 9,
-    god = 9,
     voteban = 90, -- not real, don't panic
     force = 100
 }
@@ -133,19 +133,19 @@ function UPGRADE:Apply(SWEP)
             dparams:SetPaintBackground(false)
 
             local descriptions = {
+                ["mute"] = "Forces the target to say silly things on trying to chat.",
                 ["playsound"] = "Plays a sound for the target.",
-                ["gimp"] = "Forces the target to say silly things on trying to chat.",
                 ["csay"] = "Sends a message to everyone in the middle of the screen.",
                 ["whip"] = "Slaps the target multiple times in a row.",
                 ["teleport"] = "Teleports the target to where they are looking.",
                 ["upgrade"] = "Upgrades the target's currently held weapon.",
+                ["noclip"] = "Temporarily lets the target fly through walls.",
+                ["cloak"] = "Makes the target temporarily invisible.",
+                ["god"] = "Makes the target temporarily invincible.",
                 ["armor"] = "The target takes reduced damage until armor runs out.",
                 ["credit"] = "Gives the target a credit.",
                 ["hp"] = "Sets the health of the target.",
                 ["maul"] = "Spawns 4 fast zombies around the target.",
-                ["noclip"] = "Temporarily lets the target fly through walls.",
-                ["cloak"] = "Makes the target temporarily invisible.",
-                ["god"] = "Makes the target temporarily invincible.",
                 ["voteban"] = "Starts a vote to ban the target from the server.", -- Again, not real, don't panic
                 ["force"] = "Change the target to a role other than your own."
             }
@@ -351,25 +351,27 @@ function UPGRADE:Apply(SWEP)
             end
 
             -- Otherwise, command away!
-            local chatMessageArgs = CommandFunction(admin, target, time, reason)
+            local chatMessages = CommandFunction(admin, target, time, reason)
 
-            if chatMessageArgs then
+            if chatMessages then
                 admin:SetNWInt("TTTAdminPower", power - cost)
-                local messageCount = #chatMessageArgs / 2
                 net.Start("TTT_AdminMessage")
-                net.WriteUInt(messageCount, 4)
+                net.WriteUInt(#chatMessages, 4)
 
                 -- Each admin command chat message is a pair of an enumerator telling what kind of message text it is, and the message itself as a string
                 -- (defined in lua/customroles/admin.lua from the JJ 2023 Roles Pack)
-                for i = 1, messageCount do
-                    net.WriteUInt(chatMessageArgs[i], 2)
-                    net.WriteString(chatMessageArgs[i + 1])
+                for _, message in ipairs(chatMessages) do
+                    net.WriteUInt(message[1], 2)
+                    net.WriteString(message[2])
                 end
 
                 net.Broadcast()
             end
         end)
 
+        -- 
+        -- playsound
+        -- 
         commandFunctions.playsound = function(admin, target)
             -- 
             -- ############### TODO: FIND SOME SOUNDS #################### (This is just a test)
@@ -378,15 +380,27 @@ function UPGRADE:Apply(SWEP)
 
             -- You need to pass a player's ply:SteamID64() in order to display a player's name in chat properly,
             -- I guess a ply:Nick() will work too, just without fancy colouring
-            return {ADMIN_MESSAGE_PLAYER, admin:SteamID64(), ADMIN_MESSAGE_TEXT, " played a sound on ", ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " played a sound on "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
         end
 
         -- 
-        -- ############### TODO: DELETE ME #################### (This is just a test)
+        -- mute
         -- 
-        commandFunctions.playsound_condition = function(admin, target)
-            if target:IsInnocentTeam() then return target:Nick() .. " is too innocent to have a sound played on them.." end
+        commandFunctions.mute = function(admin, target) end
+
+        commandFunctions.mute_condition = function(admin, target)
+            if target.PAPServerConsoleMute then return target:Nick() .. " is already muted!" end
         end
+    end
+end
+
+function UPGRADE:Reset()
+    for _, ply in player.Iterator() do
+        ply.PAPServerConsoleMute = nil
     end
 end
 
