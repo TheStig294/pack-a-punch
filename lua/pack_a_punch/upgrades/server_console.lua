@@ -64,7 +64,7 @@ function UPGRADE:Apply(SWEP)
     -- https://github.com/Custom-Roles-for-TTT/TTT-Jingle-Jam-Roles-2023/blob/main/gamemodes/terrortown/entities/weapons/weapon_ttt_adm_menu.lua
     -- (Because I can't be bothered doing a PR to make this all modular and there's no avoiding copying all this otherwise...)
     local function ShouldCloseAfterSelfUse(command)
-        return command == "whip" or command == "teleport" or command == "upgrade" or command == "force"
+        return command == "whip" or command == "teleport" or command == "force"
     end
 
     local function SilentChatMessage(command)
@@ -620,6 +620,9 @@ function UPGRADE:Apply(SWEP)
             if timer.Exists("TTTPAPServerConsoleWhip" .. target:SteamID64()) then return target:Nick() .. " is already being whipped" end
         end
 
+        -- 
+        -- teleport
+        -- 
         commandFunctions.teleport = function(admin, target, time, message)
             local hitPos = target:GetEyeTrace().HitPos
             target:SetPos(hitPos)
@@ -631,7 +634,28 @@ function UPGRADE:Apply(SWEP)
                 {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
             }
         end
+
+        -- 
+        -- upgrade
+        -- 
+        commandFunctions.upgrade = function(admin, target, time, message)
+            TTTPAP:OrderPAP(target)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " upgraded "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, "'s weapon"}
+            }
+        end
+
+        commandFunctions.upgrade_condition = function(admin, target, time, message)
+            local canPaP, errorMsg = TTTPAP:CanOrderPAP(target)
+            if not canPaP then return errorMsg end
+        end
     end
+
+    SWEP:GetOwner():SetNWInt("TTTAdminPower", 100)
 end
 
 function UPGRADE:Reset()
