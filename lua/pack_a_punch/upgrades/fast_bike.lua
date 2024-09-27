@@ -71,7 +71,6 @@ function UPGRADE:Apply(SWEP)
             self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
             self.PAPFastBikeOldSpeed = owner:GetLaggedMovementValue()
             owner:SetLaggedMovementValue(self.PAPFastBikeOldSpeed * speedMultCvar:GetInt())
-            owner:EmitSound("ttt_pack_a_punch/fast_bike/bike_theme.mp3")
         end
     end
 
@@ -81,7 +80,6 @@ function UPGRADE:Apply(SWEP)
 
         if IsValid(owner) then
             owner:SetLaggedMovementValue(self.PAPFastBikeOldSpeed)
-            owner:StopSound("ttt_pack_a_punch/fast_bike/bike_theme.mp3")
         end
     end
 
