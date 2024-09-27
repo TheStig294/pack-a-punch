@@ -458,6 +458,12 @@ function UPGRADE:Apply(SWEP)
 
                 if SilentChatMessage(command) then
                     table.insert(chatMessages, 1, {ADMIN_MESSAGE_TEXT, "(SILENT) "})
+                elseif IsTimedCommand(command) then
+                    table.insert(chatMessages, {ADMIN_MESSAGE_TEXT, " for "})
+
+                    table.insert(chatMessages, {ADMIN_MESSAGE_VARIABLE, time})
+
+                    table.insert(chatMessages, {ADMIN_MESSAGE_TEXT, " seconds"})
                 end
 
                 net.WriteUInt(#chatMessages, 4)
@@ -566,6 +572,52 @@ function UPGRADE:Apply(SWEP)
 
         commandFunctions.psay_condition = function(admin, target, time, message)
             if message == "" then return "Type a message first" end
+        end
+
+        -- 
+        -- whip
+        -- 
+        local whipSounds = {"physics/body/body_medium_impact_hard1.wav", "physics/body/body_medium_impact_hard2.wav", "physics/body/body_medium_impact_hard3.wav", "physics/body/body_medium_impact_hard5.wav", "physics/body/body_medium_impact_hard6.wav", "physics/body/body_medium_impact_soft5.wav", "physics/body/body_medium_impact_soft6.wav", "physics/body/body_medium_impact_soft7.wav",}
+
+        local power = 350
+
+        commandFunctions.whip = function(admin, target, time, message)
+            local timerName = "TTTPAPServerConsoleWhip" .. target:SteamID64()
+
+            timer.Create(timerName, 0.5, time * 2, function()
+                if not IsValid(target) or not UPGRADE:IsAlive(target) or GetRoundState() ~= ROUND_ACTIVE then
+                    timer.Remove(timerName)
+
+                    return
+                end
+
+                if target:InVehicle() then
+                    target:ExitVehicle()
+                end
+
+                target:EmitSound(whipSounds[math.random(#whipSounds)])
+                local direction = Vector(math.random(-10, 10), math.random(-10, 10), 10)
+                direction:Normalize()
+                target:SetVelocity(direction * power)
+                local angle_punch_pitch = math.random(-20, 20)
+                local angle_punch_yaw = math.sqrt(400 - angle_punch_pitch * angle_punch_pitch)
+
+                if math.random() < 0.5 then
+                    angle_punch_yaw = angle_punch_yaw * -1
+                end
+
+                target:ViewPunch(Angle(angle_punch_pitch, angle_punch_yaw, 0))
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " whipped "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
+        end
+
+        commandFunctions.whip_condition = function(admin, target, time, message)
+            if timer.Exists("TTTPAPServerConsoleWhip" .. target:SteamID64()) then return target:Nick() .. " is already being whipped" end
         end
     end
 end
