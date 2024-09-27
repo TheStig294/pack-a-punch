@@ -55,13 +55,6 @@ function UPGRADE:Apply(SWEP)
     -- All of this code is made by Nick, taken from the Admin role's device:
     -- https://github.com/Custom-Roles-for-TTT/TTT-Jingle-Jam-Roles-2023/blob/main/gamemodes/terrortown/entities/weapons/weapon_ttt_adm_menu.lua
     -- (Because I can't be bothered doing a PR to make this all modular and there's no avoiding copying all this otherwise...)
-    local hook = hook
-    local math = math
-    local player = player
-    local table = table
-    local PlayerIterator = player.Iterator
-    local TableInsert = table.insert
-
     local function ShouldCloseAfterSelfUse(command)
         return command == "whip" or command == "teleport" or command == "upgrade" or command == "force"
     end
@@ -112,7 +105,7 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 if cost > 0 then
-                    TableInsert(validCommands, {
+                    table.insert(validCommands, {
                         command = v,
                         cost = cost
                     })
@@ -170,7 +163,7 @@ function UPGRADE:Apply(SWEP)
                 dtarget:SetMultiSelect(false)
                 dtarget:AddColumn("Players")
 
-                for _, p in PlayerIterator() do
+                for _, p in player.Iterator() do
                     -- Skip players who are true spectators, not just dead players
                     if p:IsSpec() and p:GetRole() == ROLE_NONE then continue end
                     local sid64 = p:SteamID64()
@@ -488,11 +481,24 @@ function UPGRADE:Apply(SWEP)
         -- 
         -- playsound
         -- 
+        -- Just play a random sound from the entire library of Pack-a-Punch upgrade sounds lol (There's a lot of funny ones in there)
+        local papSounds = {}
+        local sounds, directories = file.Find("sound/ttt_pack_a_punch/*", "GAME")
+
+        for _, snd in ipairs(sounds) do
+            table.insert(papSounds, "ttt_pack_a_punch/" .. snd)
+        end
+
+        for _, dir in ipairs(directories) do
+            local dirSounds = file.Find("sound/ttt_pack_a_punch/" .. dir .. "/*", "GAME")
+
+            for _, snd in ipairs(dirSounds) do
+                table.insert(papSounds, "ttt_pack_a_punch/" .. dir .. "/" .. snd)
+            end
+        end
+
         commandFunctions.playsound = function(admin, target)
-            -- 
-            -- ############### TODO: FIND SOME SOUNDS #################### (This is just a test)
-            -- 
-            target:EmitSound("ui/achievement_earned.wav", 0, math.random(75, 125))
+            target:EmitSound(papSounds[math.random(#papSounds)], 100, math.random(75, 125))
 
             return {
                 {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
