@@ -619,6 +619,18 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.whip_condition = function(admin, target, time, message)
             if timer.Exists("TTTPAPServerConsoleWhip" .. target:SteamID64()) then return target:Nick() .. " is already being whipped" end
         end
+
+        commandFunctions.teleport = function(admin, target, time, message)
+            local hitPos = target:GetEyeTrace().HitPos
+            target:SetPos(hitPos)
+            UPGRADE:UnstuckPlayer(target)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " teleported "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
+        end
     end
 end
 
