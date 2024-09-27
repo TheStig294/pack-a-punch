@@ -7,15 +7,15 @@ UPGRADE.convars = {}
 
 -- Fancy dynamic convar creation because I can't be bothered to do it manually
 local defaultCommandCosts = {
-    mute = 10,
+    psay = 5,
     playsound = 10,
-    csay = 15,
+    mute = 15,
     whip = 4, -- 20 power for 5 seconds
     teleport = 30,
     upgrade = 40,
     noclip = 9, -- 45 power for 5 seconds
-    cloak = 9,
-    god = 9,
+    cloak = 9, -- 45 power for 5 seconds
+    god = 9, -- 45 power for 5 seconds
     armor = 50,
     credit = 60,
     hp = 70,
@@ -51,6 +51,14 @@ for _, command in ipairs(commands) do
     table.insert(UPGRADE.convars, convarTable)
 end
 
+if CLIENT then
+    surface.CreateFont("TTTPAPServerConsolePsay", {
+        font = "Trebuchet24",
+        size = 48,
+        weight = 1000
+    })
+end
+
 function UPGRADE:Apply(SWEP)
     -- All of this code is made by Nick, taken from the Admin role's device:
     -- https://github.com/Custom-Roles-for-TTT/TTT-Jingle-Jam-Roles-2023/blob/main/gamemodes/terrortown/entities/weapons/weapon_ttt_adm_menu.lua
@@ -60,7 +68,11 @@ function UPGRADE:Apply(SWEP)
     end
 
     local function SilentChatMessage(command)
-        return command == "mute"
+        return command == "psay" or command == "mute"
+    end
+
+    local function HasMessage(command)
+        return command == "psay" or command == "voteban"
     end
 
     function SWEP:PrimaryAttack()
@@ -130,9 +142,9 @@ function UPGRADE:Apply(SWEP)
             dparams:SetPaintBackground(false)
 
             local descriptions = {
-                ["mute"] = "Forces the target to say silly things on trying to chat.",
+                ["psay"] = "Sends a private message to someone in the middle of their screen.",
                 ["playsound"] = "Plays a sound for the target.",
-                ["csay"] = "Sends a message to everyone in the middle of the screen.",
+                ["mute"] = "Forces the target to say silly things when trying to chat.",
                 ["whip"] = "Slaps the target multiple times in a row.",
                 ["teleport"] = "Teleports the target to where they are looking.",
                 ["upgrade"] = "Upgrades the target's currently held weapon.",
@@ -183,7 +195,7 @@ function UPGRADE:Apply(SWEP)
                     time = math.min(5, range)
                 end
 
-                local reason = "No reason given"
+                local message = ""
                 local drun = vgui.Create("DButton", dparams)
                 drun:SetWidth(listWidth)
                 drun:SetPos(runX, labelHeight)
@@ -203,8 +215,8 @@ function UPGRADE:Apply(SWEP)
 
                         if IsTimedCommand(command) then
                             net.WriteUInt(time, 8)
-                        elseif command == "voteban" then
-                            net.WriteString(reason)
+                        elseif HasMessage(command) then
+                            net.WriteString(message)
                         end
 
                         net.SendToServer()
@@ -253,19 +265,19 @@ function UPGRADE:Apply(SWEP)
 
                     dcost:SetPos(runX, costY + labelHeight + m)
                     ddesc:SetPos(runX, costY + (labelHeight + m) * 2)
-                elseif command == "voteban" then
-                    local dreason = vgui.Create("DTextEntry", dparams)
-                    dreason:SetWidth(listWidth)
-                    dreason:SetPos(listWidth + m, buttonHeight + labelHeight + m)
-                    dreason:SetPlaceholderText("Reason")
+                elseif HasMessage(command) then
+                    local dmessage = vgui.Create("DTextEntry", dparams)
+                    dmessage:SetWidth(listWidth)
+                    dmessage:SetPos(listWidth + m, buttonHeight + labelHeight + m)
+                    dmessage:SetPlaceholderText("Message")
 
-                    dreason.OnChange = function()
-                        local text = dreason:GetValue()
+                    dmessage.OnChange = function()
+                        local text = dmessage:GetValue()
 
                         if not text or #text == 0 then
-                            reason = "No reason given"
+                            message = ""
                         else
-                            reason = text
+                            message = text
                         end
                     end
 
@@ -360,6 +372,32 @@ function UPGRADE:Apply(SWEP)
                     chat.AddText(unpack(message))
                 end
             end)
+
+            -- 
+            -- psay
+            -- 
+            net.Receive("TTTPAPServerConsolePsay", function()
+                local message = net.ReadString()
+                local TextData = {}
+                TextData.color = COLOR_WHITE
+                TextData.font = "TTTPAPServerConsolePsay"
+
+                TextData.pos = {ScrW() / 2, ScrH() / 4}
+
+                TextData.text = message
+                TextData.xalign = TEXT_ALIGN_CENTER
+                TextData.yalign = TEXT_ALIGN_CENTER
+                local shadowDist = 2
+
+                hook.Add("DrawOverlay", "TTTPAPServerConsolePsayDrawText", function()
+                    draw.DrawText(TextData.text, TextData.font, TextData.pos[1] + shadowDist, TextData.pos[2] + shadowDist, COLOR_BLACK, TextData.xalign)
+                    draw.DrawText(TextData.text, TextData.font, TextData.pos[1], TextData.pos[2], TextData.color, TextData.xalign)
+                end)
+
+                timer.Create("TTTPAPServerConsolePsayDrawText", 5, 1, function()
+                    hook.Remove("DrawOverlay", "TTTPAPServerConsolePsayDrawText")
+                end)
+            end)
         end
     end
 
@@ -377,12 +415,12 @@ function UPGRADE:Apply(SWEP)
             local CommandFunction = commandFunctions[command]
             local target = player.GetBySteamID64(net.ReadUInt64())
             local time = 1
-            local reason
+            local message = ""
 
             if IsTimedCommand(command) then
                 time = net.ReadUInt(8)
-            elseif command == "voteban" then
-                reason = net.ReadString()
+            elseif HasMessage(command) then
+                message = net.ReadString()
             end
 
             local cost = commandCvars[command]:GetInt() * time
@@ -402,7 +440,7 @@ function UPGRADE:Apply(SWEP)
             local ConditionFunction = commandFunctions[command .. "_condition"]
 
             if ConditionFunction then
-                local errorMsg = ConditionFunction(admin, target, time, reason)
+                local errorMsg = ConditionFunction(admin, target, time, message)
 
                 if isstring(errorMsg) then
                     admin:PrintMessage(HUD_PRINTTALK, errorMsg .. ". Your admin power was not used.")
@@ -412,7 +450,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             -- Otherwise, command away!
-            local chatMessages = CommandFunction(admin, target, time, reason)
+            local chatMessages = CommandFunction(admin, target, time, message)
 
             if chatMessages then
                 admin:SetNWInt("TTTAdminPower", power - cost)
@@ -426,9 +464,9 @@ function UPGRADE:Apply(SWEP)
 
                 -- Each admin command chat message is a pair of an enumerator telling what kind of message text it is, and the message itself as a string
                 -- (defined in lua/customroles/admin.lua from the JJ 2023 Roles Pack)
-                for _, message in ipairs(chatMessages) do
-                    net.WriteUInt(message[1], 2)
-                    net.WriteString(message[2])
+                for _, messageTable in ipairs(chatMessages) do
+                    net.WriteUInt(messageTable[1], 2)
+                    net.WriteString(messageTable[2])
                 end
 
                 if SilentChatMessage(command) then
@@ -505,6 +543,29 @@ function UPGRADE:Apply(SWEP)
                 {ADMIN_MESSAGE_TEXT, " played a sound on "},
                 {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
             }
+        end
+
+        -- 
+        -- psay
+        -- 
+        util.AddNetworkString("TTTPAPServerConsolePsay")
+
+        commandFunctions.psay = function(admin, target, time, message)
+            net.Start("TTTPAPServerConsolePsay")
+            net.WriteString(message)
+            net.Send(target)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " displayed \""},
+                {ADMIN_MESSAGE_VARIABLE, message},
+                {ADMIN_MESSAGE_TEXT, "\" to "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
+        end
+
+        commandFunctions.psay_condition = function(admin, target, time, message)
+            if message == "" then return "Type a message first" end
         end
     end
 end
