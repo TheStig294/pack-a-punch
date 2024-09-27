@@ -303,6 +303,70 @@ function UPGRADE:Apply(SWEP)
                     hook.Remove("Think", "Admin_Think_" .. self:EntIndex())
                 end
             end)
+
+            -- Overriding the chat message net message because for some reason,
+            -- if this net message doesn't receive a player as the first chat message, it returns out and nothing gets printed...
+            -- All of the admin messages from the base role set ADMIN_MESSAGE_PLAYER in their first message
+            -- So I think leaving this if-else block in was an oversight when it was copy-pasted by Nick...
+            --[[
+                if i == 1 then
+                    admin = value
+                    if value == sid64 then
+                        table.insert(message, colorSelf)
+                        table.insert(message, "You")
+                    else
+                        local ply = player.GetBySteamID64(value)
+                        if not IsPlayer(ply) then return end <-- this is the culprit... why??? just print it ugh...
+                        table.insert(message, colorPlayer)
+                        table.insert(message, ply:Nick())
+                    end
+                ]]
+            local colorText = Color(151, 211, 255)
+            local colorPlayer = Color(0, 201, 0)
+            local colorSelf = Color(75, 0, 130)
+            local colorVariable = Color(0, 255, 0)
+
+            net.Receive("TTT_AdminMessage", function()
+                local sid64 = LocalPlayer():SteamID64()
+                local count = net.ReadUInt(4)
+                local admin
+                local message = {}
+
+                for i = 1, count do
+                    local type = net.ReadUInt(2)
+                    local value = net.ReadString()
+
+                    if type == ADMIN_MESSAGE_TEXT then
+                        table.insert(message, colorText)
+                        table.insert(message, value)
+                    elseif type == ADMIN_MESSAGE_PLAYER then
+                        if value == sid64 then
+                            table.insert(message, colorSelf)
+
+                            if value == admin then
+                                table.insert(message, "Yourself")
+                            else
+                                table.insert(message, "You")
+                            end
+                        elseif value == admin then
+                            table.insert(message, colorPlayer)
+                            table.insert(message, "Themselves")
+                        else
+                            local ply = player.GetBySteamID64(value)
+                            if not IsPlayer(ply) then return end
+                            table.insert(message, colorPlayer)
+                            table.insert(message, ply:Nick())
+                        end
+                    elseif type == ADMIN_MESSAGE_VARIABLE then
+                        table.insert(message, colorVariable)
+                        table.insert(message, value)
+                    end
+                end
+
+                if #message > 0 then
+                    chat.AddText(unpack(message))
+                end
+            end)
         end
     end
 
@@ -360,15 +424,15 @@ function UPGRADE:Apply(SWEP)
             if chatMessages then
                 admin:SetNWInt("TTTAdminPower", power - cost)
                 net.Start("TTT_AdminMessage")
+
+                if SilentChatMessage(command) then
+                    table.insert(chatMessages, 1, {ADMIN_MESSAGE_TEXT, "(SILENT) "})
+                end
+
                 net.WriteUInt(#chatMessages, 4)
 
                 -- Each admin command chat message is a pair of an enumerator telling what kind of message text it is, and the message itself as a string
                 -- (defined in lua/customroles/admin.lua from the JJ 2023 Roles Pack)
-                if SilentChatMessage(command) then
-                    net.WriteUInt(ADMIN_MESSAGE_TEXT, 2)
-                    net.WriteString("(SILENT) ")
-                end
-
                 for _, message in ipairs(chatMessages) do
                     net.WriteUInt(message[1], 2)
                     net.WriteString(message[2])
