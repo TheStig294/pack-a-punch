@@ -655,6 +655,9 @@ function UPGRADE:Apply(SWEP)
         end
     end
 
+    -- 
+    -- ################### TODO: Remove this when done!!! ##########################
+    -- 
     SWEP:GetOwner():SetNWInt("TTTAdminPower", 100)
 end
 
