@@ -148,5 +148,133 @@ function UPGRADE:IsUpgraded(SWEP)
     return SWEP.PAPUpgrade and SWEP.PAPUpgrade.id == self.id
 end
 
+function UPGRADE:PlayerNotStuck(ply)
+    -- Check player is no-clipping
+    if ply:IsEFlagSet(EFL_NOCLIP_ACTIVE) then return true end
+    -- Check player is alive
+    if not ply:Alive() or (ply.IsSpec and ply:IsSpec()) then return true end
+    -- Check player is not in a vehicle prop like an airboat
+    local parent = ply:GetParent()
+
+    if IsValid(parent) then
+        local class = parent:GetClass()
+
+        if string.StartWith(class, "prop_vehicle") then
+            ply.NotStuckWasInVehicle = true
+
+            return true
+        end
+    else
+        -- Parent returns NULL while exiting a vehicle, delay running the usual stuck-check code to give time to exit
+        timer.Simple(1.5, function()
+            if IsValid(ply) then
+                ply.NotStuckWasInVehicle = nil
+            end
+        end)
+
+        if ply.NotStuckWasInVehicle then return true end
+    end
+
+    local pos = ply:GetPos()
+
+    local t = {
+        start = pos,
+        endpos = pos,
+        mask = MASK_PLAYERSOLID,
+        filter = ply
+    }
+
+    local isSolidEnt = util.TraceEntity(t, ply).StartSolid
+    local ent = util.TraceEntity(t, ply).Entity
+
+    if IsValid(ent) then
+        -- A backup check if an entity can be passed through or not
+        local nonPlayerCollisionGroups = {1, 2, 10, 11, 12, 15, 16, 17, 20}
+
+        local entGroup = ent:GetCollisionGroup()
+
+        for i, group in ipairs(nonPlayerCollisionGroups) do
+            if entGroup == group then return true end
+        end
+
+        -- Workaround to stop TTT entities being used to boost through walls
+        if ent.CanUseKey then return true end
+    end
+    -- Else, use what the trace returned
+
+    return not isSolidEnt
+end
+
+function UPGRADE:FindPassableSpace(ply, direction, scale, pos)
+    local i = 0
+
+    while i < 100 do
+        pos = pos + (scale * direction)
+        ply:SetPos(pos)
+        if self:PlayerNotStuck(ply) then return true, ply:GetPos() end
+        i = i + 1
+    end
+
+    return false, nil
+end
+
+function UPGRADE:UnstuckPlayer(ply)
+    if not self:PlayerNotStuck(ply) then
+        local oldPos = ply:GetPos()
+        local angle = ply:GetAngles()
+        local forward = angle:Forward()
+        local right = angle:Right()
+        local up = angle:Up()
+        local SearchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
+        local origPos = ply:GetPos()
+        -- Forward
+        local success, pos = self:FindPassableSpace(ply, forward, SearchScale, origPos)
+
+        -- Back
+        if not success then
+            success, pos = self:FindPassableSpace(ply, forward, -SearchScale, origPos)
+        end
+
+        -- Up
+        if not success then
+            success, pos = self:FindPassableSpace(ply, up, SearchScale, origPos)
+        end
+
+        -- Down
+        if not success then
+            success, pos = self:FindPassableSpace(ply, up, -SearchScale, origPos)
+        end
+
+        -- Left
+        if not success then
+            success, pos = self:FindPassableSpace(ply, right, -SearchScale, origPos)
+        end
+
+        -- Right
+        if not success then
+            success, pos = self:FindPassableSpace(ply, right, SearchScale, origPos)
+        end
+
+        if not success then return false end
+
+        -- Not stuck?
+        if oldPos == pos then
+            return true
+        else
+            ply:SetPos(pos)
+
+            if ply:IsValid() and ply:GetPhysicsObject():IsValid() then
+                if ply:IsPlayer() then
+                    ply:SetVelocity(vector_origin)
+                end
+
+                ply:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs :s
+            end
+
+            return true
+        end
+    end
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
