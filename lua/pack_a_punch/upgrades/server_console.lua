@@ -5,7 +5,6 @@ UPGRADE.name = "Server Console"
 UPGRADE.desc = "More powerful set of commands!"
 UPGRADE.convars = {}
 
--- Fancy dynamic convar creation because I can't be bothered to do it manually
 local defaultCommandCosts = {
     psay = 5,
     playsound = 10,
@@ -13,9 +12,9 @@ local defaultCommandCosts = {
     whip = 4, -- 20 power for 5 seconds
     teleport = 30,
     upgrade = 40,
-    noclip = 9, -- 45 power for 5 seconds
     cloak = 9, -- 45 power for 5 seconds
     god = 9, -- 45 power for 5 seconds
+    noclip = 9, -- 45 power for 5 seconds
     armor = 50,
     credit = 60,
     hp = 70,
@@ -24,12 +23,25 @@ local defaultCommandCosts = {
     force = 100
 }
 
-local commands = table.GetKeys(defaultCommandCosts)
-local commandCvars = {}
+local function ShouldCloseAfterSelfUse(command)
+    return command == "whip" or command == "teleport" or command == "force" or command == "cloak" or command == "god" or command == "noclip"
+end
+
+local function SilentChatMessage(command)
+    return command == "psay" or command == "mute"
+end
+
+local function HasMessage(command)
+    return command == "psay" or command == "voteban"
+end
 
 local function IsTimedCommand(command)
-    return command == "whip" or command == "noclip" or command == "cloak" or command == "god"
+    return command == "whip" or command == "cloak" or command == "god" or command == "noclip"
 end
+
+-- Fancy dynamic convar creation because I can't be bothered to do it manually
+local commands = table.GetKeys(defaultCommandCosts)
+local commandCvars = {}
 
 for _, command in ipairs(commands) do
     local convarName = "pap_server_console_" .. command .. "_cost"
@@ -63,18 +75,6 @@ function UPGRADE:Apply(SWEP)
     -- All of this code is made by Nick, taken from the Admin role's device:
     -- https://github.com/Custom-Roles-for-TTT/TTT-Jingle-Jam-Roles-2023/blob/main/gamemodes/terrortown/entities/weapons/weapon_ttt_adm_menu.lua
     -- (Because I can't be bothered doing a PR to make this all modular and there's no avoiding copying all this otherwise...)
-    local function ShouldCloseAfterSelfUse(command)
-        return command == "whip" or command == "teleport" or command == "force"
-    end
-
-    local function SilentChatMessage(command)
-        return command == "psay" or command == "mute"
-    end
-
-    local function HasMessage(command)
-        return command == "psay" or command == "voteban"
-    end
-
     function SWEP:PrimaryAttack()
         if not IsFirstTimePredicted() then return end
         self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -148,9 +148,9 @@ function UPGRADE:Apply(SWEP)
                 ["whip"] = "Slaps the target multiple times in a row.",
                 ["teleport"] = "Teleports the target to where they are looking.",
                 ["upgrade"] = "Upgrades the target's currently held weapon.",
-                ["noclip"] = "Temporarily lets the target fly through walls.",
                 ["cloak"] = "Makes the target temporarily invisible.",
                 ["god"] = "Makes the target temporarily invincible.",
+                ["noclip"] = "Temporarily lets the target fly through walls.",
                 ["armor"] = "The target takes reduced damage until armor runs out.",
                 ["credit"] = "Gives the target a credit.",
                 ["hp"] = "Sets the health of the target.",
@@ -489,7 +489,7 @@ function UPGRADE:Apply(SWEP)
         local replacementMessages = {
             "trap at door", "traitor trap get back", "bloxwich", "get behind a wall", "go back", "throwing bomb get back", "that didn't work oops", "gonna die and possess", "what did you do?", string.upper, string.reverse, function(text, sender)
                 for _, ply in player.Iterator() do
-                    if UPGRADE:IsAlive(ply) and ply ~= sender then return ply:Nick() end
+                    if self:IsAlive(ply) and ply ~= sender then return ply:Nick() end
                 end
             end
         }
@@ -497,7 +497,7 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.mute = function(admin, target)
             target.PAPServerConsoleMute = true
 
-            UPGRADE:AddHook("PlayerSay", function(sender, text, teamChat)
+            self:AddHook("PlayerSay", function(sender, text, teamChat)
                 if sender.PAPServerConsoleMute then
                     local newMsg = replacementMessages[math.random(#replacementMessages)]
 
@@ -585,7 +585,7 @@ function UPGRADE:Apply(SWEP)
             local timerName = "TTTPAPServerConsoleWhip" .. target:SteamID64()
 
             timer.Create(timerName, 0.5, time * 2, function()
-                if not IsValid(target) or not UPGRADE:IsAlive(target) or GetRoundState() ~= ROUND_ACTIVE then
+                if not IsValid(target) or not self:IsAlive(target) or GetRoundState() ~= ROUND_ACTIVE then
                     timer.Remove(timerName)
 
                     return
@@ -626,7 +626,7 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.teleport = function(admin, target, time, message)
             local hitPos = target:GetEyeTrace().HitPos
             target:SetPos(hitPos)
-            UPGRADE:UnstuckPlayer(target)
+            self:UnstuckPlayer(target)
 
             return {
                 {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
@@ -652,6 +652,42 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.upgrade_condition = function(admin, target, time, message)
             local canPaP, errorMsg = TTTPAP:CanOrderPAP(target)
             if not canPaP then return errorMsg end
+        end
+
+        -- 
+        -- noclip
+        -- 
+        commandFunctions.noclip = function(admin, target, time, message)
+            target:SetMoveType(MOVETYPE_NOCLIP)
+
+            timer.Simple(time, function()
+                if self:IsAlivePlayer(target) and (GetRoundState() == ROUND_ACTIVE or GetRoundState() == ROUND_POST) then
+                    target:SetMoveType(MOVETYPE_WALK)
+
+                    -- Give players a moment to get unstuck if they are currently stuck
+                    timer.Simple(4, function()
+                        if self:IsAlivePlayer(target) and not target:IsInWorld() or not self:PlayerNotStuck(target) then
+                            local oldHealth = target:Health()
+                            target:Spawn()
+                            target:SetHealth(oldHealth)
+                            -- Yep this is the vine boom sound effect... Remember Vine? Anyone?
+                            target:EmitSound("ttt_pack_a_punch/dramatic_death_note/vine_boom.mp3")
+                            target:ChatPrint("You were stuck and respawned!")
+                        end
+                    end)
+                end
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " granted "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " noclip"}
+            }
+        end
+
+        commandFunctions.noclip_condition = function(admin, target, time, message)
+            if target:GetMoveType() == MOVETYPE_NOCLIP then return target:Nick() .. " already has noclip" end
         end
     end
 
