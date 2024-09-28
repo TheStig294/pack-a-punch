@@ -655,6 +655,37 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- 
+        -- cloak
+        -- 
+        commandFunctions.cloak = function(admin, target, time, message)
+            target:SetColor(Color(255, 255, 255, 0))
+            target:DrawShadow(false)
+            target:SetMaterial("models/effects/vol_light001")
+            target:SetRenderMode(RENDERMODE_TRANSALPHA)
+            target:EmitSound("ttt_pack_a_punch/server_console/cloak.mp3")
+
+            timer.Simple(time, function()
+                if self:IsAlivePlayer(target) and (GetRoundState() == ROUND_ACTIVE or GetRoundState() == ROUND_POST) then
+                    target:SetColor(Color(255, 255, 255, 255))
+                    target:DrawShadow(true)
+                    target:SetMaterial("")
+                    target:SetRenderMode(RENDERMODE_NORMAL)
+                    target:EmitSound("ttt_pack_a_punch/server_console/uncloak.mp3")
+                end
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " cloaked "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
+            }
+        end
+
+        commandFunctions.cloak_condition = function(admin, target, time, message)
+            if target:GetMaterial() == "models/effects/vol_light001" then return target:Nick() .. "is already cloaked" end
+        end
+
+        -- 
         -- noclip
         -- 
         commandFunctions.noclip = function(admin, target, time, message)
