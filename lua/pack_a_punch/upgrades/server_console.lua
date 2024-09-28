@@ -686,6 +686,31 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- 
+        -- god
+        -- 
+        commandFunctions.god = function(admin, target, time, message)
+            -- Function from base custom roles, adds fancy effects, hover text info, and distinct hitmarker sounds, used for the good/evil twin roles
+            target:SetInvulnerable(true, true)
+
+            timer.Simple(time, function()
+                if self:IsAlivePlayer(target) and (GetRoundState() == ROUND_ACTIVE or GetRoundState() == ROUND_POST) then
+                    target:SetInvulnerable(false, true)
+                end
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " granted "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " god mode"}
+            }
+        end
+
+        commandFunctions.god_condition = function(admin, target, time, message)
+            if target:IsInvulnerable() then return target:Nick() .. "already has god mode" end
+        end
+
+        -- 
         -- noclip
         -- 
         commandFunctions.noclip = function(admin, target, time, message)
