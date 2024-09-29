@@ -276,5 +276,110 @@ function UPGRADE:UnstuckPlayer(ply)
     end
 end
 
+if SERVER then
+    util.AddNetworkString("TTTPAPSetShield")
+end
+
+-- Drawing the shield bar
+if CLIENT then
+    net.Receive("TTTPAPSetShield", function()
+        local maxShield = net.ReadUInt(10)
+        local ply = LocalPlayer()
+
+        hook.Add("DrawOverlay", "TTTPAPSetShield", function()
+            local shield = ply:GetNWInt("PAPHealthShield", 0)
+            if shield <= 0 then return end
+            local text = string.format("%i", shield, maxShield) .. " Shield"
+            local x = 19
+            local y = ScrH() - 95
+
+            -- Don't show shield bar if player is dead or has the pause menu open
+            if ply:Alive() and not ply:IsSpec() and not gui.IsGameUIVisible() then
+                local texttable = {}
+                texttable.font = "HealthAmmo"
+                texttable.color = COLOR_WHITE
+
+                texttable.pos = {135, y + 25}
+
+                texttable.text = text
+                texttable.xalign = TEXT_ALIGN_LEFT
+                texttable.yalign = TEXT_ALIGN_BOTTOM
+                draw.RoundedBox(5, x, y, 233, 28, Color(43, 65, 65))
+                draw.RoundedBox(5, x, y, (shield / maxShield) * 233, 28, Color(67, 216, 216))
+                draw.TextShadow(texttable, 2)
+            end
+        end)
+    end)
+end
+
+function UPGRADE:SetShield(p, maxShield, dmgResist, skipSetShield)
+    dmgResist = 1 - dmgResist / 100
+
+    if IsValid(p) then
+        p:SetColor(Color(0, 255, 255))
+        p:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
+
+        if not skipSetShield then
+            p:SetNWInt("PAPHealthShield", maxShield)
+        end
+    end
+
+    if SERVER then
+        net.Start("TTTPAPSetShield")
+        net.WriteUInt(maxShield, 10)
+        net.Send(p)
+    end
+
+    -- Adding hard-coded fix for loosing shield while having PHD flopper, don't know how to do a proper generic fix for cases like that...
+    local function ShouldBeImmune(ply, dmg)
+        return ply:GetNWBool("PHDActive") and (dmg:IsFallDamage() or dmg:IsExplosionDamage())
+    end
+
+    -- Handling damage
+    self:AddHook("EntityTakeDamage", function(ply, dmg)
+        if not self:IsPlayer(ply) then return end
+        local shield = ply:GetNWInt("PAPHealthShield", 0)
+
+        if shield > 0 and not ShouldBeImmune(ply, dmg) then
+            local attacker = dmg:GetAttacker()
+            local damage = dmg:GetDamage() * dmgResist
+            ply:SetNWInt("PAPHealthShield", math.floor(shield - damage))
+            ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/block.mp3")
+
+            if self:IsPlayer(attacker) then
+                attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/block.mp3\")")
+            end
+
+            if ply:GetNWInt("PAPHealthShield", 0) <= 0 then
+                ply:SetColor(COLOR_WHITE)
+                ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/break.mp3")
+
+                if self:IsPlayer(attacker) then
+                    attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/break.mp3\")")
+                end
+            end
+
+            dmg:ScaleDamage(0)
+        end
+    end)
+
+    self:AddHook("PlayerSpawn", function(ply)
+        ply:SetNWInt("PAPHealthShield", 0)
+    end)
+
+    self:AddHook("PostPlayerDeath", function(ply)
+        ply:SetNWInt("PAPHealthShield", 0)
+    end)
+
+    hook.Add("TTTPrepareRound", "TTTPAPSetShield", function()
+        for _, ply in player.Iterator() do
+            ply:SetNWInt("PAPHealthShield", 0)
+            ply:SetColor(COLOR_WHITE)
+        end
+
+        hook.Remove("TTTPrepareRound", "TTTPAPSetShield")
+    end)
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
