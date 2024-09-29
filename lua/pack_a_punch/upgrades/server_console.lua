@@ -366,6 +366,10 @@ function UPGRADE:Apply(SWEP)
                         table.insert(message, colorVariable)
                         table.insert(message, value)
                     end
+
+                    if i == 1 then
+                        admin = value
+                    end
                 end
 
                 if #message > 0 then
@@ -762,6 +766,22 @@ function UPGRADE:Apply(SWEP)
 
         commandFunctions.armor_condition = function(admin, target, time, message)
             if target:GetNWInt("PAPHealthShield", 0) > 0 then return target:Nick() .. " already has armor" end
+        end
+
+        -- 
+        -- credit
+        -- 
+        commandFunctions.credit = function(admin, target, time, message)
+            target:AddCredits(1)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " gave "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " "},
+                {ADMIN_MESSAGE_VARIABLE, 1},
+                {ADMIN_MESSAGE_TEXT, " credit"}
+            }
         end
     end
 
