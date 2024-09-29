@@ -745,6 +745,24 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.noclip_condition = function(admin, target, time, message)
             if target:GetMoveType() == MOVETYPE_NOCLIP then return target:Nick() .. " already has noclip" end
         end
+
+        -- 
+        -- armor
+        -- 
+        commandFunctions.armor = function(admin, target, time, message)
+            self:SetShield(target, 100, 10)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " granted "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " armor"}
+            }
+        end
+
+        commandFunctions.armor_condition = function(admin, target, time, message)
+            if target:GetNWInt("PAPHealthShield", 0) > 0 then return target:Nick() .. " already has armor" end
+        end
     end
 
     -- 
