@@ -431,6 +431,120 @@ function UPGRADE:Apply(SWEP)
                     hook.Remove("DrawOverlay", "TTTPAPServerConsolePsayDrawText")
                 end)
             end)
+
+            -- 
+            -- voteban
+            -- 
+            local voteBanWindow
+
+            net.Receive("TTTPAPServerConsoleVoteBan", function()
+                local admin = net.ReadPlayer()
+                local target = net.ReadPlayer()
+                local votesNeeded = net.ReadUInt(8)
+                local reason = net.ReadString()
+
+                voteBanWindow = Derma_Query("Should " .. target:Nick() .. " be banned from the server?\n" .. votesNeeded .. " yes votes needed.\nReason: " .. reason, admin:Nick() .. " the " .. ROLE_STRINGS[ROLE_ADMIN] .. " asks:", "Yes", function()
+                    net.Start("TTTPAPServerConsoleVoteVoted")
+                    net.WriteBool(true)
+                    net.SendToServer()
+                end, "No", function()
+                    net.Start("TTTPAPServerConsoleVoteVoted")
+                    net.WriteBool(false)
+                    net.SendToServer()
+                end)
+            end)
+
+            local votebanScreenMat = Material("ui/roles/adm/kickScreen.png")
+
+            net.Receive("TTTPAPServerConsoleVotePassed", function()
+                local admin = net.ReadPlayer()
+                local target = net.ReadPlayer()
+                local votePassed = net.ReadBool()
+                local reason = net.ReadString()
+                local localPly = LocalPlayer()
+
+                if IsValid(voteBanWindow) then
+                    voteBanWindow:Close()
+                end
+
+                -- Credit goes to Nick for this code block taken from: jingle_jam_2023_roles_pack_cr_for_ttt\lua\customroles\admin.lua
+                -- A modified version of the TTT_AdminKickClient net message
+                if votePassed and target == localPly then
+                    hook.Add("HUDShouldDraw", "Admin_HUDShouldDraw_VoteBan", function(name)
+                        if name ~= "CHudGMod" then return false end
+                    end)
+
+                    hook.Add("PlayerBindPress", "Admin_PlayerBindPress_VoteBan", function(ply, bind, pressed)
+                        if string.find(bind, "+showscores") then return true end
+                    end)
+
+                    hook.Add("Think", "Admin_Think_VoteBan", function()
+                        localPly:ConCommand("soundfade 100 1")
+                    end)
+
+                    local window = vgui.Create("DFrame")
+                    window:SetSize(ScrW(), ScrH())
+                    window:SetPos(0, 0)
+                    window:SetTitle("")
+                    window:SetVisible(true)
+                    window:SetDraggable(false)
+                    window:ShowCloseButton(false)
+                    window:SetMouseInputEnabled(true)
+                    window:SetDeleteOnClose(true)
+                    window.Paint = function() end
+                    local overlayPanel = vgui.Create("DPanel", window)
+                    overlayPanel:SetSize(window:GetWide(), window:GetTall())
+                    overlayPanel:SetPos(0, 0)
+
+                    overlayPanel.Paint = function(_, w, h)
+                        surface.SetDrawColor(COLOR_WHITE)
+                        surface.SetMaterial(votebanScreenMat)
+                        surface.DrawTexturedRect(0, 0, w, h)
+                    end
+
+                    local dpanel = vgui.Create("DPanel", window)
+                    dpanel:SetSize(380, 132)
+                    dpanel:Center()
+
+                    dpanel.Paint = function(_, w, h)
+                        surface.SetDrawColor(115, 115, 115, 245)
+                        surface.DrawRect(0, 0, w, h)
+                        surface.SetDrawColor(0, 0, 0, 255)
+                        surface.DrawOutlinedRect(0, 0, w, h, 1)
+                    end
+
+                    local dlabel = vgui.Create("DLabel", dpanel)
+                    dlabel:SetWrap(true)
+                    dlabel:SetAutoStretchVertical(true)
+                    dlabel:SetSize(340, 48)
+                    dlabel:SetPos(20, 20)
+                    dlabel:SetFont("KickText")
+                    local message = "Disconnect: Banned by " .. admin:Nick()
+                    message = message .. " - " .. reason
+                    dlabel:SetText(message)
+                    local dbutton = vgui.Create("DButton", dpanel)
+                    dbutton:SetSize(72, 24)
+                    dbutton:SetPos(288, 88)
+                    dbutton:SetFont("KickText")
+                    dbutton:SetText("Close")
+
+                    dbutton.Paint = function(_, w, h)
+                        surface.SetDrawColor(228, 228, 228, 255)
+                        surface.DrawRect(0, 0, w, h)
+                        surface.SetDrawColor(0, 0, 0, 255)
+                        surface.DrawOutlinedRect(0, 0, w, h, 1)
+                    end
+
+                    dbutton.DoClick = function()
+                        hook.Remove("HUDShouldDraw", "Admin_HUDShouldDraw_VoteBan")
+                        hook.Remove("PlayerBindPress", "Admin_PlayerBindPress_VoteBan")
+                        hook.Remove("Think", "Admin_Think_VoteBan")
+                        window:Close()
+                    end
+
+                    window:MakePopup()
+                end
+            end)
         end
     end
 
@@ -866,6 +980,98 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- 
+        -- voteban
+        -- 
+        util.AddNetworkString("TTTPAPServerConsoleVoteBan")
+        util.AddNetworkString("TTTPAPServerConsoleVoteVoted")
+        util.AddNetworkString("TTTPAPServerConsoleVotePassed")
+
+        commandFunctions.voteban = function(admin, target, time, reason)
+            if reason == "" then
+                reason = "No reason given"
+            end
+
+            local yesCount = 0
+            local noCount = 0
+            local playerCount = player.GetCount()
+            -- 50% of players rounded up need to vote yes to "ban"
+            local votesNeeded = math.ceil(playerCount / 2)
+            net.Start("TTTPAPServerConsoleVoteBan")
+            net.WritePlayer(admin)
+            net.WritePlayer(target)
+            net.WriteUInt(votesNeeded, 8)
+            net.WriteString(reason)
+            net.Broadcast()
+
+            net.Receive("TTTPAPServerConsoleVoteVoted", function(_, ply)
+                local yesVote = net.ReadBool()
+                BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/server_console/vote.mp3\")")
+
+                if yesVote then
+                    yesCount = yesCount + 1
+                    PrintMessage(HUD_PRINTTALK, ply:Nick() .. " voted to ban " .. target:Nick())
+                else
+                    noCount = noCount + 1
+                    PrintMessage(HUD_PRINTTALK, ply:Nick() .. " voted *not* to ban " .. target:Nick())
+                end
+
+                -- If we have enough votes, end voting for everyone, and "ban" the player if voted out
+                if votesNeeded >= yesCount + noCount then
+                    local msg
+                    local votePassed
+
+                    if yesCount >= votesNeeded then
+                        msg = target:Nick() .. " has been banned from the server!"
+                        BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/dramatic_death_note/vine_boom.mp3\")")
+                        votePassed = true
+
+                        if self:IsAlive(target) then
+                            -- On passing, kill the banned player, and keep them dead!
+                            target:Kill()
+                            target.TTTPAPServerConsoleVoteBanned = true
+
+                            self:AddHook("PlayerSpawn", function(p)
+                                timer.Simple(0.1, function()
+                                    if p.TTTPAPServerConsoleVoteBanned then
+                                        p:Kill()
+                                        local message = "No respawning for you! You've been banned! (For this round)"
+                                        p:PrintMessage(HUD_PRINTCENTER, message)
+                                        p:PrintMessage(HUD_PRINTTALK, message)
+                                    end
+                                end)
+                            end)
+                        end
+                    elseif noCount >= votesNeeded then
+                        msg = "The vote to ban " .. target:Nick() .. " has failed!"
+                        BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/dramatic_death_note/lego_yoda.mp3\")")
+                        votePassed = false
+                    end
+
+                    PrintMessage(HUD_PRINTCENTER, msg)
+                    PrintMessage(HUD_PRINTTALK, msg)
+                    net.Start("TTTPAPServerConsoleVotePassed")
+                    net.WritePlayer(admin)
+                    net.WritePlayer(target)
+                    net.WriteBool(votePassed)
+                    net.WriteString(reason)
+                    net.Broadcast()
+                end
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " started a voteban for "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, "\nReason: "},
+                {ADMIN_MESSAGE_VARIABLE, reason}
+            }
+        end
+
+        commandFunctions.voteban_condition = function(admin, target, time, message)
+            if target.PAPServerConsoleVoteBan then return target:Nick() .. " has already had a vote cast on them" end
+        end
+
+        -- 
         -- forcenr
         -- 
         commandFunctions.forcenr = function(admin, target, time, message)
@@ -925,6 +1131,8 @@ end
 function UPGRADE:Reset()
     for _, ply in player.Iterator() do
         ply.PAPServerConsoleMute = nil
+        ply.PAPServerConsoleVoteBan = nil
+        ply.TTTPAPServerConsoleVoteBanned = nil
     end
 end
 
