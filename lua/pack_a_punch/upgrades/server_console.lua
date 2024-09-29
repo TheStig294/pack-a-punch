@@ -32,7 +32,7 @@ local function SilentChatMessage(command)
 end
 
 local function HasMessage(command)
-    return command == "psay" or command == "voteban"
+    return command == "psay" or command == "hp" or command == "voteban"
 end
 
 local function IsTimedCommand(command)
@@ -153,7 +153,7 @@ function UPGRADE:Apply(SWEP)
                 ["noclip"] = "Temporarily lets the target fly through walls.",
                 ["armor"] = "The target takes reduced damage until armor runs out.",
                 ["credit"] = "Gives the target a credit.",
-                ["hp"] = "Sets the health of the target.",
+                ["hp"] = "Sets the health of the target. Must be from 1 to 200.",
                 ["maul"] = "Spawns 4 fast zombies around the target.",
                 ["voteban"] = "Starts a vote to ban the target from the server.", -- Again, not real, don't panic
                 ["force"] = "Change the target to a role other than your own."
@@ -269,7 +269,7 @@ function UPGRADE:Apply(SWEP)
                     local dmessage = vgui.Create("DTextEntry", dparams)
                     dmessage:SetWidth(listWidth)
                     dmessage:SetPos(listWidth + m, buttonHeight + labelHeight + m)
-                    dmessage:SetPlaceholderText("Message")
+                    dmessage:SetPlaceholderText("Value/Message")
 
                     dmessage.OnChange = function()
                         local text = dmessage:GetValue()
@@ -782,6 +782,27 @@ function UPGRADE:Apply(SWEP)
                 {ADMIN_MESSAGE_VARIABLE, 1},
                 {ADMIN_MESSAGE_TEXT, " credit"}
             }
+        end
+
+        -- 
+        -- hp
+        -- 
+        commandFunctions.hp = function(admin, target, time, message)
+            local hp = tonumber(message)
+            target:SetHealth(hp)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " set the hp for "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " to "},
+                {ADMIN_MESSAGE_VARIABLE, hp}
+            }
+        end
+
+        commandFunctions.hp_condition = function(admin, target, time, message)
+            local hp = tonumber(message)
+            if not hp or hp < 1 or hp > 200 then return "Type a number between 1 and 200 in the box" end
         end
     end
 
