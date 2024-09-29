@@ -877,11 +877,6 @@ function UPGRADE:Apply(SWEP)
             admin:ForceRoleNextRound(forcedRole.role)
 
             -- Ensuring the selected role is also set if the map changes before the next round
-            hook.Add("TTTBeginRound", "TTTPAPServerConsoleForceRolesCheck", function()
-                table.Empty(forcedRoles)
-                hook.Remove("TTTBeginRound", "TTTPAPServerConsoleForceRolesCheck")
-            end)
-
             hook.Add("ShutDown", "TTTPAPServerConsoleSaveForcedRoles", function()
                 file.CreateDir("ttt_pack_a_punch")
                 file.Write("ttt_pack_a_punch/server_console_saved_roles.json", util.TableToJSON(forcedRoles))
