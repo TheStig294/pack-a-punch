@@ -9,7 +9,7 @@ UPGRADE.desc = "x" .. math.Round(1 / multCvar:GetFloat()) .. " less recoil!"
 
 UPGRADE.convars = {
     {
-        name = "pap_recoil_multiplier",
+        name = "pap_recoil_mult",
         type = "float",
         decimals = 1
     }
