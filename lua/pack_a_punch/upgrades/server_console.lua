@@ -17,8 +17,8 @@ local defaultCommandCosts = {
     noclip = 9, -- 45 power for 5 seconds
     armor = 50,
     credit = 60,
-    hp = 70,
-    maul = 80,
+    maul = 70,
+    hp = 80,
     voteban = 90, -- not real, don't panic
     force = 100
 }
@@ -153,8 +153,8 @@ function UPGRADE:Apply(SWEP)
                 ["noclip"] = "Temporarily lets the target fly through walls.",
                 ["armor"] = "The target takes reduced damage until armor runs out.",
                 ["credit"] = "Gives the target a credit.",
-                ["hp"] = "Sets the health of the target. Must be from 1 to 200.",
                 ["maul"] = "Spawns 4 fast zombies around the target.",
+                ["hp"] = "Sets the health of the target. Must be from 1 to 200.",
                 ["voteban"] = "Starts a vote to ban the target from the server.", -- Again, not real, don't panic
                 ["force"] = "Change the target to a role other than your own."
             }
@@ -781,6 +781,37 @@ function UPGRADE:Apply(SWEP)
                 {ADMIN_MESSAGE_TEXT, " "},
                 {ADMIN_MESSAGE_VARIABLE, 1},
                 {ADMIN_MESSAGE_TEXT, " credit"}
+            }
+        end
+
+        -- 
+        -- maul
+        -- 
+        commandFunctions.maul = function(admin, target, time, message)
+            local pos = target:GetPos()
+
+            local spawns = {pos + Vector(50, 0, 0), pos + Vector(0, 50, 0), pos + Vector(-50, 0, 0), pos + Vector(0, -50, 0)}
+
+            for _, spawn in ipairs(spawns) do
+                local zombie = ents.Create("npc_fastzombie")
+                zombie:SetPos(spawn)
+                zombie.TTTPAPServerConsoleMaulZombie = true
+                zombie:Spawn()
+            end
+
+            -- Increases the damage dealt by the spawned fast zombies
+            self:AddHook("EntityTakeDamage", function(ent, dmg)
+                local attacker = dmg:GetAttacker()
+
+                if IsValid(attacker) and attacker.TTTPAPServerConsoleMaulZombie then
+                    dmg:SetDamage(6)
+                end
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " mauled "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()}
             }
         end
 
