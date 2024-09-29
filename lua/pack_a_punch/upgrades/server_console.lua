@@ -20,19 +20,19 @@ local defaultCommandCosts = {
     maul = 70,
     hp = 80,
     voteban = 90, -- not real, don't panic
-    force = 100
+    forcenr = 100
 }
 
 local function ShouldCloseAfterSelfUse(command)
-    return command == "whip" or command == "teleport" or command == "force" or command == "cloak" or command == "god" or command == "noclip"
+    return command == "whip" or command == "teleport" or command == "cloak" or command == "god" or command == "noclip" or command == "maul"
 end
 
 local function SilentChatMessage(command)
-    return command == "psay" or command == "mute"
+    return command == "psay" or command == "mute" or command == "forcenr"
 end
 
 local function HasMessage(command)
-    return command == "psay" or command == "hp" or command == "voteban"
+    return command == "psay" or command == "hp" or command == "voteban" or command == "forcenr"
 end
 
 local function IsTimedCommand(command)
@@ -69,6 +69,30 @@ if CLIENT then
         size = 48,
         weight = 1000
     })
+end
+
+local forcedRoles = {}
+
+-- If a role was forced using the forcenr command and the map changed, set each player's role on the new map
+if SERVER and file.Exists("ttt_pack_a_punch/server_console_saved_roles.json", "DATA") then
+    forcedRoles = util.JSONToTable(file.Read("ttt_pack_a_punch/server_console_saved_roles.json", "DATA"))
+
+    hook.Add("TTTPrepareRound", "TTTPAPServerConsoleSetSavedRoles", function()
+        for _, ply in player.Iterator() do
+            if UPGRADE:IsAlivePlayer(ply) then
+                local id = ply:SteamID()
+                local forcedRole = forcedRoles[id]
+
+                if forcedRole then
+                    ply:ForceRoleNextRound(forcedRole.role)
+                    ply:ChatPrint("Your role has been forced to " .. forcedRole.name .. " next round from your \"forcenr\" " .. ROLE_STRINGS[ROLE_ADMIN] .. " command!")
+                    forcedRoles[id] = nil
+                end
+            end
+        end
+    end)
+
+    file.Delete("ttt_pack_a_punch/server_console_saved_roles.json")
 end
 
 function UPGRADE:Apply(SWEP)
@@ -156,7 +180,7 @@ function UPGRADE:Apply(SWEP)
                 ["maul"] = "Spawns 4 fast zombies around the target.",
                 ["hp"] = "Sets the health of the target. Must be from 1 to 200.",
                 ["voteban"] = "Starts a vote to ban the target from the server.", -- Again, not real, don't panic
-                ["force"] = "Change the target to a role other than your own."
+                ["forcenr"] = "Choose your role for next round"
             }
 
             dcommands.OnRowSelected = function(_, _, row)
@@ -336,10 +360,15 @@ function UPGRADE:Apply(SWEP)
                 local count = net.ReadUInt(4)
                 local admin
                 local message = {}
+                local silentCommand
 
                 for i = 1, count do
                     local type = net.ReadUInt(2)
                     local value = net.ReadString()
+
+                    if i == 1 and value == "(SILENT) " then
+                        silentCommand = true
+                    end
 
                     if type == ADMIN_MESSAGE_TEXT then
                         table.insert(message, colorText)
@@ -367,7 +396,7 @@ function UPGRADE:Apply(SWEP)
                         table.insert(message, value)
                     end
 
-                    if i == 1 then
+                    if (i == 1 and not silentCommand) or (i == 2 and silentCommand) then
                         admin = value
                     end
                 end
@@ -834,6 +863,61 @@ function UPGRADE:Apply(SWEP)
         commandFunctions.hp_condition = function(admin, target, time, message)
             local hp = tonumber(message)
             if not hp or hp < 1 or hp > 200 then return "Type a number between 1 and 200 in the box" end
+        end
+
+        -- 
+        -- forcenr
+        -- 
+        commandFunctions.forcenr = function(admin, target, time, message)
+            if admin:GetForcedRole() then
+                admin:ClearForcedRole()
+            end
+
+            local forcedRole = forcedRoles[admin:SteamID()]
+            admin:ForceRoleNextRound(forcedRole.role)
+
+            -- Ensuring the selected role is also set if the map changes before the next round
+            hook.Add("TTTBeginRound", "TTTPAPServerConsoleForceRolesCheck", function()
+                table.Empty(forcedRoles)
+                hook.Remove("TTTBeginRound", "TTTPAPServerConsoleForceRolesCheck")
+            end)
+
+            hook.Add("ShutDown", "TTTPAPServerConsoleSaveForcedRoles", function()
+                file.CreateDir("ttt_pack_a_punch")
+                file.Write("ttt_pack_a_punch/server_console_saved_roles.json", util.TableToJSON(forcedRoles))
+            end)
+
+            return {
+                {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " marked "},
+                {ADMIN_MESSAGE_PLAYER, target:SteamID64()},
+                {ADMIN_MESSAGE_TEXT, " to be "},
+                {ADMIN_MESSAGE_VARIABLE, forcedRole.name},
+                {ADMIN_MESSAGE_TEXT, " next round"}
+            }
+        end
+
+        commandFunctions.forcenr_condition = function(admin, target, time, message)
+            if admin ~= target then return "You can only target yourself" end
+            if #message < 3 then return "Type in a role" end
+
+            for role = 0, ROLE_MAX do
+                local name = string.lower(ROLE_STRINGS[role])
+
+                if name:find(message) then
+                    if role == ROLE_ADMIN then return "You cannot choose to become " .. ROLE_STRINGS_EXT[ROLE_ADMIN] end
+                    name = ROLE_STRINGS_EXT[role]
+
+                    forcedRoles[admin:SteamID()] = {
+                        ["role"] = role,
+                        ["name"] = name
+                    }
+
+                    return
+                elseif role == ROLE_MAX then
+                    return "Role not found"
+                end
+            end
         end
     end
 
