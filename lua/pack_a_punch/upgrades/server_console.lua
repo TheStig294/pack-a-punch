@@ -1017,15 +1017,16 @@ function UPGRADE:Apply(SWEP)
 
                 -- If we have enough votes, end voting for everyone, and "ban" the player if voted out
                 if votesNeeded >= yesCount + noCount then
-                    local msg
                     local votePassed
 
                     if yesCount >= votesNeeded then
-                        msg = target:Nick() .. " has been banned from the server!"
+                        local msg = target:Nick() .. " has been banned from the server!"
+                        PrintMessage(HUD_PRINTCENTER, msg)
+                        PrintMessage(HUD_PRINTTALK, msg)
                         BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/dramatic_death_note/vine_boom.mp3\")")
                         votePassed = true
 
-                        if self:IsAlive(target) then
+                        if self:IsAlivePlayer(target) then
                             -- On passing, kill the banned player, and keep them dead!
                             target:Kill()
                             target.TTTPAPServerConsoleVoteBanned = true
@@ -1042,13 +1043,13 @@ function UPGRADE:Apply(SWEP)
                             end)
                         end
                     elseif noCount >= votesNeeded then
-                        msg = "The vote to ban " .. target:Nick() .. " has failed!"
+                        local msg = "The vote to ban " .. target:Nick() .. " has failed!"
+                        PrintMessage(HUD_PRINTCENTER, msg)
+                        PrintMessage(HUD_PRINTTALK, msg)
                         BroadcastLua("surface.PlaySound(\"ttt_pack_a_punch/dramatic_death_note/lego_yoda.mp3\")")
                         votePassed = false
                     end
 
-                    PrintMessage(HUD_PRINTCENTER, msg)
-                    PrintMessage(HUD_PRINTTALK, msg)
                     net.Start("TTTPAPServerConsoleVotePassed")
                     net.WritePlayer(admin)
                     net.WritePlayer(target)
