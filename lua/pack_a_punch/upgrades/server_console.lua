@@ -180,7 +180,7 @@ function UPGRADE:Apply(SWEP)
                 ["maul"] = "Spawns 4 fast zombies around the target.",
                 ["hp"] = "Sets the health of the target. Must be from 1 to 200.",
                 ["voteban"] = "Starts a vote to ban the target from the server.", -- Again, not real, don't panic
-                ["forcenr"] = "Choose your role for next round"
+                ["forcenr"] = "Choose your role for next round."
             }
 
             dcommands.OnRowSelected = function(_, _, row)
