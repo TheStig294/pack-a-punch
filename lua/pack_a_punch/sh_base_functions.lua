@@ -105,7 +105,7 @@ end)
 
 -- Checks if the passed weapon classname, weapon entity, or weapon a passed player is holding, can be upgraded
 function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
-    if not ent then return false end
+    if not ent then return false, "Invalid player/weapon" end
     local SWEP
     local class
 
@@ -120,7 +120,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         SWEP = ent
         displayErrorMessage = false
     else
-        return false
+        return false, "Invalid player/weapon"
     end
 
     -- If we weren't passed a classname of a weapon, then we have a SWEP at this point, that needs to be converted into a classname
@@ -132,7 +132,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
                 ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Invalid weapon, try again")
             end
 
-            return false
+            return false, "Invalid weapon, try again"
         else
             class = WEPS.GetClass(SWEP)
         end
@@ -147,7 +147,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
             ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] That weapon is already upgraded")
         end
 
-        return false
+        return false, "That weapon is already upgraded"
     elseif not upgrades and (not SWEP or not SWEP.AutoSpawnable or SWEP.Kind == WEAPON_NADE or not genericUpgradesCvar:GetBool()) then
         -- Preventing purchase if held weapon is either not a floor weapon, is a grenade, or generic upgrades are turned off, and the weapon has no PaP upgrade
         if displayErrorMessage then
@@ -155,7 +155,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
             ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
         end
 
-        return false
+        return false, "Weapon has no upgrade made for it :("
     elseif upgrades then
         -- Preventing purchase if all upgrades' condition functions return false or all have their convars disabled
         for id, UPGRADE in pairs(upgrades) do
@@ -168,7 +168,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
             ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
-        return false
+        return false, "Upgrade disabled, or the required mod for this upgrade isn't installed on the server"
     elseif not upgrades then
         -- Preventing purchase if all generic upgrades' condition functions return false or all have had their convars disabled
         for id, UPGRADE in pairs(TTTPAP.genericUpgrades) do
@@ -181,7 +181,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
             ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Upgrade disabled, or the required mod for this upgrade isn't installed on the server")
         end
 
-        return false
+        return false, "Upgrade disabled, or the required mod for this upgrade isn't installed on the server"
     end
 
     return true

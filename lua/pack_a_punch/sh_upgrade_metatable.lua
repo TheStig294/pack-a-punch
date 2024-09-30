@@ -148,5 +148,238 @@ function UPGRADE:IsUpgraded(SWEP)
     return SWEP.PAPUpgrade and SWEP.PAPUpgrade.id == self.id
 end
 
+function UPGRADE:PlayerNotStuck(ply)
+    -- Check player is no-clipping
+    if ply:IsEFlagSet(EFL_NOCLIP_ACTIVE) then return true end
+    -- Check player is alive
+    if not ply:Alive() or (ply.IsSpec and ply:IsSpec()) then return true end
+    -- Check player is not in a vehicle prop like an airboat
+    local parent = ply:GetParent()
+
+    if IsValid(parent) then
+        local class = parent:GetClass()
+
+        if string.StartWith(class, "prop_vehicle") then
+            ply.NotStuckWasInVehicle = true
+
+            return true
+        end
+    else
+        -- Parent returns NULL while exiting a vehicle, delay running the usual stuck-check code to give time to exit
+        timer.Simple(1.5, function()
+            if IsValid(ply) then
+                ply.NotStuckWasInVehicle = nil
+            end
+        end)
+
+        if ply.NotStuckWasInVehicle then return true end
+    end
+
+    local pos = ply:GetPos()
+
+    local t = {
+        start = pos,
+        endpos = pos,
+        mask = MASK_PLAYERSOLID,
+        filter = ply
+    }
+
+    local isSolidEnt = util.TraceEntity(t, ply).StartSolid
+    local ent = util.TraceEntity(t, ply).Entity
+
+    if IsValid(ent) then
+        -- A backup check if an entity can be passed through or not
+        local nonPlayerCollisionGroups = {1, 2, 10, 11, 12, 15, 16, 17, 20}
+
+        local entGroup = ent:GetCollisionGroup()
+
+        for i, group in ipairs(nonPlayerCollisionGroups) do
+            if entGroup == group then return true end
+        end
+
+        -- Workaround to stop TTT entities being used to boost through walls
+        if ent.CanUseKey then return true end
+    end
+    -- Else, use what the trace returned
+
+    return not isSolidEnt
+end
+
+function UPGRADE:FindPassableSpace(ply, direction, scale, pos)
+    local i = 0
+
+    while i < 100 do
+        pos = pos + (scale * direction)
+        ply:SetPos(pos)
+        if self:PlayerNotStuck(ply) then return true, ply:GetPos() end
+        i = i + 1
+    end
+
+    return false, nil
+end
+
+function UPGRADE:UnstuckPlayer(ply)
+    if not self:PlayerNotStuck(ply) then
+        local oldPos = ply:GetPos()
+        local angle = ply:GetAngles()
+        local forward = angle:Forward()
+        local right = angle:Right()
+        local up = angle:Up()
+        local SearchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
+        local origPos = ply:GetPos()
+        -- Forward
+        local success, pos = self:FindPassableSpace(ply, forward, SearchScale, origPos)
+
+        -- Back
+        if not success then
+            success, pos = self:FindPassableSpace(ply, forward, -SearchScale, origPos)
+        end
+
+        -- Up
+        if not success then
+            success, pos = self:FindPassableSpace(ply, up, SearchScale, origPos)
+        end
+
+        -- Down
+        if not success then
+            success, pos = self:FindPassableSpace(ply, up, -SearchScale, origPos)
+        end
+
+        -- Left
+        if not success then
+            success, pos = self:FindPassableSpace(ply, right, -SearchScale, origPos)
+        end
+
+        -- Right
+        if not success then
+            success, pos = self:FindPassableSpace(ply, right, SearchScale, origPos)
+        end
+
+        if not success then return false end
+
+        -- Not stuck?
+        if oldPos == pos then
+            return true
+        else
+            ply:SetPos(pos)
+
+            if ply:IsValid() and ply:GetPhysicsObject():IsValid() then
+                if ply:IsPlayer() then
+                    ply:SetVelocity(vector_origin)
+                end
+
+                ply:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs :s
+            end
+
+            return true
+        end
+    end
+end
+
+if SERVER then
+    util.AddNetworkString("TTTPAPSetShield")
+end
+
+-- Drawing the shield bar
+if CLIENT then
+    net.Receive("TTTPAPSetShield", function()
+        local maxShield = net.ReadUInt(10)
+        local ply = LocalPlayer()
+
+        hook.Add("DrawOverlay", "TTTPAPSetShield", function()
+            local shield = ply:GetNWInt("PAPHealthShield", 0)
+            if shield <= 0 then return end
+            local text = string.format("%i", shield, maxShield) .. " Shield"
+            local x = 19
+            local y = ScrH() - 95
+
+            -- Don't show shield bar if player is dead or has the pause menu open
+            if ply:Alive() and not ply:IsSpec() and not gui.IsGameUIVisible() then
+                local texttable = {}
+                texttable.font = "HealthAmmo"
+                texttable.color = COLOR_WHITE
+
+                texttable.pos = {135, y + 25}
+
+                texttable.text = text
+                texttable.xalign = TEXT_ALIGN_LEFT
+                texttable.yalign = TEXT_ALIGN_BOTTOM
+                draw.RoundedBox(5, x, y, 233, 28, Color(43, 65, 65))
+                draw.RoundedBox(5, x, y, (shield / maxShield) * 233, 28, Color(67, 216, 216))
+                draw.TextShadow(texttable, 2)
+            end
+        end)
+    end)
+end
+
+function UPGRADE:SetShield(p, maxShield, dmgResist, skipSetShield)
+    dmgResist = 1 - dmgResist / 100
+
+    if IsValid(p) then
+        p:SetColor(Color(0, 255, 255))
+        p:EmitSound("ttt_pack_a_punch/chug_jug_tool/shield.mp3")
+
+        if not skipSetShield then
+            p:SetNWInt("PAPHealthShield", maxShield)
+        end
+    end
+
+    if SERVER then
+        net.Start("TTTPAPSetShield")
+        net.WriteUInt(maxShield, 10)
+        net.Send(p)
+    end
+
+    -- Adding hard-coded fix for loosing shield while having PHD flopper, don't know how to do a proper generic fix for cases like that...
+    local function ShouldBeImmune(ply, dmg)
+        return ply:GetNWBool("PHDActive") and (dmg:IsFallDamage() or dmg:IsExplosionDamage())
+    end
+
+    -- Handling damage
+    self:AddHook("EntityTakeDamage", function(ply, dmg)
+        if not self:IsPlayer(ply) then return end
+        local shield = ply:GetNWInt("PAPHealthShield", 0)
+
+        if shield > 0 and not ShouldBeImmune(ply, dmg) then
+            local attacker = dmg:GetAttacker()
+            local damage = dmg:GetDamage() * dmgResist
+            ply:SetNWInt("PAPHealthShield", math.floor(shield - damage))
+            ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/block.mp3")
+
+            if self:IsPlayer(attacker) then
+                attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/block.mp3\")")
+            end
+
+            if ply:GetNWInt("PAPHealthShield", 0) <= 0 then
+                ply:SetColor(COLOR_WHITE)
+                ply:EmitSound("ttt_pack_a_punch/chug_jug_tool/break.mp3")
+
+                if self:IsPlayer(attacker) then
+                    attacker:SendLua("surface.PlaySound(\"ttt_pack_a_punch/chug_jug_tool/break.mp3\")")
+                end
+            end
+
+            dmg:ScaleDamage(0)
+        end
+    end)
+
+    self:AddHook("PlayerSpawn", function(ply)
+        ply:SetNWInt("PAPHealthShield", 0)
+    end)
+
+    self:AddHook("PostPlayerDeath", function(ply)
+        ply:SetNWInt("PAPHealthShield", 0)
+    end)
+
+    hook.Add("TTTPrepareRound", "TTTPAPSetShield", function()
+        for _, ply in player.Iterator() do
+            ply:SetNWInt("PAPHealthShield", 0)
+            ply:SetColor(COLOR_WHITE)
+        end
+
+        hook.Remove("TTTPrepareRound", "TTTPAPSetShield")
+    end)
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE

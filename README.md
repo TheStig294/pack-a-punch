@@ -152,13 +152,41 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
 
 ## Admin Menu (Server Console)
 
-Right-click someone to upgrade their weapon!
-+50 admin power! (Costs 50 power per upgrade)
+More powerful set of commands!
+
+- *psay* - Sends a private message to someone in the middle of their screen.
+- *playsound* - Plays a sound for the target.
+- *mute* - Forces the target to say silly things when trying to chat.
+- *whip* - Slaps the target multiple times in a row.
+- *teleport* - Teleports the target to where they are looking.
+- *upgrade* - Upgrades the target's currently held weapon.
+- *cloak* - Makes the target temporarily invisible.
+- *god* - Makes the target temporarily invincible.
+- *noclip* - Temporarily lets the target fly through walls.
+- *armor* - The target takes reduced damage until armor runs out.
+- *credit* - Gives the target a credit.
+- *maul* - Spawns 4 fast zombies around the target.
+- *hp* - Sets the health of the target. Must be from 1 to 200.
+- *voteban* - Starts a vote to ban the target from the server.
+- *forcenr* - Choose your role for next round.
+
+*ttt_pap_server_console* - Default: 1 - Whether this upgrade is enabled\
 \
-*ttt_pap_server_console* - Default: 1 - Whether this upgrade is enabled
-\
-*pap_server_console_admin_power* - Default 50 - Amount of extra admin power to give the admin\
-*pap_server_console_admin_power_cost* - Default 50 - Power upgrading a weapon costs\
+*pap_server_console_psay_cost* - Default 5 - Cost of psay command. 0 to disable\
+*pap_server_console_playsound_cost* - Default 10 - Cost of playsound command. 0 to disable\
+*pap_server_console_mute_cost* - Default 4 - Cost of mute command. 0 to disable\
+*pap_server_console_whip_cost* - Default 20 - Cost of whip command per second. 0 to disable\
+*pap_server_console_teleport_cost* - Default 30 - Cost of teleport command. 0 to disable\
+*pap_server_console_upgrade_cost* - Default 40 - Cost of upgrade command. 0 to disable\
+*pap_server_console_cloak_cost* - Default 9 - Cost of cloak command per second. 0 to disable\
+*pap_server_console_god_cost* - Default 9 - Cost of god command per second. 0 to disable\
+*pap_server_console_noclip_cost* - Default 9 - Cost of noclip command per second. 0 to disable\
+*pap_server_console_armor_cost* - Default 50 - Cost of armor command. 0 to disable\
+*pap_server_console_credit_cost* - Default 60 - Cost of credit command. 0 to disable\
+*pap_server_console_maul_cost* - Default 70 - Cost of maul command. 0 to disable\
+*pap_server_console_hp_cost* - Default 80 - Cost of hp command. 0 to disable\
+*pap_server_console_voteban_cost* - Default 90 - Cost of voteban command. 0 to disable\
+*pap_server_console_forcenr_cost* - Default 100 - Cost of forcenr command. 0 to disable\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
 
