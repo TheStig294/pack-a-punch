@@ -1030,14 +1030,22 @@ function UPGRADE:Apply(SWEP)
                             -- On passing, kill the banned player, and keep them dead!
                             target:Kill()
                             target.TTTPAPServerConsoleVoteBanned = true
+                            target.TTTPAPServerConsoleBanKillCount = 0
 
                             self:AddHook("PlayerSpawn", function(p)
                                 timer.Simple(0.1, function()
                                     if p.TTTPAPServerConsoleVoteBanned then
                                         p:Kill()
-                                        local message = "No respawning for you! You've been banned! (For this round)"
+                                        local message = "You've been banned from this round!"
                                         p:PrintMessage(HUD_PRINTCENTER, message)
                                         p:PrintMessage(HUD_PRINTTALK, message)
+                                        p:EmitSound("ttt_pack_a_punch/dramatic_death_note/vine_boom.mp3")
+                                        -- Fail-safe in case something REALLY wants to spawn a player so we don't have an infinite loop
+                                        target.TTTPAPServerConsoleBanKillCount = target.TTTPAPServerConsoleBanKillCount + 1
+
+                                        if target.TTTPAPServerConsoleBanKillCount >= 5 then
+                                            p.TTTPAPServerConsoleVoteBanned = false
+                                        end
                                     end
                                 end)
                             end)
@@ -1129,6 +1137,7 @@ function UPGRADE:Reset()
         ply.PAPServerConsoleMute = nil
         ply.PAPServerConsoleVoteBan = nil
         ply.TTTPAPServerConsoleVoteBanned = nil
+        ply.TTTPAPServerConsoleBanKillCount = nil
     end
 end
 
