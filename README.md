@@ -174,8 +174,8 @@ More powerful set of commands!
 \
 *pap_server_console_psay_cost* - Default 5 - Cost of psay command. 0 to disable\
 *pap_server_console_playsound_cost* - Default 10 - Cost of playsound command. 0 to disable\
-*pap_server_console_mute_cost* - Default 4 - Cost of mute command. 0 to disable\
-*pap_server_console_whip_cost* - Default 20 - Cost of whip command per second. 0 to disable\
+*pap_server_console_mute_cost* - Default 15 - Cost of mute command. 0 to disable\
+*pap_server_console_whip_cost* - Default 4 - Cost of whip command per second. 0 to disable\
 *pap_server_console_teleport_cost* - Default 30 - Cost of teleport command. 0 to disable\
 *pap_server_console_upgrade_cost* - Default 40 - Cost of upgrade command. 0 to disable\
 *pap_server_console_cloak_cost* - Default 9 - Cost of cloak command per second. 0 to disable\
