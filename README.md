@@ -2317,6 +2317,24 @@ Spins around on the spot, watch out!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2590612326>
 
+## Snowball (Fireball)
+
+A flaming explosive fireball!\
+\
+*ttt_pap_fireball* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
+## Snowballs (Fireballs)
+
+A placeable pile of flaming explosive fireballs!\
+\
+*ttt_pap_fireballs* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Soulbinding Device (Soul Powerer)
 
 All Soulbound abilities are upgraded!\
