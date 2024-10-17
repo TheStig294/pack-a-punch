@@ -190,6 +190,16 @@ More powerful set of commands!
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
 
+## Adv. Silenced AWP (Unsilenced AWP)
+
+x2 ammo, unsilenced\
+\
+*ttt_pap_adv_unsilenced_awp* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_adv_unsilenced_awp_ammo* - Default: 2 - Ammo multiplier\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2058216025>
+
 ## AK47 (OK-47)
 
 While held, basic sources of damage you deal heal instead!\
