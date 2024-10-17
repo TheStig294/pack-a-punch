@@ -2002,6 +2002,16 @@ Increases your damage, if used on someone else it lasts longer!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2593566065>
 
+## Present of Fate (Gift of Gambling)
+
+"Now fully heals and grants 50 max HP! But still has a chance to explode...\
+\
+*ttt_pap_gift_of_gambling* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_gift_of_gambling_hp* - Default: 50 - HP to give on success\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=596033434>
+
 ## Prop Blaster (Double Prop Blaster)
 
 Throw 2 grenades! The other takes an extra 20 seconds to explode!\
