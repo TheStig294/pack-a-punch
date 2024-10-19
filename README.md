@@ -439,6 +439,16 @@ It's a 1-shot if it hits you once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2428342861>
 
+## Brain Parasite (Mind Flayer)
+
+x2 ammo. Forces victims to mimic your actions, on death they turn into a zombie!\
+\
+*ttt_pap_mind_flayer - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=265678425>\
+(Recommended to use "TTT Tweaks and Fixes" mod as well to fix the base weapon: <https://steamcommunity.com/sharedfiles/filedetails/?id=3101810034>)
+
 ## Brain Washing Device (Brain Choosing Device)
 
 You can select the traitor role a player becomes! (Right-click)\
