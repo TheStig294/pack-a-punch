@@ -843,6 +843,15 @@ Detonates the player who has your detonator!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2055805086>
 
+## DD Gun (All Blinding Gun)
+
+Affects everyone! (except you)\
+\
+*ttt_pap_blinding_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2223631735>
+
 ## Discombobulator (The Bristol Pusher)
 
 Massive push power!\
