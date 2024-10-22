@@ -752,6 +752,15 @@ Getting near the NPC causes them to explode\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1473581448>
 
+## Death Link (Double Death Link)
+
+You can link one more person, bypasses explosion immunities!\
+\
+*ttt_pap_double_death_link* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1909514983>
+
 ## Death Note (Dramatic Death Note)
 
 Each death type has a new effect!
