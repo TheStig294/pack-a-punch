@@ -521,6 +521,15 @@ Sprays out items on opening!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3204528626>
 
+## Chicken Egg (Egg Multiplier)
+
+Spawns a big, invincible chicken, deals triple damage!\
+\
+*ttt_pap_big_chicken* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=922334896>
+
 ## Chickenator (Egg Multiplier)
 
 Spawned chickens lay more eggs!\
