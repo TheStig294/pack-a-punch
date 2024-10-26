@@ -879,6 +879,15 @@ Massive push power!\
 \
 Upgrade for: Default TTT weapon
 
+## Dislocator (The Yeet Disk)
+
+x2 ammo and fling power!\
+\
+*ttt_pap_the_yeet_disk* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1773299680>
+
 ## DoncomSummoner (Robcombine Summoner)
 
 x2 ammo, plays Robin quotes\
