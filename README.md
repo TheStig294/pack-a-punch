@@ -1039,6 +1039,15 @@ Forces them to use a crowbar instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1653669090>
 
+## Fassinator [Explosive Barrel Placer] (Barrel Converter)
+
+Converts things into explosive barrels!\
+\
+*ttt_pap_barrel_converter* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=633134671>
+
 ## Fangs (Bat Fangs)
 
 Temporarily become invincible and able to fly!
