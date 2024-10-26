@@ -834,6 +834,15 @@ Single-use, disarms all C4s on the map!\
 \
 Upgrade for: Default TTT weapon
 
+## Demonic Possession (Instant Possession)
+
+You automatically respawn in place of anyone who walks over it!\
+\
+*ttt_pap_instant_possession* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1403395766>
+
 ## Detective Ball (Guaranteed Ball)
 
 Detonates the player who has your detonator!\
