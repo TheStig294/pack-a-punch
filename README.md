@@ -1036,7 +1036,7 @@ Fires move and chase players down!\
 \
 *ttt_pap_fire_spirit* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_fire_spirit_duration* - Default: 20 - Seconds fires last\
+*pap_fire_spirit_duration* - Default: 30 - Seconds fires last\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1829329597>
 

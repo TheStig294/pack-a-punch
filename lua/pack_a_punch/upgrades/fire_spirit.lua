@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local durationCvar = CreateConVar("pap_fire_spirit_duration", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds fires last", 1, 60)
+local durationCvar = CreateConVar("pap_fire_spirit_duration", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds fires last", 1, 60)
 
 local fireEnts = {}
 
