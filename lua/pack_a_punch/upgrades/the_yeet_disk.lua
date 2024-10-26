@@ -6,6 +6,8 @@ UPGRADE.desc = "x2 ammo and fling power!"
 UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
+    SWEP.WorldModelColour = COLOR_WHITE
+    SWEP:SetColor(COLOR_WHITE)
     local mult = 2
 
     local values = {"InitialSpeed", "MaxFlightTime", "PunchSpeed", "FinalBonusUpVelocity", "PunchMax", "ViewDistortDelay"}
