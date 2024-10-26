@@ -26,7 +26,7 @@ function UPGRADE:Apply(SWEP)
         ent:Spawn()
         ent.PAPOwner = owner
         ent.PAPUpgrade = UPGRADE
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local phys = ent:GetPhysicsObject()
 
         if not (phys and IsValid(phys)) then

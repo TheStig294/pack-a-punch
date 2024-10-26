@@ -5,5 +5,5 @@ ENT.PrintName = "1-Shot Boomerang"
 
 function ENT:Initialize()
     self.BaseClass.Initialize(self)
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
 end

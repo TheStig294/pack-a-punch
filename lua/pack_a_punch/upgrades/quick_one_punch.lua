@@ -10,7 +10,7 @@ function UPGRADE:Apply(SWEP)
     own:SetNWBool("PAPQuickOnePunch", true)
     local material = Material("ttt_pack_a_punch/quick_one_punch/intro")
     own:EmitSound("ttt_pack_a_punch/quick_one_punch/intro.mp3")
-    own:SetMaterial(TTTPAP.camo)
+    own:SetPAPCamo()
 
     self:AddHook("PostDrawOpaqueRenderables", function()
         for _, ply in player.Iterator() do
@@ -44,7 +44,7 @@ function UPGRADE:Apply(SWEP)
 
         if IsValid(owner) then
             owner:EmitSound("ttt_pack_a_punch/quick_one_punch/intro.mp3")
-            owner:SetMaterial(TTTPAP.camo)
+            owner:SetPAPCamo()
             owner:SetNWBool("PAPQuickOnePunch", true)
         end
 

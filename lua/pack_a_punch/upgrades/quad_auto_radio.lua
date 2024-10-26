@@ -26,7 +26,7 @@ function UPGRADE:Apply(SWEP)
                 radio:SetOwner(ply)
                 radio:Spawn()
                 radio:PhysWake()
-                radio:SetMaterial(TTTPAP.camo)
+                radio:SetPAPCamo()
                 local timerName = radio:EntIndex() .. "TTTPAPRadio"
 
                 timer.Create(timerName, 20, 0, function()
@@ -98,7 +98,7 @@ function UPGRADE:Apply(SWEP)
                         radio:SetAngles(ang)
                         radio:SetOwner(ply)
                         radio:Spawn()
-                        radio:SetMaterial(TTTPAP.camo)
+                        radio:SetPAPCamo()
                         local timerName = radio:EntIndex() .. "TTTPAPRadio"
 
                         timer.Create(timerName, 20, 240, function()

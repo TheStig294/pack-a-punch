@@ -103,7 +103,7 @@ function UPGRADE:Apply(SWEP)
                 rocket:Spawn()
                 rocket:SetModelScale(2, 0.0001)
                 rocket:Activate()
-                rocket:SetMaterial(TTTPAP.camo)
+                rocket:SetPAPCamo()
                 rocket:Input("FireCanister", owner, owner)
                 self:TakePrimaryAmmo(1)
 
@@ -126,7 +126,7 @@ function UPGRADE:Apply(SWEP)
             local own = crab:GetOwner()
 
             if IsValid(own) and own:GetClass() == "env_headcrabcanister" then
-                crab:SetMaterial(TTTPAP.camo)
+                crab:SetPAPCamo()
                 crab:SetModelScale(2, 0.0001)
                 crab.TTTPAPBigCrabLauncher = true
             end

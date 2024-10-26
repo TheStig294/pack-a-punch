@@ -33,7 +33,7 @@ function UPGRADE:Apply(SWEP)
             ent:SetPos(owner:GetShootPos() + right * posOffset - up * 3)
             ent:SetAngles(owner:GetAngles())
             ent:SetPhysicsAttacker(owner)
-            ent:SetMaterial(TTTPAP.camo)
+            ent:SetPAPCamo()
             ent:Spawn()
             local phys = ent:GetPhysicsObject()
 

@@ -29,7 +29,7 @@ function UPGRADE:Apply(SWEP)
                 ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
                 ent:EmitSound("ttt_pack_a_punch/360_sniper/zylus" .. randomNum .. ".mp3", 0)
             else
-                ent:SetMaterial(TTTPAP.camo)
+                ent:SetPAPCamo()
             end
 
             timer.Create("CombineSniperRotate" .. ent:EntIndex(), 0.1, 0, function()

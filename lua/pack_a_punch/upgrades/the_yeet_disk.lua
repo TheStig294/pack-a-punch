@@ -18,7 +18,7 @@ function UPGRADE:Apply(SWEP)
         disk:SetOwner(self:GetOwner())
         disk:Spawn()
         disk:Activate()
-        disk:SetMaterial(TTTPAP.camo)
+        disk:SetPAPCamo()
         disk.TrailColour = COLOR_ORANGE
         disk.TTTPAPTheYeetDisk = true
 

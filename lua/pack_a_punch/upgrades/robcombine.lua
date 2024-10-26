@@ -19,7 +19,7 @@ function UPGRADE:Apply(SWEP)
 
         if IsValid(doncom) then
             timer.Simple(0.1, function()
-                doncom:SetMaterial(TTTPAP.camo)
+                doncom:SetPAPCamo()
             end)
 
             local timername = "TTTPAPRobcombine" .. doncom:EntIndex()

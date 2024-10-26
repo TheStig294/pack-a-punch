@@ -4,7 +4,7 @@ ENT.PrintName = "Anthrax Bottle"
 
 function ENT:Initialize()
 	self:SetModel("models/props_junk/garbage_glassbottle003a.mdl")
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)

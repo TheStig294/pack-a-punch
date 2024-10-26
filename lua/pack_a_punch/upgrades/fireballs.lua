@@ -7,7 +7,7 @@ UPGRADE.desc = "A placeable pile of fireballs!"
 function UPGRADE:Apply(SWEP)
     self:AddHook("JokeWeaponsSnowballsPlaced", function(snowballPile, wep)
         if self:IsUpgraded(wep) then
-            snowballPile:SetMaterial(TTTPAP.camo)
+            snowballPile:SetPAPCamo()
             snowballPile.PAPUpgrade = self
             snowballPile.NumberOfUses = 3
         end

@@ -39,7 +39,7 @@ function UPGRADE:Apply(SWEP)
             end
 
             phys:SetVelocity(dir + (vel / 2) + Vector(sp, sp, 0))
-            snowball:SetMaterial(TTTPAP.camo)
+            snowball:SetPAPCamo()
             snowball:Ignite(40)
 
             snowball:CallOnRemove("TTTPAPFireballExplosion", function(ent)

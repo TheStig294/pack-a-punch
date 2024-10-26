@@ -25,7 +25,7 @@ function UPGRADE:Apply(SWEP)
             present:SetOwner(owner)
             -- Presents always contain the Pack-a-Punch!
             present.item_id = EQUIP_PAP
-            present:SetMaterial(TTTPAP.camo)
+            present:SetPAPCamo()
             present:Spawn()
             local physobj = present:GetPhysicsObject()
 

@@ -11,7 +11,7 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(ent) then return end
         ent:SetPos(tracedata.pos)
         ent:Spawn()
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local phys = ent:GetPhysicsObject()
 
         if not IsValid(phys) then

@@ -10,7 +10,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_BBOX)
 	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 
 	if SERVER then
 		self:SetExplodeTime(0)

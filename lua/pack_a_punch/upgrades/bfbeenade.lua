@@ -9,7 +9,7 @@ function UPGRADE:Apply(SWEP)
 
     function SWEP:DrawWorldModel()
         self:PAPOldDrawWorldModel()
-        self.ModelEntity:SetMaterial(TTTPAP.camo)
+        self.ModelEntity:SetPAPCamo()
     end
 
     SWEP.PAPOldViewModelDrawn = SWEP.ViewModelDrawn
@@ -19,7 +19,7 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
 
         if IsValid(owner) and owner == LocalPlayer() then
-            self.ModelEntity:SetMaterial(TTTPAP.camo)
+            self.ModelEntity:SetPAPCamo()
         end
     end
 

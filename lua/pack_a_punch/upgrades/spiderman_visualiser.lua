@@ -26,7 +26,7 @@ function UPGRADE:Apply(SWEP)
                 cse:SetThrower(ply)
                 cse:Spawn()
                 cse:PhysWake()
-                cse:SetMaterial(TTTPAP.camo)
+                cse:SetPAPCamo()
                 local phys = cse:GetPhysicsObject()
 
                 if IsValid(phys) then

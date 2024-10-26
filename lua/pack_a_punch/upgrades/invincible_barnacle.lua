@@ -16,7 +16,7 @@ function UPGRADE:Apply(SWEP)
         for _, barnacle in ipairs(ents.FindByClass("npc_barnacle")) do
             if barnacle:GetPos() == pos then
                 barnacle.PAPInvincibleBarnacle = true
-                barnacle:SetMaterial(TTTPAP.camo)
+                barnacle:SetPAPCamo()
                 barnacle.CurrentSound = 1
             end
         end

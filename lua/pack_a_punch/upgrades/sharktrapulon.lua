@@ -33,8 +33,8 @@ function UPGRADE:Apply(SWEP)
         local owner = SWEP:GetOwner()
         if not IsValid(sharkulon) or not IsValid(owner) then return end
         -- Set the PAP camo on the sharkulon body, its turret, and disable the turret
-        sharkulon.npc.move:SetMaterial(TTTPAP.camo)
-        sharkulon.npc:SetMaterial(TTTPAP.camo)
+        sharkulon.npc.move:SetPAPCamo()
+        sharkulon.npc:SetPAPCamo()
         sharkulon.npc:SetSaveValue("spawnflags", 256)
         -- Quadruple the health because the sharkulon is coded to stay in front of the player when its turret is disabled
         local newHealth = sharkulon.npc.move:Health() * 4
@@ -56,7 +56,7 @@ function UPGRADE:Apply(SWEP)
             local sharkTrap = ents.Create("ttt_pap_left_shark_trap")
             -- The upgraded shark trap needs an Owner property set to determine the attacker
             sharkTrap:SetPlacer(owner)
-            sharkTrap:SetMaterial(TTTPAP.camo)
+            sharkTrap:SetPAPCamo()
             sharkTrap:SetPos(pos)
             sharkTrap:Spawn()
             sharkTrap:PhysWake()

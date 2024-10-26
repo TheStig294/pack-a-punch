@@ -32,7 +32,7 @@ function UPGRADE:Apply(SWEP)
             if ent.Kind and ent.AutoSpawnable and not IsValid(ent:GetParent()) then
                 -- Spawning the zombie
                 local npc = pumpkin:SpawnNPC(ent:GetPos(), "npc_fastzombie")
-                npc:SetMaterial(TTTPAP.camo)
+                npc:SetPAPCamo()
                 ent:Remove()
                 spawnCount = spawnCount + 1
             end
@@ -44,18 +44,18 @@ function UPGRADE:Apply(SWEP)
     self:AddHook("TTTZombiePumpkinThrow", function(pumpkin)
         local thrower = pumpkin:GetThrower()
         if not IsValid(thrower) or not thrower.TTTPAPZombieSpammer then return end
-        pumpkin:SetMaterial(TTTPAP.camo)
+        pumpkin:SetPAPCamo()
     end)
 
     self:AddHook("TTTZombiePumpkinSpawnZombie", function(pumpkin, zombie)
         local thrower = pumpkin:GetThrower()
         if not IsValid(thrower) or not thrower.TTTPAPZombieSpammer then return end
-        zombie:SetMaterial(TTTPAP.camo)
+        zombie:SetPAPCamo()
     end)
 
     self:AddHook("TTTZombiePumpkinDrawWorldmodel", function(wep, model)
         if IsValid(wep) and self:IsUpgraded(wep) then
-            model:SetMaterial(TTTPAP.camo)
+            model:SetPAPCamo()
         end
     end)
 end

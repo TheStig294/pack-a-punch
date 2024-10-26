@@ -94,7 +94,7 @@ hook.Add("PreDrawViewModel", "TTTPAPApplyCamo", function(vm, _, SWEP)
     if not IsValid(SWEP) then return end
 
     if SWEP.PAPUpgrade and not SWEP.PAPUpgrade.noCamo then
-        vm:SetMaterial(TTTPAP.camo)
+        vm:SetPAPCamo()
         appliedCamo = true
     elseif appliedCamo or vm:GetMaterial() == TTTPAP.camo then
         vm:SetMaterial("")

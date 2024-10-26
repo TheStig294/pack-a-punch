@@ -21,7 +21,7 @@ ENT.Damage = 50
 function ENT:Initialize()
     self:SetModel(self.Model)
     self:PhysicsInit(SOLID_VPHYSICS)
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
 
     if SERVER then
         self:SetGravity(0.4)

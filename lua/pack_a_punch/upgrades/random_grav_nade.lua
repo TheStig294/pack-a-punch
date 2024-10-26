@@ -14,7 +14,7 @@ function UPGRADE:Apply(SWEP)
             local owner = ent.Owner
 
             if ent:GetClass() == "ttt_gimnade_proj" and IsValid(owner) and owner.TTTPAPRandomGravNade then
-                ent:SetMaterial(TTTPAP.camo)
+                ent:SetPAPCamo()
             end
         end)
     end)

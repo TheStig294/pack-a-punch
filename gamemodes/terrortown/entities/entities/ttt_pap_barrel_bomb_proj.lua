@@ -20,7 +20,7 @@ function ENT:Initialize()
 	self:SetModel("models/weapons/w_grenade.mdl")
 	self:SetSubMaterial(0, self.WorldMaterial)
 	self:EmitSound("weapons/slam/throw.wav", SNDLVL_100dB)
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 
 	--code for sprite trail
 	if SERVER then

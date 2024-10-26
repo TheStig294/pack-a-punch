@@ -29,7 +29,7 @@ function ENT:Initialize()
 		phys:SetMass(350)
 	end
 
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 	self:SetModelScale(5, 0.0001)
 end
 
@@ -86,7 +86,7 @@ function ENT:Explode(tr)
 			Bee:SetParent(headBee)
 			Bee:SetModelScale(5, 0.0001)
 			Bee:Activate()
-			Bee:SetMaterial(TTTPAP.camo)
+			Bee:SetPAPCamo()
 			-- Prevent the bees from being able to be picked up with a magneto stick,
 			-- Since there's nothing you can do about it if the player is a jester killing you with it...
 			-- (And in practice the stun + large invincible bee hitbox prevents you from shooting a player doing this anyway)

@@ -52,7 +52,7 @@ function UPGRADE:Apply(SWEP)
             if IsValid(beeProp) then
                 beeProp:SetModelScale(scale, 0.001)
                 beeProp:Activate()
-                beeProp:SetMaterial(TTTPAP.camo)
+                beeProp:SetPAPCamo()
             end
         end
 

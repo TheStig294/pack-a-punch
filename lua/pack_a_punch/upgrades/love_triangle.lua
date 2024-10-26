@@ -40,7 +40,7 @@ function UPGRADE:Apply(SWEP)
                     arrow:Spawn()
                     arrow:Activate()
                     arrow:SetVelocity(ang:Forward() * 2500 * charge)
-                    arrow:SetMaterial(TTTPAP.camo)
+                    arrow:SetPAPCamo()
                     arrow.Weapon = self
                 end
             end

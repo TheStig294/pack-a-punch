@@ -17,7 +17,7 @@ function UPGRADE:Apply(SWEP)
         ent:SetPos(owner:EyePos() + (owner:GetAimVector() * 16))
         ent:SetAngles(owner:EyeAngles())
         ent:Spawn()
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local phys = ent:GetPhysicsObject()
 
         if not IsValid(phys) then

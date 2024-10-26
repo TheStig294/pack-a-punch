@@ -14,7 +14,7 @@ function UPGRADE:Apply(SWEP)
         self.CanFire = false
         local ent = ents.Create("ttt_kil_crowbar")
         ent:SetDamage(10000)
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local owner = self:GetOwner()
         ent:SetOwner(owner)
         ent:SetPos(owner:EyePos() + owner:GetAimVector() * 16)

@@ -23,7 +23,7 @@ function UPGRADE:Apply(SWEP)
                 health:Spawn()
                 health:SetPlacer(ply)
                 health:PhysWake()
-                health:SetMaterial(TTTPAP.camo)
+                health:SetPAPCamo()
                 health.MaxHeal = 50
                 health.MaxStored = 400
                 health.RechargeRate = 2

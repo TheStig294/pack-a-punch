@@ -119,7 +119,7 @@ function UPGRADE:Apply(SWEP)
             cannon:SetColor(self.CannonColor)
             cannon:Spawn()
             cannon.PAPUpgrade = self.PAPUpgrade
-            cannon:SetMaterial(TTTPAP.camo)
+            cannon:SetPAPCamo()
 
             for i = 1, musicVolume do
                 cannon:EmitSound("ttt_pack_a_punch/auto_cannon/1812_overture.mp3")

@@ -48,7 +48,7 @@ function UPGRADE:Apply(SWEP)
             local vthrow = vvel + vang * 100
             jetpack:SetPos(vsrc + vang * 10)
             jetpack:Spawn()
-            jetpack:SetMaterial(TTTPAP.camo)
+            jetpack:SetPAPCamo()
             owner.PAPJetpack = jetpack
             local phys = jetpack:GetPhysicsObject()
 

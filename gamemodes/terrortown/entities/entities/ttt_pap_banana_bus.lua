@@ -24,7 +24,7 @@ end
 function ENT:Initialize()
 	self.DistancePerTick = speedCvar:GetFloat()
 	self:SetModel("models/ttt_pack_a_punch/bus/bus.mdl")
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 	self:PhysicsInit(SOLID_NONE)
 	self:SetMoveType(MOVETYPE_NOCLIP)
 	self:SetSolid(SOLID_NONE)

@@ -54,7 +54,7 @@ function UPGRADE:Apply(SWEP)
                             phys:SetVelocity(drone:GetDriverDirection() * 1500)
                         end
 
-                        manhack:SetMaterial(TTTPAP.camo)
+                        manhack:SetPAPCamo()
                         manhack.TTTPAPBigulon = true
 
                         timer.Simple(decayTimeCvar:GetInt(), function()

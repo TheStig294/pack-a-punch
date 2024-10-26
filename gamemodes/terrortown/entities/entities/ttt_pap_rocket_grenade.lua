@@ -32,7 +32,7 @@ function ENT:Initialize()
 		self:SetDmg(200)
 	end
 
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 
 	return self.BaseClass.Initialize(self)
 end

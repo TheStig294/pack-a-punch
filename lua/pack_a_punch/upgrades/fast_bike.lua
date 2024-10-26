@@ -50,7 +50,7 @@ function UPGRADE:Apply(SWEP)
             bike:Spawn()
             bike.Damage = self.Primary.Damage
             bike:SetOwner(ply)
-            bike:SetMaterial(TTTPAP.camo)
+            bike:SetPAPCamo()
             local phys = bike:GetPhysicsObject()
 
             if IsValid(phys) then

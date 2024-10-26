@@ -199,7 +199,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
 
         -- Camo
         if not UPGRADE.noCamo then
-            SWEP:SetMaterial(TTTPAP.camo)
+            SWEP:SetPAPCamo()
         end
 
         -- Sound

@@ -20,7 +20,7 @@ function UPGRADE:Apply(SWEP)
             manhack.TTTPAPBeepulon = true
 
             if ply.TTTPAPBeepulonOwner then
-                manhack:SetMaterial(TTTPAP.camo)
+                manhack:SetPAPCamo()
                 local timername = "TTTPAPBeepulonSound" .. ply:SteamID64()
 
                 timer.Create(timername, 20, 0, function()

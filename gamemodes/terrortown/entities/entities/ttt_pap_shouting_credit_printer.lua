@@ -10,7 +10,7 @@ local maxCreditsCvar = CreateConVar("pap_shouting_credit_printer_max_credits", 4
 local soundsCvar = CreateConVar("pap_shouting_credit_printer_sounds", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Play the extra sounds?", 0, 1)
 
 function ENT:Initialize()
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
     self.PrintRate = GetConVar("ttt_printer_printduration"):GetInt() / lengthMult:GetFloat()
     self.MaxCredits = maxCreditsCvar:GetInt()
     self.BaseClass.Initialize(self)

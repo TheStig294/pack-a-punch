@@ -17,7 +17,7 @@ function UPGRADE:Apply(SWEP)
 
                 if owner.PAPChonkPigeon then
                     owner.PAPChonkPigeon = false
-                    ent:SetMaterial(TTTPAP.camo)
+                    ent:SetPAPCamo()
                     ent:SetModelScale(3, 0.001)
                     ent:Activate()
 

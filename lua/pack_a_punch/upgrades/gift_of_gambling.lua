@@ -35,7 +35,7 @@ function UPGRADE:Apply(SWEP)
                     phys:SetVelocity(throw)
                 end
 
-                gift:SetMaterial(TTTPAP.camo)
+                gift:SetPAPCamo()
                 gift:SetUseType(SIMPLE_USE)
                 gift.Uses = 2
 

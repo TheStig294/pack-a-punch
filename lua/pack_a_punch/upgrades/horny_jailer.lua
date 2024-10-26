@@ -22,7 +22,7 @@ function UPGRADE:Apply(SWEP)
         wall:SetPos(pos)
         wall:SetAngles(angle)
         wall:Spawn()
-        wall:SetMaterial(TTTPAP.camo)
+        wall:SetPAPCamo()
         wall.PAPHornyJailerWall = true
         local physobj = wall:GetPhysicsObject()
 

@@ -10,7 +10,7 @@ function ENT:Initialize()
         self:SetRadius(GetConVar("pap_big_boi_frag_grenade_radius"):GetFloat() * 250)
     end
 
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
     self:SetModelScale(5, 0.0001)
 
     if not self:GetDmg() then

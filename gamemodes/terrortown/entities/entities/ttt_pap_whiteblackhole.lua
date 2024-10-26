@@ -5,7 +5,7 @@ ENT.Base = "ttt_redblackhole"
 if SERVER then
 	function ENT:Initialize()
 		self.BaseClass.Initialize(self)
-		self:SetMaterial(TTTPAP.camo)
+		self:SetPAPCamo()
 	end
 
 	local screenFadeColour = Color(255, 255, 255, 20)

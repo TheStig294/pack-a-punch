@@ -5,7 +5,7 @@ ENT.PrintName = "Explosive Boomerang"
 
 function ENT:Initialize()
     self.BaseClass.Initialize(self)
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
 end
 
 function ENT:PhysicsCollide(data, phys)

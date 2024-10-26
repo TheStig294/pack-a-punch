@@ -23,7 +23,7 @@ function UPGRADE:Apply(SWEP)
             gren:SetElasticity(0.45)
             gren:Spawn()
             gren:PhysWake()
-            gren:SetMaterial(TTTPAP.camo)
+            gren:SetPAPCamo()
             local phys = gren:GetPhysicsObject()
 
             if IsValid(phys) then

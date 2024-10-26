@@ -216,7 +216,7 @@ function UPGRADE:Apply(SWEP)
                     if isUpgradedBarrel then
                         bee:SetModelScale(5, 0.0001)
                         bee:Activate()
-                        bee:SetMaterial(TTTPAP.camo)
+                        bee:SetPAPCamo()
                         bee.TTTPAPSoulboundBee = true
                         headBee:SetModelScale(5, 0.0001)
                         headBee:Activate()
@@ -245,7 +245,7 @@ function UPGRADE:Apply(SWEP)
         ent:SetModel("models/bee_drum/beedrum002_explosive.mdl")
         ent:SetPos(spawnPos)
         ent:Spawn()
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local uses = soulbound:GetNWInt("TTTSoulboundBeeBarrelUses", 0)
         uses = math.max(uses - 1, 0)
         soulbound:SetNWInt("TTTSoulboundBeeBarrelUses", uses)
@@ -294,7 +294,7 @@ function UPGRADE:Apply(SWEP)
         ent:Spawn()
         ent:SetModelScale(2)
         ent:Activate()
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         ent.PAPSoulboundZombieBox = true
         local uses = soulbound:GetNWInt("TTTSoulboundBoxUses", 0)
         uses = math.max(uses - 1, 0)
@@ -501,7 +501,7 @@ function UPGRADE:Apply(SWEP)
                         decoy:SetPos(pos + Vector(0, 0, 5))
                         decoy:SetOwner(soulbound)
                         decoy:Spawn()
-                        decoy:SetMaterial(TTTPAP.camo)
+                        decoy:SetPAPCamo()
                         local ang = decoy:GetAngles()
                         ang:RotateAroundAxis(ang:Right(), 90)
                         decoy:SetAngles(ang)
@@ -1575,7 +1575,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         ent.TTTPAPSoulboundPoltergeistStuckEnt = stuckEnt
-        ent:SetMaterial(TTTPAP.camo)
+        ent:SetPAPCamo()
         local uses = soulbound:GetNWInt("TTTSoulboundPoltergeistUses", 0)
         uses = math.max(uses - 1, 0)
         soulbound:SetNWInt("TTTSoulboundPoltergeistUses", uses)
@@ -1605,7 +1605,7 @@ function UPGRADE:Apply(SWEP)
                 end
 
                 newEnt.TTTPAPSoulboundPoltergeistStuckEnt = stuckEnt
-                newEnt:SetMaterial(TTTPAP.camo)
+                newEnt:SetPAPCamo()
             end
         end)
     end

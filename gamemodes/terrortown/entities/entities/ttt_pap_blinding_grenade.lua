@@ -8,7 +8,7 @@ end
 
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 end
 
 function ENT:Explode()

@@ -31,7 +31,7 @@ function UPGRADE:Apply(SWEP)
         egg:Spawn()
         egg:Activate()
         -- Egg has PaP camo
-        egg:SetMaterial(TTTPAP.camo)
+        egg:SetPAPCamo()
         local eggphys = egg:GetPhysicsObject()
 
         if eggphys:IsValid() then
@@ -60,7 +60,7 @@ function UPGRADE:Apply(SWEP)
                 chicken:SetPos(pos)
                 chicken:Spawn()
                 -- Chicken has PaP camo
-                chicken:SetMaterial(TTTPAP.camo)
+                chicken:SetPAPCamo()
                 chicken.TTTPAPBigChicken = true
 
                 -- Makes the inception "duuuunnnn" meme sound lol

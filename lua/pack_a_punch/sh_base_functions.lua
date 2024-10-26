@@ -239,3 +239,9 @@ function TTTPAP:CanRoleSpawn(role)
 
     return false
 end
+
+local ENT = FindMetaTable("Entity")
+
+function ENT:SetPAPCamo()
+    self:SetMaterial(TTTPAP.camo)
+end

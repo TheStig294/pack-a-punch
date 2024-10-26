@@ -8,7 +8,7 @@ function ENT:Initialize()
    self.Sound = CreateSound(self, "ttt_pack_a_punch/white_matter_bomb/siren.mp3")
    self.Sound:SetSoundLevel(85)
    self.Sound:Play()
-   self:SetMaterial(TTTPAP.camo)
+   self:SetPAPCamo()
 end
 
 function ENT:OnRemove()

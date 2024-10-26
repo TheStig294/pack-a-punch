@@ -6,7 +6,7 @@ ENT.PrintName = "Big Boi Donconnon"
 function ENT:Initialize()
     self.BaseClass.Initialize(self)
     -- PAP camo, no sound on shoot
-    self:SetMaterial(TTTPAP.camo)
+    self:SetPAPCamo()
 
     if SERVER then
         self.Trail = util.SpriteTrail(self, 0, Color(255, 0, 0), false, 500, 0, 3, 1 / 100 * 0.5, "sprites/combineball_trail_red_1") -- New red trail

@@ -41,7 +41,7 @@ function UPGRADE:Apply(SWEP)
             knife:Spawn()
             knife.Damage = self.Primary.Damage
             knife:SetOwner(ply)
-            knife:SetMaterial(TTTPAP.camo)
+            knife:SetPAPCamo()
             local phys = knife:GetPhysicsObject()
 
             if IsValid(phys) then

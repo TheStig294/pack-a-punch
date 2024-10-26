@@ -74,7 +74,7 @@ function UPGRADE:Apply(SWEP)
             SWEP:PAPOldDrawWorldModel()
 
             if IsValid(self.WorldModelEnt) then
-                self.WorldModelEnt:SetMaterial(TTTPAP.camo)
+                self.WorldModelEnt:SetPAPCamo()
             end
         end
     end

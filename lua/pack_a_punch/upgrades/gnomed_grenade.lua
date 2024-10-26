@@ -70,7 +70,7 @@ function UPGRADE:Apply(SWEP)
         grenade:SetElasticity(0.45)
         grenade:Spawn()
         grenade:PhysWake()
-        grenade:SetMaterial(TTTPAP.camo)
+        grenade:SetPAPCamo()
         grenade.TTTPAPGnomedGrenade = true
         local phys = grenade:GetPhysicsObject()
 

@@ -4,7 +4,7 @@ ENT.PrintName = "Banana Bomb"
 
 function ENT:Initialize()
 	self:SetModel("models/props/cs_italy/bananna_bunch.mdl")
-	self:SetMaterial(TTTPAP.camo)
+	self:SetPAPCamo()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)

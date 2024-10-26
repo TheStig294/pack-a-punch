@@ -45,7 +45,7 @@ function UPGRADE:Apply(SWEP)
             return
         else
             -- Give it the PaP camo
-            ent:SetMaterial(TTTPAP.camo)
+            ent:SetPAPCamo()
             ent.PAPSheepChildren = {}
 
             -- Spawn non-solid extra sheep models 

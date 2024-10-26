@@ -27,7 +27,7 @@ function UPGRADE:Apply(SWEP)
         gren:SetElasticity(0.45)
         gren:Spawn()
         gren:PhysWake()
-        gren:SetMaterial(TTTPAP.camo)
+        gren:SetPAPCamo()
 
         timer.Simple(20, function()
             if not IsValid(gren) then return end
