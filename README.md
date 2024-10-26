@@ -1030,6 +1030,16 @@ Doesn't kill you! Immune to fire damage while active\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966658338>
 
+## Fire Starter (Fire Spirit)
+
+Fires move and chase players down!\
+\
+*ttt_pap_fire_spirit* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_fire_spirit_duration* - Default: 20 - Seconds fires last\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1829329597>
+
 ## FKG gifter (Free Crowbar Gifter)
 
 Forces them to use a crowbar instead!\
