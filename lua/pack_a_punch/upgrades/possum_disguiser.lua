@@ -22,9 +22,7 @@ local ammoMultCvar = CreateConVar("pap_possum_disguiser_ammo_mult", "2", {FCVAR_
 
 function UPGRADE:Apply(SWEP)
     -- Ammo increase
-    local ammo = ammoMultCvar:GetFloat() * 100
-    SWEP.Primary.ClipSize = ammo
-    SWEP.Primary.ClipMax = ammo
+    self:SetClip(SWEP, ammoMultCvar:GetFloat() * 100)
 
     if possumInstalled then
         self:AddHook("PlayerPostThink", function(ply)

@@ -5,11 +5,7 @@ UPGRADE.name = "Gnomed Grenade"
 UPGRADE.desc = "x2 grenades, victims actually get gnomed"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipSize = 2
-
-    timer.Simple(0.1, function()
-        SWEP:SetClip1(2)
-    end)
+    self:SetClip(SWEP, 2)
 
     function SWEP:PrimaryAttack()
         if not self:CanPrimaryAttack() then return end

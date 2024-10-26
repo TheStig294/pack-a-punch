@@ -5,12 +5,7 @@ UPGRADE.name = "Double Death Link"
 UPGRADE.desc = "You can link one more person,\nbypasses explosion immunities!"
 
 function UPGRADE:Apply(SWEP)
-    timer.Simple(0, function()
-        SWEP.Primary.ClipSize = 2
-        SWEP.Primary.ClipMax = 2
-        SWEP:SetClip1(2)
-    end)
-
+    self:SetClip(SWEP, 2)
     if CLIENT then return end
 
     function SWEP:PrimaryAttack()

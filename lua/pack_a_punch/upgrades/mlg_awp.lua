@@ -9,9 +9,7 @@ function UPGRADE:Apply(SWEP)
         util.AddNetworkString("TTTPAPMlgAwpDeathEffects")
     end
 
-    timer.Simple(0.1, function()
-        SWEP.Primary.ClipSize = 4
-    end)
+    self:SetClip(SWEP, 4)
 
     -- Players hear a random MLG-themed sound on killing someone
     self:AddHook("DoPlayerDeath", function(ply, attacker, dmg)

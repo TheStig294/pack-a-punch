@@ -93,11 +93,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     SWEP.PAPHasFired = false
-
-    timer.Simple(0.1, function()
-        SWEP.Primary.ClipSize = -1
-        SWEP:SetClip1(-1)
-    end)
+    self:SetClip(SWEP, -1)
 
     function SWEP:PrimaryAttack()
         if self.PAPHasFired then return end

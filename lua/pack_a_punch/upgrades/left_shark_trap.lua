@@ -6,15 +6,10 @@ UPGRADE.desc = "2 traps, changes the shark's model!"
 UPGRADE.noSound = true
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipMax = 2
-    SWEP.Primary.ClipSize = 2
+    self:SetClip(SWEP, 2)
     SWEP.AmmoEnt = nil
     SWEP.Primary.Ammo = "AirboatGun"
     SWEP.Primary.Sound = ""
-
-    timer.Simple(0.1, function()
-        SWEP:SetClip1(2)
-    end)
 
     -- Code from the shark trap SWEP and cleaned up
     -- https://steamcommunity.com/sharedfiles/filedetails/?id=2550782000

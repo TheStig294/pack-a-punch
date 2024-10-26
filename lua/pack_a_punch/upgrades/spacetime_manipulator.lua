@@ -27,11 +27,7 @@ local maxTimeCvar = CreateConVar("pap_spacetime_manipulator_overuse_max", 2.2, {
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPUseCount = 0
-
-    timer.Simple(0, function()
-        SWEP.ClipSize = -1
-        SWEP:SetClip1(-1)
-    end)
+    self:SetClip(SWEP, -1)
 
     function SWEP:PrimaryAttack()
         if CLIENT then return end

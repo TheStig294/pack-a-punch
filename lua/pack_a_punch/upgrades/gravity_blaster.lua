@@ -5,14 +5,9 @@ UPGRADE.name = "Gravity Blaster"
 UPGRADE.desc = "Full-auto push gun! Now has ammo"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipSize = 50
-    SWEP.Primary.DefaultClip = 50
+    self:SetClip(SWEP, 50)
     SWEP.Primary.Delay = 0.25
     SWEP.Overheated = false
-
-    timer.Simple(0.2, function()
-        SWEP:SetClip1(SWEP.Primary.DefaultClip)
-    end)
 
     function SWEP:PrimaryAttack()
         if self.IsCharging or self.Overheated then return end

@@ -14,17 +14,11 @@ UPGRADE.convars = {
 local autoReleaseCvar = CreateConVar("pap_player_launcher_auto_release_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds until players auto-release", 0, 60)
 
 function UPGRADE:Apply(SWEP)
+    self:SetClip(SWEP, 2)
     -- Range is in source units squared, so 10000 = 100 range
     SWEP.PickupRange = 10000
-    SWEP.Primary.ClipSize = 2
-    SWEP.Primary.ClipMax = 2
     SWEP.Primary.Ammo = "AirboatGun"
     SWEP.DrawAmmo = true
-
-    timer.Simple(0.1, function()
-        SWEP:SetClip1(2)
-    end)
-
     SWEP.PAPOwner = SWEP:GetOwner()
     SWEP.AutoReleaseSecs = autoReleaseCvar:GetInt()
 

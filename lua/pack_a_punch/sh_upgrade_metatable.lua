@@ -381,5 +381,19 @@ function UPGRADE:SetShield(p, maxShield, dmgResist, skipSetShield)
     end)
 end
 
+function UPGRADE:SetClip(SWEP, size)
+    timer.Simple(0, function()
+        SWEP.Primary.ClipSize = size
+        SWEP.Primary.ClipMax = size
+
+        if SWEP.Primary_TFA then
+            SWEP.Primary_TFA.ClipSize = size
+            SWEP.Primary_TFA.MaxAmmo = size
+        end
+
+        SWEP:SetClip1(size)
+    end)
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE

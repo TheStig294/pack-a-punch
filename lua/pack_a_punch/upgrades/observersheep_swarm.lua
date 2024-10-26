@@ -6,10 +6,7 @@ UPGRADE.desc = "Sends out a swarm of observer sheep,\nwhich permanently marks pl
 local trackedPlayers = {}
 
 function UPGRADE:Apply(SWEP)
-    timer.Simple(0, function()
-        SWEP.Primary.ClipSize = -1
-        SWEP:SetClip1(-1)
-    end)
+    self:SetClip(SWEP, -1)
 
     function SWEP:PrimaryAttack()
         local owner = self:GetOwner()

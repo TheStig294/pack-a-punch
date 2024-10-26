@@ -6,12 +6,8 @@ UPGRADE.desc = "You can place 2 traps, floats around\nimmune to your own traps!"
 UPGRADE.noSound = true
 
 function UPGRADE:Apply(SWEP)
+    self:SetClip(SWEP, 2)
     if CLIENT then return end
-    SWEP.Primary.ClipSize = 2
-
-    timer.Simple(0.1, function()
-        SWEP:SetClip1(2)
-    end)
 
     function SWEP:PrimaryAttack()
         local owner = self:GetOwner()

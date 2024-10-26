@@ -16,12 +16,7 @@ local durationCvar = CreateConVar("pap_fire_spirit_duration", "30", {FCVAR_ARCHI
 local fireEnts = {}
 
 function UPGRADE:Apply(SWEP)
-    timer.Simple(0, function()
-        SWEP.Primary.ClipSize = 5
-        SWEP.Primary.ClipMax = 5
-        SWEP.Primary.DefaultClip = 5
-        SWEP:SetClip1(5)
-    end)
+    self:SetClip(SWEP, 5)
 
     function SWEP:PrimaryAttack()
         if not self:CanPrimaryAttack() then return end

@@ -5,12 +5,7 @@ UPGRADE.name = "Surprise Trap"
 UPGRADE.desc = "Can place 3, 'surprises' the victim"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipSize = 3
-
-    timer.Simple(0.1, function()
-        SWEP:SetClip1(3)
-    end)
-
+    self:SetClip(SWEP, 3)
     local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
     function SWEP:DropTrap()

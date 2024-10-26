@@ -34,8 +34,7 @@ UPGRADE.convars = {
 local ammoCvar = CreateConVar("pap_truck_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
 
 function UPGRADE:Apply(SWEP)
-    SWEP.Primary.ClipSize = ammoCvar:GetInt()
-    SWEP.Primary.ClipMax = ammoCvar:GetInt()
+    self:SetClip(SWEP, ammoCvar:GetInt())
     SWEP.Sound = Sound("ttt_pack_a_punch/truck_gun/trucking_tuesday.mp3")
     SWEP:SetHoldType(SWEP.HoldType)
 
