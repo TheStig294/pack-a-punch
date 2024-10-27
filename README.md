@@ -1081,6 +1081,15 @@ Throw 2 grenades! The other takes an extra 20 seconds to explode!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=948384112>
 
+## Fulton (Remove Tool)
+
+Removes any prop you shoot, shooting a player removes the gun!\
+\
+*ttt_pap_remove_tool* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=876405188>
+
 ## Flare gun (Perma-Fire Gun)
 
 Sets someone on fire that doesn't go out
