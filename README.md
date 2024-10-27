@@ -1273,6 +1273,15 @@ No cooldown, but be careful not to use it too much...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1618719637>
 
+## Gravity Pistol (Spacetime Gun)
+
+Continually changes the victim's gravity!\
+\
+*ttt_pap_spacetime_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067025529>
+
 ## Guitar Gun [Lightning AR1] (Rock Guitar)
 
 Infinite ammo, time to rock!\
