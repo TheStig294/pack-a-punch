@@ -1452,6 +1452,15 @@ Larger explosion, fire lasts a very long time!\
 \
 Upgrade for: Default TTT weapon
 
+## Jarate (Viral Jarate)
+
+Larger splash area, spreads between nearby players, lasts forever!\
+\
+*ttt_pap_viral_jarate* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=755748551>
+
 ## Jedi Lightsaber (The Force)
 
 Pick up things using the force! Players take much more ammo to pick up\
