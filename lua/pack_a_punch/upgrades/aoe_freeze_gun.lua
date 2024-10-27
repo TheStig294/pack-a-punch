@@ -26,7 +26,8 @@ function UPGRADE:Apply(SWEP)
             -- disallow if prep or post round
             if not ent:IsPlayer() or (not GAMEMODE:AllowPVP()) then return end
 
-            for _, ply in ipairs(self:GetAlivePlayers()) do
+            for _, ply in player.Iterator() do
+                if not self:IsAlive(ply) then continue end
                 -- Don't let players freeze themselves!
                 if ply == attacker then continue end
                 -- If 100 range

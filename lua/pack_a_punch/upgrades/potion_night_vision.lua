@@ -83,7 +83,15 @@ function UPGRADE:Apply(SWEP)
 
             if enable then
                 self:AddHook("PreDrawHalos", function()
-                    halo.Add(self:GetAlivePlayers(), Color(255, 255, 255), 0, 0, 1, true, true)
+                    local plys = {}
+
+                    for _, ply in player.Iterator() do
+                        if self:IsAlive(ply) then
+                            table.insert(plys, ply)
+                        end
+                    end
+
+                    halo.Add(plys, Color(255, 255, 255), 0, 0, 1, true, true)
                 end)
             else
                 self:RemoveHook("PreDrawHalos")

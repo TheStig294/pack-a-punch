@@ -66,7 +66,9 @@ function UPGRADE:Apply(SWEP)
         else
             attacker:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
 
-            for _, p in ipairs(self:GetAlivePlayers()) do
+            for _, p in player.Iterator() do
+                if not self:IsAlive(p) then continue end
+
                 if IsBaddie(p) then
                     p.PAPPlatinumGunExtraLife = true
                     p:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")

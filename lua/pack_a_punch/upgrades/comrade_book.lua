@@ -10,7 +10,8 @@ function UPGRADE:Apply(SWEP)
         local chosenSound = Sound("ttt_pack_a_punch/comrade_book/anthem" .. math.random(4) .. ".mp3")
         local luaString = "surface.PlaySound(\"" .. chosenSound .. "\")"
 
-        for _, ply in ipairs(self:GetAlivePlayers()) do
+        for _, ply in player.Iterator() do
+            if not self:IsAlive(ply) then continue end
             -- Don't upgrade the player's manifesto endlessly...
             if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == self.class then continue end
             ply:ChatPrint("This is OUR upgrade comrade...")

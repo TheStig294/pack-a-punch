@@ -19,7 +19,9 @@ function UPGRADE:Apply(SWEP)
             if not UPGRADE:IsPlayer(ent) then
                 owner:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
 
-                for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
+                for _, ply in player.Iterator() do
+                    if not UPGRADE:IsAlive(ply) then continue end
+
                     if IsBaddie(ply) then
                         ply.PAPPlatinumGunExtraLife = true
                         ply:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")
@@ -49,7 +51,9 @@ function UPGRADE:Apply(SWEP)
             else
                 attacker:ChatPrint("Didn't shoot a bad guy! One of them just got an extra life!")
 
-                for _, p in ipairs(UPGRADE:GetAlivePlayers()) do
+                for _, p in player.Iterator() do
+                    if not UPGRADE:IsAlive(p) then continue end
+
                     if IsBaddie(p) then
                         p.PAPPlatinumGunExtraLife = true
                         p:PrintMessage(HUD_PRINTCENTER, "You got an extra life! Someone whiffed with the Platinum Gun!")

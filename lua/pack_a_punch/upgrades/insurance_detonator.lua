@@ -9,7 +9,8 @@ function UPGRADE:Apply(SWEP)
     local owner = SWEP:GetOwner()
     if not IsValid(owner) then return end
 
-    for _, ply in ipairs(self:GetAlivePlayers()) do
+    for _, ply in player.Iterator() do
+        if not self:IsAlive(ply) then continue end
         local det = ply:GetWeapon("weapon_ttt_randomatdetonator")
 
         if IsValid(det) and det.Target == owner then

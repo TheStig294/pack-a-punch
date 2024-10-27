@@ -71,7 +71,6 @@ function UPGRADE:Apply(SWEP)
             end)
 
             hook.Call("TTTPlayerHandcuffed", nil, owner, target, time)
-
             local sid64 = target:SteamID64()
             playerNonDroppables[sid64] = {}
 
@@ -102,7 +101,9 @@ function UPGRADE:Apply(SWEP)
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
 
-        for _, ply in ipairs(UPGRADE:GetAlivePlayers()) do
+        for _, ply in player.Iterator() do
+            if not UPGRADE:IsAlive(ply) then continue end
+
             if ply ~= owner then
                 CuffPlayer(ply, owner)
             end

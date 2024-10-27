@@ -8,7 +8,8 @@ function UPGRADE:Apply(SWEP)
     if SERVER then
         local owner = SWEP:GetOwner()
 
-        for _, ply in ipairs(self:GetAlivePlayers()) do
+        for _, ply in player.Iterator() do
+            if not self:IsAlive(ply) then continue end
             if owner == ply then continue end
             local replaced = false
 

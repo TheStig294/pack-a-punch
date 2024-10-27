@@ -110,22 +110,6 @@ function UPGRADE:AddToHook(SWEP, hookName, HookFunction)
 end
 
 -- Utility functions available inside any UPGRADE function, usually used in UPGRADE:Apply()
-function UPGRADE:GetAlivePlayers(shuffle)
-    local plys = {}
-
-    for _, ply in ipairs(player.GetAll()) do
-        if IsValid(ply) and ply:Alive() and not ply:IsSpec() then
-            table.insert(plys, ply)
-        end
-    end
-
-    if shuffle then
-        table.Shuffle(plys)
-    end
-
-    return plys
-end
-
 local ForceSetPlayermodel = FindMetaTable("Entity").SetModel
 
 function UPGRADE:SetModel(ply, model)
