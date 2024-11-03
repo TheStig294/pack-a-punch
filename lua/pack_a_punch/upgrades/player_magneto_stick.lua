@@ -110,7 +110,7 @@ function UPGRADE:Apply(SWEP)
         -- Reset the properties early so the "PlayerCanPickupWeapon" hook is disabled
         self.Victim = nil
         self.VictimProps = nil
-        if CLIENT or not IsValid(ply) then return end
+        if CLIENT or not IsValid(ply) or not IsValid(owner) then return end
         ply:SetNWBool("PAP_magnetoCarryVictim", false)
         ply:SetSolid(plyProps.Solid)
         ply:SetMoveType(MOVETYPE_WALK)
