@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "jester_converter"
 UPGRADE.class = "shared" -- Making the upgrade very weapon-independent because of this... Who knows what this is going to be upgrading...
 UPGRADE.name = "Jester Converter"
-UPGRADE.desc = "Converts you into a jester while held,\n and back to your original role while not held!"
+UPGRADE.desc = "Converts you into a jester while held,\nand back to your original role while not held!"
 
 -- Should account for town of terror, custom roles, and TTT2 all in one (Well... who knows with TTT2 lol) 
 function UPGRADE:Condition()
