@@ -58,7 +58,7 @@ local function HasItemWithPropertyValue(tbl, key, val)
 end
 
 -- Add the PaP to every role's buy menu that isn't banned
-hook.Add("TTTBeginRound", "TTTPAPRegister", function()
+hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
     for role, equTable in pairs(EquipmentItems) do
         -- Check:
         -- Role is not banned
@@ -69,7 +69,7 @@ hook.Add("TTTBeginRound", "TTTPAPRegister", function()
         end
     end
 
-    hook.Remove("TTTBeginRound", "TTTPAPRegister")
+    hook.Remove("TTTPrepareRound", "TTTPAPRegister")
 end)
 
 -- Preventing the Pack-a-Punch from being bought when it shouldn't be
