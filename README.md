@@ -89,6 +89,11 @@ Requires: [Master Chief Playermodel](https://steamcommunity.com/sharedfiles/file
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3173929747>\
 Requires: [Enderman Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2116202907)
 
+## Kamehameha (Super Saiyan)
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=1599710095>\
+Requires: [Jump Force - Goku (PM+NPC)](https://steamcommunity.com/sharedfiles/filedetails/?id=1675989798)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -1527,6 +1532,20 @@ Become semi-invisible while holding\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329729175>
+
+## Kamehameha (Super Saiyan)
+
+YOUR POWER LEVEL IS OVER 9000! Right-click to teleport, you can fly while held!\
+Also gives you a Goku playermodel, if installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=1675989798>\
+\
+*ttt_pap_super_saiyan* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_super_saiyan_move_speed* - Default: 224 - Move speed\
+*pap_super_saiyan_side_move_speed_cap* - Default: 1200 - Side move speed cap\
+*pap_super_saiyan_move_velocity* - Default: 1200 - Move velocity\
+*pap_super_saiyan_air_resistance* - Default: 2.5 - Air resistance\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1599710095>
 
 ## King Crimson (Time Skip Fists)
 
