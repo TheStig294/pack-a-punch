@@ -1713,6 +1713,15 @@ Auto-promotes the player to detective!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
 
+## Malfunction Pistol (Malfunctions Pistol)
+
+Victim continually shoots at random throughout the round\
+\
+*ttt_pap_malfunctions_pistol* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=607638487>
+
 ## Medkit (AOE Medkit)
 
 Heals you more at once, and other players around you!\
