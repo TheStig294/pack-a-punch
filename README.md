@@ -1886,6 +1886,15 @@ Do do do do doooo...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
 
+## Painkillers (Damage Delayer)
+
+Permanent full heal, delays damage taken by 5 seconds\
+\
+*ttt_pap_damage_delayer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2990355083>
+
 ## Paper Plane (Nyan Plane)
 
 Throws 2 planes at once, is now a Nyan Cat!\
