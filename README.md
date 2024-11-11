@@ -2197,6 +2197,15 @@ Permanently transforms someone else into a prop!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2796353349>
 
+## Prop Exploder (Prop Sprayer)
+
+Exploded props spray more props everywhere!\
+\
+*ttt_pap_prop_sprayer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=680737032>
+
 ## Radio (Quad Auto-Radio)
 
 Auto-plays sounds, +3 extra radios!\
