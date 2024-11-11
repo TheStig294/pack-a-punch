@@ -2753,6 +2753,15 @@ Move fast while riding!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1858836015>
 
+## Turret (Invincible Turret)
+
+Invincible, immovable, x2 ammo, plays portal quotes!\
+\
+*ttt_pap_invincible_turret* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=254107561>
+
 ## Turtle Grenade (Double Turtle Grenade)
 
 Throw 2 grenades! The other takes an extra 20 seconds to explode!\
