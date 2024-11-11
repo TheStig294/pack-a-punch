@@ -2320,6 +2320,17 @@ Guess someone's favourite fruit instead!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Rollermine (Rollermine Spawner)
+
+Slowly spawns many rollermines!\
+\
+*ttt_pap_rollermine_spawner* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_rollermine_spawner_delay* - Default: 20 - Seconds between spawning rollermines\
+*pap_rollermine_spawner_cap* - Default: 20 - Max no. of rollermines spawned\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=902184195>
+
 ## Rotation Gun (Auto-Rotate Gun)
 
 Players auto-rotate for a sec!\
