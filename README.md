@@ -2113,6 +2113,17 @@ Increased disguiser capacity\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2652805911>
 
+## Possessed Melon Launcher (Explosive Melon Gun)
+
+Deals extra damage, melons explode on touch!\
+\
+*ttt_pap_exp_melon_gun* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_exp_melon_gun_primary_damage* - Default: 7 - Extra primary fire damage\
+*pap_exp_melon_gun_secondary_damage* - Default: 20 - Extra secondary fire damage\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2996083457>
+
 ## Potion of Health (Regeneration Potion)
 
 Continually regenerates your health!\
