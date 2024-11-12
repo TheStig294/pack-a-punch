@@ -4,6 +4,11 @@ UPGRADE.class = "weapon_ttt_wpnjammer"
 UPGRADE.name = "Jamifier"
 UPGRADE.desc = "x3 ammo, turns all of a player's weapons into jam!\nLeft-click to use! (Not 'E')"
 
+-- Don't register the jam weapon unless the weapon jammer is actually installed
+hook.Add("PreRegisterSWEP", "TTTPAPJamifier", function(SWEP, class)
+    if class == "ttt_pap_jam" and util.NetworkStringToID("ttt_weaponjammer_apply") == 0 then return false end
+end)
+
 function UPGRADE:Apply(SWEP)
     self:SetClip(SWEP, 3)
     SWEP.Primary.Delay = 0.1
