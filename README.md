@@ -138,6 +138,9 @@ Some icons from: <https://game-icons.net>, such as some of the upgraded soulboun
 by Jasmin Daniel
 licensed under Creative Commons Attribution <http://creativecommons.org/licenses/by/4.0/>
 
+"Jam Jam" (<https://skfb.ly/oJpRF>) by Travp333 is licensed under Creative Commons Attribution-NonCommercial (<http://creativecommons.org/licenses/by-nc/4.0/>)
+Jingle sounds from Custom Roles for TTT by Nick and Malivil
+
 # Steam Workshop Link
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
@@ -1465,6 +1468,15 @@ Larger splash area, spreads between nearby players, lasts forever!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=755748551>
+
+## Jam (Jingle Jam)
+
+Jingles as you move around\
+\
+*ttt_pap_jingle_jam* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: [Weapon Jammer upgrade (Jamifier)](#weapon-jammer-jamifier)
 
 ## Jedi Lightsaber (The Force)
 
@@ -2806,6 +2818,15 @@ Unlimited ammo!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
+## Weapon Jammer (Jamifier)
+
+x3 ammo, turns all of a player's weapons into jam! Left-click to use! (Not 'E')\
+\
+*ttt_pap_jamifier* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=849612809>
 
 ## Weeping Angel (Blinking Angel)
 
