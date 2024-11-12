@@ -94,6 +94,11 @@ Requires: [Enderman Playermodel](https://steamcommunity.com/sharedfiles/filedeta
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1599710095>\
 Requires: [Jump Force - Goku (PM+NPC)](https://steamcommunity.com/sharedfiles/filedetails/?id=1675989798)
 
+## Pusher (The Bristol Pusher)
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=1727089051>\
+Requires: [Yogscast Lewis Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2293499171)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -2217,6 +2222,15 @@ Exploded props spray more props everywhere!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=680737032>
+
+## Pusher (The Bristol Pusher)
+
+Truly embody the pusher himself... Deals extra damage!\
+\
+*ttt_pap_the_bristol_pusher* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1727089051>
 
 ## Radio (Quad Auto-Radio)
 
