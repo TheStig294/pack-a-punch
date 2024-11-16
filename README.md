@@ -883,6 +883,15 @@ Detonates the player who has your detonator!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=628655839>
 
+## Detective Playercam (Weapon Tracker)
+
+Also tracks their current weapons!\
+\
+*ttt_pap_weapon_tracker* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=942402787>
+
 ## Detonator (Insurance Detonator)
 
 Detonates the player who has your detonator!\
