@@ -626,6 +626,15 @@ Hold left-click next to someone to convert them into a traitor!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1908426838>
 
+## Confetti Cannon (Yippee!)
+
+You can play Fortnite... and drink cola!\
+\
+*ttt_pap_yippee* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Controllable Manhack (Beepulon)
 
 Deals way more damage, makes beepulon sounds\
