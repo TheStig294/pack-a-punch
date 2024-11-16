@@ -865,6 +865,15 @@ You automatically respawn in place of anyone who walks over it!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1403395766>
 
+## Deployable Force Shield (Forever Shield)
+
+Has infinite health and lasts forever!\
+\
+*ttt_pap_forever_shield* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2206887193>
+
 ## Detective Ball (Guaranteed Ball)
 
 Detonates the player who has your detonator!\
