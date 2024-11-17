@@ -1079,6 +1079,15 @@ Doesn't kill you! Immune to fire damage while active\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966658338>
 
+## Fire Extinguisher (Fire Ban)
+
+Globally bans fires from starting, and extinguishes all fires while held!\
+\
+*ttt_pap_fire_ban* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2113784695>
+
 ## Fire Starter (Fire Spirit)
 
 Fires move and chase players down!\
