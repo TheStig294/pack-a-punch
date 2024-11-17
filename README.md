@@ -919,6 +919,15 @@ Massive push power!\
 \
 Upgrade for: Default TTT weapon
 
+## Discord Soundboard (Meme Soundboard)
+
+Plays meme sound effects! Left-click: play sound, right-click: change sound\
+\
+*ttt_pap_meme_soundboard* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2568344774>
+
 ## Dislocator (The Yeet Disk)
 
 x2 ammo and fling power!\
