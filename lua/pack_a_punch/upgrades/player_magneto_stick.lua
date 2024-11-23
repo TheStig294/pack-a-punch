@@ -165,8 +165,14 @@ function UPGRADE:Apply(SWEP)
             -- Give the player's weapons back
             for _, data in ipairs(plyProps.Weapons) do
                 local wep = ply:Give(data.class)
-                wep:SetClip1(data.clip1)
-                wep:SetClip2(data.clip2)
+
+                if wep.SetClip1 then
+                    wep:SetClip1(data.clip1)
+                end
+
+                if wep.SetClip2 then
+                    wep:SetClip2(data.clip2)
+                end
 
                 if data.upgrade and IsValid(wep) then
                     TTTPAP:ApplyUpgrade(wep, data.upgrade)
