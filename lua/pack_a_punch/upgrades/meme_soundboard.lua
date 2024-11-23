@@ -17,6 +17,7 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:SecondaryAttack()
+        if not IsFirstTimePredicted() then return end
         self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
         self.TTTPAPCurrentSound = self.TTTPAPCurrentSound + 1
 
