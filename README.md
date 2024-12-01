@@ -1595,6 +1595,15 @@ Become semi-invisible while holding\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329729175>
 
+## Jump Gun (Rocket Jump Gun)
+
+Massively increased push power! Right-click to use on someone else!\
+\
+*ttt_pap_rocket_jump_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=267785752>
+
 ## Kamehameha (Super Saiyan)
 
 YOUR POWER LEVEL IS OVER 9000! Right-click to teleport, you can fly while held!\
