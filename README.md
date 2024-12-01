@@ -2092,6 +2092,15 @@ See weapons and players through walls!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=273623128>
 
+## Pew Gun (POW Gun)
+
+x2 damage, launches hit players away!\
+\
+*ttt_pap_pow_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1779538410>
+
 ## Pickle Rick Gun (Big Pickle Gun)
 
 Increases size and health instead!\
