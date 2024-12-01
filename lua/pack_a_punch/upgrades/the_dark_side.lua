@@ -78,22 +78,6 @@ function UPGRADE:Apply(SWEP)
 
             if not IsValid(SWEP.InitialTarget) then
                 if not IsValid(target) then return end
-
-                -- Make players much more expensive to pick up as it is very easy to kill with this weapon
-                if target:IsPlayer() then
-                    if SWEP:Clip1() < 100 then
-                        if CLIENT and not SWEP.ShownAmmoMessage then
-                            SWEP:EmitSound("tools/ifm/ifm_denyundo.wav")
-                            owner:ChatPrint("Players require 100 ammo to be picked up!")
-                            SWEP.ShownAmmoMessage = true
-                        end
-
-                        return
-                    else
-                        SWEP:TakePrimaryAmmo(100)
-                    end
-                end
-
                 -- Wake up the entity's physics so objects aren't left floating in the air
                 target:PhysWake()
                 SWEP.InitialTarget = target
