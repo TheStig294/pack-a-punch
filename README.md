@@ -2746,6 +2746,15 @@ Spawns all 10 surprise soldier NPCs at once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2816323301>
 
+## Taser (Peircing Taser)
+
+Can peirce through players!\
+\
+*ttt_pap_peircing_taser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=315711861>
+
 ## Taxidermy Kit (NPC Spawner)
 
 Turns a body into an invincible walking NPC!\
