@@ -1975,20 +1975,20 @@ Throws 2 planes at once, is now a Nyan Cat!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2150978792>
 
-## Parasite Cure (Parasite Tester)
+## Cure (Ranged Cure)
 
-Works on living parasite players instead!\
+Unlimited uses, works from far away!\
 \
-*ttt_pap_parasite_tester* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_ranged_cure* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
-## Parasite Cure Fake (Explosive Parasite Cure)
+## Cure [Fake] (Explosive Cure)
 
-"Cures" a player of a parasite, by exploding them after 5 seconds!\
+"Cures" a player... by exploding them after 5 seconds!\
 \
-*ttt_pap_explosive_parasite_cure* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_explosive_cure* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
