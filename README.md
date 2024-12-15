@@ -1,7 +1,7 @@
 **A very unique buyable item for TTT!**
 
 On purchase, the current weapon you are holding gets upgraded!
-These are hand-crafted unique upgrades for over 250 different weapons available on the Gmod workshop.
+These are hand-crafted unique upgrades for over 300 different weapons available on the Gmod workshop.
 
 Most are much more than a stats upgrade, and may drastically mix up how the weapon works, or add some goofy or fun new features!
 Even if a weapon doesn't have a unique upgrade, basic weapons are given a random stats upgrade instead!
