@@ -1704,7 +1704,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2958417945>
 
 ## Light Gun [D.Va Pistol] (Nerf This!)
 
-Sets off a big explosion next time you fire!\
+Right-click to set off a huge explosion!\
 You are immune, doesn't affect people behind cover\
 \
 *ttt_pap_nerf_this* - Default: 1 - Whether this upgrade is enabled

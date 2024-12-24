@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "nerf_this"
 UPGRADE.class = "c_dvaredux_nope"
 UPGRADE.name = "Nerf This!"
-UPGRADE.desc = "Sets off a big explosion next time you fire!\nYou are immune, doesn't affect people behind cover"
+UPGRADE.desc = "Right-click to set off a huge explosion!\nYou are immune, doesn't affect people behind cover"
 
 UPGRADE.convars = {
     {
@@ -31,7 +31,7 @@ end
 
 function UPGRADE:Apply(SWEP)
     if SERVER then
-        self:AddToHook(SWEP, "PrimaryAttack", function()
+        self:AddToHook(SWEP, "SecondaryAttack", function()
             local owner = SWEP:GetOwner()
             if not IsValid(owner) or SWEP.TTTPAPSpawnedDvaMech then return end
             SWEP.TTTPAPSpawnedDvaMech = true
