@@ -69,32 +69,34 @@ Requires: [Custom Roles for TTT Jingle Jam 2021 Roles Pack](https://steamcommuni
 Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084)\
 (Or any mod that adds a "Jester" role like TTT2 or Town of Terror)
 
-## Light Gun (D.va pistol)
+## Overwatch Guns
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>\
-Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)
+Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)\
+Requires: [Overwatch Tracer: Abilities](https://steamcommunity.com/sharedfiles/filedetails/?id=1098898034)\
+Optional: [Tracer Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=703995702)
 
-## Spongifier (Spongbobifier)
+## Spongifier
 
 <https://steamcommunity.com/workshop/filedetails/?id=2421039084>\
 Requires: [SpongeBob SquarePants Playermodel!](https://steamcommunity.com/sharedfiles/filedetails/?id=1915222654)
 
-## Spartan Laser (The Spartan)
+## Spartan Laser
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1836493806>\
 Requires: [Master Chief Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=125456150)
 
-## Ender Pearl (Eye Of Ender)
+## Ender Pearl
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3173929747>\
 Requires: [Enderman Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2116202907)
 
-## Kamehameha (Super Saiyan)
+## Kamehameha
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1599710095>\
 Requires: [Jump Force - Goku (PM+NPC)](https://steamcommunity.com/sharedfiles/filedetails/?id=1675989798)
 
-## Pusher (The Bristol Pusher)
+## Pusher
 
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1727089051>\
 Requires: [Yogscast Lewis Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2293499171)
@@ -2296,6 +2298,16 @@ Exploded props spray more props everywhere!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=680737032>
+
+## Pulse Pistols (Bomb's Away!)
+
+Gain Tracer's abilities!\nLShift: Blink, R: Recall, Right-click: Pulse Bomb\
+Also changes your model to Tracer, if installed: <https://steamcommunity.com/sharedfiles/filedetails/?id=703995702>\
+\
+*ttt_pap_bombs_away* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
 
 ## Pusher (The Bristol Pusher)
 
