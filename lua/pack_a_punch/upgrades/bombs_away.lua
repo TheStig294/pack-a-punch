@@ -7,15 +7,18 @@ UPGRADE.desc = "Gain Tracer's abilities!\nLShift: Blink, R: Recall, Right-click:
 -- Requires "Overwatch Tracer: Abilities" mod to be installed: https://steamcommunity.com/sharedfiles/filedetails/?id=1098898034
 hook.Add("InitPostEntity", "TTTPAPBombsAwayInit", function()
     if not OWTA_conVars then return end
-    -- For some reason the mod adds the hud whether you're using the tracer weapon or not...
-    RunConsoleCommand("tracer_hud", 0)
-    RunConsoleCommand("tracer_hud_crosshair", 0)
-    RunConsoleCommand("tracer_notification_blips", 0)
 
-    -- Override timer created in InitPostEntity from original mod to stop "Bomb's charged!" callout happening whenever you spawn
-    timer.Simple(0, function()
-        timer.Remove("passiveBombCharge")
-    end)
+    -- For some reason the mod adds the hud whether you're using the tracer weapon or not...
+    if CLIENT then
+        RunConsoleCommand("tracer_hud", 0)
+        RunConsoleCommand("tracer_hud_crosshair", 0)
+        RunConsoleCommand("tracer_notification_blips", 0)
+    end
+
+    -- Stopping "Bomb's charged!" callout happening whenever you spawn or kill a player
+    if SERVER then
+        OWTA_CALLOUTS.pulseBomb.ready = {"ttt_pack_a_punch/silence.mp3", "ttt_pack_a_punch/silence.mp3"}
+    end
 end)
 
 function UPGRADE:Condition()
@@ -23,50 +26,6 @@ function UPGRADE:Condition()
 end
 
 function UPGRADE:Apply(SWEP)
-    -- Allowing "Bomb's charged!" callout to play again while playing as Tracer
-    local own = SWEP:GetOwner()
-
-    if IsValid(own) then
-        own:SetNWInt("bombCharge", 100)
-    end
-
-    if SERVER then
-        local function playOnBombChargeCallout(ply)
-            ply:EmitSound(OWTA_CALLOUTS.pulseBomb.ready[math.random(#OWTA_CALLOUTS.pulseBomb.ready)])
-            ply:SetNWBool("ultimateNotified", true)
-        end
-
-        local function onBombCharge(ply)
-            playOnBombChargeCallout(ply)
-        end
-
-        local function shouldPlayCallout(ply)
-            local wep = ply:GetActiveWeapon()
-            if not self:IsUpgraded(wep) then return false end
-
-            return ply:GetNWInt("bombCharge") == 100 and not ply:GetNWBool("ultimateNotified") and ply:GetInfoNum("tracer_callouts", 0) == 1 and ply:Alive() and not ply:IsSpec()
-        end
-
-        local function increaseBombCharge(ply, increase)
-            if not ply:IsAdmin() and GetConVar("tracer_bomb_admin_only"):GetBool() then return end
-            ply:SetNWInt("bombCharge", math.Clamp(ply:GetNWInt("bombCharge", 0) + increase * GetConVar("tracer_bomb_charge_multiplier"):GetInt(), 0, 100))
-
-            if shouldPlayCallout(ply) then
-                onBombCharge(ply)
-            end
-        end
-
-        timer.Create("passiveBombCharge", 2, 0, function()
-            for _, ply in player.Iterator() do
-                increaseBombCharge(ply, 1)
-
-                if shouldPlayCallout(ply) then
-                    playBombReadyCallout(ply)
-                end
-            end
-        end)
-    end
-
     local tracerModel = "models/player/ow_tracer.mdl"
 
     if util.IsValidModel(tracerModel) then
