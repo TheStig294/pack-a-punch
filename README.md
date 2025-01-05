@@ -2662,7 +2662,7 @@ Also gives you a master chief playermodel, if installed: <https://steamcommunity
 *pap_the_spartan_shield_amount* - Default: 20 - No. of shield points\
 *pap_the_spartan_shield_cooldown* - Default: 5 - Seconds before shield recharges\
 \
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3025469916>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1836493806>
 
 ## Speedgun (Slowgun)
 
