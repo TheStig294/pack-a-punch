@@ -3023,7 +3023,7 @@ Spawns extra zombies around the map!\
 \
 *pap_zombie_spammer_spawn_count* - Default: 15 - Radius of AOE shot\
 \
-Upgrade for: <>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3332622562>
 
 ## Zombification Device (Re-Zombification Device)
 
