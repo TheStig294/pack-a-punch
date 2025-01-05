@@ -677,6 +677,24 @@ Zero push cooldown, x2 swing speed!\
 \
 Upgrade for: Default TTT weapon
 
+## Cure (Ranged Cure)
+
+Unlimited uses, works from far away!\
+\
+*ttt_pap_ranged_cure* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
+## Cure [Fake] (Explosive Cure)
+
+"Cures" a player... by exploding them after 5 seconds!\
+\
+*ttt_pap_explosive_cure* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
 ## Cupid's Bow (Love Triangle)
 
 You can make 3 people fall in love!\
@@ -1976,24 +1994,6 @@ Throws 2 planes at once, is now a Nyan Cat!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2150978792>
-
-## Cure (Ranged Cure)
-
-Unlimited uses, works from far away!\
-\
-*ttt_pap_ranged_cure* - Default: 1 - Whether this upgrade is enabled
-\
-\
-Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
-
-## Cure [Fake] (Explosive Cure)
-
-"Cures" a player... by exploding them after 5 seconds!\
-\
-*ttt_pap_explosive_cure* - Default: 1 - Whether this upgrade is enabled
-\
-\
-Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Pat Down Club Randomat Weapon (The Pat Down Club)
 
