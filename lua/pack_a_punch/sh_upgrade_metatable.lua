@@ -387,5 +387,42 @@ function UPGRADE:SetClip(SWEP, size)
     end)
 end
 
+function UPGRADE:SetThirdPerson(ply, active)
+    local id = "TTTPAP" .. self.id .. "ThirdPerson"
+
+    if active == nil and not isbool(active) then
+        active = true
+    end
+
+    if SERVER then
+        ply:SetNWBool(id, active)
+
+        hook.Add("TTTPrepareRound", id .. "Reset", function()
+            for _, p in player.Iterator() do
+                p:SetNWBool(id, nil)
+            end
+
+            hook.Remove("TTTPrepareRound", id .. "Reset")
+        end)
+    end
+
+    if CLIENT and active then
+        self:AddHook("CalcView", function(p, pos, angles, fov, znear, zfar)
+            if not p:GetNWBool(id) then return end
+
+            local view = {
+                origin = pos - (angles:Forward() * 100),
+                angles = angles,
+                fov = fov,
+                drawviewer = true,
+                znear = znear,
+                zfar = zfar
+            }
+
+            return view
+        end)
+    end
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
