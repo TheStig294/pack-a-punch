@@ -16,8 +16,6 @@ function UPGRADE:Apply(SWEP)
         SWEP.TTTPAPDieDieDieActive = true
         owner:SetNW2Bool("TTTPAPDieDieDieActive", true)
         owner:EmitSound("ttt_pack_a_punch/die_die_die/activate.mp3")
-        owner.TTTPAPDieDieDieCamAngle = owner:EyeAngles().y
-        owner.TTTPAPDieDieDieCamAngleOrig = owner:EyeAngles().y
 
         if reaperModelInstalled then
             owner.TTTPAPDieDieDieOldModel = owner:GetModel()
@@ -35,33 +33,44 @@ function UPGRADE:Apply(SWEP)
             end
 
             if IsValid(owner) then
-                self:SetThirdPerson(owner, false)
+                owner:SetNW2Bool("TTTPAPDieDieDieActive", false)
 
                 if owner.TTTPAPDieDieDieOldModel then
                     self:SetModel(owner, owner.TTTPAPDieDieDieOldModel)
                 end
+
+                -- Deal an extra secret 75 damage in a radius to help how inaccrate this ability normally is...
+                if SERVER then
+                    local dmg = DamageInfo()
+                    dmg:SetDamage(75)
+                    dmg:SetDamageType(DMG_BULLET)
+                    dmg:SetAttacker(owner)
+                    dmg:SetInflictor(IsValid(SWEP) and SWEP or owner)
+
+                    for _, ent in ipairs(ents.FindInSphere(owner:GetPos(), 400)) do
+                        if IsValid(ent) and ent ~= owner then
+                            ent:TakeDamageInfo(dmg)
+                        end
+                    end
+                end
             end
         end)
     end)
-
-    local moveMult = 10
 
     self:AddToHook(SWEP, "Think", function()
         if not SWEP.TTTPAPDieDieDieActive then return end
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
         SWEP:SetClip1(SWEP.Primary.ClipSize)
-        owner.TTTPAPDieDieDieCamAngle = owner.TTTPAPDieDieDieCamAngle + moveMult
-        local eyeAngles = owner:EyeAngles()
-        owner:SetEyeAngles(Angle(eyeAngles.x, owner.TTTPAPDieDieDieCamAngle, eyeAngles.z))
+        owner:SetEyeAngles(owner:EyeAngles() + Angle(0, 10, 0))
     end)
 
     self:AddHook("CalcView", function(ply, pos, angles, fov, znear, zfar)
-        if not ply:GetNWBool("TTTPAPDieDieDieActive") then return end
+        if not ply:GetNW2Bool("TTTPAPDieDieDieActive") then return end
 
         local view = {
             origin = pos - (angles:Forward() * 100),
-            angles = owner.TTTPAPDieDieDieCamAngleOrig,
+            angles = angles,
             fov = fov,
             drawviewer = true,
             znear = znear,
@@ -77,4 +86,5 @@ function UPGRADE:Reset()
         ply:SetNW2Bool("TTTPAPDieDieDieActive", nil)
     end
 end
--- TTTPAP:Register(UPGRADE)
+
+TTTPAP:Register(UPGRADE)

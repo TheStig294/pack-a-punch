@@ -75,7 +75,8 @@ Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedeta
 Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)\
 Requires: [Overwatch Tracer: Abilities](https://steamcommunity.com/sharedfiles/filedetails/?id=1098898034)\
 Optional: [Tracer Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=703995702)\
-Optional: [Mercy Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726644424)
+Optional: [Mercy Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726644424)\
+Optional: [Reaper Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726069482)
 
 ## Spongifier
 
@@ -1447,6 +1448,15 @@ Auto-tracks all alive players!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3205649099>
+
+## Hellfire Shotguns [Reaper Shotguns] (Die! Die! Die!)
+
+Next time you shoot, you shoot everyone around you!\
+\
+*ttt_pap_die_die_die* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
 
 ## Holstered (Self-Pack-a-Punch)
 
