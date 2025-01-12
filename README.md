@@ -74,7 +74,8 @@ Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedeta
 <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>\
 Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)\
 Requires: [Overwatch Tracer: Abilities](https://steamcommunity.com/sharedfiles/filedetails/?id=1098898034)\
-Optional: [Tracer Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=703995702)
+Optional: [Tracer Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=703995702)\
+Optional: [Mercy Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726644424)
 
 ## Spongifier
 
@@ -483,6 +484,16 @@ Triggers a smaller additional explosion 20 seconds after being placed\
 \
 \
 Upgrade for: Default TTT weapon
+
+## Caduceus Blaster [Mercy Gun] (Heroes Never Die!)
+
+Lets you fly and gives infinite ammo temporarily!\
+\
+*ttt_pap_heroes_never_die* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_heroes_never_die_duration* - Default: 60 - Allow revived players to become hypnotists\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
 
 ## Candy Cane (Giant Elf Cane)
 

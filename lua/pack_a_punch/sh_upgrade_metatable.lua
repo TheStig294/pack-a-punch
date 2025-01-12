@@ -114,6 +114,10 @@ local ForceSetPlayermodel = FindMetaTable("Entity").SetModel
 
 function UPGRADE:SetModel(ply, model)
     ForceSetPlayermodel(ply, model)
+
+    if SERVER then
+        ply:SetupHands()
+    end
 end
 
 function UPGRADE:IsPlayer(ply)
@@ -130,6 +134,10 @@ end
 
 function UPGRADE:IsUpgraded(SWEP)
     return SWEP.PAPUpgrade and SWEP.PAPUpgrade.id == self.id
+end
+
+function UPGRADE:IsValidUpgrade(SWEP)
+    return IsValid(SWEP) and self:IsUpgraded(SWEP)
 end
 
 function UPGRADE:PlayerNotStuck(ply)
