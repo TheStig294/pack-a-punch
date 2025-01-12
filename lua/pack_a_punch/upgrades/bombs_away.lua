@@ -68,7 +68,6 @@ function UPGRADE:Apply(SWEP)
         -- Fixing a lua error with the base mod effect
         local EFFECT = effects.Create("recall")
 
-        -- local material = Material("models/props_combine/tprings_globe")
         function EFFECT:Init(data)
             local color = Color(192, 255, 255)
             self:SetModel("models/effects/combineball.mdl")
