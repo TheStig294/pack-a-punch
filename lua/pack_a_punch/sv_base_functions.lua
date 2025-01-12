@@ -77,9 +77,6 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     if not skipCanOrderCheck then
         if not TTTPAP:CanOrderPAP(ply, true) then return end
     elseif not IsValid(SWEP) then
-        ply:PrintMessage(HUD_PRINTCENTER, "Invalid Weapon, try again")
-        ply:PrintMessage(HUD_PRINTTALK, "Invalid weapon, try again")
-
         return
     end
 
