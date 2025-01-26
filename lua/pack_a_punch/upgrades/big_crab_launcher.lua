@@ -77,16 +77,13 @@ function UPGRADE:Apply(SWEP)
             iLoopLimit = iLoopLimit + 1
         end
 
-        local iHits = table.Count(tValidHits)
-
-        if iHits > 0 then
+        if not table.IsEmpty(tValidHits) then
             self:SetNWBool("Used", true)
             self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 
             if SERVER then
                 owner:SetAnimation(PLAYER_ATTACK1)
-                local iRand = math.random(3, iHits)
-                local tRand = tValidHits[iRand]
+                local tRand = tValidHits[math.random(#tValidHits)]
                 local rocket = ents.Create("env_headcrabcanister")
                 rocket:SetPos(aBasePos)
                 rocket:SetAngles((tRand.HitPos - tRand.StartPos):Angle())
