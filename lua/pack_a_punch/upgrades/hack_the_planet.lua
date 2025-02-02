@@ -14,40 +14,53 @@ UPGRADE.convars = {
 local durationCvar = CreateConVar("pap_hack_the_planet_duration", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration of hack effect", 1, 300)
 
 function UPGRADE:Apply(SWEP)
+    if SERVER then
+        util.AddNetworkString("TTTPAPHackThePlanetPopup")
+    end
+
     local client
     local popupAlpha
+    local showPopup = false
 
-    -- TODO: Send this function to clients so everyone other than the owner actually sees it!
+    local function DoClientHackedPopup()
+        client = LocalPlayer()
+        popupAlpha = 0
+        showPopup = true
+
+        timer.Create("TTTPAPHackThePlanetPopup", 0.01, 120, function()
+            local repsLeft = timer.RepsLeft("TTTPAPHackThePlanetPopup")
+
+            if repsLeft >= 100 then
+                popupAlpha = popupAlpha + 0.05
+            elseif repsLeft < 20 then
+                popupAlpha = popupAlpha - 0.05
+            end
+
+            if repsLeft == 0 then
+                showPopup = false
+            end
+        end)
+    end
+
     local function HackedPopup(ply)
-        if not IsValid(ply) or ply.TTTPAPHackThePlanetPopup then return end
-        ply:EmitSound("Weapon_Pistol.Empty")
+        if not IsValid(ply) or showPopup then return end
 
-        if CLIENT then
-            client = LocalPlayer()
-            popupAlpha = 0
-            ply.TTTPAPHackThePlanetPopup = true
-
-            timer.Create("TTTPAPHackThePlanetPopup", 0.01, 120, function()
-                local repsLeft = timer.RepsLeft("TTTPAPHackThePlanetPopup")
-
-                if repsLeft >= 100 then
-                    popupAlpha = popupAlpha + 0.05
-                elseif repsLeft < 20 then
-                    popupAlpha = popupAlpha - 0.05
-                end
-
-                if repsLeft == 0 then
-                    ply.TTTPAPHackThePlanetPopup = false
-                end
-            end)
+        if SERVER then
+            ply:EmitSound("Weapon_Pistol.Empty")
+            net.Start("TTTPAPHackThePlanetPopup")
+            net.Send(ply)
+        else
+            ply:EmitSound("Weapon_Pistol.Empty")
+            DoClientHackedPopup()
         end
     end
 
     if CLIENT then
+        net.Receive("TTTPAPHackThePlanetPopup", DoClientHackedPopup)
         local hackedMat = Material("ttt_pack_a_punch/hack_the_planet/hacked.png")
 
         self:AddHook("PostDrawHUD", function()
-            if not client or not client.TTTPAPHackThePlanetPopup then return end
+            if not client or not showPopup then return end
             surface.SetMaterial(hackedMat)
             surface.SetDrawColor(255, 255, 255, popupAlpha * 255)
             surface.DrawTexturedRect(ScrW() / 2 - 128, ScrH() / 2 - 128, 256, 256)
@@ -59,12 +72,15 @@ function UPGRADE:Apply(SWEP)
         SWEP.TTTPAPHackThePlanetUsed = true
         local owner = SWEP:GetOwner()
         if not IsValid(owner) then return end
-        owner:EmitSound("ttt_pack_a_punch/hack_the_planet/activate.mp3", 0)
 
-        timer.Simple(0.5, function()
-            owner:EmitSound("ambient/levels/labs/electric_explosion1.wav", 0)
-            util.ScreenShake(owner:GetPos(), 6, 40, 2, 1000, true)
-        end)
+        if SERVER then
+            owner:EmitSound("ttt_pack_a_punch/hack_the_planet/activate.mp3", 0)
+
+            timer.Simple(0.5, function()
+                owner:EmitSound("ambient/levels/labs/electric_explosion1.wav", 0)
+                util.ScreenShake(owner:GetPos(), 6, 40, 2, 1000, true)
+            end)
+        end
 
         if CLIENT and owner:HasWeapon("weapon_ttt_unarmed") then
             input.SelectWeapon(owner:GetWeapon("weapon_ttt_unarmed"))
@@ -83,11 +99,16 @@ function UPGRADE:Apply(SWEP)
                 if IsValid(owner) and IsValid(SWEP) and ply == owner then continue end
 
                 if SERVER then
-                    ply:ChatPrint("Your current weapon and healing have been disabled!")
-                end
+                    ply:ChatPrint("Your weapon and healing have been hacked!")
+                    ply.TTTPAPHackThePlanetHealth = ply:Health()
+                    local wep = ply:GetActiveWeapon()
 
-                ply.TTTPAPHackThePlanetHealth = ply:Health()
-                ply.TTTPAPHackThePlanetWeapon = ply:GetActiveWeapon()
+                    if IsValid(wep) then
+                        wep:SetNWBool("TTTHackThePlanet", true)
+                    end
+
+                    ply:SelectWeapon("weapon_ttt_unarmed")
+                end
             end
         end)
 
@@ -97,7 +118,13 @@ function UPGRADE:Apply(SWEP)
         timer.Create(timername, durationCvar:GetInt(), 1, function()
             for _, ply in player.Iterator() do
                 ply.TTTPAPHackThePlanetHealth = nil
-                ply.TTTPAPHackThePlanetWeapon = nil
+                ply:PrintMessage(HUD_PRINTCENTER, "Your weapon and healing are no longer hacked!")
+            end
+
+            for _, ent in ents.Iterator() do
+                if IsValid(ent) and ent:IsWeapon() then
+                    ent:SetNWBool("TTTHackThePlanet", nil)
+                end
             end
         end)
     end)
@@ -115,10 +142,9 @@ function UPGRADE:Apply(SWEP)
     local attackKeys = {IN_ATTACK, IN_ATTACK2, IN_RELOAD}
 
     self:AddHook("StartCommand", function(ply, cmd)
-        if not IsValid(ply.TTTPAPHackThePlanetWeapon) then return end
         local wep = ply:GetActiveWeapon()
 
-        if IsValid(wep) and wep == ply.TTTPAPHackThePlanetWeapon then
+        if IsValid(wep) and wep:GetNWBool("TTTHackThePlanet", false) then
             local attackKeyDown = false
 
             for _, key in ipairs(attackKeys) do
@@ -134,4 +160,5 @@ function UPGRADE:Apply(SWEP)
         end
     end)
 end
--- TTTPAP:Register(UPGRADE)
+
+TTTPAP:Register(UPGRADE)

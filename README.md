@@ -1792,6 +1792,16 @@ Super high fire rate and recoil\
 \
 Upgrade for: Default TTT weapon
 
+## Machine Pistol [Sombra Gun] (Hack the planet!)
+
+On right-click, temporarily disables everyone's healing and currently held weapon\
+\
+*ttt_pap_hack_the_planet* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_hack_the_planet_duration* - Default: 120 - Seconds duration of hack effect
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>
+
 ## Maclunkey (Jesteriser)
 
 x2 ammo, turns players you shoot into jesters!\
