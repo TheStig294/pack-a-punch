@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "heroes_never_die"
 UPGRADE.class = "tfa_mercy_nope"
 UPGRADE.name = "Heroes Never Die!"
-UPGRADE.desc = "Lets you fly and gives infinite ammo temporarily!"
+UPGRADE.desc = "While held, grants flight and infinite ammo!"
 
 UPGRADE.convars = {
     {
@@ -26,16 +26,18 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(owner) then return end
         active = active and wep.TTTPAPHeroesNeverDieActive
         owner.TTTPAPHeroesNeverDieModel = owner.TTTPAPHeroesNeverDieModel or owner:GetModel()
-        local moveType = (active and MOVETYPE_FLY) or MOVETYPE_WALK
         local model = (active and mercyModel) or owner.TTTPAPHeroesNeverDieModel
-        owner:SetMoveType(moveType)
-
-        if active then
-            owner:EmitSound("ttt_pack_a_punch/heroes_never_die/activate.mp3")
-        end
 
         if mercyModelInstalled then
             self:SetModel(owner, model)
+        end
+
+        if active then
+            owner:EmitSound("ttt_pack_a_punch/heroes_never_die/activate.mp3")
+            owner.TTTPAPGeroesNeverDieGravity = owner:GetGravity()
+            owner:SetGravity(0.1)
+        else
+            owner:SetGravity(owner.TTTPAPGeroesNeverDieGravity or 1)
         end
     end
 
@@ -90,26 +92,45 @@ function UPGRADE:Apply(SWEP)
     end)
 
     -- Making it so pressing jump moves you up and pressing crouch moves you down
-    self:AddHook("SetupMove", function(ply, mv, cmd)
+    self:AddHook("SetupMove", function(ply, mv)
         local wep = ply:GetActiveWeapon()
-        if not self:IsValidUpgrade(wep) then return end
+
+        if not self:IsValidUpgrade(wep) then
+            if ply.TTTPAPGeroesNeverDieGravity then
+                ply:SetGravity(ply.TTTPAPGeroesNeverDieGravity)
+                ply.TTTPAPGeroesNeverDieGravity = nil
+            end
+
+            return
+        elseif not ply.TTTPAPGeroesNeverDieGravity then
+            ply.TTTPAPGeroesNeverDieGravity = ply:GetGravity()
+            ply:SetGravity(0.1)
+        end
 
         if mv:KeyDown(IN_JUMP) then
-            mv:SetUpSpeed(2000)
-            cmd:SetUpMove(2000)
+            ply:SetVelocity(Vector(0, 0, 500))
         end
 
         if mv:KeyDown(IN_DUCK) then
-            mv:SetUpSpeed(-2000)
-            cmd:SetUpMove(-2000)
+            ply:SetVelocity(Vector(0, 0, -500))
+        end
+
+        if mv:KeyDown(IN_FORWARD) then
+            ply:SetVelocity(ply:GetForward() * 10)
+        end
+
+        if mv:KeyDown(IN_BACK) then
+            ply:SetVelocity(ply:GetForward() * -10)
+        end
+
+        if mv:KeyDown(IN_MOVELEFT) then
+            ply:SetVelocity(ply:GetRight() * -10)
+        end
+
+        if mv:KeyDown(IN_MOVERIGHT) then
+            ply:SetVelocity(ply:GetRight() * 10)
         end
     end)
-end
-
-function UPGRADE:Reset()
-    for _, ply in player.Iterator() do
-        ply:SetMoveType(MOVETYPE_WALK)
-    end
 end
 
 TTTPAP:Register(UPGRADE)

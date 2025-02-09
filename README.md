@@ -488,7 +488,7 @@ Upgrade for: Default TTT weapon
 
 ## Caduceus Blaster [Mercy Gun] (Heroes Never Die!)
 
-Lets you fly and gives infinite ammo temporarily!\
+While held, grants flight and infinite ammo!\
 \
 *ttt_pap_heroes_never_die* - Default: 1 - Whether this upgrade is enabled
 \
