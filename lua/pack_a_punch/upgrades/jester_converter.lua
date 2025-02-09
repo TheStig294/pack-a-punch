@@ -11,31 +11,28 @@ end
 
 function UPGRADE:Apply(SWEP)
     local function ToggleJester(ply, toJester)
-        if not IsValid(ply) then return end
+        -- Add this delay so that the round end window displays the killed jester player as a jester and not their original role
+        timer.Simple(0.1, function()
+            if not IsValid(ply) or not ply:Alive() or ply:IsSpec() then return end
 
-        if toJester then
-            if not ply.TTTPAPJesterConverterRole then
-                ply.TTTPAPJesterConverterRole = ply:GetRole()
-            end
+            if toJester then
+                if not ply.TTTPAPJesterConverterRole then
+                    ply.TTTPAPJesterConverterRole = ply:GetRole()
+                end
 
-            ply:SetRole(ROLE_JESTER)
+                ply:SetRole(ROLE_JESTER)
 
-            if SERVER then
-                timer.Simple(0.1, function()
-                    SendFullStateUpdate()
-                end)
-            end
-        else
-            if ply.TTTPAPJesterConverterRole then
+                if SERVER then
+                    timer.Simple(0.1, SendFullStateUpdate)
+                end
+            elseif ply.TTTPAPJesterConverterRole then
                 ply:SetRole(ply.TTTPAPJesterConverterRole)
 
                 if SERVER then
-                    timer.Simple(0.1, function()
-                        SendFullStateUpdate()
-                    end)
+                    timer.Simple(0.1, SendFullStateUpdate)
                 end
             end
-        end
+        end)
     end
 
     ToggleJester(SWEP:GetOwner(), true)
