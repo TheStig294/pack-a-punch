@@ -23,9 +23,17 @@ function UPGRADE:Apply(SWEP)
             owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
-            bob:GodEnable()
+
+            if bob.SetInvulnerable then
+                bob:SetInvulnerable(true, false)
+            else
+                bob:GodEnable()
+            end
+
             bob:Give("weapon_zm_sledge")
             bob.TTTPAPBobOwner = owner
+            -- Lets Bob walk through players to allow for flying to them
+            bob:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
             local originPos = owner:GetUp() * 1000
             local targetPos = owner:GetEyeTrace().HitPos
             local totalReps = 100
@@ -42,6 +50,10 @@ function UPGRADE:Apply(SWEP)
                 local lerpedVector = LerpVector(fraction, targetPos, originPos)
                 lerpedVector:Add(Vector(0, 0, 10))
                 bob:SetPos(lerpedVector)
+
+                if timer.RepsLeft(timername) == 0 then
+                    bob.TTTPAPBobLanded = true
+                end
             end)
 
             timer.Simple(10, function()
@@ -73,18 +85,23 @@ function UPGRADE:Apply(SWEP)
         end
 
         if not self:IsAlivePlayer(closestPly) then return end
-        -- Move forwards at the bots normal walking speed
-        cmd:SetForwardMove(bob:GetWalkSpeed())
-        -- Aim at our enemy
-        cmd:SetViewAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
-        bob:SetEyeAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
         local bobWeapon = bob:GetActiveWeapon()
 
         if IsValid(bobWeapon) and bobWeapon:Clip1() == 0 then
             bobWeapon:SetClip1(bobWeapon:GetMaxClip1())
         end
 
+        -- Move forwards and shoot at the bot's normal walking speed
+        cmd:SetForwardMove(bob:GetWalkSpeed())
         cmd:SetButtons(IN_ATTACK)
+        -- Aim at our enemy
+        cmd:SetViewAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
+        bob:SetEyeAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
+
+        -- Try to un-stuck Bob if the user put him in a wall or something lol
+        if bob.TTTPAPBobLanded then
+            self:UnstuckPlayer(bob)
+        end
     end)
 end
 
