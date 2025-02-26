@@ -1,10 +1,20 @@
 local UPGRADE = {}
-UPGRADE.id = "b_o_b"
+UPGRADE.id = "bob"
 UPGRADE.class = "swep_rifle_viper"
 UPGRADE.name = "B.O.B"
 UPGRADE.desc = "Right-click to summon B.O.B, who shoots anyone not on your team!"
+
+UPGRADE.convars = {
+    {
+        name = "pap_bob_duration",
+        type = "int"
+    }
+}
+
 local bobModel = "models/konnie/overwatch/bob_default.mdl"
 local isBobModelInstalled = util.IsValidModel(bobModel)
+
+local durationCvar = CreateConVar("pap_bob_duration", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration B.O.B lasts", 5, 120)
 
 function UPGRADE:Condition()
     return isBobModelInstalled and player.GetCount() ~= game.MaxPlayers()
@@ -91,7 +101,7 @@ function UPGRADE:Apply(SWEP)
 
         timer.Simple(0.1, function()
             if not IsValid(bob) then return end
-            owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
+            owner:EmitSound("ttt_pack_a_punch/bob/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
 
@@ -127,7 +137,7 @@ function UPGRADE:Apply(SWEP)
             end)
 
             -- Bob flies away and disconnects after time is up
-            timer.Simple(15, function()
+            timer.Simple(durationCvar:GetInt(), function()
                 if IsValid(bob) then
                     bob.TTTPAPBobDespawning = true
                     FlyToPos(bob, originPos)
