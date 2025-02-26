@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "bob"
 UPGRADE.class = "swep_rifle_viper"
 UPGRADE.name = "B.O.B"
-UPGRADE.desc = "Right-click to summon B.O.B, who shoots anyone not on your team!"
+UPGRADE.desc = "Right-click to summon B.O.B, who shoots anyone but you!"
 
 UPGRADE.convars = {
     {

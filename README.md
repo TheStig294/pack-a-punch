@@ -74,6 +74,7 @@ Requires: [Custom Roles for TTT](https://steamcommunity.com/sharedfiles/filedeta
 <https://steamcommunity.com/sharedfiles/filedetails/?id=2451435560>\
 Requires: [D.Va mech w/English voice actor](https://steamcommunity.com/sharedfiles/filedetails/?id=942252663)\
 Requires: [Overwatch Tracer: Abilities](https://steamcommunity.com/sharedfiles/filedetails/?id=1098898034)\
+Requires: [Ashe & B.O.B PM](https://steamcommunity.com/sharedfiles/filedetails/?id=1582233019)\
 Optional: [Tracer Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=703995702)\
 Optional: [Mercy Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726644424)\
 Optional: [Reaper Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=726069482)
@@ -2949,6 +2950,17 @@ Shows the pointing spiderman meme\
 \
 \
 Upgrade for: Default TTT weapon
+
+## Viper Rifle (B.O.B)
+
+Right-click to summon B.O.B, who shoots anyone but you!\
+(Needs: <https://steamcommunity.com/sharedfiles/filedetails/?id=3101810034> for the base gun to work properly!)\
+\
+*ttt_pap_swep_rifle_viper* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_bob_duration* - Default: 20 - Seconds duration B.O.B lasts\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1595492061>
 
 ## VR-11 (VR-Infinity)
 
