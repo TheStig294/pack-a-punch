@@ -74,15 +74,23 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
+    SWEP.PAPOldSecondaryAttack = SWEP.SecondaryAttack
+
     function SWEP:SecondaryAttack()
-        if CLIENT or self.TTTPAPBobSummoned then return end
+        if self.TTTPAPBobSummoned then return self:PAPOldSecondaryAttack() end
+
+        -- Add a delay to setting the summon flag to the weapon, else prediction is going to call the old secondary attack prematurely
+        timer.Simple(0.5, function()
+            self.TTTPAPBobSummoned = true
+        end)
+
+        if CLIENT then return end
         local owner = self:GetOwner()
         if not IsValid(owner) then return end
         local bob = player.CreateNextBot("B.O.B")
 
         timer.Simple(0.1, function()
             if not IsValid(bob) then return end
-            self.TTTPAPBobSummoned = true
             owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
