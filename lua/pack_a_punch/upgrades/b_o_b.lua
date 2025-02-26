@@ -55,6 +55,16 @@ function UPGRADE:Apply(SWEP)
             if timer.RepsLeft(timername) == 0 then
                 self:UnstuckPlayer(bob)
                 ToggleCloak(bob, false)
+
+                -- Do some cool impact landing effects when Bob first spawns in
+                if not bob.TTTPAPBobSpawned then
+                    local effect = EffectData()
+                    effect:SetOrigin(lerpedVector)
+                    util.Effect("HelicopterMegaBomb", effect, true, true)
+                    sound.Play("BaseExplosionEffect.Sound", lerpedVector, 180, math.random(50, 150), math.random())
+                    util.ScreenShake(lerpedVector, 1000, 40, 1, 5000, true)
+                end
+
                 bob.TTTPAPBobSpawned = true
 
                 if bob.TTTPAPBobDespawning then
