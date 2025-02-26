@@ -11,6 +11,59 @@ function UPGRADE:Condition()
 end
 
 function UPGRADE:Apply(SWEP)
+    local function ToggleCloak(ent, cloakOn)
+        if not IsValid(ent) then return end
+
+        if cloakOn then
+            ent:SetColor(Color(255, 255, 255, 0))
+            ent:DrawShadow(false)
+            ent:SetMaterial("models/effects/vol_light001")
+            ent:SetRenderMode(RENDERMODE_TRANSALPHA)
+            ent:EmitSound("weapons/physgun_off.wav")
+        else
+            ent:DrawShadow(true)
+            ent:SetMaterial("")
+            ent:SetRenderMode(RENDERMODE_NORMAL)
+            ent:EmitSound("weapons/physgun_on.wav")
+        end
+    end
+
+    local function FlyToPos(bob, targetPos, originPos)
+        if not targetPos or not IsValid(bob) then return end
+        originPos = originPos or bob:GetPos()
+
+        if bob.TTTPAPBobSpawned then
+            ToggleCloak(bob, true)
+        end
+
+        local totalReps = 100
+        local timername = "TTTPAPBobFly" .. bob:EntIndex()
+
+        timer.Create(timername, 0.01, totalReps, function()
+            if not IsValid(bob) then
+                timer.Remove(timername)
+
+                return
+            end
+
+            local fraction = timer.RepsLeft(timername) / totalReps
+            local lerpedVector = LerpVector(fraction, targetPos, originPos)
+            lerpedVector:Add(Vector(0, 0, 10))
+            bob:SetPos(lerpedVector)
+
+            -- Get Bob unstuck if his last position gets him stuck in a wall or something
+            if timer.RepsLeft(timername) == 0 then
+                self:UnstuckPlayer(bob)
+                ToggleCloak(bob, false)
+                bob.TTTPAPBobSpawned = true
+
+                if bob.TTTPAPBobDespawning then
+                    bob:Kick()
+                end
+            end
+        end)
+    end
+
     function SWEP:SecondaryAttack()
         if CLIENT or self.TTTPAPBobSummoned then return end
         local owner = self:GetOwner()
@@ -20,7 +73,7 @@ function UPGRADE:Apply(SWEP)
         timer.Simple(0.1, function()
             if not IsValid(bob) then return end
             self.TTTPAPBobSummoned = true
-            owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
+            -- owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
 
@@ -30,35 +83,40 @@ function UPGRADE:Apply(SWEP)
                 bob:GodEnable()
             end
 
-            bob:Give("weapon_zm_sledge")
-            bob.TTTPAPBobOwner = owner
             -- Lets Bob walk through players to allow for flying to them
             bob:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
+            bob:Give("weapon_zm_sledge")
+            bob.TTTPAPBobOwner = owner
+            -- Fly bob to his initial spawn pos
             local originPos = owner:GetUp() * 1000
             local targetPos = owner:GetEyeTrace().HitPos
-            local totalReps = 100
-            local timername = "TTTPAPBobSummon" .. owner:SteamID64()
+            FlyToPos(bob, targetPos, originPos)
+            -- Making bob fly to the target player if stuck
+            local timername = "TTTPAPBobStuckCheck" .. bob:EntIndex()
 
-            timer.Create(timername, 0.01, totalReps, function()
+            timer.Create(timername, 1, 0, function()
                 if not IsValid(bob) then
                     timer.Remove(timername)
 
                     return
                 end
 
-                local fraction = timer.RepsLeft(timername) / totalReps
-                local lerpedVector = LerpVector(fraction, targetPos, originPos)
-                lerpedVector:Add(Vector(0, 0, 10))
-                bob:SetPos(lerpedVector)
+                local closestPlayerPos = IsValid(bob.TTTPAPBobClosestPlayer) and bob.TTTPAPBobClosestPlayer:GetPos() or nil
 
-                if timer.RepsLeft(timername) == 0 then
-                    bob.TTTPAPBobLanded = true
+                if closestPlayerPos then
+                    print(bob:GetVelocity(), bob:GetVelocity():LengthSqr(), bob:GetPos():DistToSqr(closestPlayerPos))
+                end
+
+                if bob.TTTPAPBobSpawned and closestPlayerPos and bob:GetVelocity():LengthSqr() < 100 and bob:GetPos():DistToSqr(closestPlayerPos) > 2000 then
+                    FlyToPos(bob, closestPlayerPos)
                 end
             end)
 
-            timer.Simple(10, function()
+            -- Bob flies away and disconnects after time is up
+            timer.Simple(15, function()
                 if IsValid(bob) then
-                    bob:Kick()
+                    bob.TTTPAPBobDespawning = true
+                    FlyToPos(bob, originPos)
                 end
             end)
         end)
@@ -84,6 +142,7 @@ function UPGRADE:Apply(SWEP)
             end
         end
 
+        bob.TTTPAPBobClosestPlayer = closestPly
         if not self:IsAlivePlayer(closestPly) then return end
         local bobWeapon = bob:GetActiveWeapon()
 
@@ -91,31 +150,25 @@ function UPGRADE:Apply(SWEP)
             bobWeapon:SetClip1(bobWeapon:GetMaxClip1())
         end
 
-        -- Move forwards and shoot at the bot's normal walking speed
-        cmd:SetForwardMove(bob:GetWalkSpeed())
-        cmd:SetButtons(IN_ATTACK)
-        -- Aim at our enemy
-        cmd:SetViewAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
-        bob:SetEyeAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
-
-        -- Try to un-stuck Bob if the user put him in a wall or something lol
-        if bob.TTTPAPBobLanded then
-            self:UnstuckPlayer(bob)
+        if not bob.TTTPAPBobDespawning then
+            -- Move forwards and shoot at the bot's normal walking speed
+            cmd:SetForwardMove(bob:GetWalkSpeed())
+            cmd:SetButtons(IN_ATTACK)
+            -- Aim at our enemy
+            cmd:SetViewAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
+            bob:SetEyeAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
         end
     end)
 end
 
 function UPGRADE:Reset()
-    if CLIENT then return end
-
-    for _, ply in player.Iterator() do
-        timer.Remove("TTTPAPBobSummon" .. ply:SteamID64())
-    end
-
-    for _, ent in ents.Iterator() do
-        if ent.TTTPAPBobBot then
-            ent:Kick()
+    if SERVER then
+        for _, bob in ents.Iterator() do
+            if bob.TTTPAPBobBot then
+                bob:Kick()
+            end
         end
     end
 end
--- TTTPAP:Register(UPGRADE)
+
+TTTPAP:Register(UPGRADE)
