@@ -73,7 +73,7 @@ function UPGRADE:Apply(SWEP)
         timer.Simple(0.1, function()
             if not IsValid(bob) then return end
             self.TTTPAPBobSummoned = true
-            -- owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
+            owner:EmitSound("ttt_pack_a_punch/b_o_b/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
 
@@ -103,10 +103,6 @@ function UPGRADE:Apply(SWEP)
 
                 local closestPlayerPos = IsValid(bob.TTTPAPBobClosestPlayer) and bob.TTTPAPBobClosestPlayer:GetPos() or nil
 
-                if closestPlayerPos then
-                    print(bob:GetVelocity(), bob:GetVelocity():LengthSqr(), bob:GetPos():DistToSqr(closestPlayerPos))
-                end
-
                 if bob.TTTPAPBobSpawned and closestPlayerPos and bob:GetVelocity():LengthSqr() < 100 and bob:GetPos():DistToSqr(closestPlayerPos) > 2000 then
                     FlyToPos(bob, closestPlayerPos)
                 end
@@ -122,6 +118,10 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
+    local function IsJester(ply)
+        return ply:GetRole() == ROLE_JESTER or ply.IsJesterTeam and ply:IsJesterTeam()
+    end
+
     self:AddHook("StartCommand", function(bob, cmd)
         if not self:IsAlivePlayer(bob) or not bob.TTTPAPBobBot then return end
         cmd:ClearMovement()
@@ -133,7 +133,7 @@ function UPGRADE:Apply(SWEP)
         local bobPos = bob:GetPos()
 
         for _, ply in player.Iterator() do
-            if not self:IsAlive(ply) or ply == bob or ply == owner then continue end
+            if not self:IsAlive(ply) or ply == bob or ply == owner or IsJester(ply) then continue end
             local dist = ply:GetPos():DistToSqr(bobPos)
 
             if not minDist or dist < minDist then
@@ -158,6 +158,11 @@ function UPGRADE:Apply(SWEP)
             cmd:SetViewAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
             bob:SetEyeAngles((closestPly:GetShootPos() - bob:GetShootPos()):GetNormalized():Angle())
         end
+    end)
+
+    -- Prevent Bob from killing jesters
+    self:AddHook("PlayerShouldTakeDamage", function(ply, inflictor)
+        if IsValid(inflictor) and inflictor.TTTPAPBobBot and IsJester(ply) then return false end
     end)
 end
 
