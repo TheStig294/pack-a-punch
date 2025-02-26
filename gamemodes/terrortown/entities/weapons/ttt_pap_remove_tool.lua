@@ -9,7 +9,7 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_tttbase"
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_toolgun.mdl"
 SWEP.WorldModel = "models/weapons/w_toolgun.mdl"

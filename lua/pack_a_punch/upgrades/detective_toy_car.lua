@@ -178,7 +178,7 @@ function UPGRADE:Apply(SWEP)
 
             if IsValid(_Owner) then
                 -- Specify a good position
-                local offsetVec = Vector(40, 0, 50)
+                local offsetVec = Vector(25, 0, 52)
                 local offsetAng = Angle(180, 180, 0)
                 local boneid = _Owner:LookupBone("ValveBiped.Bip01_R_Hand") -- Right Hand
                 if not boneid then return end
