@@ -146,6 +146,98 @@ local function OptionsMenu(UPGRADE)
     end
 end
 
+local function ExtraOptionsMenu()
+    if not IsAdmin(LocalPlayer()) then return end
+    -- Main window frame
+    local frame = vgui.Create("DFrame")
+    frame:SetSize(500, 350)
+    frame:SetTitle("Extra Options")
+    frame:MakePopup()
+    frame:Center()
+
+    frame.Paint = function(_, w, h)
+        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+    end
+
+    -- Scrollbar
+    local scroll = vgui.Create("DScrollPanel", frame)
+    scroll:Dock(FILL)
+    local layout = vgui.Create("DIconLayout", scroll)
+    layout:Dock(TOP)
+    -- Title text
+    local titleText = layout:Add("DLabel")
+    titleText:SetText("                         Extra Admin Options")
+    titleText:SetFont("Trebuchet24")
+    titleText:SizeToContents()
+    -- Sets the space between the image and text boxes
+    layout:SetSpaceY(8)
+    layout:SetSpaceX(10)
+    -- Sets the space between the edge of the window and the edges of the tab's contents
+    layout:SetBorder(5)
+    -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
+    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrades")
+    local genericUpgradesCheck = layout:Add("DCheckBoxLabel")
+    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
+    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
+    genericUpgradesCheck:SetIndent(10)
+    genericUpgradesCheck:SizeToContents()
+
+    function genericUpgradesCheck:OnChange()
+        net.Start("TTTPAPChangeConvar")
+        net.WriteString(genericUpgradesCvar:GetName())
+
+        if genericUpgradesCheck:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
+        net.SendToServer()
+    end
+
+    -- Convar checkbox for enabling/disabling upgradeable indicator icons in the buy menu
+    local indicatorCvar = GetConVar("ttt_pap_upgradeable_indicator")
+    local indicatorCheck = layout:Add("DCheckBoxLabel")
+    indicatorCheck:SetText(indicatorCvar:GetHelpText())
+    indicatorCheck:SetChecked(indicatorCvar:GetBool())
+    indicatorCheck:SetIndent(10)
+    indicatorCheck:SizeToContents()
+
+    function indicatorCheck:OnChange()
+        net.Start("TTTPAPChangeConvar")
+        net.WriteString(indicatorCvar:GetName())
+
+        if indicatorCheck:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
+        net.SendToServer()
+    end
+
+    -- Convar checkbox for enabling/disabling the generic PaP upgraded shoot sound
+    local shootSoundCvar = GetConVar("ttt_pap_apply_generic_shoot_sound")
+    local shootSoundCheck = layout:Add("DCheckBoxLabel")
+    shootSoundCheck:SetText(shootSoundCvar:GetHelpText())
+    shootSoundCheck:SetChecked(shootSoundCvar:GetBool())
+    shootSoundCheck:SetIndent(10)
+    shootSoundCheck:SizeToContents()
+
+    function shootSoundCheck:OnChange()
+        net.Start("TTTPAPChangeConvar")
+        net.WriteString(shootSoundCvar:GetName())
+
+        if shootSoundCheck:GetChecked() then
+            net.WriteString("1")
+        else
+            net.WriteString("0")
+        end
+
+        net.SendToServer()
+    end
+end
+
 local function DrawWeaponBar(list, UPGRADE)
     local SWEP = weapons.Get(UPGRADE.class)
     -- Icon
@@ -339,30 +431,18 @@ local function CreateOptionsMenu()
     titleText:SetText("                             Pack-a-Punch Admin Options")
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
-    -- Convar checkbox for enabling/disabling generic PaP upgrades when a floor weapon doesn't have a designated upgrade
-    local genericUpgradesCvar = GetConVar("ttt_pap_apply_generic_upgrades")
-    local genericUpgradesCheck = nonScrollList:Add("DCheckBoxLabel")
-    genericUpgradesCheck:SetText(genericUpgradesCvar:GetHelpText())
-    genericUpgradesCheck:SetChecked(genericUpgradesCvar:GetBool())
-    genericUpgradesCheck:SetIndent(10)
-    genericUpgradesCheck:SizeToContents()
-
-    function genericUpgradesCheck:OnChange()
-        net.Start("TTTPAPChangeConvar")
-        net.WriteString(genericUpgradesCvar:GetName())
-
-        if genericUpgradesCheck:GetChecked() then
-            net.WriteString("1")
-        else
-            net.WriteString("0")
-        end
-
-        net.SendToServer()
-    end
 
     if CR_VERSION then
         -- If Custom Roles for TTT is installed, simply add a button that opens the roleweapons config window,
         -- since every role with a shop by default can buy the PaP, not just traitor and detective
+        -- Filler space
+        local fillerPanel = nonScrollList:Add("DPanel")
+        fillerPanel:SetSize(100, 1)
+
+        fillerPanel.Paint = function(_, w, h)
+            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+        end
+
         -- Role weapons button
         local roleWepsButton = nonScrollList:Add("DButton")
         roleWepsButton:SetText("Buy Menu Editor")
@@ -374,7 +454,7 @@ local function CreateOptionsMenu()
 
         -- Role weapons button description text
         local roleWepsDesc = nonScrollList:Add("DLabel")
-        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the left.\n  (Note: By default, almost every role with a buy menu has the PaP)")
+        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the right.\n  (Note: By default, almost every role with a buy menu has the PaP)")
         roleWepsDesc:SizeToContents()
     else
         -- Convar checkbox for the detective being able to buy the Pack-a-Punch
@@ -420,27 +500,15 @@ local function CreateOptionsMenu()
         end
     end
 
-    -- Convar checkbox for enabling/disabling upgradeable indicator icons in the buy menu
-    local indicatorCvar = GetConVar("ttt_pap_upgradeable_indicator")
-    local indicatorCheck = nonScrollList:Add("DCheckBoxLabel")
-    indicatorCheck:SetText(indicatorCvar:GetHelpText())
-    indicatorCheck:SetChecked(indicatorCvar:GetBool())
-    indicatorCheck:SetIndent(10)
-    indicatorCheck:SizeToContents()
-
-    function indicatorCheck:OnChange()
-        net.Start("TTTPAPChangeConvar")
-        net.WriteString(indicatorCvar:GetName())
-
-        if indicatorCheck:GetChecked() then
-            net.WriteString("1")
-        else
-            net.WriteString("0")
-        end
-
-        net.SendToServer()
-    end
-
+    -- Extra options button
+    local extraOptionsButton = nonScrollList:Add("DButton")
+    extraOptionsButton:SetText("Extra Options")
+    extraOptionsButton:SetSize(100, 25)
+    extraOptionsButton.DoClick = ExtraOptionsMenu
+    -- Extra options button description text
+    local roleWepsDesc = nonScrollList:Add("DLabel")
+    roleWepsDesc:SetText("  More settings to customise the PaP")
+    roleWepsDesc:SizeToContents()
     -- Search bar
     local searchBar = nonScrollList:Add("DTextEntry")
     searchBar:SetSize(570, 20)

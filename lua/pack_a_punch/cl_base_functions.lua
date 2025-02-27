@@ -1,6 +1,12 @@
 -- 
 -- Client-side pack-a-punch functions
 -- 
+local shootSoundCvar
+
+hook.Add("Initialize", "TTTPAPGetShootSoundConvar", function()
+    shootSoundCvar = GetConVar("ttt_pap_apply_generic_shoot_sound")
+end)
+
 net.Receive("TTTPAPApply", function()
     local SWEP = net.ReadEntity()
     if not IsValid(SWEP) then return end
@@ -79,7 +85,7 @@ net.Receive("TTTPAPApply", function()
     end
 
     -- Sound
-    if SWEP.Primary and not UPGRADE.noSound then
+    if SWEP.Primary and not UPGRADE.noSound and shootSoundCvar:GetBool() then
         SWEP.Primary.Sound = TTTPAP.shootSound
     end
 
@@ -123,7 +129,7 @@ end)
 
 -- Sound
 hook.Add("EntityEmitSound", "TTTPAPApplySound", function(data)
-    if not IsValid(data.Entity) or not data.Entity.PAPUpgrade or data.Entity.PAPUpgrade.noSound then return end
+    if not IsValid(data.Entity) or not data.Entity.PAPUpgrade or data.Entity.PAPUpgrade.noSound or not shootSoundCvar:GetBool() then return end
     local current_sound = data.SoundName:lower()
     local fire_start, _ = string.find(current_sound, ".*weapons/.*fire.*%..*")
     local shot_start, _ = string.find(current_sound, ".*weapons/.*shot.*%..*")
@@ -137,6 +143,7 @@ hook.Add("EntityEmitSound", "TTTPAPApplySound", function(data)
 end)
 
 net.Receive("TTTPAPApplySound", function()
+    if not shootSoundCvar:GetBool() then return end
     local SWEP = net.ReadEntity()
 
     if SWEP.Primary then

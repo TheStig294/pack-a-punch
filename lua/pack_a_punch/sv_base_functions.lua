@@ -1,6 +1,12 @@
 -- 
 -- Server-side pack-a-punch functions 
 -- 
+local shootSoundCvar
+
+hook.Add("Initialize", "TTTPAPGetShootSoundConvar", function()
+    shootSoundCvar = GetConVar("ttt_pap_apply_generic_shoot_sound")
+end)
+
 -- Debug command for testing upgrades, only works on a peer-to-peer server for the server host if sv_cheats is on
 concommand.Add("pap_order", function(ply, _, _, argsStr)
     -- Searching for the input bot player name number
@@ -143,7 +149,7 @@ hook.Add("WeaponEquip", "TTTPAPSoundChange", function(SWEP, ply)
     timer.Simple(0.1, function()
         if not SWEP.PAPUpgrade or SWEP.PAPUpgrade.noSound then return end
 
-        if SWEP.Primary then
+        if SWEP.Primary and shootSoundCvar:GetBool() then
             SWEP.Primary.Sound = TTTPAP.shootSound
         end
 
@@ -200,7 +206,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
         end
 
         -- Sound
-        if SWEP.Primary and not UPGRADE.noSound then
+        if SWEP.Primary and not UPGRADE.noSound and shootSoundCvar:GetBool() then
             SWEP.Primary.Sound = TTTPAP.shootSound
         end
 
