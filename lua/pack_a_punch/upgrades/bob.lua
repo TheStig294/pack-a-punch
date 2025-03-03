@@ -101,6 +101,7 @@ function UPGRADE:Apply(SWEP)
 
         timer.Simple(0.5, function()
             if not IsValid(bob) then return end
+            bob:SpawnForRound(true)
             owner:EmitSound("ttt_pack_a_punch/bob/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
