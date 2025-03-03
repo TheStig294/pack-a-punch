@@ -113,9 +113,7 @@ function UPGRADE:Apply(SWEP)
         end)
 
         -- Purposfully give this timer a non-unique name so it gets reset whenever another player uses this upgrade while one is already in effect
-        local timername = "TTTPAPHackThePlanet"
-
-        timer.Create(timername, durationCvar:GetInt(), 1, function()
+        timer.Create("TTTPAPHackThePlanet", durationCvar:GetInt(), 1, function()
             for _, ply in player.Iterator() do
                 ply.TTTPAPHackThePlanetHealth = nil
                 ply:PrintMessage(HUD_PRINTCENTER, "Your weapon and healing are no longer hacked!")
@@ -159,6 +157,14 @@ function UPGRADE:Apply(SWEP)
             end
         end
     end)
+end
+
+function UPGRADE:Reset()
+    timer.Remove("TTTPAPHackThePlanet")
+
+    for _, ply in player.Iterator() do
+        ply.TTTPAPHackThePlanetHealth = nil
+    end
 end
 
 TTTPAP:Register(UPGRADE)
