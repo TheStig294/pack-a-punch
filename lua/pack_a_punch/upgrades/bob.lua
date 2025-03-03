@@ -99,7 +99,7 @@ function UPGRADE:Apply(SWEP)
         if not IsValid(owner) then return end
         local bob = player.CreateNextBot("B.O.B")
 
-        timer.Simple(0.1, function()
+        timer.Simple(0.5, function()
             if not IsValid(bob) then return end
             owner:EmitSound("ttt_pack_a_punch/bob/activate.mp3")
             bob.TTTPAPBobBot = true
