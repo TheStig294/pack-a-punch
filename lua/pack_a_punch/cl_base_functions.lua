@@ -195,27 +195,7 @@ local function GetItemIconPanels(dsheet)
     return buyMenu
 end
 
-local iconToClass = {}
-
-local function GetClassFromIcon(icon)
-    if table.IsEmpty(iconToClass) then
-        for _, wep in ipairs(weapons.GetList()) do
-            local wepIcon = wep.Icon
-
-            if wepIcon then
-                if TTT2 then
-                    wepIcon = string.StripExtension(wepIcon)
-                end
-
-                iconToClass[wepIcon] = WEPS.GetClass(wep)
-            end
-        end
-    end
-
-    return iconToClass[icon]
-end
-
-local iconToUpgradeable = {}
+local classToUpgradeable = {}
 
 hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
@@ -226,28 +206,18 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
     local notUpgradeableCount = 0
 
     for _, iconPanel in ipairs(itemIcons) do
-        if not iconPanel.GetIcon then return end
-        local icon
-
-        -- TTT2 just loves to be difficult doesn't it?
-        -- (TTT2 breaks the GetIcon() function, it always returns nil...)
-        if TTT2 then
-            icon = iconPanel.Icon:GetMaterial():GetName()
-        else
-            icon = iconPanel:GetIcon()
-        end
-
-        local class = GetClassFromIcon(icon)
+        if not iconPanel.item or not iconPanel.item.id then return end
+        local class = iconPanel.item.id
         -- Skip passive items, or items we couldn't find
-        if not class then continue end
+        if not class or not weapons.Get(class) then continue end
 
         -- Count how many items are upgradeable vs. not
         if TTTPAP:CanOrderPAP(class) then
             upgradeableCount = upgradeableCount + 1
-            iconToUpgradeable[icon] = true
+            classToUpgradeable[class] = true
         else
             notUpgradeableCount = notUpgradeableCount + 1
-            iconToUpgradeable[icon] = false
+            classToUpgradeable[class] = false
         end
     end
 
@@ -255,14 +225,8 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
 
     -- Then create the icons, either showing upgradeable, or not upgradeable, whichever adds less icons
     for _, iconPanel in ipairs(itemIcons) do
-        local upgradeable
-
-        if TTT2 then
-            upgradeable = iconToUpgradeable[iconPanel.Icon:GetMaterial():GetName()]
-        else
-            upgradeable = iconToUpgradeable[iconPanel:GetIcon()]
-        end
-
+        if not iconPanel.item or not iconPanel.item.id then return end
+        local upgradeable = classToUpgradeable[iconPanel.item.id]
         local icon
 
         if upgradeable and not moreUpgradeableThanNot then
@@ -282,7 +246,6 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
 
         -- This is how other overlayed icons are done in vanilla TTT, so we do the same here
         -- This normally used for the slot icon and custom item icon
-        -- Hopefully TTT2 also has a "LayeredIcon" vgui element but you know how TTT2 goes... We'll probably have to do something else...
         icon.PerformLayout = function(s)
             s:AlignBottom(4)
             s:CenterHorizontal()
