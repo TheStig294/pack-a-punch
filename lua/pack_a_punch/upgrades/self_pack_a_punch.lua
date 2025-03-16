@@ -46,7 +46,6 @@ function UPGRADE:Apply(SWEP)
             SWEP.PAPHolsterOldStats.health = owner:GetMaxHealth()
             SWEP.PAPHolsterOldStats.movement = owner:GetLaggedMovementValue()
             owner:SetPAPCamo()
-            owner:SetFOV(90, 0.5)
             owner:SetJumpPower(owner:GetJumpPower() * jumpScale)
             owner:SetHealth(owner:Health() * healthScale)
 
@@ -62,7 +61,6 @@ function UPGRADE:Apply(SWEP)
 
         if IsValid(owner) then
             owner:SetMaterial("")
-            owner:SetFOV(0)
 
             if self.PAPHolsterOldStats then
                 owner:SetJumpPower(self.PAPHolsterOldStats.jump or 200)

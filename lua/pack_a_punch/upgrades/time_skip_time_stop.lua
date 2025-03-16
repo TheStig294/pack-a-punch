@@ -85,13 +85,8 @@ function UPGRADE:Apply(SWEP)
                 owner:SetLaggedMovementValue(2)
                 owner.PAPTimeSkipTSDmgResist = true
 
-                for _, ply in ipairs(player.GetAll()) do
+                for _, ply in player.Iterator() do
                     ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 200), 0.5, lengthSecsCvar:GetInt() - 0.5)
-                    ply:SetFOV(ply:GetFOV() * 1.5, 0.5)
-
-                    timer.Simple(0.5, function()
-                        ply:SetFOV(0, 0.25)
-                    end)
                 end
 
                 util.ScreenShake(owner:GetPos(), 20, 10, 1.5, 1000, true)
