@@ -14,7 +14,7 @@ UPGRADE.convars = {
 local bobModel = "models/konnie/overwatch/bob_default.mdl"
 local isBobModelInstalled = util.IsValidModel(bobModel)
 
-local durationCvar = CreateConVar("pap_bob_duration", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration B.O.B lasts", 5, 120)
+local durationCvar = CreateConVar("pap_bob_duration", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration B.O.B lasts", 5, 120)
 
 function UPGRADE:Condition()
     return isBobModelInstalled and player.GetCount() ~= game.MaxPlayers()

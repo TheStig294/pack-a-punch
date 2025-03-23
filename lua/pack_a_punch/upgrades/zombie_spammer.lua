@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local spawnNumCvar = CreateConVar("pap_zombie_spammer_spawn_count", "15", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of extra zombies to spawn", 1, 30)
+local spawnNumCvar = CreateConVar("pap_zombie_spammer_spawn_count", "15", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of extra zombies to spawn", 1, 30)
 
 function UPGRADE:Apply(SWEP)
     local owner = SWEP:GetOwner()

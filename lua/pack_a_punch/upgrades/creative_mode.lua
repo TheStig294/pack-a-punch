@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local distCvar = CreateConVar("pap_creative_mode_distance", 2400, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance blocks can be placed", 1, 5000)
+local distCvar = CreateConVar("pap_creative_mode_distance", 2400, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance blocks can be placed", 1, 5000)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then return end

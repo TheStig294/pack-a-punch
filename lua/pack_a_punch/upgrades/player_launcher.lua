@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local autoReleaseCvar = CreateConVar("pap_player_launcher_auto_release_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds until players auto-release", 0, 60)
+local autoReleaseCvar = CreateConVar("pap_player_launcher_auto_release_secs", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds until players auto-release", 0, 60)
 
 function UPGRADE:Apply(SWEP)
     self:SetClip(SWEP, 2)

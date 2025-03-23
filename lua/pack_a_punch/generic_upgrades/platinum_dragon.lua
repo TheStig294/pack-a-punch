@@ -3,7 +3,7 @@ UPGRADE.id = "platinum_dragon"
 UPGRADE.class = "weapon_ap_golddragon"
 UPGRADE.name = "Platinum Dragon"
 
-local multCvar = CreateConVar("pap_platinum_dragon_ammo", "3", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo multiplier", 1, 10)
+local multCvar = CreateConVar("pap_platinum_dragon_ammo", "3", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo multiplier", 1, 10)
 
 UPGRADE.desc = "x" .. multCvar:GetInt() .. " ammo"
 

@@ -19,11 +19,11 @@ UPGRADE.convars = {
     }
 }
 
-local radiusCvar = CreateConVar("pap_nerf_this_radius", 700, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of explosion", 1, 3000)
+local radiusCvar = CreateConVar("pap_nerf_this_radius", 700, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of explosion", 1, 3000)
 
-local damageCvar = CreateConVar("pap_nerf_this_damage", 10000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion damage", 1, 10000)
+local damageCvar = CreateConVar("pap_nerf_this_damage", 10000, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion damage", 1, 10000)
 
-local ownerImmuneCvar = CreateConVar("pap_nerf_this_owner_immune", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Owner is immune to explosion?", 0, 1)
+local ownerImmuneCvar = CreateConVar("pap_nerf_this_owner_immune", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Owner is immune to explosion?", 0, 1)
 
 function UPGRADE:Condition(SWEP)
     return scripted_ents.Get("d.va_mech") ~= nil

@@ -5,9 +5,9 @@ if TTT2 or engine.ActiveGamemode() ~= "terrortown" then return end
 AddCSLuaFile()
 
 -- Convars to turn off detective/traitor being able to buy the Pack-a-Punch for vanilla TTT (Custom Roles users can just use the role weapons system)
-local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
+local detectiveCvar = CreateConVar("ttt_pap_detective", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Detectives can buy PaP (Requires map change)", 0, 1)
 
-local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
+local traitorCvar = CreateConVar("ttt_pap_traitor", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Traitors can buy PaP (Requires map change)", 0, 1)
 
 if CLIENT then
     LANG.AddToLanguage("english", "pap_name", "Pack-A-Punch")

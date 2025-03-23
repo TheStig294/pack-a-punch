@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local speedMultCvar = CreateConVar("pap_fast_bike_speed_mult", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed multiplier", 1, 5)
+local speedMultCvar = CreateConVar("pap_fast_bike_speed_mult", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed multiplier", 1, 5)
 
 function UPGRADE:Apply(SWEP)
     if CLIENT then return end

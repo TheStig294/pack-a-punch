@@ -3,7 +3,7 @@ UPGRADE.id = "unsilenced_awp"
 UPGRADE.class = "weapon_ttt_awp"
 UPGRADE.name = "Unsilenced AWP"
 
-local multCvar = CreateConVar("pap_unsilenced_awp_ammo", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo multiplier", 1, 10)
+local multCvar = CreateConVar("pap_unsilenced_awp_ammo", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo multiplier", 1, 10)
 
 UPGRADE.desc = "x" .. multCvar:GetInt() .. " ammo, unsilenced"
 

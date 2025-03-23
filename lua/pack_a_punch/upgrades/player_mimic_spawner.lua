@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local multCvar = CreateConVar("pap_player_mimic_spawner_mimics_per_player", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of mimics spawned per player", 0.1, 3)
+local multCvar = CreateConVar("pap_player_mimic_spawner_mimics_per_player", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of mimics spawned per player", 0.1, 3)
 
 function UPGRADE:Apply(SWEP)
     function SWEP:SpawnMimics()

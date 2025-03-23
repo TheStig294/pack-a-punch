@@ -431,18 +431,31 @@ local function CreateOptionsMenu()
     titleText:SetText("                             Pack-a-Punch Admin Options")
     titleText:SetFont("Trebuchet24")
     titleText:SizeToContents()
+    -- Filler space
+    local fillerPanel = nonScrollList:Add("DPanel")
+    fillerPanel:SetSize(100, 1)
+
+    fillerPanel.Paint = function(_, w, h)
+        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+    end
+
+    -- README link
+    local readmeButton = nonScrollList:Add("DButton")
+    readmeButton:SetText("Open GitHub Page")
+    readmeButton:SetSize(100, 25)
+
+    function readmeButton:DoClick()
+        gui.OpenURL("https://github.com/TheStig294/pack-a-punch/blob/master/README.md")
+    end
+
+    -- Role weapons button description text
+    local roleWepsDesc = nonScrollList:Add("DLabel")
+    roleWepsDesc:SetText("  *NOTE: Changing these options here only stays in effect until the map changes!*\n  See this guide for how to change these settings")
+    roleWepsDesc:SizeToContents()
 
     if CR_VERSION then
         -- If Custom Roles for TTT is installed, simply add a button that opens the roleweapons config window,
         -- since every role with a shop by default can buy the PaP, not just traitor and detective
-        -- Filler space
-        local fillerPanel = nonScrollList:Add("DPanel")
-        fillerPanel:SetSize(100, 1)
-
-        fillerPanel.Paint = function(_, w, h)
-            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
-        end
-
         -- Role weapons button
         local roleWepsButton = nonScrollList:Add("DButton")
         roleWepsButton:SetText("Buy Menu Editor")

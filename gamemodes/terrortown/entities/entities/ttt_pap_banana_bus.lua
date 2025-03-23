@@ -1,4 +1,4 @@
-local speedCvar = CreateConVar("pap_banana_bus_speed", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed the bus travels (units/tick)", 0.1, 5)
+local speedCvar = CreateConVar("pap_banana_bus_speed", "1.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed the bus travels (units/tick)", 0.1, 5)
 
 if SERVER then
 	AddCSLuaFile()

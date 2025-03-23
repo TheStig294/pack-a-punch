@@ -11,11 +11,11 @@ TTTPAP.shootSound = Sound("ttt_pack_a_punch/shoot.mp3")
 TTTPAP.upgrade_meta = {} -- Set by sh_upgrade_metatable.lua
 
 -- Create convar to disable trying to apply generic upgrades on weapons without one
-local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade\n(Normally a stats upgrade)", 0, 1)
+local genericUpgradesCvar = CreateConVar("ttt_pap_apply_generic_upgrades", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Weapons without upgrades will *try* to be upgraded with a random \"generic\" upgrade\n(Normally a stats upgrade)", 0, 1)
 
-CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "*Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not", 0, 1)
+CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "*Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not", 0, 1)
 
-CreateConVar("ttt_pap_apply_generic_shoot_sound", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the generic upgraded shoot sound to weapons\n(Changes apply to newly upgraded weapons)", 0, 1)
+CreateConVar("ttt_pap_apply_generic_shoot_sound", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the generic upgraded shoot sound to weapons\n(Changes apply to newly upgraded weapons)", 0, 1)
 
 local PAPConvars = {
     ttt_pap_apply_generic_upgrades = true,
@@ -51,7 +51,7 @@ function TTTPAP:Register(UPGRADE)
     -- Create enable/disable convar
     cvarName = "ttt_pap_" .. UPGRADE.id
 
-    CreateConVar(cvarName, 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED})
+    CreateConVar(cvarName, 1, {FCVAR_NOTIFY, FCVAR_REPLICATED})
 
     -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
     PAPConvars[cvarName] = true

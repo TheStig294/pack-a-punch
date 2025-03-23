@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local canBecomeMedCvar = CreateConVar("pap_role_choosing_defib_can_become_paramedic", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
+local canBecomeMedCvar = CreateConVar("pap_role_choosing_defib_can_become_paramedic", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become paramedics")
 
 function UPGRADE:Apply(SWEP)
     -- Returns the list of all enabled roles

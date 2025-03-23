@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local itemCountCvar = CreateConVar("pap_loot_cracker_item_count", "8", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of items dropped", 1, 20)
+local itemCountCvar = CreateConVar("pap_loot_cracker_item_count", "8", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of items dropped", 1, 20)
 
 function UPGRADE:Apply(SWEP)
     -- Code modified from the Loot Goblin by Noxx and Mal

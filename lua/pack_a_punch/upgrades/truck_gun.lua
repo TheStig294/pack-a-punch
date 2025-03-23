@@ -31,7 +31,7 @@ UPGRADE.convars = {
     }
 }
 
-local ammoCvar = CreateConVar("pap_truck_gun_ammo", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
+local ammoCvar = CreateConVar("pap_truck_gun_ammo", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Truck gun ammo", 1, 10)
 
 function UPGRADE:Apply(SWEP)
     self:SetClip(SWEP, ammoCvar:GetInt())

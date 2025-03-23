@@ -18,7 +18,7 @@ UPGRADE.convars = {
     }
 }
 
-local ammoMultCvar = CreateConVar("pap_possum_disguiser_ammo_mult", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Disguiser capacity multiplier", 1, 5)
+local ammoMultCvar = CreateConVar("pap_possum_disguiser_ammo_mult", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Disguiser capacity multiplier", 1, 5)
 
 function UPGRADE:Apply(SWEP)
     -- Ammo increase

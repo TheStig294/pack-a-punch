@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local scaleCvar = CreateConVar("pap_shrink_ray_scale", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Shrinking scale multiplier", 0.1, 1)
+local scaleCvar = CreateConVar("pap_shrink_ray_scale", "0.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Shrinking scale multiplier", 0.1, 1)
 
 function UPGRADE:Apply(SWEP)
     SWEP.ShrinkScale = scaleCvar:GetFloat()

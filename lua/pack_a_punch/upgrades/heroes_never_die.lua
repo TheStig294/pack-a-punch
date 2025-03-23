@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local durationCvar = CreateConVar("pap_heroes_never_die_duration", "60", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs duration of flight & infinite ammo", 1, 180)
+local durationCvar = CreateConVar("pap_heroes_never_die_duration", "60", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs duration of flight & infinite ammo", 1, 180)
 
 function UPGRADE:Apply(SWEP)
     local mercyModel = "models/player/tfa_ow_mercy.mdl"

@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local secsCvar = CreateConVar("pap_horny_jailer_secs", 120, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds jail lasts", 10, 180)
+local secsCvar = CreateConVar("pap_horny_jailer_secs", 120, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds jail lasts", 10, 180)
 
 function UPGRADE:Apply(SWEP)
     -- Locally override the jail wall function to apply the PaP camo

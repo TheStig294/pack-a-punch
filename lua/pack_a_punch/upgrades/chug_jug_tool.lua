@@ -14,9 +14,9 @@ UPGRADE.convars = {
     }
 }
 
-local shieldCvar = CreateConVar("pap_chug_jug_tool_shield", 100, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 500)
+local shieldCvar = CreateConVar("pap_chug_jug_tool_shield", 100, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 500)
 
-local dmgResistCvar = CreateConVar("pap_chug_jug_tool_dmg_resist", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
+local dmgResistCvar = CreateConVar("pap_chug_jug_tool_dmg_resist", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
 
 UPGRADE.desc = "Gives you a health shield!\nResists " .. dmgResistCvar:GetInt() .. "% of damage, protects from 1-shot deaths!"
 

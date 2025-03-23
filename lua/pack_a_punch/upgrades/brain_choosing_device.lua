@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local canBecomeHypCvar = CreateConVar("pap_brain_choosing_device_can_become_hypnotist", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
+local canBecomeHypCvar = CreateConVar("pap_brain_choosing_device_can_become_hypnotist", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Allow revived players to become hypnotists")
 
 function UPGRADE:Apply(SWEP)
     -- Returns the list of all enabled roles

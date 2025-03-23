@@ -16,9 +16,9 @@ UPGRADE.convars = {
     }
 }
 
-local damageMultCvar = CreateConVar("pap_detective_toy_car_damage_mult", 2.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage multiplier the detective car takes", 0, 10)
+local damageMultCvar = CreateConVar("pap_detective_toy_car_damage_mult", 2.5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage multiplier the detective car takes", 0, 10)
 
-local placeRangeCvar = CreateConVar("pap_detective_toy_car_place_range", 200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Maximum placement distance", 10, 10000)
+local placeRangeCvar = CreateConVar("pap_detective_toy_car_place_range", 200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Maximum placement distance", 10, 10000)
 
 local carModel = Model("models/simfphys_vehicle1/cozycoupe.mdl")
 

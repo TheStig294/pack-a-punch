@@ -16,9 +16,9 @@ UPGRADE.convars = {
     }
 }
 
-local sizeCvar = CreateConVar("pap_big_pickle_gun_size", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size multiplier", 1.1, 5)
+local sizeCvar = CreateConVar("pap_big_pickle_gun_size", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size multiplier", 1.1, 5)
 
-local healthCvar = CreateConVar("pap_big_pickle_gun_health", "350", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health you are set to", 101, 600)
+local healthCvar = CreateConVar("pap_big_pickle_gun_health", "350", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health you are set to", 101, 600)
 
 function UPGRADE:Apply(SWEP)
     self:AddHook("TTTPickleRickApplyTransform", function(ply, wep, scale, health, model)

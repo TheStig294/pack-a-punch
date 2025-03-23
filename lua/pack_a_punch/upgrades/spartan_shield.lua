@@ -15,9 +15,9 @@ UPGRADE.convars = {
     }
 }
 
-local shieldCvar = CreateConVar("pap_spartan_shield_amount", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 100)
+local shieldCvar = CreateConVar("pap_spartan_shield_amount", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of shield points", 1, 100)
 
-local cooldownCvar = CreateConVar("pap_spartan_shield_cooldown", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds before shield recharges", 1, 30)
+local cooldownCvar = CreateConVar("pap_spartan_shield_cooldown", 5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds before shield recharges", 1, 30)
 
 local function ResetShield(ply)
     ply:SetNWInt("PAPHealthShield", 0)

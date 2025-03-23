@@ -10,7 +10,7 @@ UPGRADE.convars = {
     }
 }
 
-local secsCvar = CreateConVar("pap_instant_handcuffs_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players remain handcuffed", 1, 30)
+local secsCvar = CreateConVar("pap_instant_handcuffs_secs", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players remain handcuffed", 1, 30)
 
 UPGRADE.desc = "Handcuffs everyone else for " .. secsCvar:GetInt() .. " seconds!"
 

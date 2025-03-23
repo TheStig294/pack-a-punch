@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local scaleCvar = CreateConVar("pap_bigby_cannon_scale", "8", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of spawned bees", 1, 10)
+local scaleCvar = CreateConVar("pap_bigby_cannon_scale", "8", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of spawned bees", 1, 10)
 
 function UPGRADE:Apply(SWEP)
     local ShootSound = Sound("weapons/grenade_launcher1.wav")

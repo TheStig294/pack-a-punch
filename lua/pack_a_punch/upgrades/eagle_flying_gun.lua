@@ -10,7 +10,7 @@ UPGRADE.convars = {
     }
 }
 
-local ammoCvar = CreateConVar("pap_eagle_flying_gun_ammo", "2", {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Amount of times you can ragdoll", 1, 10)
+local ammoCvar = CreateConVar("pap_eagle_flying_gun_ammo", "2", {FCVAR_REPLICATED, FCVAR_NOTIFY}, "Amount of times you can ragdoll", 1, 10)
 
 UPGRADE.desc = "Lets you ragdoll again " .. ammoCvar:GetInt() .. " times!"
 

@@ -15,9 +15,9 @@ UPGRADE.convars = {
     }
 }
 
-local primaryDmgCvar = CreateConVar("pap_exp_melon_gun_primary_damage", "7", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra primary fire damage", 1, 100)
+local primaryDmgCvar = CreateConVar("pap_exp_melon_gun_primary_damage", "7", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra primary fire damage", 1, 100)
 
-local secondaryDmgCvar = CreateConVar("pap_exp_melon_gun_secondary_damage", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra secondary fire damage", 1, 100)
+local secondaryDmgCvar = CreateConVar("pap_exp_melon_gun_secondary_damage", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra secondary fire damage", 1, 100)
 
 function UPGRADE:Apply(SWEP)
     if CLIENT then return end

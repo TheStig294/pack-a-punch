@@ -3,11 +3,11 @@ ENT.Base = "ent_credit_printer"
 ENT.Type = "anim"
 ENT.PrintName = "Shouting Credit Printer"
 
-local lengthMult = CreateConVar("pap_shouting_credit_printer_length_mult", 2, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Times faster printing credits", 0.1, 5)
+local lengthMult = CreateConVar("pap_shouting_credit_printer_length_mult", 2, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Times faster printing credits", 0.1, 5)
 
-local maxCreditsCvar = CreateConVar("pap_shouting_credit_printer_max_credits", 4, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max number of printed credits", 0, 20)
+local maxCreditsCvar = CreateConVar("pap_shouting_credit_printer_max_credits", 4, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max number of printed credits", 0, 20)
 
-local soundsCvar = CreateConVar("pap_shouting_credit_printer_sounds", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Play the extra sounds?", 0, 1)
+local soundsCvar = CreateConVar("pap_shouting_credit_printer_sounds", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Play the extra sounds?", 0, 1)
 
 function ENT:Initialize()
     self:SetPAPCamo()

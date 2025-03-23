@@ -14,9 +14,9 @@ UPGRADE.convars = {
     }
 }
 
-local maxCvar = CreateConVar("pap_potion_shield_max", 100, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max no. of shield points", 1, 500)
+local maxCvar = CreateConVar("pap_potion_shield_max", 100, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max no. of shield points", 1, 500)
 
-local dmgResistCvar = CreateConVar("pap_potion_shield_resist", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
+local dmgResistCvar = CreateConVar("pap_potion_shield_resist", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "% damage resistance", 0, 100)
 
 UPGRADE.desc = "Gives you a health shield!\nResists " .. dmgResistCvar:GetInt() .. "% of damage, protects from 1-shot deaths!"
 

@@ -6,7 +6,7 @@ if SERVER then
 	util.AddNetworkString("TTTPAPWaveGunInflation")
 end
 
-local radiusCvar = CreateConVar("pap_wave_gun_radius", 200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of AOE shot", 1, 500)
+local radiusCvar = CreateConVar("pap_wave_gun_radius", 200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of AOE shot", 1, 500)
 
 function ENT:Explode(ent, pos, normal)
 	self.BaseClass.Explode(self, ent, pos, normal)

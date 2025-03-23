@@ -15,9 +15,9 @@ UPGRADE.convars = {
     }
 }
 
-local ammoCvar = CreateConVar("pap_mustang_and_sally_ammo", "8", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo count", 1, 20)
+local ammoCvar = CreateConVar("pap_mustang_and_sally_ammo", "8", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Ammo count", 1, 20)
 
-local damageCvar = CreateConVar("pap_mustang_and_sally_damage", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Amount of damage", 1, 50)
+local damageCvar = CreateConVar("pap_mustang_and_sally_damage", "10", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Amount of damage", 1, 50)
 
 function UPGRADE:Apply(SWEP)
     SWEP.Primary.ClipMax = ammoCvar:GetInt() / 2

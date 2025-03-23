@@ -3,9 +3,9 @@ ENT.Type = "anim"
 ENT.Base = "ttt_basegrenade_proj"
 ENT.Model = Model("models/ttt_pack_a_punch/disco_ball/disco_ball.mdl")
 
-ENT.DurationCvar = CreateConVar("pap_groovitron_duration", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds the groovitron lasts", 1, 30)
+ENT.DurationCvar = CreateConVar("pap_groovitron_duration", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds the groovitron lasts", 1, 30)
 
-ENT.RadiusCvar = CreateConVar("pap_groovitron_radius", 300, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of area of effect", 1, 2000)
+ENT.RadiusCvar = CreateConVar("pap_groovitron_radius", 300, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Radius of area of effect", 1, 2000)
 
 function ENT:Initialize()
 	self:EmitSound("weapons/slam/throw.wav", SNDLVL_100dB)

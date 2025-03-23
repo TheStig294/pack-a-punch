@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local damageCvar = CreateConVar("pap_brewis_ginley_extra_damage", "75", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra damage dealt", 1, 200)
+local damageCvar = CreateConVar("pap_brewis_ginley_extra_damage", "75", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra damage dealt", 1, 200)
 
 local lewisModel = "models/bradyjharty/yogscast/lewis.mdl"
 local lewisModelInstalled = util.IsValidModel(lewisModel)

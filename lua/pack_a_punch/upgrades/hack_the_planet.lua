@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local durationCvar = CreateConVar("pap_hack_the_planet_duration", "120", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration of hack effect", 1, 300)
+local durationCvar = CreateConVar("pap_hack_the_planet_duration", "120", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration of hack effect", 1, 300)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

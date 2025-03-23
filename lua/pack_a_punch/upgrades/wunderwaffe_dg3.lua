@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local rangeCvar = CreateConVar("pap_wunderwaffe_dg3_arc_range", 150, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "AOE range of arc lightning", 1, 1000)
+local rangeCvar = CreateConVar("pap_wunderwaffe_dg3_arc_range", 150, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "AOE range of arc lightning", 1, 1000)
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod

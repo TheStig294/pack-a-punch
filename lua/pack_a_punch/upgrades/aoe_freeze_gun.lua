@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local rangeCvar = CreateConVar("pap_aoe_freeze_gun_range", 200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Range of the freeze gun AOE", 10, 1000)
+local rangeCvar = CreateConVar("pap_aoe_freeze_gun_range", 200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Range of the freeze gun AOE", 10, 1000)
 
 function UPGRADE:Apply(SWEP)
     local freezeDuration = GetConVar("ttt_freezegun_duration")

@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local multCvar = CreateConVar("pap_potion_slow_mult", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Slowness multiplier", 1, 10)
+local multCvar = CreateConVar("pap_potion_slow_mult", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Slowness multiplier", 1, 10)
 
 function UPGRADE:Apply(SWEP)
     timer.Simple(0.1, function()

@@ -15,9 +15,9 @@ UPGRADE.convars = {
     }
 }
 
-local delayCvar = CreateConVar("pap_rollermine_spawner_delay", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between spawning rollermines", 1, 60)
+local delayCvar = CreateConVar("pap_rollermine_spawner_delay", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between spawning rollermines", 1, 60)
 
-local capCvar = CreateConVar("pap_rollermine_spawner_cap", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max no. of rollermines spawned", 1, 60)
+local capCvar = CreateConVar("pap_rollermine_spawner_cap", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max no. of rollermines spawned", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     local healthCvar = GetConVar("weapon_ttt_rollermine_health")

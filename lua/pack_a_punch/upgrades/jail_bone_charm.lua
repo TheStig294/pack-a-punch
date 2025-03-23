@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local jailSecsCvar = CreateConVar("pap_jail_bone_charm_jail_secs", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "How long a player is in jail in seconds", 0, 180)
+local jailSecsCvar = CreateConVar("pap_jail_bone_charm_jail_secs", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "How long a player is in jail in seconds", 0, 180)
 
 function UPGRADE:Apply()
     -- Modified version of the bonk bat jail

@@ -24,13 +24,13 @@ UPGRADE.convars = {
     }
 }
 
-local moveSpeedCvar = CreateConVar("pap_bat_fangs_move_speed", 224, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move speed", 0, 1000)
+local moveSpeedCvar = CreateConVar("pap_bat_fangs_move_speed", 224, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move speed", 0, 1000)
 
-local sideMoveSpeedCapCvar = CreateConVar("pap_bat_fangs_side_move_speed_cap", 1200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Side move speed cap", 0, 2000)
+local sideMoveSpeedCapCvar = CreateConVar("pap_bat_fangs_side_move_speed_cap", 1200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Side move speed cap", 0, 2000)
 
-local moveVelocityCvar = CreateConVar("pap_bat_fangs_move_velocity", 1200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move velocity", 0, 2000)
+local moveVelocityCvar = CreateConVar("pap_bat_fangs_move_velocity", 1200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move velocity", 0, 2000)
 
-local airResistanceCvar = CreateConVar("pap_bat_fangs_air_resistance", 2.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Air resistance", 0, 10)
+local airResistanceCvar = CreateConVar("pap_bat_fangs_air_resistance", 2.5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Air resistance", 0, 10)
 
 local batModel = "models/weapons/gamefreak/w_nessbat.mdl"
 local batPlayermodel = "models/TSBB/Animals/Bat.mdl"

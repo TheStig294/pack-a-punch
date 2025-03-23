@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local tauntDelayCvar = CreateConVar("pap_infinite_disguiser_taunt_delay", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between taunt sounds", 5, 120)
+local tauntDelayCvar = CreateConVar("pap_infinite_disguiser_taunt_delay", 15, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between taunt sounds", 5, 120)
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPOldPropDisguise = SWEP.PropDisguise

@@ -24,13 +24,13 @@ UPGRADE.convars = {
     }
 }
 
-local moveSpeedCvar = CreateConVar("pap_super_saiyan_move_speed", 224, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move speed", 0, 1000)
+local moveSpeedCvar = CreateConVar("pap_super_saiyan_move_speed", 224, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move speed", 0, 1000)
 
-local sideMoveSpeedCapCvar = CreateConVar("pap_super_saiyan_side_move_speed_cap", 1200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Side move speed cap", 0, 2000)
+local sideMoveSpeedCapCvar = CreateConVar("pap_super_saiyan_side_move_speed_cap", 1200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Side move speed cap", 0, 2000)
 
-local moveVelocityCvar = CreateConVar("pap_super_saiyan_move_velocity", 1200, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move velocity", 0, 2000)
+local moveVelocityCvar = CreateConVar("pap_super_saiyan_move_velocity", 1200, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Move velocity", 0, 2000)
 
-local airResistanceCvar = CreateConVar("pap_super_saiyan_air_resistance", 2.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Air resistance", 0, 10)
+local airResistanceCvar = CreateConVar("pap_super_saiyan_air_resistance", 2.5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Air resistance", 0, 10)
 
 function UPGRADE:Apply(SWEP)
     -- Applying model if installed, and only while the weapon is held

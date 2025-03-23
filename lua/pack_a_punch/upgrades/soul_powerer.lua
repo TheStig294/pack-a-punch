@@ -45,23 +45,23 @@ UPGRADE.convars = {
     }
 }
 
-local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by bee barrel ability", 1, 10)
+local bee_barrel_bees = CreateConVar("pap_soul_powerer_bee_barrel_bees", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Bees spawned by bee barrel ability", 1, 10)
 
-local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
+local clown_transform_uses = CreateConVar("pap_soul_powerer_clown_transform_uses", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of clown transform, 0 = infinite", 0, 10)
 
-local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of clown transform", 2, 60)
+local clown_transform_delay = CreateConVar("pap_soul_powerer_clown_transform_delay", "10", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs delay of clown transform", 2, 60)
 
-local headcrab_launcher_uses = CreateConVar("pap_soul_powerer_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn headcrab launcher", 1, 5)
+local headcrab_launcher_uses = CreateConVar("pap_soul_powerer_headcrab_launcher_uses", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn headcrab launcher", 1, 5)
 
-local heal_uses = CreateConVar("pap_soul_powerer_heal_uses", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of heal ability", 1, 10)
+local heal_uses = CreateConVar("pap_soul_powerer_heal_uses", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of heal ability", 1, 10)
 
-local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
+local heal_cooldown = CreateConVar("pap_soul_powerer_heal_cooldown", "30", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of heal ability", 1, 60)
 
-local poison_headcrab_launcher_uses = CreateConVar("pap_soul_powerer_poison_headcrab_launcher_uses", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn poison headcrab launcher", 1, 5)
+local poison_headcrab_launcher_uses = CreateConVar("pap_soul_powerer_poison_headcrab_launcher_uses", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of spawn poison headcrab launcher", 1, 5)
 
-local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of swap position", 1, 10)
+local swap_position_uses = CreateConVar("pap_soul_powerer_swap_position_uses", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Uses of swap position", 1, 10)
 
-local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of swap position", 1, 60)
+local swap_position_cooldown = CreateConVar("pap_soul_powerer_swap_position_cooldown", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs cooldown of swap position", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     -- Make a backup of old ability functionality

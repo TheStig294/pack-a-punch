@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local healMultCvar = CreateConVar("pap_aoe_medkit_heal_mult", 1.5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra healing mutiplier", 0.1, 10)
+local healMultCvar = CreateConVar("pap_aoe_medkit_heal_mult", 1.5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Extra healing mutiplier", 0.1, 10)
 
 UPGRADE.ammoMult = healMultCvar:GetFloat()
 

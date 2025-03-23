@@ -3,9 +3,9 @@ UPGRADE.id = "announcement_pad"
 UPGRADE.class = "wt_writingpad"
 UPGRADE.name = "Announcement Pad"
 
-local cooldownCvar = CreateConVar("pap_announcement_pad_cooldown", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown on displaying messages", 0, 120)
+local cooldownCvar = CreateConVar("pap_announcement_pad_cooldown", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown on displaying messages", 0, 120)
 
-local displayLengthCvar = CreateConVar("pap_announcement_pad_display_length", 3, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds message is displayed", 1, 10)
+local displayLengthCvar = CreateConVar("pap_announcement_pad_display_length", 3, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds message is displayed", 1, 10)
 
 UPGRADE.desc = "Displays messages you write in the pad\nto everyone's screen! (" .. cooldownCvar:GetInt() .. " second cooldown)"
 

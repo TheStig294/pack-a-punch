@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-CreateConVar("pap_blinding_grenade_seconds_duration", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds the blindness lasts", 1, 60)
+CreateConVar("pap_blinding_grenade_seconds_duration", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds the blindness lasts", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     if SERVER then

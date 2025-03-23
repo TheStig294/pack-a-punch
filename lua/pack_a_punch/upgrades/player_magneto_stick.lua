@@ -34,17 +34,17 @@ UPGRADE.convars = {
     }
 }
 
-CreateConVar("pap_player_magneto_stick_release_delay", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a victim is stunned", 0, 60)
+CreateConVar("pap_player_magneto_stick_release_delay", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a victim is stunned", 0, 60)
 
-CreateConVar("pap_player_magneto_stick_carry_duration", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds someone can be carried for", 0, 60)
+CreateConVar("pap_player_magneto_stick_carry_duration", "30", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds someone can be carried for", 0, 60)
 
-CreateConVar("pap_player_magneto_stick_struggle_interval", "0.25", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
+CreateConVar("pap_player_magneto_stick_struggle_interval", "0.25", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
 
-CreateConVar("pap_player_magneto_stick_struggle_reduce", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 5)
+CreateConVar("pap_player_magneto_stick_struggle_reduce", "0.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 5)
 
-CreateConVar("pap_player_magneto_stick_cooldown", "10", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
+CreateConVar("pap_player_magneto_stick_cooldown", "10", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
 
-CreateConVar("pap_player_magneto_stick_multi_pickup", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Players can be picked up more than once a round", 0, 1)
+CreateConVar("pap_player_magneto_stick_multi_pickup", "0", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Players can be picked up more than once a round", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     local CurTime = CurTime

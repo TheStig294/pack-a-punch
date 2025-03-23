@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local multCvar = CreateConVar("pap_potion_leaping_jump_mult", "4", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Jump multiplier", 1, 10)
+local multCvar = CreateConVar("pap_potion_leaping_jump_mult", "4", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Jump multiplier", 1, 10)
 
 function UPGRADE:Apply(SWEP)
     timer.Simple(0.1, function()

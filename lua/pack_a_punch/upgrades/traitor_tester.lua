@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local secsCvar = CreateConVar("pap_traitor_tester_initial_seconds", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Initial testing delay in seconds", 1, 60)
+local secsCvar = CreateConVar("pap_traitor_tester_initial_seconds", "30", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Initial testing delay in seconds", 1, 60)
 
 local beep_miss = Sound("player/suit_denydevice.wav")
 

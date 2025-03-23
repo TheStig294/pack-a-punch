@@ -16,9 +16,9 @@ UPGRADE.convars = {
     },
 }
 
-local lengthSecsCvar = CreateConVar("pap_time_skip_king_crimson_length_secs", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
+local lengthSecsCvar = CreateConVar("pap_time_skip_king_crimson_length_secs", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds length of time skip", 0, 60)
 
-local dmgResistCvar = CreateConVar("pap_time_skip_king_crimson_dmg_resist_mult", 0.8, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
+local dmgResistCvar = CreateConVar("pap_time_skip_king_crimson_dmg_resist_mult", 0.8, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage resistance multiplier", 0, 1)
 
 local function StopSkip(wep, owner, timername)
     if timername then

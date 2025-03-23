@@ -61,9 +61,9 @@ hook.Add("PreRender", "ZapGrenProj_DynamicLight", function()
 	end
 end)
 
-local disarmTimeCvar = CreateConVar("pap_disarm_grenade_time", 10, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs players are disarmed", 1, 20)
+local disarmTimeCvar = CreateConVar("pap_disarm_grenade_time", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs players are disarmed", 1, 20)
 
-local undroppableRemoveCvar = CreateConVar("pap_disarm_grenade_undroppable_remove", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Remove undroppable weapons?", 0, 1)
+local undroppableRemoveCvar = CreateConVar("pap_disarm_grenade_undroppable_remove", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Remove undroppable weapons?", 0, 1)
 
 function ENT:Explode(tr)
 	if CLIENT then return end

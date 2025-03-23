@@ -10,7 +10,7 @@ UPGRADE.convars = {
     }
 }
 
-local hpConvar = CreateConVar("pap_gift_of_gambling_hp", 50, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "HP to give on success", 1, 100)
+local hpConvar = CreateConVar("pap_gift_of_gambling_hp", 50, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "HP to give on success", 1, 100)
 
 UPGRADE.desc = "Now fully heals and grants " .. hpConvar:GetInt() .. " max HP!\nBut still has a chance to explode..."
 

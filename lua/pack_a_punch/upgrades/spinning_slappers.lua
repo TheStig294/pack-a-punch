@@ -14,9 +14,9 @@ UPGRADE.convars = {
     }
 }
 
-local cooldownCvar = CreateConVar("pap_spinning_slappers_cooldown", 3, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown on weapon use", 0, 30)
+local cooldownCvar = CreateConVar("pap_spinning_slappers_cooldown", 3, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown on weapon use", 0, 30)
 
-local strengthCvar = CreateConVar("pap_spinning_slappers_strength", 1000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Fling strength", 0, 10000)
+local strengthCvar = CreateConVar("pap_spinning_slappers_strength", 1000, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Fling strength", 0, 10000)
 
 UPGRADE.desc = "Slaps send people flying! Has a " .. cooldownCvar:GetInt() .. " second cooldown"
 

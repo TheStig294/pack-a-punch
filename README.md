@@ -8,7 +8,7 @@ Even if a weapon doesn't have a unique upgrade, basic weapons are given a random
 
 # Settings/Convars
 
-**In order to keep your settings saved between map changes (If you use the F1 options menu), you need to use these convars *(In Italics)* listed below**
+**In order to keep your settings saved between map changes (if you use the F1 options menu, they won't be saved), you need to use these convars *(in italics)* listed below**
 
 A "convar", e.g. *ttt_pap_detective* that makes the detective be able to buy the PaP or not, is a setting for you to change.
 

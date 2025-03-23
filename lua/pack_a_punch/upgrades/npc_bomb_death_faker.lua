@@ -19,11 +19,11 @@ UPGRADE.convars = {
     }
 }
 
-local radiusCvar = CreateConVar("pap_npc_bomb_death_faker_radius", "400", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion radius", 0, 1000)
+local radiusCvar = CreateConVar("pap_npc_bomb_death_faker_radius", "400", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion radius", 0, 1000)
 
-local damageCvar = CreateConVar("pap_npc_bomb_death_faker_damage", "1000", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion damage", 0, 4000)
+local damageCvar = CreateConVar("pap_npc_bomb_death_faker_damage", "1000", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Explosion damage", 0, 4000)
 
-local triggerRadiusCvar = CreateConVar("pap_npc_bomb_death_faker_trigger_radius", "100", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance before triggering explosion", 0, 1000)
+local triggerRadiusCvar = CreateConVar("pap_npc_bomb_death_faker_trigger_radius", "100", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance before triggering explosion", 0, 1000)
 
 function UPGRADE:Apply(SWEP)
     -- Suppressing join/leave messages while the NPC bomb is active so they don't give away one spawning

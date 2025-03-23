@@ -24,13 +24,13 @@ UPGRADE.convars = {
     }
 }
 
-local healthCvar = CreateConVar("pap_big_crab_launcher_health", 100, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health upgraded headcrabs have", 1, 500)
+local healthCvar = CreateConVar("pap_big_crab_launcher_health", 100, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health upgraded headcrabs have", 1, 500)
 
-local crabCountCvar = CreateConVar("pap_big_crab_launcher_crab_count", 18, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of headcrabs spawned", 1, 30)
+local crabCountCvar = CreateConVar("pap_big_crab_launcher_crab_count", 18, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of headcrabs spawned", 1, 30)
 
-local damageCvar = CreateConVar("pap_big_crab_launcher_damage", 30, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage direct launcher hit deals", 0, 100)
+local damageCvar = CreateConVar("pap_big_crab_launcher_damage", 30, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage direct launcher hit deals", 0, 100)
 
-local damageRadiusCvar = CreateConVar("pap_big_crab_launcher_damage_radius", 150, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "AOE range of direct launcher damage", 0, 500)
+local damageRadiusCvar = CreateConVar("pap_big_crab_launcher_damage_radius", 150, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "AOE range of direct launcher damage", 0, 500)
 
 local oldHealthValue
 

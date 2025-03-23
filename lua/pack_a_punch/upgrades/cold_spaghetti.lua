@@ -20,11 +20,11 @@ UPGRADE.convars = {
     }
 }
 
-local frozenSecsCvar = CreateConVar("pap_cold_spaghetti_frozen_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players are frozen", 0, 60)
+local frozenSecsCvar = CreateConVar("pap_cold_spaghetti_frozen_secs", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds players are frozen", 0, 60)
 
-local radiusCvar = CreateConVar("pap_cold_spaghetti_frozen_radius", 600, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance players are frozen", 0, 1000)
+local radiusCvar = CreateConVar("pap_cold_spaghetti_frozen_radius", 600, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Distance players are frozen", 0, 1000)
 
-local musicCvar = CreateConVar("pap_cold_spaghetti_alt_music", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Whether the cold spaghetti plays alternative music", 0, 1)
+local musicCvar = CreateConVar("pap_cold_spaghetti_alt_music", 0, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Whether the cold spaghetti plays alternative music", 0, 1)
 
 UPGRADE.desc = "Temporarily freezes players in addition to exploding,\ndoesn't affect you!"
 

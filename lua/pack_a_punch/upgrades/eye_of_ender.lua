@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local cooldownCvar = CreateConVar("pap_eye_of_ender_cooldown", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown for teleporting", 0, 30)
+local cooldownCvar = CreateConVar("pap_eye_of_ender_cooldown", "5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown for teleporting", 0, 30)
 
 function UPGRADE:Apply(SWEP)
     local endermanModel = "models/player/lingry/minecraft/enderman.mdl"

@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local cooldownCvar = CreateConVar("pap_damage_swap_gun_cooldown", 2, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown for another swap", 0, 30)
+local cooldownCvar = CreateConVar("pap_damage_swap_gun_cooldown", 2, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds cooldown for another swap", 0, 30)
 
 function UPGRADE:Apply(SWEP)
     local function HitEffects(att, path, dmginfo)

@@ -19,11 +19,11 @@ UPGRADE.convars = {
     },
 }
 
-local overuseCountCvar = CreateConVar("pap_spacetime_manipulator_overuse_count", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of uses until 'overuse' triggers", 1, 50)
+local overuseCountCvar = CreateConVar("pap_spacetime_manipulator_overuse_count", 15, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of uses until 'overuse' triggers", 1, 50)
 
-local minTimeCvar = CreateConVar("pap_spacetime_manipulator_overuse_min", 0.2, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Min random overuse time scale", 0.001, 1)
+local minTimeCvar = CreateConVar("pap_spacetime_manipulator_overuse_min", 0.2, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Min random overuse time scale", 0.001, 1)
 
-local maxTimeCvar = CreateConVar("pap_spacetime_manipulator_overuse_max", 2.2, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max random overuse time scale", 1, 5)
+local maxTimeCvar = CreateConVar("pap_spacetime_manipulator_overuse_max", 2.2, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max random overuse time scale", 1, 5)
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPUseCount = 0

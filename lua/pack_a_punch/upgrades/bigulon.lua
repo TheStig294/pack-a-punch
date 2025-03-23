@@ -14,9 +14,9 @@ UPGRADE.convar = {
     }
 }
 
-local damageCvar = CreateConVar("pap_bigulon_manhack_damage", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage manhacks deal on touch", 1, 100)
+local damageCvar = CreateConVar("pap_bigulon_manhack_damage", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage manhacks deal on touch", 1, 100)
 
-local decayTimeCvar = CreateConVar("pap_bigulon_manhack_decay_time", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds manhacks last until dying", 1, 120)
+local decayTimeCvar = CreateConVar("pap_bigulon_manhack_decay_time", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds manhacks last until dying", 1, 120)
 
 UPGRADE.desc = "Fires high-damage manhacks instead of missiles.\nManhacks die after " .. decayTimeCvar:GetInt() .. " seconds."
 

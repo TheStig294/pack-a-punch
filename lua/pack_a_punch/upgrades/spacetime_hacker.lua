@@ -19,11 +19,11 @@ UPGRADE.convars = {
     },
 }
 
-local overuseCountCvar = CreateConVar("pap_spacetime_hacker_overuse_count", 15, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of uses until 'overuse' triggers", 1, 50)
+local overuseCountCvar = CreateConVar("pap_spacetime_hacker_overuse_count", 15, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of uses until 'overuse' triggers", 1, 50)
 
-local minGravityCvar = CreateConVar("pap_spacetime_hacker_overuse_min", -600, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Min random overuse gravity", -1000, 600)
+local minGravityCvar = CreateConVar("pap_spacetime_hacker_overuse_min", -600, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Min random overuse gravity", -1000, 600)
 
-local maxGravityCvar = CreateConVar("pap_spacetime_hacker_overuse_max", 2000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max random overuse gravity", -600, 1000)
+local maxGravityCvar = CreateConVar("pap_spacetime_hacker_overuse_max", 2000, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Max random overuse gravity", -600, 1000)
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPUseCount = 0

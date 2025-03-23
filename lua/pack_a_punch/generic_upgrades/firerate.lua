@@ -3,7 +3,7 @@ UPGRADE.id = "firerate"
 UPGRADE.class = nil
 UPGRADE.name = nil
 
-local multCvar = CreateConVar("pap_firerate_mult", "1.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Firerate multiplier", 1, 5)
+local multCvar = CreateConVar("pap_firerate_mult", "1.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Firerate multiplier", 1, 5)
 
 UPGRADE.desc = "x" .. math.Round(multCvar:GetFloat(), 1) .. " firerate increase!"
 

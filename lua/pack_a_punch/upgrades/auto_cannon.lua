@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local damageCvar = CreateConVar("pap_auto_cannon_damage", 1000, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage of the auto cannon's shells", 1, 1000)
+local damageCvar = CreateConVar("pap_auto_cannon_damage", 1000, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage of the auto cannon's shells", 1, 1000)
 
 -- As per usual, sound is abnormally quiet, so it is played over itself to be louder
 local musicVolume = 4

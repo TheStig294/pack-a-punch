@@ -17,7 +17,7 @@ function ENT:Initialize()
 	end
 end
 
-local speedMultCvar = CreateConVar("pap_fast_motion_grenade_speed_mult", 2, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Game speed multiplier", 1, 4)
+local speedMultCvar = CreateConVar("pap_fast_motion_grenade_speed_mult", 2, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Game speed multiplier", 1, 4)
 
 function ENT:Explode(tr)
 	if SERVER then

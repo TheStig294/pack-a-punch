@@ -53,7 +53,7 @@ for _, command in ipairs(commands) do
 
     helptext = helptext .. ". 0 to disable"
 
-    commandCvars[command] = CreateConVar(convarName, defaultCommandCosts[command], {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, helptext, 0, 100)
+    commandCvars[command] = CreateConVar(convarName, defaultCommandCosts[command], {FCVAR_REPLICATED, FCVAR_NOTIFY}, helptext, 0, 100)
 
     local convarTable = {
         name = convarName,

@@ -15,9 +15,9 @@ UPGRADE.convars = {
     }
 }
 
-local delayCvar = CreateConVar("pap_potion_regen_delay", "2", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs between heals", 1, 10)
+local delayCvar = CreateConVar("pap_potion_regen_delay", "2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs between heals", 1, 10)
 
-local healAmountCvar = CreateConVar("pap_potion_regen_amount", "5", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Heal amount", 1, 100)
+local healAmountCvar = CreateConVar("pap_potion_regen_amount", "5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Heal amount", 1, 100)
 
 function UPGRADE:Apply(SWEP)
     timer.Simple(0.1, function()

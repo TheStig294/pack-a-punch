@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local spawnDelayCvar = CreateConVar("pap_random_vault_spawn_delay", 5, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs between changing npcs", 1, 60)
+local spawnDelayCvar = CreateConVar("pap_random_vault_spawn_delay", 5, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Secs between changing npcs", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     local throwsound = Sound("Weapon_SLAM.SatchelThrow")

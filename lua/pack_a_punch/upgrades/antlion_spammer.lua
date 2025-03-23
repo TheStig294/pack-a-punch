@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local rechargeSecsCvar = CreateConVar("pap_antlion_spammer_recharge_secs", 20, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "Delay in secs for ammo recharge", 1, 60)
+local rechargeSecsCvar = CreateConVar("pap_antlion_spammer_recharge_secs", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Delay in secs for ammo recharge", 1, 60)
 
 function UPGRADE:Apply(SWEP)
     SWEP.PAPOldPrimaryAttack = SWEP.PrimaryAttack

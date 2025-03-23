@@ -13,7 +13,7 @@ ENT.GrenadeColor = Color(255, 111, 0)
 AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
-local barrelCountCvar = CreateConVar("pap_barrel_bomb_count", 12, {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of spawned barrels", 1, 20)
+local barrelCountCvar = CreateConVar("pap_barrel_bomb_count", 12, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "No. of spawned barrels", 1, 20)
 
 function ENT:Initialize()
 	--new code for custom skin
