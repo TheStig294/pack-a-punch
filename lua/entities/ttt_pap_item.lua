@@ -25,40 +25,42 @@ local pap = {
     desc = "pap_desc"
 }
 
--- Faker breaks by spending a credit without being able to get one back
--- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
--- Jester/Swapper are shop roles because of an old request to let them have buyable items that pre-dates the role weapons system, which hasn't been removed for some reason
--- Hive Mind's buy menu is supposed to start empty
-local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND}
-
-if not detectiveCvar:GetBool() then
-    table.insert(bannedRoles, ROLE_DETECTIVE)
-end
-
-if not traitorCvar:GetBool() then
-    table.insert(bannedRoles, ROLE_TRAITOR)
-end
-
-local bannedRolesDictionary = {}
-
--- Not a sequential table, unless all banned roles aren't nil, so we have to use pairs instead of ipairs
-for _, role in pairs(bannedRoles) do
-    bannedRolesDictionary[role] = true
-end
-
--- Check that the PaP item hasn't been added already
-local function HasItemWithPropertyValue(tbl, key, val)
-    if not tbl or not key then return end
-
-    for _, v in pairs(tbl) do
-        if v[key] and v[key] == val then return true end
-    end
-
-    return false
-end
-
 -- Add the PaP to every role's buy menu that isn't banned
 hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
+    -- Checks that the PaP item hasn't been added already
+    local function HasItemWithPropertyValue(tbl, key, val)
+        if not tbl or not key then return end
+
+        for _, v in pairs(tbl) do
+            if v[key] and v[key] == val then return true end
+        end
+
+        return false
+    end
+
+    -- Faker breaks by spending a credit without being able to get one back
+    -- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
+    -- Jester/Swapper are shop roles because of an old request to let them have buyable items that pre-dates the role weapons system, which hasn't been removed for some reason
+    -- Hive Mind's buy menu is supposed to start empty
+    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND}
+
+    local bannedRolesDictionary = {}
+
+    if not detectiveCvar:GetBool() then
+        table.insert(bannedRoles, ROLE_DETECTIVE)
+    end
+
+    if not traitorCvar:GetBool() then
+        table.insert(bannedRoles, ROLE_TRAITOR)
+    end
+
+    -- Not a sequential table, unless all banned roles aren't nil, so we have to use pairs instead of ipairs
+    -- We do this rather than defining bannedRolesDictionary, since setting a table key to nil in Lua can cause problems, but a table value is fine
+    -- (The role enums in the table might not exist and be nil)
+    for _, role in pairs(bannedRoles) do
+        bannedRolesDictionary[role] = true
+    end
+
     for role, equTable in pairs(EquipmentItems) do
         -- Check:
         -- Role is not banned
