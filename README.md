@@ -8,18 +8,18 @@ Even if a weapon doesn't have a unique upgrade, basic weapons are given a random
 
 # Settings/Convars
 
-**In order to keep your settings saved between map changes (if you use the F1 options menu, they won't be saved), you need to use these convars *(in italics)* listed below**
+**If you use the F1 options menu, changes to settings won't be saved**\
+In order to keep your settings saved between map changes, you need to use these convars *in italics* listed below
 
-A "convar", e.g. *ttt_pap_detective* that makes the detective be able to buy the PaP or not, is a setting for you to change.
+## A Complete Guide To Convars
 
-If a convar can be toggled on or off, it can be set to the value 1 (on), or 0 (off). E.g. *ttt_pap_detective 0* will make it so the detective **cannot** buy the PaP.
-
+A "convar" is a setting for you to change, e.g. *ttt_pap_detective* that toggles whether the Detective is able to buy the PaP.\
+If a convar can be toggled on or off, it can be set to the value 1 (on), or 0 (off). E.g. *ttt_pap_detective 0* will make it so the detective **cannot** buy the PaP.\
 If a convar is just a number, it can be set to any number you want. E.g. *pap_adv_unsilenced_awp_ammo 3* will give the upgraded AWP 3 ammo.
 
 Every convar has a default value, as listed below, e.g. "*ttt_pap_detective* - Default: 1" so the detective by default can buy the PaP, so if you don't change a convar, it will use its default value.
 
-Convars can be changed via your "config file", which will be a text file located in your Gmod install folder, usually at: C:\Program Files (x86)\Steam\steamapps\common\GarrysMod\garrysmod\cfg\listenserver.cfg
-
+Convars can be changed via your "config file", which will be a text file located in your Gmod install folder, usually at: C:\Program Files (x86)\Steam\steamapps\common\GarrysMod\garrysmod\cfg\listenserver.cfg \
 (If you are hosting a game via a dedicated server, you should instead use "server.cfg", located in the same relative directory in your server's install folder)
 
 Open this file with your favourite text editor (e.g. Notepad), and place each convar you wish to change, one line at a time. E.g:
@@ -36,7 +36,7 @@ the upgraded AWP to have 3 ammo,
 the "detective toy car" (upgraded airboat spawner) to take x1.5 more damage
 and the upgraded acid gat to be disabled.
 
-Below are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to see the giant list below!
+## General Convars
 
 *ttt_pap_apply_generic_upgrades* - Default: 1 - Weapons without upgrades will *try* to be upgraded with a random "generic" upgrade (Normally a stats upgrade)
 
@@ -45,6 +45,8 @@ Below are the general convars available for the PaP, to see every convar availab
 *ttt_pap_traitor* - Default: 1 - Traitors can buy PaP (Requires map change)
 
 *ttt_pap_upgradeable_indicator* - Default: 1 - *Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not
+
+Above are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to [the giant list below!](#the-great-giant-list-of-upgrades)
 
 # Upgrades that need other mods to work
 
