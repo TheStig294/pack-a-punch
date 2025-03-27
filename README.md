@@ -1605,15 +1605,6 @@ Pick up things using the force! Players take much more ammo to pick up\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=635911320>
 
-## Jester Emulator (Jester Converter)
-
-Converts you into a jester while held, and back to your original role while not held!\
-\
-*ttt_pap_jester_converter* - Default: 1 - Whether this upgrade is enabled
-\
-\
-Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2089540679>
-
 ## Jetgun (Player Trapper)
 
 Sucks in players and kills after 30 seconds. Avoids triggering many on death effects!\
