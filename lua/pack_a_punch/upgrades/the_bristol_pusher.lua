@@ -29,8 +29,6 @@ function UPGRADE:Apply(SWEP)
     end
 
     local function SetLewisMode(ply, setMode)
-        print(SERVER, IsValid(ply))
-
         if SERVER and IsValid(ply) then
             if setMode then
                 -- Change the player's model
