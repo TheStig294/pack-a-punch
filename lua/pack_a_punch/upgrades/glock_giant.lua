@@ -11,7 +11,7 @@ UPGRADE.convars = {
         decimals = 1
     },
     {
-        name = "pap_glock_giant_use_camo",
+        name = "pap_glock_giant_uses_camo",
         type = "bool"
     }
 }

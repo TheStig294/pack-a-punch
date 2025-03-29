@@ -7,7 +7,7 @@ UPGRADE.noSelectWep = true
 
 UPGRADE.convars = {
     {
-        name = "pap_cold_spaghetti_radius",
+        name = "pap_cold_spaghetti_frozen_radius",
         type = "int"
     },
     {
@@ -15,7 +15,7 @@ UPGRADE.convars = {
         type = "int"
     },
     {
-        name = "pap_cold_spaghetti_music",
+        name = "pap_cold_spaghetti_alt_music",
         type = "bool"
     }
 }

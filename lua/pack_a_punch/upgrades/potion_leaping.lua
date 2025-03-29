@@ -6,7 +6,7 @@ UPGRADE.desc = "Jump much higher, no fall damage!"
 
 UPGRADE.convars = {
     {
-        name = "pap_potion_leaping_mult",
+        name = "pap_potion_leaping_jump_mult",
         type = "int"
     }
 }

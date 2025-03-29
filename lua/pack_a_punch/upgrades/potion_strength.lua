@@ -14,7 +14,7 @@ UPGRADE.convars = {
         type = "int"
     },
     {
-        name = "pap_potion_strength_other_player_secs",
+        name = "pap_potion_strength_other_player_time",
         type = "int"
     }
 }
