@@ -35,17 +35,46 @@ hook.Add("PlayerSwitchWeapon", "TTTPAPPreventUpgradingSwitch", function(ply, _, 
     end
 end)
 
--- The auto-player unstuck mod tries to make players who are stuck not shoot each other, but this conflicts with the pack-a-punch,
--- It causes a weapon's upgrade to undo itself if it uses the SWEP:PrimaryAttack() hook, using its old functionality on swapping weapons...
--- The original purpose of this hook was to make it so players who were stuck shot through each other, but removing this isn't the end of the world
--- (That feature vs. the Pack-a-Punch? Come on the PaP wins)
--- If they're both installed, remove this functionality to make the PaP work again
 hook.Add("InitPostEntity", "TTTPAPFixPlayerUnstuckModConflict", function()
+    -- The auto-player unstuck mod tries to make players who are stuck not shoot each other, but this conflicts with the pack-a-punch,
+    -- It causes a weapon's upgrade to undo itself if it uses the SWEP:PrimaryAttack() hook, using its old functionality on swapping weapons...
+    -- The original purpose of this hook was to make it so players who were stuck shot through each other, but removing this isn't the end of the world
+    -- (That feature vs. the Pack-a-Punch? Come on the PaP wins)
+    -- If they're both installed, remove this functionality to make the PaP work again
     if ConVarExists("sv_player_stuck") then
         hook.Add("Think", "StigTTTFixes", function()
             hook.Remove("PlayerSwitchWeapon", "PlayerSwitchWeaponStuck")
         end)
     end
+
+    -- Set on load/save on exit all PaP convars
+    -- This is used instead of FCVAR_ARCHIVE because it causes a major issue in players not being able to join the server if too many archived convars are used!
+    -- This is done in an InitPostEntity hook because we need to wait for the ttt_pap_detective and ttt_pap_traitor convars to be created in their entity lua files!
+    -- (Hopefully in TTT2 the PaP item is loaded before this hook too but who knows...)
+    -- Also, the server config hasn't loaded yet, so all config values will overwrite these values, and be saved, which perfectly emulates FCVAR_ARCHIVE!
+    if not file.Exists("pack_a_punch/convars.json", "DATA") then
+        file.CreateDir("pack_a_punch")
+    else
+        local cvarValues = util.JSONToTable(file.Read("pack_a_punch/convars.json", "DATA"))
+
+        if cvarValues then
+            for cvarName, cvarValue in pairs(cvarValues) do
+                if ConVarExists(cvarName) then
+                    GetConVar(cvarName):SetString(cvarValue)
+                end
+            end
+        end
+    end
+end)
+
+hook.Add("ShutDown", "TTTPAPSaveConvars", function()
+    local cvarValues = {}
+
+    for cvarName, _ in pairs(TTTPAP.convars) do
+        cvarValues[cvarName] = GetConVar(cvarName):GetString()
+    end
+
+    file.Write("pack_a_punch/convars.json", util.TableToJSON(cvarValues))
 end)
 
 -- Choose a random upgrade from available ones to give to the weapon

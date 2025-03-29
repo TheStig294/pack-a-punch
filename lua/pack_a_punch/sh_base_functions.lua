@@ -17,12 +17,12 @@ CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED
 
 CreateConVar("ttt_pap_apply_generic_shoot_sound", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the generic upgraded shoot sound to weapons\n(Changes apply to newly upgraded weapons)", 0, 1)
 
-local PAPConvars = {
+TTTPAP.convars = {
     ttt_pap_apply_generic_upgrades = true,
     ttt_pap_detective = true,
     ttt_pap_traitor = true,
     ttt_pap_upgradeable_indicator = true,
-    ttt_pap_apply_generic_shoot_sound = true,
+    ttt_pap_apply_generic_shoot_sound = true
 }
 
 -- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:
@@ -37,7 +37,6 @@ local PAPConvars = {
 --}
 function TTTPAP:Register(UPGRADE)
     setmetatable(UPGRADE, TTTPAP.upgrade_meta)
-    local cvarName
 
     -- Register to TTTPAP.upgrades, or TTTPAP.genericUpgrades if no base weapon to apply to upgrade is defined
     if UPGRADE.class then
@@ -49,17 +48,17 @@ function TTTPAP:Register(UPGRADE)
     end
 
     -- Create enable/disable convar
-    cvarName = "ttt_pap_" .. UPGRADE.id
+    local cvarName = "ttt_pap_" .. UPGRADE.id
 
     CreateConVar(cvarName, 1, {FCVAR_NOTIFY, FCVAR_REPLICATED})
 
     -- Add convar to the list of allowed to be changed convars by the "TTTPAPChangeConvar" net message
-    PAPConvars[cvarName] = true
+    TTTPAP.convars[cvarName] = true
 
     -- Also add any custom convar settings the upgrade may have
     if UPGRADE.convars then
         for _, cvarInfo in ipairs(UPGRADE.convars) do
-            PAPConvars[cvarInfo.name] = true
+            TTTPAP.convars[cvarInfo.name] = true
         end
     end
 end
@@ -84,7 +83,7 @@ if SERVER then
         if not IsAdmin(ply) then return end
         local cvarName = net.ReadString()
         -- Don't allow non-PAP convars to be changed by this net message
-        if not PAPConvars[cvarName] then return end
+        if not TTTPAP.convars[cvarName] then return end
         local value = net.ReadString()
 
         if ConVarExists(cvarName) then
