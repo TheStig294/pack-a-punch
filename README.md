@@ -1,4 +1,6 @@
-**A very unique buyable item for TTT!**
+# Pack-a-Punch
+
+**A very unique buyable item for Gmod TTT!**
 
 On purchase, the current weapon you are holding gets upgraded!
 These are hand-crafted unique upgrades for over 300 different weapons available on the Gmod workshop.
@@ -6,47 +8,9 @@ These are hand-crafted unique upgrades for over 300 different weapons available 
 Most are much more than a stats upgrade, and may drastically mix up how the weapon works, or add some goofy or fun new features!
 Even if a weapon doesn't have a unique upgrade, basic weapons are given a random stats upgrade instead!
 
-# Settings/Convars
+# Steam Workshop Link
 
-**If you use the F1 options menu, changes to settings won't be saved**\
-In order to keep your settings saved between map changes, you need to use these convars *in italics* listed below
-
-## A Complete Guide To Convars
-
-A "convar" is a setting for you to change, e.g. *ttt_pap_detective* that toggles whether the Detective is able to buy the PaP.\
-If a convar can be toggled on or off, it can be set to the value 1 (on), or 0 (off). E.g. *ttt_pap_detective 0* will make it so the detective **cannot** buy the PaP.\
-If a convar is just a number, it can be set to any number you want. E.g. *pap_adv_unsilenced_awp_ammo 3* will give the upgraded AWP 3 ammo.
-
-Every convar has a default value, as listed below, e.g. "*ttt_pap_detective* - Default: 1" so the detective by default can buy the PaP, so if you don't change a convar, it will use its default value.
-
-Convars can be changed via your "config file", which will be a text file located in your Gmod install folder, usually at: C:\Program Files (x86)\Steam\steamapps\common\GarrysMod\garrysmod\cfg\listenserver.cfg \
-(If you are hosting a game via a dedicated server, you should instead use "server.cfg", located in the same relative directory in your server's install folder)
-
-Open this file with your favourite text editor (e.g. Notepad), and place each convar you wish to change, one line at a time. E.g:
-
-```txt
-ttt_pap_detective 0
-pap_adv_unsilenced_awp_ammo 3
-pap_detective_toy_car_damage_mult 1.5
-ttt_pap_acid_insta_gat 0
-```
-
-Which changes the detective to not be able to buy the PaP,
-the upgraded AWP to have 3 ammo,
-the "detective toy car" (upgraded airboat spawner) to take x1.5 more damage
-and the upgraded acid gat to be disabled.
-
-## General Convars
-
-*ttt_pap_apply_generic_upgrades* - Default: 1 - Weapons without upgrades will *try* to be upgraded with a random "generic" upgrade (Normally a stats upgrade)
-
-*ttt_pap_detective* - Default: 1 - Detectives can buy PaP (Requires map change)
-
-*ttt_pap_traitor* - Default: 1 - Traitors can buy PaP (Requires map change)
-
-*ttt_pap_upgradeable_indicator* - Default: 1 - *Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not
-
-Above are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to [the giant list below!](#the-great-giant-list-of-upgrades)
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
 
 # Upgrades that need other mods to work
 
@@ -177,9 +141,46 @@ licensed under Creative Commons Attribution <http://creativecommons.org/licenses
 "Jam Jam" (<https://skfb.ly/oJpRF>) by Travp333 is licensed under Creative Commons Attribution-NonCommercial (<http://creativecommons.org/licenses/by-nc/4.0/>)
 Jingle sounds from Custom Roles for TTT by Nick and Malivil
 
-# Steam Workshop Link
+# Settings/Convars
 
-<https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
+To change this mod's settings and turn on/off or modify the settings of any one upgrade, either use the in-game F1 settings menu, or use these convars *in italics* listed below!
+
+## A Complete Guide To Convars
+
+A "convar" is a setting for you to change, e.g. *ttt_pap_detective* that toggles whether the Detective is able to buy the PaP.\
+If a convar can be toggled on or off, it can be set to the value 1 (on), or 0 (off). E.g. *ttt_pap_detective 0* will make it so the detective **cannot** buy the PaP.\
+If a convar is just a number, it can be set to any number you want. E.g. *pap_adv_unsilenced_awp_ammo 3* will give the upgraded AWP 3 ammo.
+
+Every convar has a default value, as listed below, e.g. "*ttt_pap_detective* - Default: 1" so the detective by default can buy the PaP, so if you don't change a convar, it will use its default value.
+
+Convars can be changed via your "config file", which will be a text file located in your Gmod install folder, usually at: C:\Program Files (x86)\Steam\steamapps\common\GarrysMod\garrysmod\cfg\listenserver.cfg \
+(If you are hosting a game via a dedicated server, you should instead use "server.cfg", located in the same relative directory in your server's install folder)
+
+Open this file with your favourite text editor (e.g. Notepad), and place each convar you wish to change, one line at a time. E.g:
+
+```txt
+ttt_pap_detective 0
+pap_adv_unsilenced_awp_ammo 3
+pap_detective_toy_car_damage_mult 1.5
+ttt_pap_acid_insta_gat 0
+```
+
+Which changes the detective to not be able to buy the PaP,
+the upgraded AWP to have 3 ammo,
+the "detective toy car" (upgraded airboat spawner) to take x1.5 more damage
+and the upgraded acid gat to be disabled.
+
+## General Convars
+
+*ttt_pap_apply_generic_upgrades* - Default: 1 - Weapons without upgrades will *try* to be upgraded with a random "generic" upgrade (Normally a stats upgrade)
+
+*ttt_pap_detective* - Default: 1 - Detectives can buy PaP (Requires map change)
+
+*ttt_pap_traitor* - Default: 1 - Traitors can buy PaP (Requires map change)
+
+*ttt_pap_upgradeable_indicator* - Default: 1 - *Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not
+
+Above are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to the giant list below!
 
 # The Great Giant List of Upgrades
 
@@ -3159,7 +3160,3 @@ x10 tighter bullet spread!\
 *ttt_pap_spread* - Default: 1 - Whether this upgrade is enabled
 \
 *pap_spread_mult* - Default: 0.1 - Spread multiplier
-
-## Steam Workshop Link
-
-<https://steamcommunity.com/sharedfiles/filedetails/?id=3043605644>
