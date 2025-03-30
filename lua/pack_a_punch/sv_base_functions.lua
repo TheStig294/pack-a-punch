@@ -52,17 +52,15 @@ hook.Add("InitPostEntity", "TTTPAPFixPlayerUnstuckModConflict", function()
     -- This is done in an InitPostEntity hook because we need to wait for the ttt_pap_detective and ttt_pap_traitor convars to be created in their entity lua files!
     -- (Hopefully in TTT2 the PaP item is loaded before this hook too but who knows...)
     -- Also, the server config hasn't loaded yet, so all config values will overwrite these values, and be saved, which perfectly emulates FCVAR_ARCHIVE!
-    if not file.Exists("pack_a_punch/convars.json", "DATA") then
+    if not file.IsDir("pack_a_punch", "DATA") then
         file.CreateDir("pack_a_punch")
-    else
+    elseif file.Exists("pack_a_punch/convars.json", "DATA") then
         local cvarValues = util.JSONToTable(file.Read("pack_a_punch/convars.json", "DATA"))
 
-        if cvarValues then
-            for cvarName, cvarValue in pairs(cvarValues) do
-                if ConVarExists(cvarName) then
-                    GetConVar(cvarName):SetString(cvarValue)
-                end
-            end
+        for cvarName, cvarValue in pairs(cvarValues) do
+            local cvar = GetConVar(cvarName)
+            if not cvar then continue end
+            cvar:SetString(cvarValue)
         end
     end
 end)
