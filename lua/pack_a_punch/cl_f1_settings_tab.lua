@@ -453,7 +453,7 @@ local function CreateOptionsMenu()
 
         -- Role weapons button description text
         local roleWepsDesc = nonScrollList:Add("DLabel")
-        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the right.\n  (Note: By default, almost every role with a buy menu has the PaP)")
+        roleWepsDesc:SetText("  Change which roles can buy the PaP, or any item, by clicking the button on the left.\n  (Note: By default, almost every role with a buy menu has the PaP)")
         roleWepsDesc:SizeToContents()
     else
         -- Convar checkbox for the detective being able to buy the Pack-a-Punch
