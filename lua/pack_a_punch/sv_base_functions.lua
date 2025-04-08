@@ -69,7 +69,14 @@ hook.Add("ShutDown", "TTTPAPSaveConvars", function()
     local cvarValues = {}
 
     for cvarName, _ in pairs(TTTPAP.convars) do
-        cvarValues[cvarName] = GetConVar(cvarName):GetString()
+        local convar = GetConVar(cvarName)
+        if not convar then continue end
+        local value = convar:GetString()
+        -- Don't bother saving the default value because that will just use up more space
+        -- and make it difficult for us to change defaults in the future
+        -- (Thanks to Mal for this optimisation!)
+        if value == convar:GetDefault() then continue end
+        cvarValues[cvarName] = value
     end
 
     file.Write("pack_a_punch/convars.json", util.TableToJSON(cvarValues))
