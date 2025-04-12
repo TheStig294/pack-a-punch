@@ -69,8 +69,9 @@ net.Receive("TTTPAPApply", function()
         end
     end
 
-    -- Camo (SWEP construction kit weapons)
+    -- Camo
     if not UPGRADE.noCamo then
+        -- SWEP construction kit weapons
         if SWEP.VElements and istable(SWEP.VElements) then
             for _, element in pairs(SWEP.VElements) do
                 element.material = TTTPAP.camo
@@ -81,6 +82,15 @@ net.Receive("TTTPAPApply", function()
             for _, element in pairs(SWEP.WElements) do
                 element.material = TTTPAP.camo
             end
+        end
+
+        -- Bonemerged weapons
+        if IsValid(SWEP.v_model) and isentity(SWEP.v_model) then
+            SWEP.v_model:SetPAPCamo()
+        end
+
+        if IsValid(SWEP.w_model) and isentity(SWEP.w_model) then
+            SWEP.w_model:SetPAPCamo()
         end
     end
 
