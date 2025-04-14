@@ -14,7 +14,7 @@ UPGRADE.convars = {
 local bobModel = "models/konnie/overwatch/bob_default.mdl"
 local isBobModelInstalled = util.IsValidModel(bobModel)
 
-local durationCvar = CreateConVar("pap_bob_duration", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration B.O.B lasts", 5, 120)
+local durationCvar = CreateConVar("pap_bob_duration", 15, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds duration B.O.B lasts", 5, 120)
 
 function UPGRADE:Condition()
     return isBobModelInstalled and player.GetCount() ~= game.MaxPlayers()
@@ -90,7 +90,7 @@ function UPGRADE:Apply(SWEP)
         if self.TTTPAPBobSummoned then return self:PAPOldSecondaryAttack() end
 
         -- Add a delay to setting the summon flag to the weapon, else prediction is going to call the old secondary attack prematurely
-        timer.Simple(0.5, function()
+        timer.Simple(0, function()
             self.TTTPAPBobSummoned = true
         end)
 
@@ -105,13 +105,6 @@ function UPGRADE:Apply(SWEP)
             owner:EmitSound("ttt_pack_a_punch/bob/activate.mp3")
             bob.TTTPAPBobBot = true
             bob:SetModel(bobModel)
-
-            if bob.SetInvulnerable then
-                bob:SetInvulnerable(true, false)
-            else
-                bob:GodEnable()
-            end
-
             -- Lets Bob walk through players to allow for flying to them
             bob:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
             bob:Give("weapon_zm_sledge")
@@ -120,6 +113,7 @@ function UPGRADE:Apply(SWEP)
             local originPos = owner:GetUp() * 1000
             local targetPos = owner:GetEyeTrace().HitPos
             FlyToPos(bob, targetPos, originPos)
+            bob:SetHealth(150)
             -- Making bob fly to the target player if stuck
             local timername = "TTTPAPBobStuckCheck" .. bob:EntIndex()
 

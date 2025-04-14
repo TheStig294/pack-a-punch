@@ -2985,7 +2985,7 @@ Right-click to summon B.O.B, who shoots anyone but you!\
 \
 *ttt_pap_swep_rifle_viper* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_bob_duration* - Default: 20 - Seconds duration B.O.B lasts\
+*pap_bob_duration* - Default: 15 - Seconds duration B.O.B lasts\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1595492061>
 
