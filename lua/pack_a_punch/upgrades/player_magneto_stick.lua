@@ -40,7 +40,7 @@ CreateConVar("pap_player_magneto_stick_carry_duration", "30", {FCVAR_NOTIFY, FCV
 
 CreateConVar("pap_player_magneto_stick_struggle_interval", "0.25", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds between struggles", 0.1, 1)
 
-CreateConVar("pap_player_magneto_stick_struggle_reduce", "0.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 5)
+CreateConVar("pap_player_magneto_stick_struggle_reduce", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Seconds a struggle reduces carry", 0.1, 5)
 
 CreateConVar("pap_player_magneto_stick_cooldown", "10", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Second cooldown between picking up", 0, 180)
 
