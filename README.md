@@ -346,7 +346,7 @@ Spawns a deadly bus where it explodes, driving through walls, killing any player
 \
 *ttt_pap_banana_bus* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_banana_bus_speed* - Default: 1.5 - Speed the bus travels (units/tick)\
+*pap_banana_bus_speed* - Default: 1 - Speed the bus travels (units/tick)\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=654570222>
 

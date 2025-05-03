@@ -1,4 +1,4 @@
-local speedCvar = CreateConVar("pap_banana_bus_speed", "1.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed the bus travels (units/tick)", 0.1, 5)
+local speedCvar = CreateConVar("pap_banana_bus_speed", "1", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed the bus travels (units/tick)", 0.1, 5)
 
 if SERVER then
 	AddCSLuaFile()
@@ -41,7 +41,7 @@ function ENT:Initialize()
 		if SERVER and IsValid(self.PAPOwner) then
 			net.Start("TTTPAPBananaBusOutline")
 			net.WriteEntity(self)
-			net.Send(self.PAPOwner)
+			net.Broadcast()
 		end
 	end)
 end
