@@ -35,13 +35,13 @@ function UPGRADE:Apply(SWEP)
             if not toggleOn and ply.TTTPAPBombsAwayModel then
                 UPGRADE:SetModel(ply, ply.TTTPAPBombsAwayModel)
                 ply.TTTPAPBombsAwayModel = nil
-                RunConsoleCommand("tracer_hud", 0)
-                RunConsoleCommand("tracer_hud_crosshair", 0)
+                ply:ConCommand("tracer_hud 0")
+                ply:ConCommand("tracer_hud_crosshair 0")
             elseif toggleOn then
                 ply.TTTPAPBombsAwayModel = ply:GetModel()
                 UPGRADE:SetModel(ply, "models/player/ow_tracer.mdl")
-                RunConsoleCommand("tracer_hud", 1)
-                RunConsoleCommand("tracer_hud_crosshair", 1)
+                ply:ConCommand("tracer_hud 1")
+                ply:ConCommand("tracer_hud_crosshair 1")
             end
         end
 
