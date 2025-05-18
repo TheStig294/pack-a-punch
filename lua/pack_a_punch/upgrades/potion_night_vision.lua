@@ -98,13 +98,15 @@ function UPGRADE:Apply(SWEP)
             end
         end)
 
-        SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
+        if not SWEP.PAPOldDrawWorldModel then
+            SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
-        function SWEP:DrawWorldModel()
-            SWEP:PAPOldDrawWorldModel()
+            function SWEP:DrawWorldModel()
+                SWEP:PAPOldDrawWorldModel()
 
-            if IsValid(self.WorldModelEnt) then
-                self.WorldModelEnt:SetPAPCamo()
+                if IsValid(self.WorldModelEnt) then
+                    self.WorldModelEnt:SetPAPCamo()
+                end
             end
         end
     end

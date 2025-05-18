@@ -140,7 +140,7 @@ function UPGRADE:Apply(SWEP)
         timer.Remove("TTTPAPStrengthPotionOtherPlayerTimer" .. ply:SteamID64())
     end)
 
-    if CLIENT then
+    if CLIENT and not SWEP.PAPOldDrawWorldModel then
         SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
         function SWEP:DrawWorldModel()

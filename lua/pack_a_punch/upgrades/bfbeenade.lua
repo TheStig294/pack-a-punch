@@ -5,21 +5,25 @@ UPGRADE.name = "BFBeenade"
 UPGRADE.desc = "Spawns invincible big bees!"
 
 function UPGRADE:Apply(SWEP)
-    SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
+    if CLIENT and not SWEP.PAPOldDrawWorldModel then
+        SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
-    function SWEP:DrawWorldModel()
-        self:PAPOldDrawWorldModel()
-        self.ModelEntity:SetPAPCamo()
+        function SWEP:DrawWorldModel()
+            self:PAPOldDrawWorldModel()
+            self.ModelEntity:SetPAPCamo()
+        end
     end
 
-    SWEP.PAPOldViewModelDrawn = SWEP.ViewModelDrawn
+    if CLIENT and not SWEP.PAPOldViewModelDrawn then
+        SWEP.PAPOldViewModelDrawn = SWEP.ViewModelDrawn
 
-    function SWEP:ViewModelDrawn()
-        self:PAPOldViewModelDrawn()
-        local owner = self:GetOwner()
+        function SWEP:ViewModelDrawn()
+            self:PAPOldViewModelDrawn()
+            local owner = self:GetOwner()
 
-        if IsValid(owner) and owner == LocalPlayer() then
-            self.ModelEntity:SetPAPCamo()
+            if IsValid(owner) and owner == LocalPlayer() then
+                self.ModelEntity:SetPAPCamo()
+            end
         end
     end
 

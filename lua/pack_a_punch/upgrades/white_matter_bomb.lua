@@ -10,23 +10,27 @@ function UPGRADE:Apply(SWEP)
         return "ttt_pap_wmgrenade_proj"
     end
 
-    SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
+    if CLIENT and not SWEP.PAPOldDrawWorldModel then
+        SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
-    function SWEP:DrawWorldModel()
-        self:PAPOldDrawWorldModel()
+        function SWEP:DrawWorldModel()
+            self:PAPOldDrawWorldModel()
 
-        if IsValid(self.ModelEntity) then
-            self.ModelEntity:SetPAPCamo()
+            if IsValid(self.ModelEntity) then
+                self.ModelEntity:SetPAPCamo()
+            end
         end
     end
 
-    SWEP.PAPOldViewModelDrawn = SWEP.ViewModelDrawn
+    if CLIENT and not SWEP.PAPOldViewModelDrawn then
+        SWEP.PAPOldViewModelDrawn = SWEP.ViewModelDrawn
 
-    function SWEP:ViewModelDrawn()
-        self:PAPOldViewModelDrawn()
+        function SWEP:ViewModelDrawn()
+            self:PAPOldViewModelDrawn()
 
-        if IsValid(self.ModelEntity) then
-            self.ModelEntity:SetPAPCamo()
+            if IsValid(self.ModelEntity) then
+                self.ModelEntity:SetPAPCamo()
+            end
         end
     end
 end

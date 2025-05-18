@@ -57,7 +57,7 @@ function UPGRADE:Apply(SWEP)
         end
     end
 
-    if CLIENT then
+    if CLIENT and not SWEP.PAPOldDrawWorldModel then
         SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
         function SWEP:DrawWorldModel()

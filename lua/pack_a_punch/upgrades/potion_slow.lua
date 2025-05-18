@@ -67,7 +67,7 @@ function UPGRADE:Apply(SWEP)
         self:DoSlow(ent)
     end
 
-    if CLIENT then
+    if CLIENT and not SWEP.PAPOldDrawWorldModel then
         SWEP.PAPOldDrawWorldModel = SWEP.DrawWorldModel
 
         function SWEP:DrawWorldModel()
