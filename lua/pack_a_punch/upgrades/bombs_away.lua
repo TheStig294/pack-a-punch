@@ -31,6 +31,7 @@ function UPGRADE:Apply(SWEP)
     if util.IsValidModel(tracerModel) then
         local function ToggleTracerModel(ply, toggleOn)
             if not IsValid(ply) then return end
+            if CLIENT and IsValid(LocalPlayer()) and LocalPlayer() ~= ply then return end
 
             if not toggleOn and ply.TTTPAPBombsAwayModel then
                 UPGRADE:SetModel(ply, ply.TTTPAPBombsAwayModel)
