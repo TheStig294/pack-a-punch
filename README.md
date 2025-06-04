@@ -1854,6 +1854,15 @@ A magneto-stick that exclusively picks up players!\
 \
 Upgrade for: Default TTT weapon
 
+## Mario Mushroom (Mini Mush)
+
+1/3 size + floaty jump\
+\
+*ttt_pap_mini_mush* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2813468706>
+
 ## Marshal Badge (Promotion Badge)
 
 Auto-promotes the player to detective!\
