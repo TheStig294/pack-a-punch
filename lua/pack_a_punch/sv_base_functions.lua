@@ -171,6 +171,8 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
 
         -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
         UPGRADE.oldClip = oldClip
+        -- This prevents a weapon's upgrade from being displayed twice, the PlayerSwitchWeapon hook below isn't run for ply:SelectWeapon()
+        SWEP.TTTPAPLastPlayerSwitchedTo = ply
         hook.Run("TTTPAPOrder", ply, SWEP, UPGRADE)
         TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end)
@@ -310,19 +312,29 @@ end
 
 -- Applies a random upgrade to a loose weapon, not necessarily carried by a player
 function TTTPAP:ApplyRandomUpgrade(SWEP)
-    if not SWEP.PAPUpgrade then
-        local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
-        if UPGRADE == nil then return end
-        UPGRADE.noDesc = true
+    if not IsValid(SWEP) or SWEP.PAPUpgrade then return end
+    local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
+    if UPGRADE == nil then return end
+    UPGRADE.noDesc = true
 
-        local function Try()
-            TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
-        end
-
-        local function Catch(err)
-            ErrorNoHalt("WARNING: Pack-a-Punch upgrade '" .. UPGRADE.id .. "' caused an error being applied to '" .. tostring(SWEP) .. "'. Please report to the addon developer with the following error:\n", err, "\n")
-        end
-
-        xpcall(Try, Catch)
+    local function Try()
+        TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
     end
+
+    local function Catch(err)
+        ErrorNoHalt("WARNING: Pack-a-Punch upgrade '" .. UPGRADE.id .. "' caused an error being applied to '" .. tostring(SWEP) .. "'. Please report to the addon developer with the following error:\n", err, "\n")
+    end
+
+    xpcall(Try, Catch)
 end
+
+-- Displays the upgrade description for upgraded weapons you find on the ground
+hook.Add("PlayerSwitchWeapon", "TTTPAPDroppedWeaponUpgradeDescription", function(ply, _, SWEP)
+    if IsValid(SWEP) and SWEP.PAPUpgrade and SWEP.PAPUpgrade.desc then
+        if not IsValid(SWEP.TTTPAPLastPlayerSwitchedTo) or SWEP.TTTPAPLastPlayerSwitchedTo ~= ply then
+            ply:ChatPrint("PAP UPGRADE: " .. SWEP.PAPUpgrade.desc)
+        end
+
+        SWEP.TTTPAPLastPlayerSwitchedTo = ply
+    end
+end)
