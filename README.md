@@ -360,6 +360,15 @@ Plays a 'help I'm stuck in a barnacle!' sound for the victim\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067939864>
 
+## Barrel Transformer (MEGA Barrel Transformer)
+
+Turn into a MASSIVE barrel!\
+\
+*ttt_pap_mega_barrel_transformer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
+
 ## Bear Trap (Floating Bear Trap)
 
 You can place 2 traps, floats around immune to your own traps!\
