@@ -295,6 +295,15 @@ whenever someone walks near\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2887757921>
 
+## Ankh (Infinite Ankh)
+
+Unlimited respawns! (So long as it's not destroyed...)\
+\
+*ttt_pap_infinite_ankh* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
+
 ## Antlion Summoner (Antlion Spammer)
 
 Ammo recharges over time\
@@ -2375,6 +2384,15 @@ Exploded props spray more props everywhere!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=680737032>
+
+## Proselytizer (Remote PAPer)
+
+Upgrades all weapons of the player you promote!\
+\
+*ttt_pap_remote_paper* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
 
 ## Pulse Pistols (Bomb's Away!)
 
