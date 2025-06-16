@@ -3061,6 +3061,15 @@ Makes victims blink...\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1346794275>
 
+## Wheel Spinner (Wheel Spammer)
+
+No cooldown, spin the wheel faster!\
+\
+*ttt_pap_wheel_spammer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
+
 ## Winter's Howl [Standalone] (Winter's Fury)
 
 Extra ammo + slows everyone else down and puts an icy overlay over their screen\
