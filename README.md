@@ -2228,6 +2228,15 @@ You only swap after taking damage\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3022191155>
 
+## Poison Gun (Instant Aging Gun)
+
+Turns someone into an Old Man!\
+\
+*ttt_pap_instant_aging_gun* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
+
 ## Poltergeist (The Ghost Ball)
 
 x2 ammo + fire rate increase\
