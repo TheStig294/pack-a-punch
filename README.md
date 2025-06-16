@@ -2527,6 +2527,15 @@ Zoomier zoom, fire rate increase!\
 \
 Upgrade for: Default TTT weapon
 
+## Rocket Launcher [Randomat Weapon] (Rocket Jumper)
+
+Immune to self-damage, launches players hilariously far!\
+\
+*ttt_pap_rocket_jumper* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3440665808>
+
 ## Rocket Thruster (Remote Thruster)
 
 Launches other players instead!\
