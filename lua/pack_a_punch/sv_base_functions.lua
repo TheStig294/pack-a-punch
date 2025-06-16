@@ -329,12 +329,14 @@ function TTTPAP:ApplyRandomUpgrade(SWEP)
 end
 
 -- Displays the upgrade description for upgraded weapons you find on the ground
-hook.Add("PlayerSwitchWeapon", "TTTPAPDroppedWeaponUpgradeDescription", function(ply, _, SWEP)
-    if IsValid(SWEP) and SWEP.PAPUpgrade and SWEP.PAPUpgrade.desc then
-        if not IsValid(SWEP.TTTPAPLastPlayerSwitchedTo) or SWEP.TTTPAPLastPlayerSwitchedTo ~= ply then
-            ply:ChatPrint("PAP UPGRADE: " .. SWEP.PAPUpgrade.desc)
-        end
+if SERVER then
+    hook.Add("PlayerSwitchWeapon", "TTTPAPDroppedWeaponUpgradeDescription", function(ply, _, SWEP)
+        if IsValid(SWEP) and SWEP.PAPUpgrade and SWEP.PAPUpgrade.desc then
+            if not IsValid(SWEP.TTTPAPLastPlayerSwitchedTo) or SWEP.TTTPAPLastPlayerSwitchedTo ~= ply then
+                ply:ChatPrint("PAP UPGRADE: " .. SWEP.PAPUpgrade.desc)
+            end
 
-        SWEP.TTTPAPLastPlayerSwitchedTo = ply
-    end
-end)
+            SWEP.TTTPAPLastPlayerSwitchedTo = ply
+        end
+    end)
+end
