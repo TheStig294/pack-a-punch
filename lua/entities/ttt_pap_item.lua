@@ -42,7 +42,8 @@ hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
     -- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
     -- Jester/Swapper are shop roles because of an old request to let them have buyable items that pre-dates the role weapons system, which hasn't been removed for some reason
     -- Hive Mind's buy menu is supposed to start empty
-    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND}
+    -- The Werewolf's buy menu is empty
+    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND, ROLE_WEREWOLF}
 
     local bannedRolesDictionary = {}
 

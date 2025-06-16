@@ -612,6 +612,15 @@ Spawned chickens lay more eggs!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1659437311>
 
+## Claws [Werewolf Role Weapon] (Cloaked Claws)
+
+Become invisible while held!\
+\
+*ttt_pap_cloaked_claws* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
+
 ## Claws [Zombie Role Weapon] (Braaaaaains)
 
 Makes zombie sounds for you!\
