@@ -88,7 +88,7 @@ function TTTPAP:SelectUpgrade(SWEP)
     local upgrades = TTTPAP.upgrades[SWEP:GetClass()]
     local isGenericUpgrade = false
 
-    if not upgrades then
+    if not upgrades or (TTTPAP:IsGenericWeapon(SWEP) and not TTTPAP:FindValidUpgradeFromPool(SWEP, upgrades)) then
         upgrades = TTTPAP.genericUpgrades
         isGenericUpgrade = true
     end

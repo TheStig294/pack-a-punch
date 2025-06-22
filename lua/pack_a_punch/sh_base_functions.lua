@@ -105,6 +105,17 @@ hook.Add("TTTPrepareRound", "TTTPAPResetAll", function()
     end
 end)
 
+function TTTPAP:IsGenericWeapon(SWEP)
+    return SWEP and SWEP.AutoSpawnable and SWEP.Kind and SWEP.Kind ~= WEAPON_NADE
+end
+
+function TTTPAP:FindValidUpgradeFromPool(SWEP, pool)
+    for _, UPGRADE in pairs(pool) do
+        -- If even one upgrade's condition returns true, and its convar is on, we're good
+        if UPGRADE:Condition(SWEP) and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return UPGRADE end
+    end
+end
+
 -- Checks if the passed weapon classname, weapon entity, or weapon a passed player is holding, can be upgraded
 function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
     if not ent then return false, "Invalid player/weapon" end
@@ -150,8 +161,8 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         end
 
         return false, "That weapon is already upgraded"
-    elseif not upgrades and (not SWEP or not SWEP.AutoSpawnable or SWEP.Kind == WEAPON_NADE or not genericUpgradesCvar:GetBool()) then
-        -- Preventing purchase if held weapon is either not a floor weapon, is a grenade, or generic upgrades are turned off, and the weapon has no PaP upgrade
+    elseif not upgrades and (not TTTPAP:IsGenericWeapon(SWEP) or not genericUpgradesCvar:GetBool()) then
+        -- Preventing purchase if held weapon is either not a generic weapon, or generic upgrades are turned off, and the weapon has no PaP upgrade
         if displayErrorMessage then
             ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
             ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Weapon has no upgrade made for it :(")
@@ -160,10 +171,9 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         return false, "Weapon has no upgrade made for it :("
     elseif upgrades then
         -- Preventing purchase if all upgrades' condition functions return false or all have their convars disabled
-        for id, UPGRADE in pairs(upgrades) do
-            -- If even one upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
-            if UPGRADE:Condition(SWEP) and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return true end
-        end
+        if TTTPAP:FindValidUpgradeFromPool(SWEP, upgrades) then return true end
+        -- If no upgrades are enabled, and the weapon is generic, see if generic upgrades are enabled and if there's a generic upgrade available
+        if TTTPAP:IsGenericWeapon(SWEP) and genericUpgradesCvar:GetBool() and TTTPAP:FindValidUpgradeFromPool(SWEP, TTTPAP.genericUpgrades) then return true end
 
         if displayErrorMessage then
             ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
@@ -173,10 +183,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         return false, "Upgrade disabled, or the required mod for this upgrade isn't installed on the server"
     elseif not upgrades then
         -- Preventing purchase if all generic upgrades' condition functions return false or all have had their convars disabled
-        for id, UPGRADE in pairs(TTTPAP.genericUpgrades) do
-            -- If even one generic upgrade's condition returns true, and its convar is on, we're good, return out of printing an error
-            if UPGRADE:Condition(SWEP) and GetConVar("ttt_pap_" .. UPGRADE.id):GetBool() then return true end
-        end
+        if TTTPAP:FindValidUpgradeFromPool(SWEP, TTTPAP.genericUpgrades) then return true end
 
         if displayErrorMessage then
             ent:PrintMessage(HUD_PRINTCENTER, "Held weapon can't be upgraded")
