@@ -180,6 +180,8 @@ and the upgraded acid gat to be disabled.
 
 *ttt_pap_upgradeable_indicator* - Default: 1 - *Try* to display an icon over buy menu icons showing if a weapon is upgradeable or not
 
+*ttt_pap_apply_generic_shoot_sound* - Default: 1 - Apply the generic upgraded shoot sound to weapons (Changes apply to newly upgraded weapons)
+
 Above are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to the giant list below!
 
 # The Great Giant List of Upgrades
