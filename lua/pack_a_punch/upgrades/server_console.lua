@@ -1097,6 +1097,12 @@ function UPGRADE:Apply(SWEP)
                 file.Write("ttt_pack_a_punch/server_console_saved_roles.json", util.TableToJSON(forcedRoles))
             end)
 
+            -- If there actually is a next round, no more need to save forced roles or set them on the next map
+            hook.Add("TTTBeginRound", "TTTPAPServerConsoleClearForcedRoles", function()
+                hook.Remove("ShutDown", "TTTPAPServerConsoleSaveForcedRoles")
+                hook.Remove("TTTBeginRound", "TTTPAPServerConsoleClearForcedRoles")
+            end)
+
             return {
                 {ADMIN_MESSAGE_PLAYER, admin:SteamID64()},
                 {ADMIN_MESSAGE_TEXT, " marked "},
