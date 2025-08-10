@@ -22,7 +22,8 @@ local pap = {
     type = "item_passive",
     material = "vgui/ttt/ttt_pack_a_punch.png",
     name = "pap_name",
-    desc = "pap_desc"
+    desc = "pap_desc",
+    norandom = true,
 }
 
 -- Add the PaP to every role's buy menu that isn't banned
