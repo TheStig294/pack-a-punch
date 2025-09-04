@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "double_death_note"
 UPGRADE.class = "death_note_ttt"
 UPGRADE.name = "Double Death Note"
-UPGRADE.desc = "Write 2 names separately, their deaths are quicker!"
+UPGRADE.desc = "2 uses, deaths are quicker!"
 
 UPGRADE.convars = {
     {
