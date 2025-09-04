@@ -5,6 +5,8 @@ UPGRADE.name = "No Take Backsies Potato"
 UPGRADE.desc = "Cannot be given back.\nImmune to the bigger explosion!"
 
 function UPGRADE:Apply(SWEP)
+    self:SetClip(SWEP, -1)
+
     -- If this is not being passed to a player, and is the owner upgrading the weapon themselves, then set them as the owner
     if not IsValid(SWEP.PAPOriginalOwner) then
         SWEP.PAPOriginalOwner = SWEP:GetOwner()
@@ -28,7 +30,7 @@ function UPGRADE:Apply(SWEP)
             end)
 
             if victim == SWEP.PAPOriginalOwner then
-                attacker:PrintMessage(HUD_PRINTCENTER, "No take backsies! Find someone else!")
+                owner:PrintMessage(HUD_PRINTCENTER, "No take backsies! Find someone else!")
 
                 return
             end
@@ -57,8 +59,10 @@ function UPGRADE:Apply(SWEP)
     SWEP.PAPOldDetonate = SWEP.Detonate
 
     function SWEP:Detonate(ply)
-        if IsValid(self.PAPOriginalOwner) then
-            self.PAPOriginalOwner.PAPPotatoExplosionImmune = true
+        local originalOwner = self.PAPOriginalOwner
+
+        if IsValid(originalOwner) then
+            originalOwner.PAPPotatoExplosionImmune = true
         end
 
         self:PAPOldDetonate(ply)
@@ -76,9 +80,11 @@ function UPGRADE:Apply(SWEP)
         local tr = util.QuickTrace(self:GetPos(), Vector(0, 0, -1))
         StartFires(self:GetPos(), tr, 20, 40, false, self:GetOwner())
 
-        if IsValid(self.PAPOriginalOwner) then
-            self.PAPOriginalOwner.PAPPotatoExplosionImmune = false
-        end
+        timer.Simple(0, function()
+            if IsValid(originalOwner) then
+                originalOwner.PAPPotatoExplosionImmune = false
+            end
+        end)
     end
 
     -- The original owner of the upgraded hot potato is immune to the explosion
