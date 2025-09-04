@@ -872,19 +872,14 @@ You can link one more person, bypasses explosion immunities!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1909514983>
 
-## Death Note (Dramatic Death Note)
+## Death Note (Double Death Note)
 
-Each death type has a new effect!
-
-- Pre-mature burial: Victim sinks way further into the ground, plays the lego yoda death noise
-- Ignite: x5 fire damage, starts fires after they die
-- Heart attack: Plays the vine boom
-- Fall: Plays a cartoon fling noise
-- Explode: Extra large explosion and starts some fires!
-- Dissolve: Leaves no trace where they died, no weapons dropped
-
-*ttt_pap_dramatic_death_note* - Default: 1 - Whether this upgrade is enabled
+Lets you write 2 names separately in the death note, and kill 2 players!\
+Both players die faster than normal.\
 \
+*ttt_pap_double_death_note* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_double_death_note_time_mult* - Default: 0.5 - Multiplier to the time the death note takes to kill\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2552417009>
 
@@ -1547,15 +1542,12 @@ Bigger model, larger explosion, leaves fire\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1894982220>
 
-## Hot Potato (Cold Spaghetti)
+## Hot Potato (No Takesies Backsies Potato)
 
-Temporarily freezes players in addition to exploding, doesn't affect you!
+Cannot be given back. Immune to the bigger explosion!
 \
-*ttt_pap_cold_spaghetti* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_no_takesies_backsies_potato* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_cold_spaghetti_frozen_radius* - Default: 600 - Distance players are frozen\
-*pap_cold_spaghetti_frozen_secs* - Default: 20 - Seconds players are frozen\
-*pap_cold_spaghetti_alt_music* - Default: 0 - Whether the cold spaghetti plays alternative music\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2377790970>
 

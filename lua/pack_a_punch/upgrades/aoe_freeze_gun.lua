@@ -18,7 +18,7 @@ function UPGRADE:Apply(SWEP)
     local screenColour = Color(0, 238, 255, 20)
     local freezeColour = Color(0, 255, 255)
 
-    local function FreezeTarget(attacker, tr, dmginfo)
+    local function FreezeTarget(attacker, tr, _)
         local ent = tr.Entity
         if not IsValid(ent) then return end
 
@@ -36,8 +36,7 @@ function UPGRADE:Apply(SWEP)
 
                 if ply:GetPos():DistToSqr(ent:GetPos()) < range then
                     ply:Freeze(true)
-                    -- Most use I've ever got out of a single sound effect lol
-                    ply:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                    ply:EmitSound("ttt_pack_a_punch/aoe_freeze_gun/freeze.mp3")
                     ply:ScreenFade(SCREENFADE.OUT, screenColour, 1, freezeDuration:GetInt() - 1)
                     local oldPlayerColour = ply:GetColor()
                     ply:SetColor(freezeColour)

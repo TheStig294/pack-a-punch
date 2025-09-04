@@ -10,19 +10,17 @@ function UPGRADE:Apply(SWEP)
     local screenColour = Color(0, 238, 255, 20)
 
     if SERVER then
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             if self:IsAlive(ply) and ply ~= owner then
                 ply:ScreenFade(SCREENFADE.OUT, screenColour, 1, 1)
 
                 timer.Simple(1.5, function()
-                    -- ply:ScreenFade(SCREENFADE.IN, screenColour, 1, 1)
                     ply:ScreenFade(SCREENFADE.STAYOUT, screenColour, 1, 1)
                 end)
 
                 ply:SetLaggedMovementValue(0.75 * ply:GetLaggedMovementValue())
                 ply:PrintMessage(HUD_PRINTCENTER, "Someone wields winter's fury...")
-                -- Getting some use out of this sound huh?
-                ply:EmitSound("ttt_pack_a_punch/cold_spaghetti/freeze.mp3")
+                ply:EmitSound("ttt_pack_a_punch/aoe_freeze_gun/freeze.mp3")
             end
         end
     end
@@ -35,7 +33,7 @@ end
 
 function UPGRADE:Reset()
     if SERVER then
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             ply:ScreenFade(SCREENFADE.PURGE, screenColour, 1, 1)
             ply:SetLaggedMovementValue(1)
         end
