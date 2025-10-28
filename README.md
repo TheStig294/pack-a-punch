@@ -879,7 +879,7 @@ Both players die faster than normal.\
 \
 *ttt_pap_double_death_note* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_double_death_note_time_mult* - Default: 0.5 - Multiplier to the time the death note takes to kill\
+*pap_double_death_note_time_mult* - Default: 0.8 - Multiplier to the time the death note takes to kill\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2552417009>
 

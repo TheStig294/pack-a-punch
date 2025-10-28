@@ -12,7 +12,7 @@ UPGRADE.convars = {
     }
 }
 
-local timeMultCvar = CreateConVar("pap_double_death_note_time_mult", "0.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Multiplier to the time the death note takes to kill", 0, 1)
+local timeMultCvar = CreateConVar("pap_double_death_note_time_mult", "0.8", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Multiplier to the time the death note takes to kill", 0, 1)
 
 function UPGRADE:Apply(SWEP)
     SWEP.UsesLeft = 2
