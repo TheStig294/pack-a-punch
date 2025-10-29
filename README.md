@@ -832,6 +832,15 @@ Become a ghost while active!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3074845055>
 
+## Deadtector (Body Radar)
+
+Highlights unsearched bodies through walls!\
+\
+*ttt_pap_body_radar* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3528212299>
+
 ## Deagle (The Head Lifter)
 
 High recoil, high damage!\
