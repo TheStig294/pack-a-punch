@@ -2568,6 +2568,16 @@ Players auto-rotate for a sec!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=639376504>
 
+## Seekgull in a Can (Gull-dar)
+
+Keeps spawning Seekgulls intermittently from where it explodes\
+\
+*ttt_pap_gulldar* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_gulldar_delay* - Default: 20 - Seconds between spawning Seekgulls\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3592849639>
+
 ## Slappers (Spinning Slappers)
 
 Slaps send people flying! Has a 30 second cooldown (by default)\
