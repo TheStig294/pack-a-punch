@@ -22,11 +22,11 @@ UPGRADE.convars = {
     }
 }
 
-local speedMult = CreateConVar("pap_self_pack_a_punch_speed", "1.2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed multiplier", 1, 5)
+local speedMult = CreateConVar("pap_self_pack_a_punch_speed", "1.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Speed multiplier", 1, 5)
 
 local jumpMult = CreateConVar("pap_self_pack_a_punch_jump", "1.5", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Jump height multiplier", 1, 5)
 
-local healthMult = CreateConVar("pap_self_pack_a_punch_health", "1.2", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health multiplier", 1, 5)
+local healthMult = CreateConVar("pap_self_pack_a_punch_health", "1.3", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health multiplier", 1, 5)
 
 function UPGRADE:Apply(SWEP)
     local speedScale = speedMult:GetFloat()

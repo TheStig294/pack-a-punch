@@ -1537,9 +1537,9 @@ Speed, jump and health boost!\
 \
 *ttt_pap_self_pack_a_punch* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_self_pack_a_punch_speed* - Default: 1.2 - Speed multiplier\
+*pap_self_pack_a_punch_speed* - Default: 1.5 - Speed multiplier\
 *pap_self_pack_a_punch_jump* - Default: 1.5 - Jump height multiplier\
-*pap_self_pack_a_punch_health* - Default: 1.2 - Health multiplier\
+*pap_self_pack_a_punch_health* - Default: 1.3 - Health multiplier\
 \
 Upgrade for: Default TTT weapon
 
