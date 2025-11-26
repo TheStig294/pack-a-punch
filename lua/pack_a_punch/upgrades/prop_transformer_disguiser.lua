@@ -19,7 +19,7 @@ function UPGRADE:Apply(SWEP)
             owner:LagCompensation(true)
         end
 
-        local victim = UPGRADE:GetLookedAtEntity(owner)
+        local victim = owner:GetEyeTrace().Entity
 
         if SERVER and owner.LagCompensation then
             owner:LagCompensation(false)
