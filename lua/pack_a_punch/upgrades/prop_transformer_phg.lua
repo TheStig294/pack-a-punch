@@ -1,5 +1,5 @@
 local UPGRADE = {}
-UPGRADE.id = "prop_transformer"
+UPGRADE.id = "prop_transformer_phg"
 UPGRADE.class = "weapon_ttt_prop_hunt_gun"
 UPGRADE.name = "Prop Transformer"
 UPGRADE.desc = "Permanently transforms someone else into a prop!"
@@ -10,8 +10,7 @@ function UPGRADE:Apply(SWEP)
     function SWEP:PrimaryAttack()
         if CLIENT then return end
         local owner = self:GetOwner()
-        local TraceResult = owner:GetEyeTrace()
-        local victim = TraceResult.Entity
+        local victim = owner:GetEyeTrace().Entity
 
         if UPGRADE:IsPlayer(victim) then
             local timername = victim:SteamID64() .. "TTTPAPPropTransformerTaunts"

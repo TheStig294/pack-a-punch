@@ -2403,10 +2403,19 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2127939503>
 
 Permanently transforms someone else into a prop!\
 \
-*ttt_pap_weapon_ttt_prop_hunt_gun* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_prop_transformer_phg* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2796353349>
+
+## Prop Disguiser [Prop Disguiser 2] (Prop Transformer)
+
+Permanently transforms someone else into a prop!\
+\
+*ttt_pap_prop_transformer_disguiser* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <>
 
 ## Prop Exploder (Prop Sprayer)
 
