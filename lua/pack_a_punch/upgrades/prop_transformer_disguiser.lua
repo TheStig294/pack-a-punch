@@ -11,7 +11,6 @@ function UPGRADE:Apply(SWEP)
     end)
 
     local function SetWeaponFunctions(upgradedDisguiser, disguiser, owner, victim)
-        print(upgradedDisguiser, disguiser, owner, victim)
         if (SERVER and not IsValid(upgradedDisguiser)) or not IsValid(disguiser) or not IsValid(owner) or not IsValid(victim) then return end
         disguiser:PrimaryAttack()
 
@@ -64,7 +63,6 @@ function UPGRADE:Apply(SWEP)
         if CLIENT then return end
         local owner = self:GetOwner()
         local victim = owner:GetEyeTrace().Entity
-        print(owner, victim)
 
         if UPGRADE:IsPlayer(victim) then
             victim:StripWeapons()
@@ -78,12 +76,15 @@ function UPGRADE:Apply(SWEP)
             victim:SelectWeapon(UPGRADE.class)
             owner:PrintMessage(HUD_PRINTCENTER, "Transforming " .. victim:Nick() .. " into a prop...")
             SetWeaponFunctions(self, disguiser, owner, victim)
-            net.Start("TTTPAPPropTransformerDisguiser")
-            net.WriteEntity(self)
-            net.WriteEntity(disguiser)
-            net.WritePlayer(owner)
-            net.WritePlayer(victim)
-            net.Broadcast()
+
+            timer.Simple(0.1, function()
+                net.Start("TTTPAPPropTransformerDisguiser")
+                net.WriteEntity(self)
+                net.WriteEntity(disguiser)
+                net.WritePlayer(owner)
+                net.WritePlayer(victim)
+                net.Broadcast()
+            end)
         end
     end
 end
