@@ -2415,7 +2415,7 @@ Permanently transforms someone else into a prop!\
 *ttt_pap_prop_transformer_disguiser* - Default: 1 - Whether this upgrade is enabled
 \
 \
-Upgrade for: <>
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3612689589>
 
 ## Prop Exploder (Prop Sprayer)
 
