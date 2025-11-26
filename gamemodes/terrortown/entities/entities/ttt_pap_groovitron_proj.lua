@@ -20,7 +20,7 @@ function ENT:Initialize()
 		local view = {
 			origin = util.TraceLine({
 				start = pos,
-				endPos = pos - angles:Forward() * 100,
+				endpos = pos - angles:Forward() * 100,
 				filter = ply
 			}).HitPos,
 			angles = angles,
