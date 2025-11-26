@@ -10,12 +10,9 @@ function UPGRADE:Apply(SWEP)
         if IsValid(disguiser) and disguiser.TTTPAPPropTransformer then return false end
     end)
 
-    local function SetWeaponFunctions(wep, owner, victim)
-        print(wep, owner, victim)
-        if not IsValid(wep) or not IsValid(owner) or not IsValid(victim) then return end
-        local disguiser = victim:GetWeapon(UPGRADE.class)
-        print(disguiser)
-        if not IsValid(disguiser) then return end
+    local function SetWeaponFunctions(upgradedDisguiser, disguiser, owner, victim)
+        print(upgradedDisguiser, disguiser, owner, victim)
+        if (SERVER and not IsValid(upgradedDisguiser)) or not IsValid(disguiser) or not IsValid(owner) or not IsValid(victim) then return end
         disguiser:PrimaryAttack()
 
         if SERVER then
@@ -44,7 +41,7 @@ function UPGRADE:Apply(SWEP)
         end
 
         if SERVER then
-            wep:Remove()
+            upgradedDisguiser:Remove()
             owner:ConCommand("lastinv")
         end
     end
@@ -53,10 +50,11 @@ function UPGRADE:Apply(SWEP)
         util.AddNetworkString("TTTPAPPropTransformerDisguiser")
     else
         net.Receive("TTTPAPPropTransformerDisguiser", function()
+            local upgradedDisguiser = net.ReadEntity()
             local disguiser = net.ReadEntity()
             local owner = net.ReadPlayer()
             local victim = net.ReadPlayer()
-            SetWeaponFunctions(disguiser, owner, victim)
+            SetWeaponFunctions(upgradedDisguiser, disguiser, owner, victim)
         end)
     end
 
@@ -79,9 +77,10 @@ function UPGRADE:Apply(SWEP)
 
             victim:SelectWeapon(UPGRADE.class)
             owner:PrintMessage(HUD_PRINTCENTER, "Transforming " .. victim:Nick() .. " into a prop...")
-            SetWeaponFunctions(self, owner, victim)
+            SetWeaponFunctions(self, disguiser, owner, victim)
             net.Start("TTTPAPPropTransformerDisguiser")
             net.WriteEntity(self)
+            net.WriteEntity(disguiser)
             net.WritePlayer(owner)
             net.WritePlayer(victim)
             net.Broadcast()
