@@ -141,7 +141,6 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         if not IsValid(SWEP) then
             -- Preventing purchase if the currently held weapon is invalid
             if displayErrorMessage then
-                ent:PrintMessage(HUD_PRINTCENTER, "Invalid weapon, try again")
                 ent:PrintMessage(HUD_PRINTTALK, "[Pack-a-Punch] Invalid weapon, try again")
             end
 
