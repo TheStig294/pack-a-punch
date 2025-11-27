@@ -1,6 +1,6 @@
 local UPGRADE = {}
-UPGRADE.id = "ok47"
-UPGRADE.class = "weapon_ttt_ak47"
+UPGRADE.id = "ok47_golden"
+UPGRADE.class = "weapon_ttt_ak47gold"
 UPGRADE.name = "OK-47"
 UPGRADE.desc = "While held, basic sources of damage you deal heal instead!"
 

@@ -256,6 +256,15 @@ While held, basic sources of damage you deal heal instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=194965598>
 
+## AK47 [Golden] (OK-47)
+
+While held, basic sources of damage you deal heal instead!\
+\
+*ttt_pap_ok47_golden* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1174728266>
+
 ## Airboat Spawner (Detective Toy Car)
 
 Drive around in your very own little detective toy car!
