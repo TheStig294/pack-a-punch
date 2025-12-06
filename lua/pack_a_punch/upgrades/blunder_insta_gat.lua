@@ -3,6 +3,7 @@ UPGRADE.id = "blunder_insta_gat"
 UPGRADE.class = "tfa_blundergat"
 UPGRADE.name = "Insta-gat"
 UPGRADE.desc = "Extra ammo + faster reload!"
+UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod

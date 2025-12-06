@@ -39,6 +39,10 @@ function UPGRADE:Condition(SWEP)
     return true
 end
 
+-- Runs when a player purchases the PaP and the weapon begins upgrading. NOT run for instant upgrades. Useful for disabling a weapon's passive effects while it's upgrading
+function UPGRADE:OnPurchase(SWEP)
+end
+
 -- The function responsible for upgrading the weapon, run when the weapon should be upgraded
 function UPGRADE:Apply(SWEP)
 end

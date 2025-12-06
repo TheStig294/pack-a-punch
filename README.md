@@ -287,11 +287,11 @@ If you're a baddie, just your teammates!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2553080682>
 
-## Amaterasu (Vision Pooper)
+## Amaterasu (Death Stare)
 
-Poops the victim's vision instead\
+Always kills, doesn't affect your vision!\
 \
-*ttt_pap_vision_pooper* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_death_stare* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1978094981>
@@ -2640,7 +2640,7 @@ Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
 ## Scavenger (Fart Cannon)
 
-1.5x ammo, plays fart noises\
+Extra ammo, plays fart noises\
 \
 *ttt_pap_fart_cannon* - Default: 1 - Whether this upgrade is enabled
 \

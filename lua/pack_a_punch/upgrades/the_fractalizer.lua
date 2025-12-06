@@ -3,6 +3,7 @@ UPGRADE.id = "the_fractalizer"
 UPGRADE.class = "tfa_shrinkray"
 UPGRADE.name = "The Fractalizer"
 UPGRADE.desc = "Immune to becoming a baby + extra ammo\nYou make higher-pitched sounds!"
+UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
@@ -49,7 +50,7 @@ function UPGRADE:Apply(SWEP)
 end
 
 function UPGRADE:Reset()
-    for _, ply in ipairs(player.GetAll()) do
+    for _, ply in player.Iterator() do
         ply.PAPTheBabyKickerImmune = nil
         ply:SetNW2Bool("IsBaby", false)
         ply:SetNW2Bool("ShouldKickBaby", false)

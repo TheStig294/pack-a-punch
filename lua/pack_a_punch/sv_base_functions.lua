@@ -11,7 +11,7 @@ end)
 concommand.Add("pap_order", function(ply, _, _, argsStr)
     -- Searching for the input bot player name number
     if argsStr ~= "" then
-        for _, p in ipairs(player.GetAll()) do
+        for _, p in player.Iterator() do
             if p:Nick() == "Bot" .. argsStr then
                 -- Skip upgrade is valid checks as this is a debug command
                 TTTPAP:OrderPAP(p, true)
@@ -42,7 +42,7 @@ hook.Add("InitPostEntity", "TTTPAPFixPlayerUnstuckModConflict", function()
     -- (That feature vs. the Pack-a-Punch? Come on the PaP wins)
     -- If they're both installed, remove this functionality to make the PaP work again
     if ConVarExists("sv_player_stuck") then
-        hook.Add("Think", "StigTTTFixes", function()
+        hook.Add("Think", "TTTPAPFixPlayerUnstuckModConflict", function()
             hook.Remove("PlayerSwitchWeapon", "PlayerSwitchWeaponStuck")
         end)
     end
@@ -84,7 +84,7 @@ end)
 
 -- Choose a random upgrade from available ones to give to the weapon
 -- Else, pick a random generic upgrade if no upgrade is found
-function TTTPAP:SelectUpgrade(SWEP)
+function TTTPAP:SelectUpgrade(SWEP, skipConditionCheck)
     local upgrades = TTTPAP.upgrades[SWEP:GetClass()]
     local isGenericUpgrade = false
 
@@ -98,7 +98,7 @@ function TTTPAP:SelectUpgrade(SWEP)
     -- Check for an upgrade that has its condition met, and has its convar enabled
     -- (There is guaranteed to be at least one by the TTTCanOrderEquipment hook)
     for id, upg in RandomPairs(upgrades) do
-        if not upg:Condition(SWEP) then continue end
+        if not skipConditionCheck and not upg:Condition(SWEP) then continue end
         if isGenericUpgrade and not GetConVar("ttt_pap_" .. id):GetBool() then continue end
         if not isGenericUpgrade and not GetConVar("ttt_pap_" .. upg.id):GetBool() then continue end
         UPGRADE = upg
@@ -120,11 +120,12 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         return
     end
 
+    local UPGRADE = TTTPAP:SelectUpgrade(SWEP, true)
+    UPGRADE:OnPurchase(SWEP)
     -- Initial upgrade sound is only heard for the player who bought the Pack-a-Punch
     ply:SendLua("surface.PlaySound(\"ttt_pack_a_punch/upgrade_begin.mp3\")")
     local classname = SWEP:GetClass()
     local oldClip = SWEP:Clip1()
-    ply:StripWeapon(classname)
     -- Prevent the player from using a weapon while Pack-a-Punching
     ply:SetNWBool("TTTPAPIsUpgrading", true)
     ply:SelectWeapon("weapon_ttt_unarmed")
@@ -141,13 +142,6 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
             return
         end
 
-        for _, w in ipairs(ply:GetWeapons()) do
-            if w.Kind == weapons.Get(classname).Kind then
-                ply:StripWeapon(w.ClassName)
-                break
-            end
-        end
-
         SWEP = ply:Give(classname)
         ply:SetNWBool("TTTPAPIsUpgrading", false)
     end)
@@ -162,8 +156,6 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         if not IsValid(SWEP) then
             SWEP = ply:GetWeapon(classname)
         end
-
-        local UPGRADE = TTTPAP:SelectUpgrade(SWEP)
 
         if not UPGRADE.noSelectWep then
             ply:SelectWeapon(classname)
@@ -298,7 +290,7 @@ function TTTPAP:ApplyUpgrade(SWEP, UPGRADE)
         net.WriteFloat(SWEP.Primary.Damage or -1)
         net.WriteFloat(SWEP.Primary.Cone or -1)
         net.WriteFloat(SWEP.Primary.Spread or -1)
-        net.WriteFloat(SWEP.Primary.ClipSize or -1)
+        net.WriteInt(SWEP.Primary.ClipSize or -1, 32)
         net.WriteFloat(SWEP.Primary.Recoil or -1)
         net.WriteFloat(SWEP.Primary.StaticRecoilFactor or -1)
         net.WriteBool(SWEP.Primary.Automatic or false)

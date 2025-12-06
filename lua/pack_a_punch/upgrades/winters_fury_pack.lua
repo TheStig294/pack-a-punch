@@ -3,6 +3,7 @@ UPGRADE.id = "winters_fury_pack"
 UPGRADE.class = "tfa_wintershowl"
 UPGRADE.name = "Winter's Fury"
 UPGRADE.desc = "Extra ammo + slows everyone else down\nand puts an icy overlay over their screen"
+UPGRADE.ammoMult = 2
 
 function UPGRADE:Apply(SWEP)
     -- Is a CoD weapon, so has its own PAP function we can take advantage of, this is not from this mod
@@ -10,7 +11,7 @@ function UPGRADE:Apply(SWEP)
     local owner = SWEP:GetOwner()
 
     if SERVER then
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             if self:IsAlive(ply) and ply ~= owner then
                 ply:ConCommand("pp_mat_overlay hud/freeze_screen")
                 ply:SetLaggedMovementValue(0.75 * ply:GetLaggedMovementValue())
@@ -28,7 +29,7 @@ end
 
 function UPGRADE:Reset()
     if SERVER then
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             ply:ConCommand("pp_mat_overlay \"\"")
             ply:SetLaggedMovementValue(1)
         end
