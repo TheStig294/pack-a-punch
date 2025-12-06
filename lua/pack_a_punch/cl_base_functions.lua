@@ -164,9 +164,11 @@ end)
 -- 
 -- Adding icons to the buy menu to show if a weapon is upgradeable or not
 -- 
--- Travels down the panel hierarchy of the buy menu, and returns a table of all buy menu icons
-local function GetItemIconPanels(dsheet)
-    local panelHierachy
+-- Travels down the panel hierarchy of the buy menu, and updates the table of all buy menu icons if it is found
+-- For TTT2's spectator/out of round shop preview, extends the callback of the role selector to perform update
+local function SetupIndicators(dsheet, specCallback)
+    local pathToRoleSel = {2, 2} --TTT2 only
+    local pathToIcons
 
     -- The way the buy menu panels are laid out depends on what version of TTT you are using
     -- In Custom Roles, the search bar is in the way, on the main dsheet on the left hand side
@@ -174,43 +176,79 @@ local function GetItemIconPanels(dsheet)
     -- First index is the scroll panel child, the second index is the "Equipment Items" child, its children are all of the buy menu icons
     -- A table of the children of that panel is returned (The buy menu icons)
     if CR_VERSION then
-        panelHierachy = {2, 1}
+        pathToIcons = {2, 1}
     else
-        panelHierachy = {1, 1}
+        pathToIcons = {1, 1}
     end
 
-    local buyMenu
+    local equipTabPanel
 
     for _, tab in ipairs(dsheet:GetItems()) do
         if tab.Name == "Order Equipment" then
-            buyMenu = tab.Panel
+            equipTabPanel = tab.Panel
             break
         end
     end
 
-    if not buyMenu then return end
-    buyMenu = buyMenu:GetChildren()
+    if not equipTabPanel then return end
 
     -- From here, things get unavoidably arbitrary
     -- Hopefully Panel:GetChildren() always returns these child panels the same way every time since they don't have any sort of ID
     -- Being super careful here to check for nil or empty table values at each step,
     -- since Gmod store skins or future updates for the buy menu could render it unusable otherwise
-    for _, childIndex in ipairs(panelHierachy) do
-        if not buyMenu or table.IsEmpty(buyMenu) then return end
-        buyMenu = buyMenu[childIndex]
-        if not buyMenu then return end
-        buyMenu = buyMenu:GetChildren()
+
+    -- Condition for whether shop preview dropdown is shown directly adapted from
+    -- TTT2/gamemodes/terrortown/client/cl_equip.lua (cf. "notalive = true")
+    local alive = true
+
+    if gameloop then --TTT2
+        local client = LocalPlayer()
+        alive = gameloop.GetRoundState() == ROUND_ACTIVE and client:Alive() and client:IsTerror()
     end
 
-    return buyMenu
+    if alive or specCallback then
+        -- Real shop; extracting buy menu icon collection from equipment tab
+        local buyMenuIcons = equipTabPanel:GetChildren()
+
+        for _, childIndex in ipairs(pathToIcons) do
+            if not buyMenuIcons or table.IsEmpty(buyMenuIcons) then return end
+            buyMenuIcons = buyMenuIcons[childIndex]
+            if not buyMenuIcons then return end
+            buyMenuIcons = buyMenuIcons:GetChildren()
+        end
+
+        AddUpgradeableIndicators(buyMenuIcons)
+    else
+        -- Spectator/non-round shop; find role preview selector (TTT2)
+        local roleSel = equipTabPanel:GetChildren()
+
+        for i, childIndex in ipairs(pathToRoleSel) do
+            if not roleSel or table.IsEmpty(roleSel) then return end
+            roleSel = roleSel[childIndex]
+            if not roleSel then return end
+            if i < #pathToRoleSel then roleSel = roleSel:GetChildren() end
+        end
+
+        -- Overwrite callback to update buy menu icons on role preview selection
+        local roleSelOnSelect = roleSel.OnSelect
+        roleSel.OnSelect = function(panel, index, value)
+            roleSelOnSelect(panel, index, value)
+            SetupIndicators(dsheet, true)
+        end
+    end
 end
 
 local classToUpgradeable = {}
 
 hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
-    if not GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then return end
-    local itemIcons = GetItemIconPanels(dsheet)
+    if GetConVar("ttt_pap_upgradeable_indicator"):GetBool() then
+        SetupIndicators(dsheet)
+    end
+end)
+
+function AddUpgradeableIndicators(itemIcons)
     if not itemIcons or table.IsEmpty(itemIcons) then return end
+
     -- Now we've finally made it, start looping through the buy menu icons and start counting which weapons are upgradeable or not
     local upgradeableCount = 0
     local notUpgradeableCount = 0
@@ -265,4 +303,4 @@ hook.Add("TTTEquipmentTabs", "TTTPAPAddBuyMenuIcons", function(dsheet)
         iconPanel:AddLayer(icon)
         iconPanel:EnableMousePassthrough(icon)
     end
-end)
+end
