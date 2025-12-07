@@ -101,6 +101,8 @@ Requires: [Yogscast Lewis Playermodel](https://steamcommunity.com/sharedfiles/fi
 Credit for the magneto stick upgrade's code goes to Malivil and Noxx from the 2022 Jingle Jam roles pack: <https://steamcommunity.com/sharedfiles/filedetails/?id=2942056355>
 DBKEEBLER (<https://freesound.org/people/DBKEEBLER/sounds/403684/>) on FreeSound.org for the magneto stick upgrade's victim struggle sounds
 
+Support for TTT2's spectator shop preview for the upgradeable icon indicators added by Guy-L <https://github.com/Guy-L>
+
 "Italeri Truck" (<https://skfb.ly/6WOSA>) by H.A.K_Niazi is licensed under Creative Commons Attribution (<http://creativecommons.org/licenses/by/4.0/>)
 
 Zombie sound effects used in upgraded Custom Roles zombie claws from: <https://www.fesliyanstudios.com>
