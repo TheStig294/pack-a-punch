@@ -33,7 +33,7 @@ hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
         if not tbl or not key then return end
 
         for _, v in pairs(tbl) do
-            if v[key] and v[key] == val then return true end
+            if v and v[key] and v[key] == val then return true end
         end
 
         return false
@@ -41,10 +41,7 @@ hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
 
     -- Faker breaks by spending a credit without being able to get one back
     -- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
-    -- Jester/Swapper are shop roles because of an old request to let them have buyable items that pre-dates the role weapons system, which hasn't been removed for some reason
-    -- Hive Mind's buy menu is supposed to start empty
-    -- The Werewolf's buy menu is empty
-    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_JESTER, ROLE_SWAPPER, ROLE_HIVEMIND, ROLE_WEREWOLF}
+    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN}
 
     local bannedRolesDictionary = {}
 
@@ -68,7 +65,7 @@ hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
         -- Role is not banned
         -- Role doesn't already have the PaP
         -- CR is not installed, or role has a shop
-        if not bannedRolesDictionary[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) and (not SHOP_ROLES or SHOP_ROLES[role]) then
+        if not bannedRolesDictionary[role] and not HasItemWithPropertyValue(EquipmentItems[role], "id", EQUIP_PAP) and (not SHOP_ROLES or (SHOP_ROLES[role] and WEPS.DoesRoleHaveWeapon(role, false))) then
             table.insert(equTable, pap)
         end
     end
