@@ -1,6 +1,6 @@
 local UPGRADE = {}
 UPGRADE.id = "quick_one_punch"
-UPGRADE.class = "one_punch_skin"
+UPGRADE.class = "weapon_ttt_one_punch"
 UPGRADE.name = "Quick One Punch!!!"
 UPGRADE.desc = "x2 punch speed, shows the anime intro around you!"
 
