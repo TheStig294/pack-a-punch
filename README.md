@@ -2888,6 +2888,15 @@ Converts *anything* into a bomb station!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Stove Placer (Explosive Stove Placer)
+
+Goes nuts.\
+\
+*ttt_pap_explosive_stove_placer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Stungun (Flying Stungun)
 
 More ammo, infinite range, instant recharge, much more taser power!\
