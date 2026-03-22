@@ -432,5 +432,15 @@ function UPGRADE:SetThirdPerson(ply, active)
     end
 end
 
+function UPGRADE:SetUpgraded(ent, skipCamo)
+    if not IsValid(ent) then return end
+
+    if not skipCamo then
+        ent:SetPAPCamo()
+    end
+
+    ent.PAPUpgrade = self
+end
+
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
 TTTPAP.upgrade_meta = UPGRADE
