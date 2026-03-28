@@ -2998,6 +2998,15 @@ x2 ammo, shoots Nyan Cats!
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329750618>
 
+## Thieves' Tools (Thieves' Upgrader)
+
+All stolen weapons are upgraded!
+\
+*ttt_pap_thieves_upgrader* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Throwable Crowbar (Throwable Freeman's Club)
 
 x2 swing speed, first throw kills in 1-shot,
