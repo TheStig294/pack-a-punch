@@ -451,14 +451,12 @@ function UPGRADE:Explode(ent, magnitude, radius, skipSpawnFires)
     explode:SetKeyValue("iMagnitude", magnitude)
     explode:SetKeyValue("iRadiusOverride", radius)
     explode:Spawn()
-    explode:Fire("Explode", 0, 0)
+    explode:Fire("Explode")
     local tr = util.QuickTrace(pos, Vector(0, 0, -1))
 
     if not skipSpawnFires then
         StartFires(pos, tr, 20, 40, false, ent)
     end
-
-    explode:Remove()
 end
 
 -- Making the metatable accessible to the base code by placing it in the TTTPAP namespace
