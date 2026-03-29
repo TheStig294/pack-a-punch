@@ -2252,6 +2252,15 @@ Increases size and health instead!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3044651560>
 
+## Pie (Tea Fuelled Pie)
+
+Massively buffs your dog, 1-shot kills, has a ton of health and moves super fast!\
+\
+*ttt_pap_tea_fuelled_pie* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Pistol (Standard Issue)
 
 Slower, high damage & accuracy shots\
