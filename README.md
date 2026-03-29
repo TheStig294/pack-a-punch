@@ -2608,6 +2608,16 @@ Players auto-rotate for a sec!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=639376504>
 
+## Safe (Safe Transformer)
+
+Turns a player into your safe!\
+\
+*ttt_pap_safe_transformer* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_safe_transformer_extra_drop_time* - Default: 30 - Seconds extra until the safe is dropped\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Seekgull in a Can (Gull-dar)
 
 Keeps spawning Seekgulls intermittently from where it explodes\
