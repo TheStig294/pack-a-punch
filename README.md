@@ -1453,6 +1453,15 @@ Continually changes the victim's gravity!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2067025529>
 
+## Guard Dog (Dog Spammer)
+
+Spawn lots of dogs!\
+\
+*ttt_pap_dog_spammer* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Guitar Gun [Lightning AR1] (Rock Guitar)
 
 Infinite ammo, time to rock!\
