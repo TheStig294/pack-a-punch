@@ -59,7 +59,9 @@ function UPGRADE:Apply(SWEP)
         end
 
         -- Find a location to drop the safe in front of the player
+        owner:LagCompensation(true)
         local tr = owner:GetEyeTrace()
+        owner:LagCompensation(false)
         local victim
 
         -- Make sure the hit isn't at the end of the length because that seems to mean it actually hasn't hit anything

@@ -11,7 +11,7 @@ UPGRADE.convars = {
     }
 }
 
-local buffCooldownCvar = CreateConVar("pap_target_buffer_buff_cooldown", 30, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Buff cooldown", 1, 180)
+local buffCooldownCvar = CreateConVar("pap_target_buffer_buff_cooldown", 20, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Buff cooldown", 1, 180)
 
 local registeredBuffs = false
 local buffs = {}
@@ -64,6 +64,7 @@ function UPGRADE:Apply(SWEP)
         if SERVER or not IsValid(owner) or LocalPlayer() ~= owner then return end
         local target = player.GetBySteamID64(owner.TTTCloneTarget)
         if not IsValid(target) then return end
+        ChooseBuff(owner, target)
         local timername = "TTTPAPTargetBufferBuffCooldown" .. target:SteamID64()
 
         timer.Create(timername, buffCooldownCvar:GetInt(), 0, function()

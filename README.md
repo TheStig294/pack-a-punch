@@ -2967,7 +2967,7 @@ Lets you periodically buff you and your target!\
 \
 *ttt_pap_target_buffer* - Default: 1 - Whether this upgrade is enabled
 \
-*pap_target_buffer_buff_cooldown* - Default: 30 - How long the buff cooldown is in seconds\
+*pap_target_buffer_buff_cooldown* - Default: 20 - How long the buff cooldown is in seconds\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
 
