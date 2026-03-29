@@ -1104,6 +1104,15 @@ x4 ammo, full-auto, fire-rate up!\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Double Barrel [Yorkshireman Role Weapon] (Lmao Bang)
+
+x2 ammo, new gun shoot sounds!\
+\
+*ttt_pap_lmao_bang_yorkshireman* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Dragon Elites (Mustang and Sally)
 
 Duel-wield grenade launcher!\
