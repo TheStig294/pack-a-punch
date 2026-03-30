@@ -535,6 +535,15 @@ You can select the traitor role a player becomes! (Right-click)\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
 
+## Button Transformer (Mobile Button)
+
+You can move while transformed!\
+\
+*ttt_pap_mobile_button* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## C4 (Mini-Nuke)
 
 x1.5 explosion damage and radius
