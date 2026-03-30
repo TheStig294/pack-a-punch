@@ -19,7 +19,7 @@ function ENT:Initialize()
 		self.BlockList = {}
 
 		for blocked_id in string.gmatch(GetConVar("ttt_safekeeper_weapons_blocklist"):GetString(), "([^,]+)") do
-			TableInsert(self.BlockList, blocked_id:Trim())
+			table.insert(self.BlockList, blocked_id:Trim())
 		end
 
 		self:SetUseType(CONTINUOUS_USE)
