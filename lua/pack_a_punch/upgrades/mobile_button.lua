@@ -8,12 +8,8 @@ function UPGRADE:Apply(SWEP)
     self:AddToHook(SWEP, "PrimaryAttack", function()
         local owner = SWEP:GetOwner()
         if CLIENT or not IsValid(SWEP.Button) or not IsValid(owner) or owner.TTTPAPMobileButtonHeight then return end
-
-        if SERVER then
-            owner:SpectateEntity(nil)
-            owner:UnSpectate()
-        end
-
+        owner:SpectateEntity(nil)
+        owner:UnSpectate()
         owner:SetParent(nil)
         local button = SWEP.Button
         if not IsValid(button) then return end
