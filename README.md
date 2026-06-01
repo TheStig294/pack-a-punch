@@ -1348,6 +1348,15 @@ Freezes nearby players too!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=888948962>
 
+## Gatcha Roller (Legendary Gatcha)
+
+Always gives legendary prizes, given to everyone!\
+\
+*ttt_pap_legendary_gatcha* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
+
 ## Ghosting Device (Passive Ghoster)
 
 You automatically see all dead players' messages!\
