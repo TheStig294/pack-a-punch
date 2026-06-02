@@ -4,11 +4,52 @@ UPGRADE.class = "ttt_no_scope_awp"
 UPGRADE.name = "MLG AWP"
 UPGRADE.desc = "Displays MLG popups + ammo and clip size"
 
-function UPGRADE:Apply(SWEP)
-    if SERVER then
-        util.AddNetworkString("TTTPAPMlgAwpDeathEffects")
-    end
+if SERVER then
+    util.AddNetworkString("TTTPAPMlgAwpDeathEffects")
+end
 
+if CLIENT then
+    net.Receive("TTTPAPMlgAwpDeathEffects", function()
+        local frame = vgui.Create("DFrame")
+        local xSize = ScrW() / 2
+        local ySize = ScrH() / 2
+        local pos1 = ScrW() / 4
+        local pos2 = ScrH() / 4
+        frame:SetPos(pos1, pos2)
+        frame:SetSize(xSize, ySize)
+        -- Make derma frame holding the image popup invisible
+        frame:ShowCloseButton(false)
+        frame:SetTitle("")
+        frame.Paint = function() end
+        -- Display the image
+        local image = vgui.Create("DImage", frame)
+        image:SetImage("ttt_pack_a_punch/mlg_awp/mlg" .. math.random(6) .. ".jpg")
+        image:SetPos(0, 0)
+        image:SetSize(xSize, ySize)
+        -- ...and shake it around the screen a bit
+        local shakeSize = 20
+
+        timer.Create("TTTPAPMlgAwpPopupShake", 0.1, 30, function()
+            if not IsValid(frame) then
+                timer.Remove("TTTPAPMlgAwpPopupShake")
+
+                return
+            end
+
+            frame:SetPos(pos1 + math.random(-shakeSize, shakeSize), pos2 + math.random(-shakeSize, shakeSize))
+        end)
+
+        timer.Simple(3, function()
+            timer.Remove("TTTPAPMlgAwpPopupShake")
+
+            if IsValid(frame) then
+                frame:Close()
+            end
+        end)
+    end)
+end
+
+function UPGRADE:Apply(SWEP)
     self:SetClip(SWEP, 4)
 
     -- Players hear a random MLG-themed sound on killing someone
@@ -36,47 +77,6 @@ function UPGRADE:Apply(SWEP)
             net.Send(plys)
         end
     end)
-
-    if CLIENT then
-        net.Receive("TTTPAPMlgAwpDeathEffects", function()
-            local frame = vgui.Create("DFrame")
-            local xSize = ScrW() / 2
-            local ySize = ScrH() / 2
-            local pos1 = ScrW() / 4
-            local pos2 = ScrH() / 4
-            frame:SetPos(pos1, pos2)
-            frame:SetSize(xSize, ySize)
-            -- Make derma frame holding the image popup invisible
-            frame:ShowCloseButton(false)
-            frame:SetTitle("")
-            frame.Paint = function() end
-            -- Display the image
-            local image = vgui.Create("DImage", frame)
-            image:SetImage("ttt_pack_a_punch/mlg_awp/mlg" .. math.random(6) .. ".jpg")
-            image:SetPos(0, 0)
-            image:SetSize(xSize, ySize)
-            -- ...and shake it around the screen a bit
-            local shakeSize = 20
-
-            timer.Create("TTTPAPMlgAwpPopupShake", 0.1, 30, function()
-                if not IsValid(frame) then
-                    timer.Remove("TTTPAPMlgAwpPopupShake")
-
-                    return
-                end
-
-                frame:SetPos(pos1 + math.random(-shakeSize, shakeSize), pos2 + math.random(-shakeSize, shakeSize))
-            end)
-
-            timer.Simple(3, function()
-                timer.Remove("TTTPAPMlgAwpPopupShake")
-
-                if IsValid(frame) then
-                    frame:Close()
-                end
-            end)
-        end)
-    end
 end
 
 function UPGRADE:Reset()

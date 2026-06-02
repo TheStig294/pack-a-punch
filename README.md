@@ -94,6 +94,11 @@ Requires: [Jump Force - Goku (PM+NPC)](https://steamcommunity.com/sharedfiles/fi
 <https://steamcommunity.com/sharedfiles/filedetails/?id=1727089051>\
 Requires: [Yogscast Lewis Playermodel](https://steamcommunity.com/sharedfiles/filedetails/?id=2293499171)
 
+## Cheeto Fingers
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>\
+Optional: [DewRitos Playermodels](https://steamcommunity.com/sharedfiles/filedetails/?id=232539187)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -587,6 +592,15 @@ Now shoots a truck, you can't miss!\
 *pap_truck_gun_range* - Default: 4000 - Truck range\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2966658018>
+
+## Cheeto Fingers (Dewritos Hand)
+
+Unlimited ammo, transforms players into Dewritos!\
+\
+*ttt_pap_dewritos_hand* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
 
 ## Christmas Cannon [Santa Role Weapon] (Infinite Christmas Cannon)
 
