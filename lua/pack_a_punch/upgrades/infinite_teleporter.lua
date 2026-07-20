@@ -6,20 +6,22 @@ UPGRADE.desc = "Infinite teleport grenades!"
 
 function UPGRADE:Apply(SWEP)
     if CLIENT then return end
-    local owner = SWEP:GetOwner()
+    -- Use SWEP.PAPOwner instead of just using self:GetOwner() because it returns NULL in SWEP:OnRemove() on the server...
+    SWEP.PAPOwner = SWEP:GetOwner()
 
     function SWEP:OwnerChanged()
-        owner = SWEP:GetOwner()
+        self.PAPOwner = SWEP:GetOwner()
     end
 
     local kind = SWEP.Kind
 
     self:AddHook("PlayerCanPickupWeapon", function(ply, wep)
-        if not IsValid(owner) or ply ~= owner then return end
+        if not IsValid(wep) or not IsValid(wep.PAPOwner) or ply ~= wep.PAPOwner then return end
         if wep.Kind and wep.Kind == kind and wep:GetClass() ~= UPGRADE.class then return false end
     end)
 
     function SWEP:OnRemove()
+        local owner = self.PAPOwner
         if not IsValid(owner) then return end
 
         timer.Simple(0.1, function()
@@ -37,8 +39,15 @@ function UPGRADE:Apply(SWEP)
         end)
     end
 
-    -- Add PAP camo
-    self:AddToHook("")
+    -- Set PaP camo
+    self:AddHook("OnEntityCreated", function(ent)
+        timer.Simple(0, function()
+            if not IsValid(ent) or ent:GetClass() ~= "ttt_teleportgren_proj" then return end
+            local owner = ent:GetOwner()
+            if not IsValid(owner) then return end
+            self:SetUpgraded(ent)
+        end)
+    end)
 end
 
 TTTPAP:Register(UPGRADE)
