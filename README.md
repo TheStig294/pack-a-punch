@@ -99,6 +99,11 @@ Requires: [Yogscast Lewis Playermodel](https://steamcommunity.com/sharedfiles/fi
 <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>\
 Optional: [DewRitos Playermodels](https://steamcommunity.com/sharedfiles/filedetails/?id=232539187)
 
+## Lasso
+
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3727222594>\
+Requires: [Skyrim rideable horses](https://steamcommunity.com/sharedfiles/filedetails/?id=1202035024)
+
 # Credits
 
 "PaP Camo Texture from PureBDcraft ResourcePack by <https://bdcraft.net>"
@@ -539,6 +544,15 @@ You can select the traitor role a player becomes! (Right-click)\
 *pap_brain_choosing_device_can_become_hypnotist* - Default: 1 - Allow revived players to become hypnotists\
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
+## Buffet Table [Whale Custom Role Weapon] (True Whale)
+
+You can pick from ANY role!\
+\
+*ttt_pap_true_whale* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3677825516>
 
 ## Button Transformer (Mobile Button)
 
@@ -1389,6 +1403,15 @@ Big fire rate, ammo, and fire spread increase\
 \
 Upgrade for: Default TTT weapon
 
+## Glue Trap (Boost Pad)
+
+Launches players away, harder to see!\
+\
+*ttt_pap_boost_pad* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3760332241>
+
 ## Gloves [Boxer Role Weapon] (Box Gloves)
 
 Players you hit turn into boxes\
@@ -1863,6 +1886,15 @@ x999 ammo lol\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1386154572>
+
+## Lasso (Horse Spawner)
+
+Right-click to spawn a rideable horse!\
+\
+*ttt_pap_horse_spawner* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3727222594>
 
 ## Lift Grenade (Rocket Grenade)
 
@@ -3002,6 +3034,15 @@ Spawns all 10 surprise soldier NPCs at once!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2816323301>
 
+## Tactical Brick (Giant Brick)
+
+Throw a giant one-shot brick! You get 3 throws\
+\
+*ttt_pap_giant_brick* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3752019810>
+
 ## Target Picker (Target Buffer)
 
 Lets you periodically buff you and your target!\
@@ -3038,6 +3079,15 @@ Also sets you to 100 health!\
 \
 \
 Upgrade for: <https://steamcommunity.com/workshop/filedetails/?id=2421039084>
+
+## Teleport Grenade (Infinite Teleporter)
+
+Infinite teleport grenades!\
+\
+*ttt_pap_infinite_teleporter* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3623477650>
 
 ## Teleporter (Infini-porter)
 
@@ -3201,6 +3251,15 @@ Unlimited ammo!\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2252594978>
+
+## Waluigi Launcher (Waluigi Launcher Launcher)
+
+Shoots Waluigi Launchers!\
+\
+*ttt_pap_waluigi_launcher_launcher* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2159859989>
 
 ## Weapon Jammer (Jamifier)
 
