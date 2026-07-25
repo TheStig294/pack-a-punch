@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "boost_pad"
 UPGRADE.class = "weapon_ttt_glue_trap"
 UPGRADE.name = "Boost Pad"
-UPGRADE.desc = "Launches players away!"
+UPGRADE.desc = "Launches players away, harder to see!"
 
 function UPGRADE:Apply(SWEP)
     local funnyFlingSounds = {"ttt_pack_a_punch/flinging_spin_attack/fling.mp3", "ttt_pack_a_punch/the_yeet_disk/yeet.mp3", "ttt_pack_a_punch/dramatic_death_note/cartoon_fling_sound.mp3"}
