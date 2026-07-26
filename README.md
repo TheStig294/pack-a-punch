@@ -507,6 +507,15 @@ Jail lasts a very long time or until you release them!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2475989756>
 
+## Boom Cat (Forever Boom Cat)
+
+Lasts forever!\
+\
+*ttt_pap_forever_boom_cat* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3771806775>
+
 ## Boomerang (Explosive Boomerang)
 
 Boomerang explodes on touch!\
