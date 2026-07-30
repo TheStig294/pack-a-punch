@@ -236,6 +236,29 @@ local function ExtraOptionsMenu()
 
         net.SendToServer()
     end
+
+    -- Convar checkbox for enabling/disabling the TTT2 on round start chat message
+    if TTT2 then
+        local chatMessageCvar = GetConVar("ttt_pap_round_start_chat_message")
+        local chatMessageCheck = layout:Add("DCheckBoxLabel")
+        chatMessageCheck:SetText(chatMessageCvar:GetHelpText())
+        chatMessageCheck:SetChecked(chatMessageCvar:GetBool())
+        chatMessageCheck:SetIndent(10)
+        chatMessageCheck:SizeToContents()
+
+        function chatMessageCheck:OnChange()
+            net.Start("TTTPAPChangeConvar")
+            net.WriteString(chatMessageCvar:GetName())
+
+            if chatMessageCheck:GetChecked() then
+                net.WriteString("1")
+            else
+                net.WriteString("0")
+            end
+
+            net.SendToServer()
+        end
+    end
 end
 
 local function DrawWeaponBar(list, UPGRADE)
@@ -572,8 +595,11 @@ end)
 
 -- Lets players know about chat/console command
 hook.Add("TTTBeginRound", "TTTPAPTTT2OptionsMessage", function()
-    if TTT2 and IsAdmin(LocalPlayer()) then
-        LocalPlayer():ChatPrint("Type /papop to open options window\nor ttt_pap_options in the console")
+    if not GetConVar("ttt_pap_round_start_chat_message"):GetBool() then return end
+    local client = LocalPlayer()
+
+    if IsAdmin(client) then
+        client:ChatPrint("Type /papop to open options window\nor ttt_pap_options in the console")
     end
 
     hook.Remove("TTTBeginRound", "TTTPAPTTT2OptionsMessage")

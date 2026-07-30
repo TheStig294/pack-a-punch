@@ -7,16 +7,39 @@ UPGRADE.convars = {
     {
         name = "pap_giant_brick_throws",
         type = "int"
-    }
+    },
+    {
+        name = "pap_giant_brick_damage",
+        type = "int"
+    },
+    {
+        name = "pap_giant_brick_scale",
+        type = "int"
+    },
 }
 
 local throwsCvar = CreateConVar("pap_giant_brick_throws", "3", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Number of throws, 0 = infinite", 0, 50)
 
-UPGRADE.desc = "Throw a giant one-shot brick! You get " .. throwsCvar:GetInt() .. " throw(s)"
+local scaleCvar = CreateConVar("pap_giant_brick_scale", "20", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Size scale of the brick", 2, 40)
+
+local function GetDescription()
+    local desc = "Throw a giant brick!"
+    local throws = throwsCvar:GetInt()
+
+    if throws == 1 then
+        desc = desc .. " You get 1 throw"
+    elseif throws > 1 then
+        desc = desc .. " You get " .. throws .. " throws"
+    end
+
+    return desc
+end
+
+UPGRADE.desc = GetDescription()
 
 function UPGRADE:Apply(SWEP)
-    self.desc = "Throw a giant one-shot brick! You get " .. throwsCvar:GetInt() .. " throw(s)"
-    SWEP:SetModelScale(20, 0.0001)
+    self.desc = GetDescription()
+    SWEP:SetModelScale(scaleCvar:GetInt(), 0.0001)
     SWEP:Activate()
     local owner = SWEP:GetOwner()
 

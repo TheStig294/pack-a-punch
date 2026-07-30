@@ -17,12 +17,15 @@ CreateConVar("ttt_pap_upgradeable_indicator", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED
 
 CreateConVar("ttt_pap_apply_generic_shoot_sound", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Apply the generic upgraded shoot sound to weapons\n(Changes apply to newly upgraded weapons)", 0, 1)
 
+CreateConVar("ttt_pap_round_start_chat_message", 1, {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Display the /papop message in chat at the start of the round", 0, 1)
+
 TTTPAP.convars = {
     ttt_pap_apply_generic_upgrades = true,
     ttt_pap_detective = true,
     ttt_pap_traitor = true,
     ttt_pap_upgradeable_indicator = true,
-    ttt_pap_apply_generic_shoot_sound = true
+    ttt_pap_apply_generic_shoot_sound = true,
+    ttt_pap_round_start_chat_message = true,
 }
 
 -- Store every weapon upgrade first by the weapon's classname, then the id of each upgrade for that weapon, e.g:

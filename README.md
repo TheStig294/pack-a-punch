@@ -3045,10 +3045,13 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2816323301>
 
 ## Tactical Brick (Giant Brick)
 
-Throw a giant one-shot brick! You get 3 throws\
+Throw a giant brick! You get 3 throws\
 \
 *ttt_pap_giant_brick* - Default: 1 - Whether this upgrade is enabled
 \
+*pap_giant_brick_throws* - Default: 3 - Number of throws, 0 = infinite\
+*pap_giant_brick_damage* - Default: 200 - Damage of the brick\
+*pap_giant_brick_scale* - Default: 20 - Size scale of the brick\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3752019810>
 

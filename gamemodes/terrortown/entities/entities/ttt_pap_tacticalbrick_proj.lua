@@ -1,17 +1,17 @@
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "ttt_tacticalbrick_proj"
-ENT.DamageMin = 10000
-ENT.DamageMax = 10000
-ENT.RemoveOnNextCollide = false
-ENT.ThrowsCvar = GetConVar("pap_giant_brick_throws")
-ENT.Explode = nil
+
+local damageCvar = CreateConVar("pap_giant_brick_damage", "200", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Damage of the brick", 0, 200)
 
 function ENT:Initialize()
     self.BaseClass.Initialize(self)
     self:SetPAPCamo()
     self:SetModelScale(20, 0.0001)
     self:Activate()
+    self.ThrowsCvar = GetConVar("pap_giant_brick_throws")
+    self.DamageMin = damageCvar:GetFloat()
+    self.DamageMax = self.DamageMin
     if CLIENT then return end
     local thrower = self:GetThrower()
 
