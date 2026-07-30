@@ -194,6 +194,8 @@ and the upgraded acid gat to be disabled.
 
 *ttt_pap_apply_generic_shoot_sound* - Default: 1 - Apply the generic upgraded shoot sound to weapons (Changes apply to newly upgraded weapons)
 
+*ttt_pap_round_start_chat_message* - Default: 1 - Display the /papop message in chat at the start of the round (TTT2 only)
+
 Above are the general convars available for the PaP, to see every convar available for each individual PaP upgrade, scroll down to the giant list below!
 
 # The Great Giant List of Upgrades
