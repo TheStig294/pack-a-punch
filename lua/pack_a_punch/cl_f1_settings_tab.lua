@@ -595,7 +595,7 @@ end)
 
 -- Lets players know about chat/console command
 hook.Add("TTTBeginRound", "TTTPAPTTT2OptionsMessage", function()
-    if not GetConVar("ttt_pap_round_start_chat_message"):GetBool() then return end
+    if not TTT2 or not GetConVar("ttt_pap_round_start_chat_message"):GetBool() then return end
     local client = LocalPlayer()
 
     if IsAdmin(client) then
