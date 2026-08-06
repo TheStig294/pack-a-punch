@@ -15,7 +15,6 @@ ENT.Weaponised = false
 ENT.CanHavePrints = false
 ENT.IsSilent = true
 ENT.CanPickup = false
-ENT.WeaponID = AMMO_KNIFE
 ENT.Damage = 50
 
 function ENT:Initialize()
