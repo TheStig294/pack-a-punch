@@ -327,7 +327,7 @@ function UPGRADE:Apply(SWEP)
                 local round_state = GetRoundState()
 
                 -- Automatically close the menu when the player dies or the round is in a state where they wouldn't have the weapon anymore
-                if not client:Alive() or (round_state ~= ROUND_ACTIVE and round_state ~= ROUND_POST) then
+                if not client:Alive() or round_state ~= ROUND_ACTIVE and round_state ~= ROUND_POST then
                     dframe:Close()
                     hook.Remove("Think", "Admin_Think_" .. self:EntIndex())
                 end
@@ -396,7 +396,7 @@ function UPGRADE:Apply(SWEP)
                         table.insert(message, value)
                     end
 
-                    if (i == 1 and not silentCommand) or (i == 2 and silentCommand) then
+                    if i == 1 and not silentCommand or i == 2 and silentCommand then
                         admin = value
                     end
                 end
@@ -1114,7 +1114,6 @@ function UPGRADE:Apply(SWEP)
         end
 
         commandFunctions.forcenr_condition = function(admin, target, time, message)
-            if admin ~= target then return "You can only target yourself" end
             if #message < 3 then return "Type in a role" end
 
             for role = 0, ROLE_MAX do
