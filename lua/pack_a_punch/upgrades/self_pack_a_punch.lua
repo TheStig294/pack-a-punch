@@ -29,6 +29,8 @@ local jumpMult = CreateConVar("pap_self_pack_a_punch_jump", "1.5", {FCVAR_NOTIFY
 local healthMult = CreateConVar("pap_self_pack_a_punch_health", "1.3", {FCVAR_NOTIFY, FCVAR_REPLICATED}, "Health multiplier", 1, 5)
 
 function UPGRADE:Apply(SWEP)
+    -- In case somehow someone is able to upgrade themselves multiple times
+    if SWEP.PAPHolsterOldStats then return end
     local speedScale = speedMult:GetFloat()
     local jumpScale = jumpMult:GetFloat()
     local healthScale = healthMult:GetFloat()
@@ -85,7 +87,7 @@ end
 
 function UPGRADE:Reset()
     if SERVER then
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             local holstered = ply:GetWeapon("weapon_ttt_unarmed")
 
             if IsValid(holstered) and self:IsUpgraded(holstered) then

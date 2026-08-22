@@ -125,7 +125,8 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
     -- Initial upgrade sound is only heard for the player who bought the Pack-a-Punch
     ply:SendLua("surface.PlaySound(\"ttt_pack_a_punch/upgrade_begin.mp3\")")
     local classname = SWEP:GetClass()
-    local oldClip = SWEP:Clip1()
+    -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
+    UPGRADE.oldClip = SWEP:Clip1()
     -- Prevent the player from using a weapon while Pack-a-Punching
     ply:SetNWBool("TTTPAPIsUpgrading", true)
     ply:SelectWeapon("weapon_ttt_unarmed")
@@ -143,6 +144,10 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
         end
 
         SWEP = ply:Give(classname)
+        -- Set the upgrade table here early so that TTTPAP:CanOrderPAP() can prevent a weapon from being upgraded twice,
+        -- even though it is set again in TTTPAP:ApplyUpgrade().
+        -- Otherwise there is this 0.1 second window of being able to upgrade the same weapon twice.
+        SWEP.PAPUpgrade = UPGRADE
         ply:SetNWBool("TTTPAPIsUpgrading", false)
     end)
 
@@ -161,8 +166,6 @@ function TTTPAP:OrderPAP(ply, skipCanOrderCheck)
             ply:SelectWeapon(classname)
         end
 
-        -- The gun's original remaining ammo in the clip is needed to scale remaining ammo properly if there's an ammo upgrade
-        UPGRADE.oldClip = oldClip
         -- This prevents a weapon's upgrade from being displayed twice, the PlayerSwitchWeapon hook below isn't run for ply:SelectWeapon()
         SWEP.TTTPAPLastPlayerSwitchedTo = ply
         hook.Run("TTTPAPOrder", ply, SWEP, UPGRADE)

@@ -131,6 +131,7 @@ function TTTPAP:CanOrderPAP(ent, displayErrorMessage)
         class = ent
         displayErrorMessage = false
     elseif ent:IsValid() and ent:IsPlayer() then
+        if ent:GetNWBool("TTTPAPIsUpgrading") then return false, "Already upgrading a weapon" end
         SWEP = ent:GetActiveWeapon()
     elseif ent:IsValid() and ent:IsWeapon() then
         SWEP = ent
