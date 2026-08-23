@@ -603,6 +603,18 @@ Become larger and have more health!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2886774933>
 
+## Cannibalizer (Vacuum Eater)
+
+Sucks people in to eat them!\
+\
+*ttt_pap_vacuum_eater* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_vacuum_eater_force* - Default: 1000 - Player-sucking force\
+*pap_vacuum_eater_range* - Default: 200 - Player-sucking range\
+*pap_vacuum_eater_angle* - Default: 45 - Player-sucking angle\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2421039084>
+
 ## Car Gun (Truck Gun)
 
 Now shoots a truck, you can't miss!\
