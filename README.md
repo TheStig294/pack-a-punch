@@ -403,6 +403,16 @@ Turn into a MASSIVE barrel!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
 
+## Beacon (Infinite Beacon)
+
+Unlimited beacons! (On a cooldown)\
+\
+*ttt_pap_infinite_beacon* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_infinite_beacon_cooldown_secs* - Default: 30 - Seconds between giving beacons
+\
+Upgrade for: Default TTT weapon
+
 ## Bear Trap (Floating Bear Trap)
 
 You can place 2 traps, floats around immune to your own traps!\
