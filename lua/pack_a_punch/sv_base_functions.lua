@@ -25,6 +25,42 @@ concommand.Add("pap_order", function(ply, _, _, argsStr)
     end
 end, nil, "Simulates ordering the Pack-a-Punch item, searches for the input bot player name number if argument given, e.g. pap_order 01 orders for Bot01", FCVAR_CHEAT)
 
+-- Debug command for printing all weapons without an upgrade
+concommand.Add("pap_print_all_missing", function()
+    local weaponsWithAnUpgrade = {}
+    local newClassWeapons = {}
+
+    local weaponBases = {
+        weapon_tttbasegrenade = true,
+        weapon_tttbase = true
+    }
+
+    for class, upgradeList in pairs(TTTPAP.upgrades) do
+        weaponsWithAnUpgrade[class] = true
+
+        for _, UPGRADE in pairs(upgradeList) do
+            if UPGRADE.newClass then
+                newClassWeapons[UPGRADE.newClass] = true
+            end
+        end
+    end
+
+    local weaponPrinted = false
+
+    for _, SWEP in ipairs(weapons.GetList()) do
+        local class = WEPS.GetClass(SWEP)
+
+        if SWEP.Kind and not TTTPAP:IsGenericWeapon(SWEP) and not weaponsWithAnUpgrade[class] and not newClassWeapons[class] and not weaponBases[class] then
+            print(class)
+            weaponPrinted = true
+        end
+    end
+
+    if not weaponPrinted then
+        print("No SWEPs found without an upgrade!")
+    end
+end, nil, "Prints out all buyable weapons missing an upgrade")
+
 -- Preventing a player from using a weapon while they are Pack-a-Punching a weapon
 hook.Add("PlayerSwitchWeapon", "TTTPAPPreventUpgradingSwitch", function(ply, _, newWep)
     if ply:GetNWBool("TTTPAPIsUpgrading") and ply:HasWeapon("weapon_ttt_unarmed") and IsValid(newWep) and newWep:GetClass() ~= "weapon_ttt_unarmed" then
@@ -324,14 +360,12 @@ function TTTPAP:ApplyRandomUpgrade(SWEP)
 end
 
 -- Displays the upgrade description for upgraded weapons you find on the ground
-if SERVER then
-    hook.Add("PlayerSwitchWeapon", "TTTPAPDroppedWeaponUpgradeDescription", function(ply, _, SWEP)
-        if IsValid(SWEP) and SWEP.PAPUpgrade and SWEP.PAPUpgrade.desc then
-            if not IsValid(SWEP.TTTPAPLastPlayerSwitchedTo) or SWEP.TTTPAPLastPlayerSwitchedTo ~= ply then
-                ply:ChatPrint("PAP UPGRADE: " .. SWEP.PAPUpgrade.desc)
-            end
-
-            SWEP.TTTPAPLastPlayerSwitchedTo = ply
+hook.Add("PlayerSwitchWeapon", "TTTPAPDroppedWeaponUpgradeDescription", function(ply, _, SWEP)
+    if IsValid(SWEP) and SWEP.PAPUpgrade and SWEP.PAPUpgrade.desc then
+        if not IsValid(SWEP.TTTPAPLastPlayerSwitchedTo) or SWEP.TTTPAPLastPlayerSwitchedTo ~= ply then
+            ply:ChatPrint("PAP UPGRADE: " .. SWEP.PAPUpgrade.desc)
         end
-    end)
-end
+
+        SWEP.TTTPAPLastPlayerSwitchedTo = ply
+    end
+end)
