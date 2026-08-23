@@ -3237,6 +3237,15 @@ Activates automatically while held!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2329721936>
 
+## Upgrade Device (Upgrade All Device)
+
+Upgrades ALL of the target player's weapons!\
+\
+*ttt_pap_upgrade_all_device* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3590045051>
+
 ## Visualiser (Spiderman Visualiser)
 
 Shows the pointing spiderman meme\
