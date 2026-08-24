@@ -2395,6 +2395,15 @@ Turns someone into an Old Man!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3449793129>
 
+## Poison Turtlenade (Invincible Turtlenade)
+
+Spawns invincible Poison Turtles!\
+\
+*ttt_pap_invincible_turtlenade* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3622557914>
+
 ## Poltergeist (The Ghost Ball)
 
 x2 ammo + fire rate increase\
