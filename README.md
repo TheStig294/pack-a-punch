@@ -1747,6 +1747,15 @@ Larger explosion, fire lasts a very long time!\
 \
 Upgrade for: Default TTT weapon
 
+## Info Book (Bee Movie Script)
+
+According to all known laws of aviation...\
+\
+*ttt_pap_bee_movie_script_signedbook* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3727266353>
+
 ## Jarate (Viral Jarate)
 
 Larger splash area, spreads between nearby players, lasts forever!\
@@ -2166,6 +2175,15 @@ Displays MLG popups + ammo and clip size\
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=2860986215>
+
+## Notebook (Bee Movie Script)
+
+According to all known laws of aviation...\
+\
+*ttt_pap_bee_movie_script_bookquill* - Default: 1 - Whether this upgrade is enabled
+\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3727266353>
 
 ## NPC Vault (Random Vault)
 
