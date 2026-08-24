@@ -1550,6 +1550,16 @@ Spawn lots of dogs!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
 
+## Guardian Summoner (Guardian Spammer)
+
+Spawns regular antlion guardians instead!\
+\
+*ttt_pap_guardian_spammer* - Default: 1 - Whether this upgrade is enabled
+\
+*pap_guardian_spammer_antlion_cap* - Default: 5 - Max number of antlions summoned\
+\
+Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3622557177>
+
 ## Guitar Gun [Lightning AR1] (Rock Guitar)
 
 Infinite ammo, time to rock!\
