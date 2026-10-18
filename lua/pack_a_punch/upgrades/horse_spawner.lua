@@ -2,7 +2,7 @@ local UPGRADE = {}
 UPGRADE.id = "horse_spawner"
 UPGRADE.class = "ttt_weapon_lasso"
 UPGRADE.name = "Horse Spawner"
-UPGRADE.desc = "Right-click to spawn a rideable horse!"
+UPGRADE.desc = "Right-click to spawn a rideable horse!\nDrop it to share it around!"
 
 function UPGRADE:Condition()
     return scripted_ents.Get("npc_horse")

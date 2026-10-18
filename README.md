@@ -1941,7 +1941,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1386154572>
 
 ## Lasso (Horse Spawner)
 
-Right-click to spawn a rideable horse!\
+Right-click to spawn a rideable horse! Drop it to share it around!\
 \
 *ttt_pap_horse_spawner* - Default: 1 - Whether this upgrade is enabled
 \
