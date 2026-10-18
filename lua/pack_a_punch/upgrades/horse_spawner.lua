@@ -26,6 +26,12 @@ function UPGRADE:Apply(SWEP)
     self:AddHook("StartCommand", function(ply, cmd)
         if IsValid(ply:GetNWEntity("mount")) then
             cmd:AddKey(IN_DUCK)
+
+            -- Disable T-Posing while on a horse
+            if SERVER and ply:GetNWBool("T-Posing") then
+                ply:SetNWBool("T-Posing", false)
+                ply:PrintMessage(HUD_PRINTCENTER, "You can't T-Pose on a horse")
+            end
         end
 
         if not ply.TTTPAPHorseSpawnerAutoUseKey then return end
