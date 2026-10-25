@@ -1246,7 +1246,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3173929747>
 
 ## Exorcism Device (Ghost Buster)
 
-Multiple uses, kills a phantom without them haunting you!\
+Removes all haunting phantoms, and kills all phantom players without them haunting you!\
 \
 *ttt_pap_ghost_buster* - Default: 1 - Whether this upgrade is enabled
 \
