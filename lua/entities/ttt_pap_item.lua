@@ -40,8 +40,8 @@ hook.Add("TTTPrepareRound", "TTTPAPRegister", function()
     end
 
     -- Faker breaks by spending a credit without being able to get one back
-    -- Randoman is supposed to have just randomats to buy (I recommend adding: ttt_randoman_guaranteed_randomats "papupgrade" to your server config instead)
-    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN}
+    -- Randoman/Hoodoo is supposed to have just randomats to buy (I recommend adding: ttt_[randoman/hoodoo]_guaranteed_randomats "papupgrade" to your server config instead)
+    local bannedRoles = {ROLE_FAKER, ROLE_RANDOMAN, ROLE_HOODOO}
 
     local bannedRolesDictionary = {}
 
