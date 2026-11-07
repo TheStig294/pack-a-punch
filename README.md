@@ -1409,11 +1409,11 @@ Freezes nearby players too!\
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=888948962>
 
-## Gatcha Roller (Legendary Gatcha)
+## Gacha Roller (Legendary Gacha)
 
-Always gives legendary prizes, given to everyone!\
+Always gives legendary prizes!\
 \
-*ttt_pap_legendary_gatcha* - Default: 1 - Whether this upgrade is enabled
+*ttt_pap_legendary_gacha* - Default: 1 - Whether this upgrade is enabled
 \
 \
 Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=3667558223>
