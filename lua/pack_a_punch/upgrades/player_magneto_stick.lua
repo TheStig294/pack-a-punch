@@ -4,7 +4,7 @@ local UPGRADE = {}
 UPGRADE.id = "player_magneto_stick"
 UPGRADE.class = "weapon_zm_carry"
 UPGRADE.name = "Player Magneto-stick"
-UPGRADE.desc = "A magneto-stick that exclusively picks up players!"
+UPGRADE.desc = "Lets you pick up players!"
 UPGRADE.automatic = false
 
 UPGRADE.convars = {
@@ -80,6 +80,7 @@ function UPGRADE:Apply(SWEP)
 
     if SERVER then
         local oldThink = SWEP.Think
+
         function SWEP:Think()
             oldThink(self)
             if self.Victim == nil then return end
@@ -272,6 +273,7 @@ function UPGRADE:Apply(SWEP)
         if IsValid(self.Victim) then
             self:SendWeaponAnim(ACT_VM_MISSCENTER)
             self:ResetPlayer()
+
             return
         end
 
@@ -307,6 +309,7 @@ function UPGRADE:Apply(SWEP)
 
             -- If we didn't hit a player, try picking up an item instead
             self:DoAttack(true)
+
             return
         end
 
@@ -319,12 +322,14 @@ function UPGRADE:Apply(SWEP)
     end
 
     local oldOnDrop = SWEP.OnDrop
+
     function SWEP:OnDrop()
         oldOnDrop(self)
         self:Remove()
     end
 
     local oldDeploy = SWEP.Deploy
+
     function SWEP:Deploy()
         oldDeploy(self)
         self:ResetPlayer()
@@ -335,12 +340,14 @@ function UPGRADE:Apply(SWEP)
     end
 
     local oldOnRemove = SWEP.OnRemove
+
     function SWEP:OnRemove()
         oldOnRemove(self)
         self:ResetPlayer()
     end
 
     local oldHolster = SWEP.Holster
+
     function SWEP:Holster()
         oldHolster(self)
         self:ResetPlayer()
