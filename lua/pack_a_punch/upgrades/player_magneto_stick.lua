@@ -418,6 +418,39 @@ function UPGRADE:Apply(SWEP)
             weight = 600
         })
 
+        local Tex_Corner8 = surface.GetTextureID("gui/corner8")
+        local function RoundedMeter(bs, x, y, w, h, color)
+            surface.SetDrawColor(clr(color))
+
+            surface.DrawRect(x + bs, y, w - bs * 2, h)
+            surface.DrawRect(x, y + bs, bs, h - bs * 2)
+
+            surface.SetTexture(Tex_Corner8)
+            surface.DrawTexturedRectRotated(x + bs / 2, y + bs / 2, bs, bs, 0)
+            surface.DrawTexturedRectRotated(x + bs / 2, y + h - bs / 2, bs, bs, 90)
+
+            if w > 14 then
+                surface.DrawRect(x + w - bs, y + bs, bs, h - bs * 2)
+                surface.DrawTexturedRectRotated(x + w - bs / 2, y + bs / 2, bs, bs, 270)
+                surface.DrawTexturedRectRotated(x + w - bs / 2, y + h - bs / 2, bs, bs, 180)
+            else
+                surface.DrawRect(x + math.max(w - bs, bs), y, bs / 2, h)
+            end
+        end
+
+        local function PaintBar(r, x, y, w, h, colors, value)
+            -- Background
+            -- slightly enlarged to make a subtle border
+            draw.RoundedBox(8, x - 1, y - 1, w + 2, h + 2, colors.background)
+
+            -- Fill
+            local width = w * math.Clamp(value, 0, 1)
+
+            if width > 0 then
+                RoundedMeter(r, x, y, width, h, colors.fill)
+            end
+        end
+
         net.Receive("PAP_magnetoVictimCarryStart", function()
             local client = LocalPlayer()
             local entIdx = net.ReadUInt(16)
@@ -490,6 +523,10 @@ function UPGRADE:Apply(SWEP)
             local width, height = 200, 25
             local x = ScrW() / 2 - width / 2
             local y = margin / 2 + height
+            -- Move this further down on TTT2 so its below the round state UI
+            if TTT2 then
+                y = y + 75
+            end
 
             local colors = {
                 background = Color(30, 60, 100, 222),
@@ -511,7 +548,7 @@ function UPGRADE:Apply(SWEP)
                     return
                 end
 
-                CRHUD:PaintBar(8, x, y, width, height, colors, percentage)
+                PaintBar(8, x, y, width, height, colors, percentage)
 
                 draw.TextShadow({
                     text = "Someone has a hold of you!",
