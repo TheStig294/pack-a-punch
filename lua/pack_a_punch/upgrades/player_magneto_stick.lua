@@ -4,7 +4,7 @@ local UPGRADE = {}
 UPGRADE.id = "player_magneto_stick"
 UPGRADE.class = "weapon_zm_carry"
 UPGRADE.name = "Player Magneto-stick"
-UPGRADE.desc = "A magneto-stick that exclusively picks up players!"
+UPGRADE.desc = "Lets you pick up players!"
 UPGRADE.automatic = false
 
 UPGRADE.convars = {
@@ -79,13 +79,15 @@ function UPGRADE:Apply(SWEP)
     SWEP.BaseClass.Initialize(SWEP)
 
     if SERVER then
+        local oldThink = SWEP.Think
+
         function SWEP:Think()
-            self.BaseClass.Think(self)
+            oldThink(self)
             if self.Victim == nil then return end
 
             -- If the player we're holding left or is dead then reset the weapon
             if not IsValid(self.Victim) or not self.Victim:Alive() or self.Victim:IsSpec() then
-                self:Reset()
+                self:ResetPlayer()
 
                 return
             end
@@ -103,7 +105,7 @@ function UPGRADE:Apply(SWEP)
         self.Victim:SetMoveType(MOVETYPE_NOCLIP)
     end
 
-    function SWEP:Reset()
+    function SWEP:ResetPlayer()
         local owner = self:GetOwner()
         local ply = self.Victim
         local plyProps = self.VictimProps
@@ -191,7 +193,7 @@ function UPGRADE:Apply(SWEP)
         net.Send(ply)
     end
 
-    function SWEP:Pickup(ent)
+    function SWEP:PickupPlayer(ent)
         if IsValid(self.Victim) then return end
         if not IsValid(ent) then return end
 
@@ -260,14 +262,17 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:PrimaryAttack()
+        -- If there is a player, don't do anything item-related
+        if IsValid(self.Victim) then return end
+        self:DoAttack(false)
     end
 
     function SWEP:SecondaryAttack()
-        self:SendWeaponAnim(ACT_VM_MISSCENTER)
         self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
         if IsValid(self.Victim) then
-            self:Reset()
+            self:SendWeaponAnim(ACT_VM_MISSCENTER)
+            self:ResetPlayer()
 
             return
         end
@@ -302,34 +307,50 @@ function UPGRADE:Apply(SWEP)
                 owner:LagCompensation(false)
             end
 
+            -- If we didn't hit a player, try picking up an item instead
+            self:DoAttack(true)
+
             return
         end
 
-        self:Pickup(hitEnt)
+        self:SendWeaponAnim(ACT_VM_MISSCENTER)
+        self:PickupPlayer(hitEnt)
 
         if owner.LagCompensation then
             owner:LagCompensation(false)
         end
     end
 
+    local oldOnDrop = SWEP.OnDrop
+
     function SWEP:OnDrop()
+        oldOnDrop(self)
         self:Remove()
     end
 
+    local oldDeploy = SWEP.Deploy
+
     function SWEP:Deploy()
-        self:Reset()
+        oldDeploy(self)
+        self:ResetPlayer()
         local vm = self:GetOwner():GetViewModel()
         vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
 
         return true
     end
 
+    local oldOnRemove = SWEP.OnRemove
+
     function SWEP:OnRemove()
-        self:Reset()
+        oldOnRemove(self)
+        self:ResetPlayer()
     end
 
+    local oldHolster = SWEP.Holster
+
     function SWEP:Holster()
-        self:Reset()
+        oldHolster(self)
+        self:ResetPlayer()
 
         return true
     end
@@ -355,7 +376,7 @@ function UPGRADE:Apply(SWEP)
             local wep = Entity(entIdx)
             if not IsValid(wep) or not wep:IsWeapon() then return end
             if wep.Victim ~= ply then return end
-            wep:Reset()
+            wep:ResetPlayer()
         end)
 
         net.Receive("PAP_magnetoVictimStruggle", function(_, ply)
