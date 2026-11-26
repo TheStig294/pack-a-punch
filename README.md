@@ -2027,7 +2027,7 @@ Upgrade for: <https://steamcommunity.com/sharedfiles/filedetails/?id=1960689564>
 
 ## Magneto-stick (Player Magneto-stick)
 
-A magneto-stick that exclusively picks up players!\
+Lets you pick up players!\
 \
 *ttt_pap_player_magneto_stick* - Default: 1 - Whether this upgrade is enabled
 \

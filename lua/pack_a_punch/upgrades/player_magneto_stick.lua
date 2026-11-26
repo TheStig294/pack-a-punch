@@ -4,7 +4,7 @@ local UPGRADE = {}
 UPGRADE.id = "player_magneto_stick"
 UPGRADE.class = "weapon_zm_carry"
 UPGRADE.name = "Player Magneto-stick"
-UPGRADE.desc = "A magneto-stick that exclusively picks up players!"
+UPGRADE.desc = "Lets you pick up players!"
 UPGRADE.automatic = false
 
 UPGRADE.convars = {
@@ -79,13 +79,15 @@ function UPGRADE:Apply(SWEP)
     SWEP.BaseClass.Initialize(SWEP)
 
     if SERVER then
+        local oldThink = SWEP.Think
+
         function SWEP:Think()
-            self.BaseClass.Think(self)
+            oldThink(self)
             if self.Victim == nil then return end
 
             -- If the player we're holding left or is dead then reset the weapon
             if not IsValid(self.Victim) or not self.Victim:Alive() or self.Victim:IsSpec() then
-                self:Reset()
+                self:ResetPlayer()
 
                 return
             end
@@ -103,7 +105,7 @@ function UPGRADE:Apply(SWEP)
         self.Victim:SetMoveType(MOVETYPE_NOCLIP)
     end
 
-    function SWEP:Reset()
+    function SWEP:ResetPlayer()
         local owner = self:GetOwner()
         local ply = self.Victim
         local plyProps = self.VictimProps
@@ -191,7 +193,7 @@ function UPGRADE:Apply(SWEP)
         net.Send(ply)
     end
 
-    function SWEP:Pickup(ent)
+    function SWEP:PickupPlayer(ent)
         if IsValid(self.Victim) then return end
         if not IsValid(ent) then return end
 
@@ -260,14 +262,17 @@ function UPGRADE:Apply(SWEP)
     end
 
     function SWEP:PrimaryAttack()
+        -- If there is a player, don't do anything item-related
+        if IsValid(self.Victim) then return end
+        self:DoAttack(false)
     end
 
     function SWEP:SecondaryAttack()
-        self:SendWeaponAnim(ACT_VM_MISSCENTER)
         self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
         if IsValid(self.Victim) then
-            self:Reset()
+            self:SendWeaponAnim(ACT_VM_MISSCENTER)
+            self:ResetPlayer()
 
             return
         end
@@ -302,34 +307,50 @@ function UPGRADE:Apply(SWEP)
                 owner:LagCompensation(false)
             end
 
+            -- If we didn't hit a player, try picking up an item instead
+            self:DoAttack(true)
+
             return
         end
 
-        self:Pickup(hitEnt)
+        self:SendWeaponAnim(ACT_VM_MISSCENTER)
+        self:PickupPlayer(hitEnt)
 
         if owner.LagCompensation then
             owner:LagCompensation(false)
         end
     end
 
+    local oldOnDrop = SWEP.OnDrop
+
     function SWEP:OnDrop()
+        oldOnDrop(self)
         self:Remove()
     end
 
+    local oldDeploy = SWEP.Deploy
+
     function SWEP:Deploy()
-        self:Reset()
+        oldDeploy(self)
+        self:ResetPlayer()
         local vm = self:GetOwner():GetViewModel()
         vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
 
         return true
     end
 
+    local oldOnRemove = SWEP.OnRemove
+
     function SWEP:OnRemove()
-        self:Reset()
+        oldOnRemove(self)
+        self:ResetPlayer()
     end
 
+    local oldHolster = SWEP.Holster
+
     function SWEP:Holster()
-        self:Reset()
+        oldHolster(self)
+        self:ResetPlayer()
 
         return true
     end
@@ -355,7 +376,7 @@ function UPGRADE:Apply(SWEP)
             local wep = Entity(entIdx)
             if not IsValid(wep) or not wep:IsWeapon() then return end
             if wep.Victim ~= ply then return end
-            wep:Reset()
+            wep:ResetPlayer()
         end)
 
         net.Receive("PAP_magnetoVictimStruggle", function(_, ply)
@@ -396,6 +417,39 @@ function UPGRADE:Apply(SWEP)
             size = 18,
             weight = 600
         })
+
+        local Tex_Corner8 = surface.GetTextureID("gui/corner8")
+        local function RoundedMeter(bs, x, y, w, h, color)
+            surface.SetDrawColor(clr(color))
+
+            surface.DrawRect(x + bs, y, w - bs * 2, h)
+            surface.DrawRect(x, y + bs, bs, h - bs * 2)
+
+            surface.SetTexture(Tex_Corner8)
+            surface.DrawTexturedRectRotated(x + bs / 2, y + bs / 2, bs, bs, 0)
+            surface.DrawTexturedRectRotated(x + bs / 2, y + h - bs / 2, bs, bs, 90)
+
+            if w > 14 then
+                surface.DrawRect(x + w - bs, y + bs, bs, h - bs * 2)
+                surface.DrawTexturedRectRotated(x + w - bs / 2, y + bs / 2, bs, bs, 270)
+                surface.DrawTexturedRectRotated(x + w - bs / 2, y + h - bs / 2, bs, bs, 180)
+            else
+                surface.DrawRect(x + math.max(w - bs, bs), y, bs / 2, h)
+            end
+        end
+
+        local function PaintBar(r, x, y, w, h, colors, value)
+            -- Background
+            -- slightly enlarged to make a subtle border
+            draw.RoundedBox(8, x - 1, y - 1, w + 2, h + 2, colors.background)
+
+            -- Fill
+            local width = w * math.Clamp(value, 0, 1)
+
+            if width > 0 then
+                RoundedMeter(r, x, y, width, h, colors.fill)
+            end
+        end
 
         net.Receive("PAP_magnetoVictimCarryStart", function()
             local client = LocalPlayer()
@@ -469,6 +523,10 @@ function UPGRADE:Apply(SWEP)
             local width, height = 200, 25
             local x = ScrW() / 2 - width / 2
             local y = margin / 2 + height
+            -- Move this further down on TTT2 so its below the round state UI
+            if TTT2 then
+                y = y + 75
+            end
 
             local colors = {
                 background = Color(30, 60, 100, 222),
@@ -490,7 +548,7 @@ function UPGRADE:Apply(SWEP)
                     return
                 end
 
-                CRHUD:PaintBar(8, x, y, width, height, colors, percentage)
+                PaintBar(8, x, y, width, height, colors, percentage)
 
                 draw.TextShadow({
                     text = "Someone has a hold of you!",
